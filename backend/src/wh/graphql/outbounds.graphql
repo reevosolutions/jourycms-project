@@ -1,0 +1,317 @@
+type Outbound {
+    id: ID!
+    number: String!
+    is_cod: Boolean!
+    type: String!
+    status: String!
+    note: String
+
+    awb: String
+    dropshipper_name: String
+    dropshipper_phone: String
+
+    invoice_n: String!
+    name: String!
+    address: String
+    address2: String
+    zip: String
+    phone: String!
+    price: Int
+    freeshipping: Boolean
+    is_stopdesk: Boolean
+    has_exchange: Boolean
+    product_to_collect: String
+
+    created_at: DateTime!
+    updated_at: DateTime
+    printed_at: DateTime
+    validated_at: DateTime
+    deleted_at: DateTime
+    packaged_at: DateTime
+
+    state_id: ID
+    city_id: ID
+    store_id: ID
+
+    shipping_id: String
+    shipping_status: String
+
+    label: String
+    imageLabel: String
+
+    integration_id: ID
+    validation: Boolean!
+
+    user: User @belongsTo
+    assignedToUser: User @belongsTo
+
+    state: State @belongsTo
+    city: City @belongsTo
+    store: Store @belongsTo
+
+    getYalidinePdfLink: String @method
+    isStockReady: Boolean @method
+
+    outboundProducts: [OutboundProduct]! @hasMany
+    outboundPackages: [OutboundPackage]! @hasMany
+    outboundDispatchs: [OutboundDispatch]! @hasMany
+
+
+
+    outboundImportation: OutboundImportation @belongsTo
+
+    productCodes: [ProductCode]! @hasMany
+}
+
+type OutboundProduct {
+    id: ID!
+    product_id: ID!
+    quantity: Int!
+    price: Int!
+    status: String
+    created_at: DateTime!
+    updated_at: DateTime
+
+    product: Product! @belongsTo
+    outbound: Outbound! @belongsTo
+
+    productCodes: [ProductCode] @hasMany
+}
+
+type OutboundImportation {
+    id: ID!
+    file: String!
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+    outbounds: [Outbound!]! @hasMany #TODO find out why this is not working
+    o: [Outbound!]! @hasMany
+    outbounds_counts: Int! @count(relation: "outbounds")
+}
+
+type OutboundPackage {
+    id: ID!
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+    outbound: Outbound! @belongsTo
+}
+
+type OutboundDispatch {
+    id: ID!
+    name: String!
+    id_number: String!
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+    outbound: Outbound! @belongsTo
+}
+
+extend type Query {
+    outbounds(
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at", "validated_at", "packaged_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "number", "user_id", "store_id", "state_id","name", "phone","assigned_to"
+            "city_id", "type", "status", "created_at", "shipping_id", "updated_at", "printed_at", "validated_at"
+            "status", "shipping_status", "integration_id", "validation", "importation_id", "packaged_by", "packaged_at"
+        ])
+    ): [Outbound!]!
+    @paginate(defaultCount: 10)
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outboundsForProduct(
+        product_id: ID!
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at", "validated_at", "packaged_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "number", "user_id", "store_id", "state_id","name", "phone","assigned_to"
+            "city_id", "type", "status", "created_at", "shipping_id", "updated_at", "printed_at", "validated_at"
+            "status", "shipping_status", "integration_id", "validation", "importation_id", "packaged_by", "packaged_at"
+        ])
+    ): [Outbound!]!
+    @paginate(defaultCount: 10, builder: "App\\GraphQL\\Queries\\OutboundsForProduct")
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outboundsCount(
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at", "validated_at", "packaged_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "number", "user_id", "store_id", "state_id","name", "phone","assigned_to"
+            "city_id", "type", "status", "created_at", "shipping_id", "updated_at", "printed_at", "validated_at"
+            "status", "shipping_status", "integration_id", "validation", "importation_id", "packaged_by", "packaged_at"
+        ])
+    ): Int
+    @count(model: "Outbound")
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outboundsByDate(
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at", "validated_at", "packaged_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "number", "user_id", "store_id", "state_id","name", "phone","assigned_to"
+            "city_id", "type", "status", "created_at", "shipping_id", "updated_at", "printed_at", "validated_at"
+            "status", "shipping_status", "integration_id", "validation", "importation_id", "packaged_by", "packaged_at"
+        ])
+    ): Mixed!
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outboundsForDate(
+        orderBy: _ @orderBy(columns: ["updated_at", "created_at", "validated_at", "packaged_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "number", "user_id", "store_id", "state_id","name", "phone","assigned_to"
+            "city_id", "type", "status", "created_at", "shipping_id", "updated_at", "printed_at", "validated_at"
+            "status", "shipping_status", "integration_id", "validation", "importation_id", "packaged_by", "packaged_at"
+        ])
+    ): [Outbound]!
+    @all
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outbound(number: String! @eq): Outbound @find @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+    @guard
+
+    outboundImportations(
+        orderBy: _ @orderBy(columns: ["created_at", "updated_at", "validated_at",], direction: DESC)
+    ): [OutboundImportation!]!
+    @paginate(defaultCount: 15)
+    @whereAuthOrRole(relation: "user")
+    @guard
+
+    outboundImportation(id: ID! @eq): OutboundImportation! @find @whereAuthOrRole(relation: "user")
+
+    outboundsDashboard(
+        startDate: Date
+        endDate: Date
+    ): Mixed! @whereAuthOrRole(relation: "user")  @guard
+
+    outboundsMiniDashboard: Mixed
+}
+
+input OutboundInput {
+    id: ID
+    number: String
+    is_cod: Boolean
+    type: String!
+    status: String
+    note: String
+
+    awb: String
+    dropshipper_name: String
+    dropshipper_phone: String
+
+    invoice_n: String!
+    name: String!
+    address: String
+    address2: String
+    zip: String
+    phone: String!
+
+    price: Int!
+    freeshipping: Boolean
+    is_stopdesk: Boolean
+    has_exchange: Boolean
+    product_to_collect: String
+
+    state_id: ID!
+    city_id: ID!
+    store_id: ID!
+    warehouse_id: ID!
+
+    validation: Boolean
+    validated_at: DateTime
+
+    outboundProducts: OutboundProductHasMany
+}
+
+input OutboundInputCompleted {
+    id: ID
+    note: String
+
+    inboundProducts: OutboundProductHasManyCompleted
+}
+
+input OutboundProductHasMany {
+    create: [OutboundProductInput!]
+    update: [OutboundProductInput!]
+    delete: [ID!]
+}
+
+input OutboundProductHasManyCompleted {
+    canceled: [ID!]!
+}
+
+input OutboundProductInput {
+    id: ID
+    product_id: ID!
+    quantity: Int!
+    price: Int
+    status: String
+}
+
+
+input OutboundImportationInput {
+    store_id: ID!
+    warehouse_id: ID!
+    file: Upload!
+}
+
+input OutboundDispatchInput {
+    numbers: [String]!
+    name: String!
+    id_number: String!
+}
+
+input OutboundsReturnInput {
+    number: String,
+    outboundProducts: OutboundProductHasManyReturned
+}
+
+input OutboundProductHasManyReturned {
+    updated: [OutboundProductReturned]!
+}
+
+input OutboundProductReturned {
+    id: ID!
+    returned_undamaged: Int!
+    returned_damaged: Int!
+
+}
+
+input OutboundPackageInput {
+    product_codes: [OutboundPackageProductCodesInput!]!,
+    number: String!
+}
+
+input OutboundPackageProductCodesInput {
+    codes: [String!]!
+    outbound_product_id: ID!
+}
+
+extend type Mutation {
+    createOutbound(input: OutboundInput @spread): Outbound! @create @guard
+
+    updateOutbound(id: ID!, input: OutboundInput @spread): Outbound! @update @guard
+    @whereAuthOrRole(relation: "user", permissions: ["view-outbounds"])
+
+    validateOutbound(id: ID!, validation: Boolean! @spread): Outbound! @guard
+    @update
+    @whereAuthOrRole(relation: "user", roles: ["emplayee"])
+
+    markOutboundsAsPrinted(numbers: [String!]!): [Outbound!]! @can(ability: "print") @guard
+    markOutboundsAsPackaged(input: OutboundPackageInput! @spread): Outbound! @can(ability: "package") @guard
+    dispatchOutbounds(input: OutboundDispatchInput @spread): [Outbound!]! @can(ability: "dispatch") @guard
+    returnOutbounds(codes: [String]!, damaged: Boolean): [ProductCode!]! @guard
+
+    completeOutbound(id: ID!, input: OutboundInputCompleted @spread): Outbound! @can(ability: "complete", find: "id") @can(ability: "complete") @guard
+
+    deleteOutbounds(ids:[ ID!]): [Outbound] @guard
+
+    uploadOutboundImportation(input: OutboundImportationInput @spread): OutboundImportation! @guard
+    assignOutbound(ids:[ ID!]!, user_id: ID!): [Outbound] @guard
+}

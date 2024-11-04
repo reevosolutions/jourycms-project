@@ -1,0 +1,42 @@
+{
+  "compilerOptions": {
+    "target": "es2017",
+    "lib": [
+      "es2017",
+      "esnext.asynciterable",
+      "DOM"
+    ],
+    "typeRoots": [
+      // "./node_modules/@types",
+      "./src/typings",
+      "../lup-sdk/typings",
+      "../../levelup-project/lup-sdk/typings",
+      // "./node_modules/@levelup-system/sdk/typings",
+    ],
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "forceConsistentCasingInFileNames": true,
+    "moduleResolution": "node",
+    "module": "commonjs",
+    "pretty": true,
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "outDir": "./build",
+    "allowJs": true,
+    "noEmit": false,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "include": [
+    "./src/**/*",
+    "../lup-sdk/typings",
+    "../../levelup-project/lup-sdk/typings",
+    // "./node_modules/@levelup-system/sdk/typings"
+  ],
+  "exclude": [
+    "node_modules",
+    "tests"
+  ]
+}

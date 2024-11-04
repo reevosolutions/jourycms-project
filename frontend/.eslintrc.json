@@ -1,0 +1,46 @@
+{
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:unicorn/recommended",
+    "plugin:import/recommended",
+    "plugin:playwright/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "plugins": ["simple-import-sort"],
+  "rules": {
+    "simple-import-sort/exports": "off",
+    "unicorn/no-array-callback-reference": "off",
+    "unicorn/no-array-for-each": "off",
+    "unicorn/no-array-reduce": "off",
+    "unicorn/no-null": "off",
+    "prettier/prettier": "warn",
+    "simple-import-sort/imports": "off",
+    "unicorn/prefer-module": "off",
+    "unicorn/no-negated-condition": "off",
+    "unicorn/no-useless-undefined": "off",
+    "unicorn/no-document-cookie": "off",
+    "unicorn/prefer-global-this": "off",
+    "unicorn/explicit-length-check": "warn",
+    "unicorn/prevent-abbreviations": [
+      "warn",
+      {
+        "allowList": {
+          "e2e": true
+        },
+        "replacements": {
+          "props": false,
+          "ref": false,
+          "params": false
+        }
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["*.js"],
+      "rules": {
+        "unicorn/prefer-module": "off"
+      }
+    }
+  ]
+}

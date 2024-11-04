@@ -1,0 +1,54 @@
+type Store {
+    id: ID!
+    name: String!
+    phone: String
+    description: String
+
+    state_id: ID
+    city_id: ID
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    state: State @belongsTo
+    city: City @belongsTo
+
+    user: User @belongsTo
+}
+
+extend type Query {
+    stores(orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)): [Store!]!
+    @paginate(defaultCount: 10)
+    @whereAuthOrRole(relation: "user")
+    @guard
+
+    storesAll: [Store!]! @whereAuthOrRole(relation: "user", roles: ["employee"]) @all  @guard
+    store(id: ID! @eq): Store @find @whereAuthOrRole(relation: "user")  @guard
+    storesSearch(
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "user_id", "name", "state_id","city_id", "phone",
+        ])
+    ): [Store!]! @all @guard
+}
+
+input StoreInput {
+    name: String!
+    phone: String
+    description: String
+    state_id: ID
+    city_id: ID
+}
+
+input StoreInputUpdate {
+    phone: String
+    description: String
+    state_id: ID
+    city_id: ID
+}
+
+extend type Mutation {
+    createStore(input: StoreInputUpdate @spread): Store! @create  @guard
+    updateStore(id: ID!, input: StoreInput @spread): Store! @whereAuthOrRole(relation: "user") @update  @guard
+    deleteStore(id: ID!): Store @whereAuthOrRole(relation: "user") @delete  @guard @can(ability: "delete")
+}

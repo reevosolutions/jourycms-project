@@ -1,0 +1,158 @@
+type Shelf {
+    id: ID!
+    code: String!
+    warehouse_id: ID!
+    length: Int
+    rowsType: String!
+    colsType: String!
+
+    warehouse: Warehouse @belongsTo
+    rows: [ShelfRow] @hasMany
+    cols: [ShelfCol] @hasMany
+    boxes: [ShelfBox] @hasMany
+}
+
+type ShelfRow {
+    id: ID!
+    code: String!
+    shelf_id: ID!
+    height: Int
+
+    shelf: Shelf @belongsTo
+}
+
+type ShelfCol {
+    id: ID!
+    code: String!
+    shelf_id: ID!
+    width: Int
+
+    shelf: Shelf @belongsTo
+}
+
+type ShelfCart {
+    id: ID!
+    code: String!
+    warehouse_id: ID!
+
+    warehouse: Warehouse @belongsTo
+    boxes: [ShelfBox] @hasMany
+}
+
+type ShelfBox {
+    id: ID!
+    code: String!
+    shelf_id: ID
+    shelf_col_id: ID
+    shelf_row_id: ID
+    shelf_cart_id: ID
+    length: Int
+    height: Int
+    width: Int
+
+    printed_at: DateTime
+
+    warehouse: Warehouse @belongsTo
+    shelf: Shelf @belongsTo
+    shelfRow: ShelfRow @belongsTo
+    shelfCol: ShelfCol @belongsTo
+    cart: ShelfCart @belongsTo
+    checkIns: [CheckIn] @hasMany
+    productCodes: [ProductCode] @hasMany
+    products: [Product] @method
+
+    productsCount: Int @method
+    productCodesCount: Int @count(relation: "ProductCodes")
+}
+
+
+extend type Query {
+    shelves: [Shelf] @paginate
+    shelf(id: ID @eq): Shelf @find
+    shelfWithCode(code: String): Shelf @field(resolver: "App\\GraphQL\\Queries\\ShelfWithCode@shelf")
+    shelfColWithCode(code: String): ShelfCol @field(resolver: "App\\GraphQL\\Queries\\ShelfWithCode@shelfCol")
+    shelfRowWithCode(code: String): ShelfRow @field(resolver: "App\\GraphQL\\Queries\\ShelfWithCode@shelfRow")
+    shelfCartWithCode(code: String): ShelfRow @field(resolver: "App\\GraphQL\\Queries\\ShelfWithCode@shelfCart")
+
+    shelfBoxes(
+        orderBy: _ @orderBy(columns: ["created_at", "id", "code"]),
+        where: _ @whereConditions(columns: ["code", "warehouse_id"])
+    ): [ShelfBox] @paginate
+
+    shelfBox(code: String @eq): ShelfBox @find
+
+    shelfCarts(
+        orderBy: _ @orderBy(columns: ["created_at", "id", "code"]),
+        where: _ @whereConditions(columns: ["code", "warehouse_id"])
+    ): [ShelfCart] @paginate
+
+    shelfCart(code: String @eq): ShelfCart @find
+
+    compartment(shelf_id: ID!,shelf_col_id: ID!,shelf_row_id: ID!): [ShelfBox] @field(resolver: "App\\GraphQL\\Queries\\CompartmentQuery")
+}
+
+input ShelfInput {
+    code: String!
+    warehouse_id: ID!
+    length: Int
+
+    rowsType: String
+    colsType: String
+
+    rows: ShelfInputRowsBelongsTo
+    cols: ShelfInputColsBelongsTo
+}
+
+input ShelfInputRowsBelongsTo {
+    create: [RowInput]
+    update: [RowInput]
+    delete: [ID]
+}
+
+input RowInput {
+    id: ID @eq
+    code: String!
+    shelf_id: ID
+    height: Int
+}
+
+input ShelfInputColsBelongsTo {
+    create: [ColInput]
+    update: [ColInput]
+    delete: [ID]
+}
+
+input ColInput {
+    id: ID @eq
+    code: String!
+    shelf_id: ID
+    width: Int
+}
+
+input ShelfBoxesInput {
+    warehouse_id: ID!
+    howMany: Int!
+    length: Int
+    height: Int
+    width: Int
+}
+
+input ShelfCartsInput {
+    warehouse_id: ID!
+    howMany: Int!
+}
+
+extend type Mutation {
+    createShelf(input: ShelfInput @spread): Shelf @create
+
+    createRow(input: RowInput @spread): ShelfRow @create
+    createCol(input: ColInput @spread): ShelfCol @create
+
+    deleteRow(id: ID! @eq): ShelfRow @delete
+    deleteCol(id: ID! @eq): ShelfCol @delete
+
+    createShelfBoxes(input: ShelfBoxesInput @spread): [ShelfBox]!
+    printShelfBoxesCodes(codes: [String!]!): [ShelfBox]!
+
+    createShelfCarts(input: ShelfCartsInput @spread): [ShelfCart]!
+}

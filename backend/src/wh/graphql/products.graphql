@@ -1,0 +1,159 @@
+type Product {
+    id: ID!
+    name: String!
+    sku: String!
+    category: String
+    size: String
+    width: Float
+    height: Float
+    length: Float
+    weight: Float
+    description: String
+    value: Int
+
+    total: Int!
+    ready: Int!
+    incoming: Int!
+    incoming_return: Int!
+    damaged: Int!
+    delivered: Int!
+    on_process: Int!
+    in_warehouse: Int!
+
+    integration_id: ID
+    link : String
+    image : String
+    remote_id: String
+
+    variant_of: String
+
+    store_id: ID
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+    inboundProducts: InboundProduct @hasMany
+    outboundProducts: OutboundProduct @hasMany
+    productInventory: ProductInventory @hasOne
+    integration: Integration @belongsTo
+    store: Store @belongsTo
+
+    image: String
+
+    variant: String
+    variations: String
+    options: String
+    type: String
+
+    main: Product @belongsTo
+    variants: [Product] @hasMany
+
+    warehouses: [Warehouse] @belongsToMany
+    productCodes: [ProductCode] @hasMany
+    shelfBoxes: [ShelfBox] @method
+}
+
+type ProductCode {
+    id: ID!
+    code: String!
+    scanned_at: DateTime
+    check_in_at: DateTime
+    packaged_at: DateTime
+    status: String
+    damaged: Boolean
+
+    product: Product! @belongsTo
+    inbound: Inbound! @belongsTo
+    outbound: Outbound @belongsTo
+    user: User @belongsTo
+    checkIn: [CheckIn] @hasMany
+
+    shelfBox: ShelfBox @belongsTo
+    checkedInByUser: User @belongsTo
+    packagedByUser: User @belongsTo
+
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+type ProductInventory {
+    id: ID!
+    total: Int!
+    ready: Int!
+    incoming: Int!
+    incoming_return: Int!
+
+    updated_at: DateTime
+}
+
+extend type Query {
+    products(
+        orderBy: _ @orderBy(columns: ["created_at" , "name" , "sku" , "size",
+            "total", "ready", "incoming_return", "incoming", "damaged", "on_process", "delivered", "in_warehouse"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "id", "integration_id", "variant_of", "sku", "name", "size","variant"
+            "store_id", "warehouse_id", "weight"
+            "total" , "ready" , "incoming" , "incoming_return"
+        ])
+    ): [Product!]!
+    @paginate(defaultCount: 10)
+    @whereAuthOrRole(relation: "user", permissions: ["view-products"])
+    @guard
+
+    productsAll(
+        orderBy: _ @orderBy(columns: ["created_at" , "name" , "sku" , "size",
+            "total", "ready", "incoming_return", "incoming", "damaged", "on_process", "delivered", "in_warehouse"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "integration_id","variant_of","sku", "name", "size",
+            "store_id", "user_id", "warehouse_id"
+            "total" , "ready" , "incoming" , "incoming_return",
+        ])
+    ): [Product!]! @all @whereAuthOrRole(relation: "user")  @guard
+
+    productsAllAdmin(
+        where: _ @whereConditions(columns: ["id","sku", "name", "variant_of", "user_id"])
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+    ): [Product!]! @all @whereAuthOrRole(relation: "user", roles: ["admin"])  @guard
+
+    product(sku: String! @eq): Product @find @whereAuthOrRole(relation: "user")  @guard
+
+    productCodes(
+        where: _ @whereConditions(columns: [
+            "code", "product_id"
+        ])
+    ): [ProductCode!]! @all
+
+    productCodesPagination(
+        where: _ @whereConditions(columns: [
+            "code", "product_id"
+        ])
+    ): [ProductCode!]! @paginate
+}
+
+input ProductInput {
+    name: String!
+    sku: String
+    category: String
+    size: String
+    width: Float
+    height: Float
+    length: Float
+    weight: Float
+    description: String
+    value: Int!
+    image: Upload
+
+    variant: String
+    variations: String
+    options: String
+}
+
+extend type Mutation {
+    createProduct(input: ProductInput @spread): Product! @create  @guard
+    updateProduct(id: ID!, input: ProductInput @spread): Product! @whereAuthOrRole(relation: "user") @update  @guard
+    deleteProduct(id: ID!): Product @whereAuthOrRole(relation: "user") @delete  @guard
+    printProductCodes(inbound_id: ID!, product_id: ID!): [ProductCode]  @guard
+    checkProductCode(outbound_id: ID!, code: String): ProductCode @guard
+    removeProductCode(inbound_id: ID!,codes: [String!]!): Inbound @guard @can(ability: "delete")
+}

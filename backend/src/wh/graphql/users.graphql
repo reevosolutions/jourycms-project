@@ -1,0 +1,68 @@
+extend type User {
+    role: String!
+    permissions: [Permission] @belongsToMany
+
+    created_at: DateTime!
+    updated_at: DateTime
+    warehouse_id: ID
+
+    products: [Product] @hasMany
+    stores: [Store] @hasMany
+    store: Store @method
+    warehouse: Warehouse @belongsTo
+}
+
+type Permission {
+    id: ID!
+    label: String
+    permission: String!
+
+    created_at: DateTime!
+    updated_at: DateTime
+}
+
+extend type Query {
+    users(
+        orderBy: _ @orderBy(columns: ["created_at", "role", "email","state", "name"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "created_at", "role", "email","status", "name", "warehouse_id"
+        ])
+    ): [User!]!
+    @paginate(defaultCount: 10)
+    @can(ability: "viewAny") @guard
+    clients: [User!]! @can(ability: "viewClients") @guard
+    user(id: ID @eq): User @find @can(ability: "viewClients", find: "id") @guard
+}
+
+input PermissionInput {
+    user_id: ID!
+    permission: String!
+}
+
+input UserInput {
+    id: ID
+    name: String!
+    email: String!
+    password: String @hash
+    role: String!
+    permissions: syncPermissionInput
+    stores: syncStoreInput
+    warehouse_id: ID
+}
+
+input syncStoreInput {
+    create: [StoreInput]
+}
+
+input syncPermissionInput {
+    sync: [ID!]
+}
+
+extend type Query  {
+    permissions: [Permission] @all
+}
+
+extend type Mutation {
+    createUser(input: UserInput @spread): User @create @can(ability: "create")  @guard
+    updateUser(id: ID! @eq, input: UserInput @spread): User @update @can(ability: "update", find: "id")  @guard
+}

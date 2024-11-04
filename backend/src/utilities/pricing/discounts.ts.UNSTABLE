@@ -1,0 +1,144 @@
+import moment from "moment";
+
+/**
+ * TODO: implement this
+ * @generator Levelup
+ * @author dr. Salmi <reevosolutions@gmail.com>
+ * @since 27-02-2024 19:03:02
+ * 
+ */
+export const isDiscountApplicable = (parcelData: Levelup.V2.Offers.Entity.IDiscountRequiredDataType, offer: Levelup.V2.Offers.Entity.DiscountOffer, otherDiscountsApplied: string[]): boolean => {
+  try {
+
+    return true;
+  } catch (error) {
+
+  }
+}
+
+
+export const applyDiscounts: (amounts: Entities.IDeposit["amounts"], parcel: Partial<Levelup.V2.Shipping.Entity.Parcel>) => Entities.IDeposit["amounts"] = (amounts, parcel) => {
+  const otherDiscountsApplied: string[] = []
+  discounts.forEach(discount => {
+
+    if (discount.isApplicable(parcel, otherDiscountsApplied)) {
+      otherDiscountsApplied.push(discount.name);
+      amounts.discount_offers?.push(discount);
+      if (discount.tax_delivery.discount) {
+        amounts.tax_delivery = discount.tax_delivery.factor === "minus" ? amounts.tax_delivery - discount.tax_delivery.discount : amounts.tax_delivery - (amounts.tax_delivery * discount.tax_delivery.discount / 100)
+      }
+      if (discount.tax_assurance.discount) {
+        amounts.tax_assurance = discount.tax_assurance.factor === "minus" ? amounts.tax_assurance - discount.tax_assurance.discount : amounts.tax_assurance - (amounts.tax_assurance * discount.tax_assurance.discount / 100)
+      }
+      if (discount.tax_overweight.discount) {
+        amounts.tax_overweight = discount.tax_overweight.factor === "minus" ? amounts.tax_overweight - discount.tax_overweight.discount : amounts.tax_overweight - (amounts.tax_overweight * discount.tax_overweight.discount / 100)
+      }
+      if (discount.tax_return.discount) {
+        amounts.tax_return = discount.tax_return.factor === "minus" ? amounts.tax_return - discount.tax_return.discount : amounts.tax_return - (amounts.tax_return * discount.tax_return.discount / 100)
+      }
+
+      // fix values lower than 0;
+      amounts.tax_delivery = amounts.tax_delivery || 0;
+      amounts.tax_assurance = amounts.tax_assurance || 0;
+      amounts.tax_overweight = amounts.tax_overweight || 0;
+      amounts.tax_return = amounts.tax_return || 0;
+    }
+
+  });
+
+  return amounts;
+
+};
+
+export const applyDiscountsToDeliveryFees: (value: number, parcelData: Levelup.V2.Offers.Entity.IDiscountRequiredDataType) => number = (value, parcelData) => {
+
+  /* -------------------------------------------------------------------------- */
+  /*                   START INJECT BLACK FRIDAY 2023 DISCOUNT                  */
+  /* -------------------------------------------------------------------------- */
+
+  if (parcelData.createdAt) {
+    const startBlackFriday2023 = new Date('2023-11-04T00:00:00Z');
+    const endBlackFriday2023 = new Date('2023-11-30T23:59:59Z');
+    const createdAt = new Date(parcelData.createdAt?.toString());
+    if (createdAt >= startBlackFriday2023 && createdAt <= endBlackFriday2023) {
+      let feesAmount: number | null = null;
+      let stateFeesAmount: number | null = null;
+      let cityFeesAmount: number = 0;
+      const config: {
+        [Zone: number]: {
+          home: number;
+          desk: number;
+        };
+      } = {
+        0: {
+          home: 400,
+          desk: 300
+        },
+        1: {
+          home: 400,
+          desk: 300
+        },
+        2: {
+          home: 600,
+          desk: 400
+        },
+        3: {
+          home: 600,
+          desk: 400
+        },
+        4: {
+          home: 800,
+          desk: 600
+        },
+        5: {
+          home: 800,
+          desk: 600
+        },
+      }
+
+      if (parcelData.shipment_to === "desk") {
+        feesAmount = config[parcelData.target_state_zone]?.desk || null;
+      } else if (parcelData.shipment_to === "home") {
+        feesAmount = config[parcelData.target_state_zone]?.home || null;
+      }
+
+      if (feesAmount) {
+        return feesAmount;
+      }
+
+    }
+  }
+
+  /* ------------------ END INJECT BLACK FRIDAY 2023 DISCOUNT ----------------- */
+
+  const otherDiscountsApplied: string[] = []
+  let new_value = value;
+  if (new_value === 0) return new_value;
+  discounts.forEach(discount => {
+    if (discount.isApplicable(parcelData, otherDiscountsApplied)) {
+      otherDiscountsApplied.push(discount.name);
+      if (discount.tax_delivery.discount) {
+        new_value = discount.tax_delivery.factor === "minus" ? new_value - discount.tax_delivery.discount : new_value - (value * discount.tax_delivery.discount / 100)
+      }
+    }
+  });
+  // console.log(colors.magenta('DISCOUNT APPLICABLE'), value, new_value);
+  return new_value || 0;
+};
+
+export const applyDiscountsToReturnTax: (value: number, parcel: Partial<Levelup.V2.Shipping.Entity.Parcel>) => number = (value, parcel) => {
+  const otherDiscountsApplied: string[] = []
+  let new_value = value;
+  if (new_value === 0) return new_value;
+  discounts.forEach(discount => {
+    if (discount.isApplicable(parcel, otherDiscountsApplied)) {
+      otherDiscountsApplied.push(discount.name);
+      if (discount.tax_return.discount) {
+        new_value = discount.tax_return.factor === "minus" ? new_value - discount.tax_return.discount : new_value - (value * discount.tax_return.discount / 100)
+      }
+    }
+  });
+  // console.log(colors.magenta('DISCOUNT APPLICABLE'), value, new_value);
+  return new_value || 0;
+};
+

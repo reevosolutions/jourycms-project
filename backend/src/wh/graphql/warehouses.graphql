@@ -1,0 +1,29 @@
+type Warehouse {
+    id: ID!
+    name: String!
+    description: String
+
+    shelves: [Shelf] @hasMany
+    carts: [ShelfCart] @hasMany
+    products: [Product] @belongsToMany
+    productsMain: [Product] @belongsToMany
+}
+
+extend type Query {
+    warehouses(
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: ["number", "user_id", "store_id", "state_id", "city_id", "type", "status", "created_at"])
+    ): [Warehouse!]!
+    @paginate(defaultCount: 10) @guard
+    warehouse(id: ID! @eq): Warehouse @find @guard
+}
+
+input warehouseInput{
+    name: String!
+    description: String
+}
+
+extend type Mutation {
+    createWarehouse(input: warehouseInput @spread): Warehouse! @create @can(ability: "create")
+    updateWarehouse(id: ID!, input: warehouseInput @spread): Warehouse! @create @can(ability: "update")
+}

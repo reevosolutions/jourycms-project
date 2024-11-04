@@ -1,0 +1,80 @@
+import { customAlphabet } from "nanoid";
+import config from "../../config";
+import { ITEM_SHORTCUTS, type TShortcutEntities } from "../../constants/tracking_id.constants";
+import { ExportItem } from "../../models/export-item.model";
+import initLogger from '../logging';
+
+const suffixLength = config.settings.tracking.suffixLength;
+
+const alphabet = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const nanoid = customAlphabet(alphabet, suffixLength);
+const oneLetterNanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1);
+const otherCharactersNanoid = customAlphabet(alphabet, suffixLength - 1);
+
+
+const logger = initLogger('UTILITY', 'TRACKING_ID');
+
+/**
+ * @generator Levelup
+ * @author dr. Salmi <reevosolutions@gmail.com>
+ * @since 27-02-2024 21:13:56
+ */
+const createTrackingId: (
+  entity: TShortcutEntities,
+  parent_tracking_id?: string | null
+) => Promise<string> = async (entity, parent_tracking_id = null) => {
+  let idUsed = true;
+  let id = "",
+    itemsFound;
+  while (idUsed) {
+
+    id = `${ITEM_SHORTCUTS[entity]}-${oneLetterNanoid()}${otherCharactersNanoid()}`
+    logger.value("NANOID PARAMS", entity, id)
+    switch (entity) {
+      case 'Export':
+        itemsFound = await ExportItem.countDocuments({ tracking_id: id });
+        break;
+    }
+
+    if (!itemsFound) {
+      idUsed = false;
+    }
+  }
+
+  return id;
+}
+
+
+
+export const isTrackingId = (str: string): false | string => {
+  if (!str.length) return false;
+  str = str.trim().toUpperCase();
+  if (str.match(/^([A-Z]{3}-[A-Z0-9]{6,10})$/g)) return str;
+  if (str.startsWith('INB-')) return str;
+  if (str.startsWith('OTB-')) return str;
+  return false;
+};
+
+
+/**
+ * TODO: Implement dynamic prefixes from the app/company settings
+ * @param {string} tracking_id 
+ * @returns {false | TShortcutEntities}
+ */
+export const getTrackingEntity = (tracking_id: string): false | TShortcutEntities => {
+  const prefix = tracking_id.substring(0, 3);
+  let entity: false | TShortcutEntities = false;
+
+  for (let i = 0; i < Object.keys(ITEM_SHORTCUTS).length; i++) {
+    const key = Object.keys(ITEM_SHORTCUTS)[i] as TShortcutEntities;
+    if (ITEM_SHORTCUTS[key] === prefix) {
+      entity = key;
+      break;
+    }
+  }
+
+  return entity;
+};
+
+
+export { createTrackingId };

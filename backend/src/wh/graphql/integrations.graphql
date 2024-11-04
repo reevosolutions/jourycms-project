@@ -1,0 +1,66 @@
+type Integration {
+    id: ID!
+    service: String!
+    type: String!
+    name: String
+    url: String
+    synced: Boolean
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+    products: [Product] @hasMany
+    productsCount: Int  @count(relation: "products")
+
+    webhooks: [Webhook] @hasMany
+
+    store: Store @hasOne
+}
+
+type Webhook {
+    id: ID!
+    topic: String!
+
+    integration: Integration @belongsTo
+}
+
+extend type Query{
+    integration(id: ID!): Integration @find  @guard
+    integrations(
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: [
+            "name", "service", "type", "url"
+        ])
+    ): [Integration!]!
+    @whereAuthOrRole(relation: "user")
+    @paginate(defaultCount: 10)
+    @guard
+}
+
+input IntegrationInput {
+    type: String!
+    API_ID: String
+    API_TOKEN: String
+    service: String
+}
+
+input ShopifyIntegrationInput {
+    URL: String!
+    API_ID: String!
+    API_TOKEN: String!
+    Shared_Secret: String!
+}
+
+extend type Mutation {
+    createYalidineIntegration(input: IntegrationInput @spread): Integration!  @guard
+
+    createShopifyIntegration(input: ShopifyIntegrationInput! @spread): Integration!
+    @field(resolver: "App\\GraphQL\\Mutations\\ShopifyMutations@create")  @guard
+
+    reSyncIntegration(id: ID!): Integration  @guard
+
+    updateWoocommerceIntegrationInfo(url: String!): Integration!
+    @field(resolver: "App\\GraphQL\\Mutations\\WoocommerceMutations@updateName")
+    @guard
+}

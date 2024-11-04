@@ -1,0 +1,274 @@
+import { find, isNull, isUndefined } from 'lodash';
+import config from '../../config';
+// import { applyDiscounts } from './discounts';
+import exceptions from '../../exceptions/index';
+
+export const DEFAULT_TAX_ASSURANCE_PERCENTAGE = config.pricing.cod_assurance_percentage;
+export const DEFAULT_TAX_RETURN = config.pricing.tax_return;
+
+const RETURNED_PARCEL_STATUSES: Entities.ParcelStatus[] = [
+  "returned_to_warehouse",
+  "returned_to_seller",
+];
+
+/**
+ * Must be called once the parcel is delivered or returned 
+ * @param parcel 
+ * @returns 
+ */
+
+export type CalculateParcelAmountsFunction = (parcel: Pick<Levelup.V2.Shipping.Entity.Parcel,
+  'source' |
+  'last_status' |
+  'status_history' |
+  'fees' |
+  'type' |
+  'sub_type'>) => Levelup.V2.Payment.Entity.IParcelFees;
+
+export const calculateParcelAmounts: CalculateParcelAmountsFunction = (parcel) => {
+  if (!parcel.fees) throw new exceptions.UnprocessableEntityException('The parcel must have fees property');
+  const fees = parcel.fees;
+  const amounts: Levelup.V2.Payment.Entity.IParcelFees = {
+    delivery_fees_payment_mode: fees.delivery_fees_payment_mode,
+    delivery_discount: 0,
+    price: fees.price || 0,
+    declared_value: fees.declared_value || 0,
+    is_free_shipping: fees.is_free_shipping || false,
+    delivery_fees: 0,
+
+    return_fees: 0,
+    net_taxable: 0,
+    net_without_delivery: 0,
+    // assurance
+    tax_assurance: 0,
+    tax_assurance_percent: 0,
+    is_parcel_assured: fees.is_parcel_assured || false,
+    is_store_assured: fees.is_store_assured || false,
+    // services
+    additional_services: fees.additional_services,
+    // totals
+    store_net_payable: 0,
+    net_to_recover_from_customer: 0,
+    overweight_fees: 0,
+    overweight_fees_payment_mode: "by_seller",
+    applied_offers: null,
+    store_has_custom_pricing: false, // TODO apply custom prices
+    deliverer_due: 0,
+    deliverer_paid: false,
+    delivery_fees_before_discount: 0,
+    tax_cod_percent: 0,
+    tax_cod: 0,
+    payment_status: 'not_ready'
+  }
+
+  amounts.tax_assurance_percent = isNull(fees.tax_cod_percent) ||
+    isUndefined(fees.tax_cod_percent)
+    ? DEFAULT_TAX_ASSURANCE_PERCENTAGE
+    : fees.tax_cod_percent;
+
+  /* -------------------------------------------------------------------------- */
+  /*                               service pickup                               */
+  /* -------------------------------------------------------------------------- */
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                       service callcenter & warehouse                       */
+  /* -------------------------------------------------------------------------- */
+  amounts.tax_callcenter_applied = parcel.source === "service_callcenter";
+  amounts.tax_warehouse_applied = find(parcel.status_history, s => s.status === "packaged") ? true : false;
+
+  /**
+   * TODO: You have to implement this property "SERVICE.apply" in the parcel fees on change status
+  */
+  amounts.tax_callcenter_applied = fees.additional_services.callcenter?.apply || false;
+  amounts.tax_warehouse_applied = fees.additional_services.warehouse?.apply || false;
+  amounts.tax_pickuo_applied = fees.additional_services.warehouse?.apply || false;
+
+  if (parcel.last_status === "delivered") {
+    amounts.tax_callcenter = amounts.tax_callcenter_applied ? fees.additional_services.warehouse?.d || 0 : 0;
+    amounts.tax_warehouse = amounts.tax_warehouse_applied ? fees.additional_services.warehouse?.d || 0 : 0;
+    amounts.tax_pickup = amounts.tax_warehouse_applied ? fees.additional_services.pickup?.d || 0 : 0;
+  }
+  else {
+    amounts.tax_callcenter = amounts.tax_callcenter_applied ? fees.additional_services.callcenter?.r || 0 : 0;
+    amounts.tax_warehouse = amounts.tax_warehouse_applied ? fees.additional_services.warehouse?.r || 0 : 0;
+    amounts.tax_pickup = amounts.tax_warehouse_applied ? fees.additional_services.pickup?.r || 0 : 0;
+  }
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 return fees                                */
+  /* -------------------------------------------------------------------------- */
+  amounts.tax_return = fees.tax_return;
+
+  /* -------------------------------------------------------------------------- */
+  /*                               overweight tax                               */
+  /* -------------------------------------------------------------------------- */
+  amounts.tax_overweight = fees.tax_overweight || 0;
+  amounts.tax_overweight_payment_method = fees.tax_overweight_payment_method || "by_seller";
+  const tax_overweight_to_recover_from_customer = amounts.tax_overweight_payment_method === "by_customer" ? amounts.tax_overweight : 0;
+  const tax_overweight_to_recover_from_seller = amounts.tax_overweight_payment_method === "by_seller" ? amounts.tax_overweight : 0;
+
+  /* -------------------------------------------------------------------------- */
+  /*                                delivery fees                               */
+  /* -------------------------------------------------------------------------- */
+  amounts.tax_delivery = fees.delivery_fee || 0;
+
+  /* -------------------------------------------------------------------------- */
+  /*                             has custom pricing                             */
+  /* -------------------------------------------------------------------------- */
+  amounts.store_has_custom_pricing = fees.store_has_custom_pricing;
+
+  /* -------------------------------------------------------------------------- */
+  /*                           delivery payment method                          */
+  /* -------------------------------------------------------------------------- */
+  const is_delivery_fees_recovered_from_customer = !fees.delivery_prepaid && !fees.is_free_shipping;
+  amounts.is_delivery_fees_recovered_from_customer = is_delivery_fees_recovered_from_customer;
+  const delivery_fees_to_recover_from_customer = is_delivery_fees_recovered_from_customer ? amounts.tax_delivery : 0;
+
+  /* -------------------------------------------------------------------------- */
+  /*                   net to recover from the final customer                   */
+  /* -------------------------------------------------------------------------- */
+  amounts.net_to_recover = (parcel.type === "classic" ? 0 : fees.price)
+    + delivery_fees_to_recover_from_customer
+    + tax_overweight_to_recover_from_customer;
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 net_taxable                                */
+  /* -------------------------------------------------------------------------- */
+  let net_taxable = (amounts.parcel_price || amounts.parcel_declared_value)
+    - amounts.tax_pickup
+    - amounts.tax_callcenter
+    - amounts.tax_warehouse
+    - tax_overweight_to_recover_from_seller
+    - (fees.is_free_shipping ? amounts.tax_delivery : 0);
+
+  /* -------------------------------------------------------------------------- */
+  /*             the classic parcels dont collect the parcel price!             */
+  /* -------------------------------------------------------------------------- */
+  if (parcel.type === "classic") net_taxable = 0;
+
+  /* -------------------------------------------------------------------------- */
+  /*                         fix the net taxable under 0                        */
+  /* -------------------------------------------------------------------------- */
+  if (net_taxable < 0) net_taxable = 0;
+
+
+  amounts.net_taxable = net_taxable;
+  // amounts.tax_assurance = net_without_delivery * (amounts.tax_assurance_percent || DEFAULT_TAX_ASSURANCE_PERCENTAGE) / 100;
+
+  // TODO: check if the tax assurance is calculated on the net taxable or the net without delivery
+  // TODO: reenable this line
+  // amounts.tax_assurance = amounts.store_is_assured ? net_taxable * (amounts.tax_assurance_percent) / 100 : 0;
+  amounts.tax_assurance = net_taxable * (amounts.tax_assurance_percent) / 100;
+  amounts.tax_assurance = 0 // TODO: remove this line it's temporary
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 net payable                                */
+  /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------- EXCHANGE -------------------------------- */
+  if (parcel.sub_type === 'exchange') {
+    amounts.store_net_payable = 0;
+  }
+  /* -------------------------------- DELIVERED ------------------------------- */
+  else if (parcel.last_status === "delivered") {
+    amounts.store_net_payable = amounts.parcel_price
+      - amounts.tax_assurance
+      - amounts.tax_pickup
+      - amounts.tax_callcenter
+      - amounts.tax_warehouse
+      - tax_overweight_to_recover_from_seller;
+    if (fees.is_free_shipping && !fees.delivery_prepaid) {
+      amounts.store_net_payable = amounts.store_net_payable - amounts.tax_delivery;
+    }
+  }
+  /* -------------------------------- RETURNED -------------------------------- */
+  else if (RETURNED_PARCEL_STATUSES.includes(parcel.last_status || 'in_preparation')) {
+    amounts.store_net_payable = 0
+      - amounts.return_fees
+      - amounts.tax_pickup
+      - amounts.tax_callcenter
+      - amounts.tax_warehouse
+      ;
+  }
+  /* ------------------------------- PROCESSING ------------------------------- */
+  else {
+    amounts.store_net_payable = 0;
+  }
+  /* --------------------------------- CLASSIC -------------------------------- */
+  if (parcel.type === "classic") amounts.store_net_payable = 0;
+
+  /* -------------------------------------------------------------------------- */
+  /*                               APPLY DISCOUNTS                              */
+  /* -------------------------------------------------------------------------- */
+  const amountsAfterDiscount = parcel.sub_type !== 'exchange' && fees.discount_applied ? amounts : amounts; // UNSTABLE applyDiscounts(amounts, parcel);
+  return amountsAfterDiscount;
+}
+
+
+export const calculateClassicParcelReturnFees = (fees: Levelup.V2.Payment.Entity.IParcelFees) => {
+  const result: {
+    delivery_fees: number;
+    delivery_fees_paid: boolean;
+    return_fees: number;
+    amount_to_collect: number;
+  } = {
+    delivery_fees: 0,
+    delivery_fees_paid: true,
+    return_fees: 0,
+    amount_to_collect: 0,
+  };
+
+  result.delivery_fees = fees.delivery_fees || 0;
+  result.delivery_fees_paid = fees.delivery_fees_payment_mode === 'by_seller';
+  result.return_fees = result.delivery_fees * 0.5;
+  result.return_fees = result.delivery_fees * 0;
+  result.amount_to_collect = result.return_fees + (result.delivery_fees_paid ? 0 : result.delivery_fees);
+
+  return result;
+}
+
+
+
+
+
+export const calculateOverWeight = (
+  volume: { width: number; height: number; length: number },
+  weight: number,
+  maxFreeWeight: number = 5,
+  zone: number = 0,
+  unitPrice: number = 50,
+) => {
+  const volumeWeight = volume.width * volume.height * volume.length * 0.0002;
+  const overweight = weight > volumeWeight ? weight - maxFreeWeight : volumeWeight - maxFreeWeight;
+  let result = overweight > 0 ? overweight * unitPrice : 0;
+  if (zone >= 4) result = result * 2;
+  return result;
+}
+
+
+export const calculateSupplementaryServiceFees = (
+  parcel: Partial<Levelup.V2.Shipping.Entity.Parcel>,
+  store: Levelup.V2.Accounts.Entity.Store,
+) => {
+  const service_callcenter_fees = parcel.source === 'service_callcenter' && store.settings?.services?.callcenter.active ? {
+    r: store.settings.services.callcenter.settings?.has_custom_pricing ? store.settings.services.callcenter.settings.pricing?.confirmed_not_delivered_orders ?? 0 : config.pricing.services_pricing.callcenter.confirmed_not_delivered_orders,
+    d: store.settings.services.callcenter.settings?.has_custom_pricing ? store.settings.services.callcenter.settings.pricing?.confirmed_delivered_orders ?? 0 : config.pricing.services_pricing.callcenter.confirmed_delivered_orders,
+  } : {
+    r: 0,
+    d: 0,
+  };
+  const service_warehouse_fees = find((parcel.status_history || []), s => s.status === 'packaged') && store.settings?.services?.warehouse.active ? {
+    r: store.settings.services.warehouse.settings?.has_custom_pricing ? store.settings.services.warehouse.settings.pricing?.returned_parcels ?? 0 : config.pricing.services_pricing.warehouse.returned_parcels,
+    d: store.settings.services.warehouse.settings?.has_custom_pricing ? store.settings.services.warehouse.settings.pricing?.delivered_parcels ?? 0 : config.pricing.services_pricing.warehouse.delivered_parcels,
+  } : {
+    r: 0,
+    d: 0,
+  };
+
+  return {
+    service_callcenter_fees,
+    service_warehouse_fees,
+  }
+}

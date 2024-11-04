@@ -1,0 +1,20 @@
+type State {
+    id : ID!
+    name: String!
+    zone: Int
+    cities: [City!]! @hasMany
+}
+
+type City {
+    id: ID!
+    name: String!
+    state: State @belongsTo
+    stop_desk: Boolean
+}
+
+extend type Query {
+    states: [State!]! @all
+    state(id: ID! @eq): State @find
+    cities: [City!]! @all
+    city(id: ID! @eq): City @find
+}

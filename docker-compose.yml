@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo
+    container_name: cms_mongodb
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    container_name: cms_backend
+    build:
+      context: ./backend
+    ports:
+      - '3032:3032'
+    environment:
+      - DB_URI=${DB_URI}
+      - CACHE_MANAGER_REDIS_URL=${CACHE_MANAGER_REDIS_URL}
+    depends_on:
+      - mongodb
+    volumes:
+      - ./sdk:/usr/src/app/sdk
+      - ./typings:/usr/src/app/typings
+
+  frontend:
+    container_name: cms_frontend
+    build:
+      context: ./frontend
+    ports:
+      - '3000:3000'
+    environment:
+      - SDK_BASE_URL=${SDK_BASE_URL}
+    depends_on:
+      - backend
+    volumes:
+      - ./sdk:/usr/src/app/sdk
+      - ./typings:/usr/src/app/typings
+
+  
+volumes:
+  mongodb_data:

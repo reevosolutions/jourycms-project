@@ -1,0 +1,45 @@
+type CheckIn {
+    id: ID!
+    product_code_id: ID!
+    shelf_box_id: ID!
+    by_user_id: ID!
+    batch:Int
+    created_at: DateTime!
+
+
+    productCode: ProductCode @belongsTo
+    shelfBox: ShelfBox @belongsTo
+    by: User @belongsTo
+}
+
+extend type Query {
+    checkIns(
+        orderBy: _ @orderBy(columns: ["created_at"])
+        where: _ @whereConditions(columns: ["product_code_id", "shelf_box_id", "by_user_id", "batch", "created_at"])
+    ): [CheckIn] @paginate(defaultCount: 20)
+}
+
+input CheckInInput {
+    productCodes: [String!]!
+    shelfBoxCode: String!
+}
+
+input PlaceBoxInput {
+    shelf_id: ID!
+    shelf_col_id: ID!
+    shelf_row_id: ID!
+    code: String!
+}
+
+input PlaceBoxInCartInput {
+    shelf_cart_id: ID!
+    code: String!
+}
+
+extend type Mutation {
+    createCheckIn(input: CheckInInput @spread): [CheckIn]! @guard
+    createCheckOut(input: CheckInInput @spread): [CheckIn]! @guard
+
+    placeBoxInShelf(input: PlaceBoxInput @spread): ShelfBox! @guard
+    placeBoxInCart(input: PlaceBoxInCartInput @spread): ShelfBox! @guard
+}

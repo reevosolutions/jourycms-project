@@ -1,0 +1,180 @@
+type Inbound {
+    id: ID!
+    number: String!
+    type: String!
+    status: String!
+    inbound_date: DateTime
+    phone: String
+    note: String
+    address: String
+    address2: String
+    zip: String
+
+    created_at: DateTime!
+    updated_at: DateTime
+
+    user: User @belongsTo
+
+    state_id: ID
+    city_id: ID
+    store_id: ID!
+    warehouse_id: ID
+
+    state: State @belongsTo
+    city: City @belongsTo
+    store: Store @belongsTo
+    warehouse: Warehouse @belongsTo
+
+    inboundProducts: [InboundProduct]! @hasMany
+}
+
+type InboundProduct {
+    id: ID!
+    product_id: ID!
+    quantity: Int!
+    quantity_received: Int
+    quantity_damaged: Int
+    expired_at: Date
+    created_at: DateTime!
+    updated_at: DateTime
+
+    variation: String
+
+    product: Product!
+}
+
+extend type Query {
+    inbounds(
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: ["number", "user_id", "store_id", "state_id", "city_id", "type", "status", "created_at"])
+    ): [Inbound!]!
+    @paginate(defaultCount: 10)
+    @whereAuthOrRole(relation: "user", permissions: ["view-inbounds"])
+    @guard
+
+    inboundsForProduct(
+        product_id: ID!
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: ["number", "user_id", "store_id", "state_id", "city_id", "type", "status", "created_at"])
+    ): [Inbound!]!
+    @paginate(defaultCount: 10, builder: "App\\GraphQL\\Queries\\InboundsForProduct")
+    @whereAuthOrRole(relation: "user", permissions: ["view-inbounds"])
+    @guard
+
+    inboundsClient(
+        orderBy: _ @orderBy(columns: ["created_at"], direction: DESC)
+        where: _ @whereConditions(columns: ["number", "user_id", "store_id", "state_id", "city_id", "type", "status", "created_at"])
+    ): [Inbound!]!
+    @paginate(defaultCount: 10) @guard
+    @whereAuth(relation: "user")
+
+    inbound(number: String! @eq): Inbound @find @whereAuthOrRole(relation: "user", permissions: ["view-inbounds"]) @guard
+    inboundClient(number: String! @eq): Inbound @find @whereAuth(relation: "user") @guard
+}
+
+input InboundInputAdmin {
+    id: ID
+    user_id: ID!
+    number: String
+    type: String!
+    phone: String
+    note: String
+
+    status: String
+    inbound_date: DateTime
+
+    address: String
+    address2: String
+    zip: String
+
+    state_id: ID
+    city_id: ID
+    store_id: ID!
+    warehouse_id: ID!
+
+    inboundProducts: InboundProductHasMany
+}
+
+input InboundInput {
+    id: ID
+    number: String
+    type: String!
+    phone: String
+    note: String
+
+    status: String
+    inbound_date: DateTime
+
+    address: String
+    address2: String
+    zip: String
+
+    state_id: ID
+    city_id: ID
+    store_id: ID!
+    warehouse_id: ID!
+
+    inboundProducts: InboundProductHasMany
+}
+
+
+input InboundProductHasMany {
+    create: [InboundProductInput!]
+    update: [InboundProductInput!]
+    delete: [ID!]
+}
+
+
+input InboundProductInput {
+    id: ID
+    product_id: ID!
+    quantity: Int!
+    variation: String
+    quantity_received: Int
+    expired_at: Date
+}
+
+input InboundInputCompleted {
+    id: ID
+    note: String
+
+    inboundProducts: InboundProductHasManyCompleted
+}
+
+
+input InboundProductHasManyCompleted {
+    update: [InboundProductInputCompleted!]!
+    create: [InboundProductInputCompleted!]!
+    delete: [ID!]
+}
+
+
+input InboundProductInputCompleted {
+    id: ID
+    product_id: ID!
+    quantity: Int!
+    variation: String
+    expired_at: Date
+    quantity_received: Int!
+    quantity_damaged: Int
+
+    size: String
+
+    width: Float
+    height: Float
+    length: Float
+    weight: Float
+}
+
+extend type Mutation @guard {
+    createInbound(input: InboundInput @spread): Inbound! @create
+    createInboundAdmin(input: InboundInputAdmin @spread): Inbound! @create
+
+    updateInbound(id: ID! @eq, input: InboundInput @spread): Inbound!
+    @update
+    @can(ability: "update", query: true)
+
+    completeInbound(id: ID! @eq, input: InboundInputCompleted @spread): Inbound! @can(ability: "complete", find: "id")
+    deleteInbound(id: ID! @eq): Inbound @delete @can(ability: "delete", find: "id")
+
+}

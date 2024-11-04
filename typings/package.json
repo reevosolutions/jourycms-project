@@ -1,0 +1,15 @@
+{
+  "name": "jourycms-typings",
+  "version": "1.0.0",
+  "main": "index.d.ts",
+  "license": "MIT",
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "@types/node": "^22.8.7",
+    "typescript": "^5.6.3"
+  }
+}
