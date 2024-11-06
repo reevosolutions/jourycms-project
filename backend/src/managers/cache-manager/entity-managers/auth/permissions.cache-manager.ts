@@ -8,7 +8,7 @@ import { defaults } from '../../../../utilities/helpers/utils.helpers';
  * @description Cache manager for Permissions
  */
 export default class PermissionsCacheManager
-  implements Levelup.V2.CacheManager.EntityCacheManager<"permission">
+  implements Levelup.CMS.V1.CacheManager.EntityCacheManager<"permission">
 {
   private logger: LoggerService;
 
@@ -63,22 +63,22 @@ export default class PermissionsCacheManager
   public async list(
     config: {
       company?: string | null;
-      query?: Levelup.V2.CacheManager.TListQueryParams<"permission">;
+      query?: Levelup.CMS.V1.CacheManager.TListQueryParams<"permission">;
       force_load_from_db?: boolean;
       filter?: (
-        item: Levelup.V2.SystemStructure.EntityType<"permission">
+        item: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permission">
       ) => boolean;
     } = {
       query: {} as any,
       force_load_from_db: true,
     }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<"permission">[]> {
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permission">[]> {
     return this.cache.list(this.ENTITY, config);
   }
 
   public async set(
     id: string,
-    value: Partial<Levelup.V2.SystemStructure.EntityType<"permission">>,
+    value: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permission">>,
     company?: string | null
   ) {
     return this.cache.set(this.ENTITY, id, value as any, company);

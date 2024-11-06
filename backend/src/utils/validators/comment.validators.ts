@@ -7,16 +7,16 @@
 import Joi from "joi";
 import exceptions from "../../exceptions";
 
-import ApiAlias = Levelup.V2.Cm.Api.Comments;
-type PropType<TObj, TProp extends keyof TObj> = Levelup.V2.Utils.PropType<TObj, TProp>;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Comments;
+type PropType<TObj, TProp extends keyof TObj> = Levelup.CMS.V1.Utils.PropType<TObj, TProp>;
 
 
 
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Comments.Create.Request['data']} body
- * @returns {Joi.ValidationResult<Levelup.V2.Cm.Api.Comments.Create.Request['data']>}
+ * @param {Levelup.CMS.V1.Content.Api.Comments.Create.Request['data']} body
+ * @returns {Joi.ValidationResult<Levelup.CMS.V1.Content.Api.Comments.Create.Request['data']>}
  */
 const validateCreateBody = (body: PropType<ApiAlias.Create.Request, 'data'>) => {
   if (!body) throw new exceptions.ValidationException('Body data object is required');
@@ -38,8 +38,8 @@ const validateCreateBody = (body: PropType<ApiAlias.Create.Request, 'data'>) => 
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Comments.Update.Request['data']} body
- * @returns {Joi.ValidationResult<Levelup.V2.Cm.Api.Comments.Update.Request['data']>}
+ * @param {Levelup.CMS.V1.Content.Api.Comments.Update.Request['data']} body
+ * @returns {Joi.ValidationResult<Levelup.CMS.V1.Content.Api.Comments.Update.Request['data']>}
  */
 const validateUpdateBody = (body: PropType<ApiAlias.Update.Request, 'data'>) => {
   if (!body) throw new exceptions.ValidationException('Body data object is required');

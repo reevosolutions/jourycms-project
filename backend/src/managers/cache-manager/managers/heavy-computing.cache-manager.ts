@@ -40,7 +40,7 @@ export default class HeavyComputingCacheManager {
     expiration = 7200,
     generator: () => Promise<T>,
     force_regenerate?: boolean
-  ): Promise<Levelup.V2.Utils.CachedHeavyResult<T>> {
+  ): Promise<Levelup.CMS.V1.Utils.CachedHeavyResult<T>> {
     try {
       if (!name) return null;
       const now = new Date();

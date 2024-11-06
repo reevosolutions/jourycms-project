@@ -1,8 +1,8 @@
 import initLogger, { LoggerService } from "../../utilities/logging/index";
 import Container, { Service } from "typedi";
-import BaseService from "../../services/base.service";
+import BaseService from "../../common/base.service";
 
-const t: Levelup.V2.Features.Translator.TFunction = (namespace, key) => {
+const t: (namespace: string, str: string) => string = (namespace, key) => {
   return key;
 };
 

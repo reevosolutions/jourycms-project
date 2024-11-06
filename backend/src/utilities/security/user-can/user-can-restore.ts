@@ -1,8 +1,8 @@
 
-export const userCanRestoreObject = <E extends Levelup.V2.SystemStructure.Services.Models.AllModels>(
+export const userCanRestoreObject = <E extends Levelup.CMS.V1.Utils.SystemStructure.Models.AllModels>(
   entity: E,
-  doc: Partial<Levelup.V2.SystemStructure.EntityType<E>>,
-  authData: Levelup.V2.Security.AuthData
+  doc: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>>,
+  authData: Levelup.CMS.V1.Security.AuthData
 ):boolean => {
   if (authData?.current?.service) return true;
 

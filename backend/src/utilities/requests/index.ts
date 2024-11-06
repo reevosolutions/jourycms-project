@@ -9,8 +9,8 @@ export function respond<T>(
   res: Response,
   data: T,
   status: number = 200
-): Response<T, Record<string, any>> {
-  return res.status(status).json(data);
+): void {
+  res.status(status).json(data);
 }
 
 export function fixFiltersObject(filters?: any): any {

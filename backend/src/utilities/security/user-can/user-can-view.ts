@@ -2,10 +2,10 @@ import initLogger from "../../logging";
 
 const logger = initLogger("UTILITY", "SECURITY");
 
-export const userCanViewObject = <E extends Levelup.V2.SystemStructure.Services.Models.AllModels>(
+export const userCanViewObject = <E extends Levelup.CMS.V1.Utils.SystemStructure.Models.AllModels>(
   entity: E,
-  doc: Partial<Levelup.V2.SystemStructure.EntityType<E>>,
-  authData: Levelup.V2.Security.AuthData
+  doc: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>>,
+  authData: Levelup.CMS.V1.Security.AuthData
 ): boolean => {
   if (authData?.isServiceRequest && authData?.isServiceRequest()) {
     logger.info("Service request detected, allowing access to view object");

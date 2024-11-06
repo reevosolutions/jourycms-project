@@ -7,11 +7,11 @@ import initLogger, { LoggerContext } from "../../logging";
 const logger = initLogger(LoggerContext.UTILITY, "trackUsedFields");
 
 export const trackUsedFieldsDBMiddleware = function <
-  E extends Levelup.V2.SystemStructure.Services.Models.AllModels
+  E extends Levelup.CMS.V1.Utils.SystemStructure.Models.AllModels
 >(
   this: Query<
-    Levelup.V2.SystemStructure.LevelupEntityType<E>,
-    Levelup.V2.SystemStructure.LevelupEntityType<E>
+    Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>,
+    Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>
   >,
   // eslint-disable-next-line @typescript-eslint/ban-types
   next: Function

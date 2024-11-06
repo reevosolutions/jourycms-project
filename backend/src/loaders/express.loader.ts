@@ -45,13 +45,13 @@ export default ({ app }: { app: express.Application }): void => {
 
   app.use(express.urlencoded({ extended: true, limit: config.http.bodySizeLimit }));
 
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false, // don't save session if unmodified
-    saveUninitialized: false, // don't create session until something stored
-  })
-);
+  app.use(
+    session({
+      secret: "keyboard cat",
+      resave: false, // don't save session if unmodified
+      saveUninitialized: false, // don't create session until something stored
+    })
+  );
 
   /**
    * Handle JWT token

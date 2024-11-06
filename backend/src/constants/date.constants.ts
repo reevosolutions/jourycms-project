@@ -11,7 +11,7 @@ export const MILLISECONDS_IN_A_DAY = SECONDS_IN_A_DAY * 1000;
 export const MILLISECONDS_IN_A_WEEK = SECONDS_IN_A_WEEK * 1000;
 export const MILLISECONDS_IN_AN_YEAR = SECONDS_IN_AN_YEAR * 1000;
 
-export const WEEK_DAYS: Levelup.V2.Utils.Common.TDay[] = [
+export const WEEK_DAYS: Levelup.CMS.V1.Utils.Common.TDay[] = [
   "sunday",
   "monday",
   "tuesday",

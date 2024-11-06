@@ -7,16 +7,16 @@
 import Joi from "joi";
 import exceptions from "../../exceptions";
 
-import ApiAlias = Levelup.V2.Cm.Api.Taxonomies;
-type PropType<TObj, TProp extends keyof TObj> = Levelup.V2.Utils.PropType<TObj, TProp>;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Taxonomies;
+type PropType<TObj, TProp extends keyof TObj> = Levelup.CMS.V1.Utils.PropType<TObj, TProp>;
 
 
 
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Taxonomies.Create.Request['data']} body
- * @returns {Joi.ValidationResult<Levelup.V2.Cm.Api.Taxonomies.Create.Request['data']>}
+ * @param {Levelup.CMS.V1.Content.Api.Taxonomies.Create.Request['data']} body
+ * @returns {Joi.ValidationResult<Levelup.CMS.V1.Content.Api.Taxonomies.Create.Request['data']>}
  */
 const validateCreateBody = (body: PropType<ApiAlias.Create.Request, 'data'>) => {
   if (!body) throw new exceptions.ValidationException('Body data object is required');
@@ -39,8 +39,8 @@ const validateCreateBody = (body: PropType<ApiAlias.Create.Request, 'data'>) => 
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Taxonomies.Update.Request['data']} body
- * @returns {Joi.ValidationResult<Levelup.V2.Cm.Api.Taxonomies.Update.Request['data']>}
+ * @param {Levelup.CMS.V1.Content.Api.Taxonomies.Update.Request['data']} body
+ * @returns {Joi.ValidationResult<Levelup.CMS.V1.Content.Api.Taxonomies.Update.Request['data']>}
  */
 const validateUpdateBody = (body: PropType<ApiAlias.Update.Request, 'data'>) => {
   if (!body) throw new exceptions.ValidationException('Body data object is required');

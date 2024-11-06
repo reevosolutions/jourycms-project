@@ -1,58 +1,17 @@
 
-export const SERVICES: Levelup.V2.SystemStructure.TMicroservice[] = [
-  'accounts',
-  'activity',
+export const SERVICES: Levelup.CMS.V1.Utils.SystemStructure.TMicroService[] = [
   'auth',
-  'customers',
-  'carts',
-  'eventbus',
-  'cm',
-  'gateway',
-  'integrations',
-  'inventory',
-  'locations',
-  'logistics',
-  'loyalty',
-  'notifications',
-  'offers',
-  'orders',
-  'payment',
-  'products',
-  'promotions',
-  'reports',
-  'shipping',
+  'content',
   'storage',
-  'support',
-  'system',
 ];
 
 export const SERVICE_PORTS: {
-  [service in Levelup.V2.SystemStructure.TMicroservice]: number
+  [service in Levelup.CMS.V1.Utils.SystemStructure.TMicroService]: number
 } = {
-  accounts: 5001,
-  activity: 5002,
-  auth: 5003,
-  customers: 5004,
-  carts: 5005,
-  eventbus: 5006,
-  cm: 5007,
-  integrations: 5009,
-  inventory: 5010,
-  locations: 5011,
-  logistics: 5012,
-  loyalty: 5013,
-  notifications: 5014,
-  offers: 5015,
-  orders: 5016,
-  payment: 5017,
-  products: 5018,
-  promotions: 5019,
-  reports: 5020,
-  shipping: 5021,
-  storage: 5022,
-  support: 5023,
+  DEFAULT: 6000,
+  auth: 6003,
+  content: 6004,
+  storage: 6005,
   //
-  gateway: 5100,
-  system: 5101,
 };
 

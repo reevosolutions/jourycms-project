@@ -16,10 +16,10 @@ export default async (): Promise<mongoose.mongo.Db> => {
       /**
        * @deprecated on 6.^
        */
-      // useNewUrlParser: true,
-      // useUnifiedTopology: true,
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
       // useCreateIndex: true,
-    });
+    } as any);
     eventDispatcher.dispatch(events.service.dbConnect, connection.connection);
     return connection.connection.db;
   } catch (error) {

@@ -8,16 +8,15 @@
 
 
 // import the service-specific models
-import { ArticleType } from '../models/article-type.model';
-import { Article } from '../models/article.model';
-import { Comment } from '../models/comment.model';
-import { ExportItem } from '../models/export-item.model';
-import { Review } from '../models/review.model';
-import { Term } from '../models/term.model';
-import { Taxonomy } from '../models/taxonomy.model';
-import { TranslationItem } from '../models/translation.item.model';
-import { TranslationNamespace } from '../models/translation.namespace.model';
-import { TranslationProject } from '../models/translation.project.model';
+import { ArticleType } from '../features/content/models/article-type.model';
+import { Article } from '../features/content/models/article.model';
+import { Comment } from '../features/content/models/comment.model';
+import { Review } from '../features/content/models/review.model';
+import { Term } from '../features/content/models/term.model';
+import { Taxonomy } from '../features/content/models/taxonomy.model';
+import { TranslationItem } from '../features/content/models/translation.item.model';
+import { TranslationNamespace } from '../features/content/models/translation.namespace.model';
+import { TranslationProject } from '../features/content/models/translation.project.model';
 
 /**
  * Load the service models.
@@ -27,12 +26,11 @@ import { TranslationProject } from '../models/translation.project.model';
 const getServiceModels: () => { [name: string]: any } = () => {
 	return {
 		/**
-		 * The service-specific models.
+		 * The content feature models.
 		 */
 		articleTypeModel: ArticleType,
 		articleModel: Article,
 		commentModel: Comment,
-		exportItemModel: ExportItem,
 		reviewModel: Review,
 		termModel: Term,
 		taxonomyModel: Taxonomy,

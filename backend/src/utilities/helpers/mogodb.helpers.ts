@@ -103,7 +103,7 @@ export function ensureIndexes(
 ) {
   upgradeIndexes(model).then(() => {
     model
-      .ensureIndexes()
+      .createIndexes()
       .then(() => {
         logger.success(
           "ensure-indexes",

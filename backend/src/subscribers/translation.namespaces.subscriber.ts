@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class TranslationNamespaceSubscriber {
   /**
    * @method onTranslationNamespaceCreated
    * @alias ON_TRANSLATION_NAMESPACE_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Namespace.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.created} payload
    */
-  @On(events.cm.translation.namespace.created)
-  public async onTranslationNamespaceCreated({data}: Levelup.V2.Events.Payloads.Cm.Translation.Namespace.created): Promise < void> {
+  @On(events.content.translation.namespace.created)
+  public async onTranslationNamespaceCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class TranslationNamespaceSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.namespace.created, identifier);
+        logger.event(events.content.translation.namespace.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class TranslationNamespaceSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.namespace.created}:ERROR`, error);
+        logger.error(`${events.content.translation.namespace.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.namespace.created,
+        name: events.content.translation.namespace.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class TranslationNamespaceSubscriber {
   /**
    * @method onTranslationNamespaceUpdated
    * @alias ON_TRANSLATION_NAMESPACE_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Namespace.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.updated} payload
    */
-  @On(events.cm.translation.namespace.updated)
-  public async onTranslationNamespaceUpdated({data}: Levelup.V2.Events.Payloads.Cm.Translation.Namespace.updated): Promise < void> {
+  @On(events.content.translation.namespace.updated)
+  public async onTranslationNamespaceUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class TranslationNamespaceSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.namespace.updated, identifier);
+        logger.event(events.content.translation.namespace.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class TranslationNamespaceSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.namespace.updated}:ERROR`, error);
+        logger.error(`${events.content.translation.namespace.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.namespace.updated,
+        name: events.content.translation.namespace.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class TranslationNamespaceSubscriber {
   /**
    * @method onTranslationNamespaceDeleted
    * @alias ON_TRANSLATION_NAMESPACE_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Namespace.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.deleted} payload
    */
-  @On(events.cm.translation.namespace.deleted)
-  public async onTranslationNamespaceDeleted({data}: Levelup.V2.Events.Payloads.Cm.Translation.Namespace.deleted): Promise < void> {
+  @On(events.content.translation.namespace.deleted)
+  public async onTranslationNamespaceDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class TranslationNamespaceSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.namespace.deleted, identifier);
+        logger.event(events.content.translation.namespace.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class TranslationNamespaceSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.namespace.deleted}:ERROR`, error);
+        logger.error(`${events.content.translation.namespace.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.namespace.deleted,
+        name: events.content.translation.namespace.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class TranslationNamespaceSubscriber {
   /**
    * @method onTranslationNamespaceRestored
    * @alias ON_TRANSLATION_NAMESPACE_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Namespace.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.restored} payload
    */
-  @On(events.cm.translation.namespace.restored)
-  public async onTranslationNamespaceRestored({data}: Levelup.V2.Events.Payloads.Cm.Translation.Namespace.restored): Promise < void> {
+  @On(events.content.translation.namespace.restored)
+  public async onTranslationNamespaceRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Namespace.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class TranslationNamespaceSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.namespace.restored, identifier);
+        logger.event(events.content.translation.namespace.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class TranslationNamespaceSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.namespace.restored}:ERROR`, error);
+        logger.error(`${events.content.translation.namespace.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.namespace.restored,
+        name: events.content.translation.namespace.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

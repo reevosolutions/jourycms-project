@@ -152,7 +152,7 @@ export const createDateRangeFilter: <F = string, Q = any, T = any>(
   if (value) {
     if (
       typeof value === "object" &&
-      (value as Levelup.V2.Utils.Entity.General.HasStartEnd).start
+      (value as Levelup.CMS.V1.Utils.Entity.General.HasStartEnd).start
     ) {
       if (value.end) {
         q = (q as any).where({
@@ -219,7 +219,7 @@ export const createAggregateDateRangeFilter: <F extends string = string>(
   if (value) {
     if (
       typeof value === "object" &&
-      (value as Levelup.V2.Utils.Entity.General.HasStartEnd).start
+      (value as Levelup.CMS.V1.Utils.Entity.General.HasStartEnd).start
     ) {
       if (value.end)
         match[field as unknown as string] = {

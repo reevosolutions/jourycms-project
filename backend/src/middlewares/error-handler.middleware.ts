@@ -15,7 +15,7 @@ const logger = initLogger('MIDDLEWARE', 'errorHandler');
  * @returns {NextFunction} The next function to be called
  */
 const errorHandler = () => {
-  return (err: Error | Levelup.V2.Utils.Api.Response.Error, req: Request, res: Response, next: NextFunction) => {
+  return (err: Error | Levelup.CMS.V1.Utils.Api.Response.Error, req: Request, res: Response, next: NextFunction): void => {
 
     // console.log('## Error handler middleware', err)
 
@@ -24,7 +24,7 @@ const errorHandler = () => {
      * Handle 400 thrown by celebrate library
      */
     if (isCelebrateError(err)) {
-      return res.status(400).json({
+      res.status(400).json({
         error: {
           is_celebrate: true,
           message: err.message,
@@ -37,6 +37,7 @@ const errorHandler = () => {
           stack: process.env.NODE_ENV !== 'development' ? undefined : (err.stack as string)?.split('\n'),
         },
       }).end();
+      return ;
     }
 
     /**
@@ -49,7 +50,7 @@ const errorHandler = () => {
           message: `Value already exists`,
         }
         return acc;
-      }, {} as Levelup.V2.Utils.Api.Response.ErrorFields));
+      }, {} as Levelup.CMS.V1.Utils.Api.Response.ErrorFields));
       err['is_mongoose'] = true;
     }
 
@@ -57,7 +58,7 @@ const errorHandler = () => {
      * Handle Mongoose validation error
      */
     if (err instanceof mongoose.Error.ValidationError) {
-      const fields = Object.values(err.errors).reduce((acc: Levelup.V2.Utils.Api.Response.ErrorFields, val) => {
+      const fields = Object.values(err.errors).reduce((acc: Levelup.CMS.V1.Utils.Api.Response.ErrorFields, val) => {
         acc[val.path] = {
           value: val.value,
           message: val.message,
@@ -81,7 +82,7 @@ const errorHandler = () => {
      */
     if (err.name === 'UnauthorizedError') {
       logger.warn('UnauthorizedError', err);
-      return res.status((err as any).status || 401).json({
+      res.status((err as any).status || 401).json({
         error: {
           message: err.message,
           name: err.name,
@@ -89,6 +90,7 @@ const errorHandler = () => {
           stack: process.env.NODE_ENV !== 'development' ? undefined : (err.stack as string)?.split('\n'),
         },
       }).end();
+      return;
     }
 
 
@@ -107,7 +109,7 @@ const errorHandler = () => {
     /**
      * Send the error response
      */
-    res.status(typeof ((error as Levelup.V2.Utils.Api.Response.Error).status) === 'number' ? (error as Levelup.V2.Utils.Api.Response.Error).status : 500).json({
+    res.status(typeof ((error as Levelup.CMS.V1.Utils.Api.Response.Error).status) === 'number' ? (error as Levelup.CMS.V1.Utils.Api.Response.Error).status : 500).json({
       error,
     }).end();
 

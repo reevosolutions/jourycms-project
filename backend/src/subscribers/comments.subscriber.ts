@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class CommentSubscriber {
   /**
    * @method onCommentCreated
    * @alias ON_COMMENT_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Comment.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Comment.created} payload
    */
-  @On(events.cm.comment.created)
-  public async onCommentCreated({data}: Levelup.V2.Events.Payloads.Cm.Comment.created): Promise < void> {
+  @On(events.content.comment.created)
+  public async onCommentCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Comment.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class CommentSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.comment.created, identifier);
+        logger.event(events.content.comment.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class CommentSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.comment.created}:ERROR`, error);
+        logger.error(`${events.content.comment.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.comment.created,
+        name: events.content.comment.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class CommentSubscriber {
   /**
    * @method onCommentUpdated
    * @alias ON_COMMENT_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Comment.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Comment.updated} payload
    */
-  @On(events.cm.comment.updated)
-  public async onCommentUpdated({data}: Levelup.V2.Events.Payloads.Cm.Comment.updated): Promise < void> {
+  @On(events.content.comment.updated)
+  public async onCommentUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Comment.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class CommentSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.comment.updated, identifier);
+        logger.event(events.content.comment.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class CommentSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.comment.updated}:ERROR`, error);
+        logger.error(`${events.content.comment.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.comment.updated,
+        name: events.content.comment.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class CommentSubscriber {
   /**
    * @method onCommentDeleted
    * @alias ON_COMMENT_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Comment.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Comment.deleted} payload
    */
-  @On(events.cm.comment.deleted)
-  public async onCommentDeleted({data}: Levelup.V2.Events.Payloads.Cm.Comment.deleted): Promise < void> {
+  @On(events.content.comment.deleted)
+  public async onCommentDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Comment.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class CommentSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.comment.deleted, identifier);
+        logger.event(events.content.comment.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class CommentSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.comment.deleted}:ERROR`, error);
+        logger.error(`${events.content.comment.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.comment.deleted,
+        name: events.content.comment.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class CommentSubscriber {
   /**
    * @method onCommentRestored
    * @alias ON_COMMENT_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Comment.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Comment.restored} payload
    */
-  @On(events.cm.comment.restored)
-  public async onCommentRestored({data}: Levelup.V2.Events.Payloads.Cm.Comment.restored): Promise < void> {
+  @On(events.content.comment.restored)
+  public async onCommentRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Comment.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class CommentSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.comment.restored, identifier);
+        logger.event(events.content.comment.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class CommentSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.comment.restored}:ERROR`, error);
+        logger.error(`${events.content.comment.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.comment.restored,
+        name: events.content.comment.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

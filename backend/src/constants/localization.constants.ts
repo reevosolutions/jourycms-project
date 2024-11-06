@@ -1,5 +1,5 @@
 export const LOCALIZATION_LANGUAGES: {
-  [key in Levelup.V2.Cm.Translation.Entity.TLanguageCode]: string;
+  [key in Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode]: string;
 } = {
   zh: "Chinese",
   es: "Spanish",
@@ -73,7 +73,7 @@ export const LOCALIZATION_LANGUAGES: {
 };
 
 export const LANGUAGE_TO_COUNTRY: {
-  [key in Levelup.V2.Cm.Translation.Entity.TLanguageCode]: string;
+  [key in Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode]: string;
 } = {
   zh: "CN", // Chinese - China
   es: "ES", // Spanish - Spain (Note: Spanish is widely spoken in many countries in Latin America)
@@ -148,12 +148,12 @@ export const LANGUAGE_TO_COUNTRY: {
 
 export const LOCALIZATION_LANGUAGE_CODES = Object.keys(
   LOCALIZATION_LANGUAGES
-) as Levelup.V2.Cm.Translation.Entity.TLanguageCode[];
+) as Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode[];
 export const LOCALIZATION_LANGUAGE_NAMES = Object.values(
   LOCALIZATION_LANGUAGES
 ) as string[];
 
-export const SUPPORTED_LANGUAGES: Levelup.V2.Cm.Translation.Entity.TLanguageCode[] =
+export const SUPPORTED_LANGUAGES: Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode[] =
   ["en", "fr", "ar", "it", "es"];
 export const SUPPORTED_LANGUAGE_OBJECTS = SUPPORTED_LANGUAGES.map((lang) => ({
   language_code: lang,

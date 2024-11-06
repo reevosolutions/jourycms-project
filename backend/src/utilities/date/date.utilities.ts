@@ -168,7 +168,7 @@ export const isDateWithinLastNTimeRange = (date: Date, timeRange: string): boole
  * @since 26 July 2000
  * @since 29-04-2024 23:01:17
  */
-export const isDateRangObject = (obj: any): obj is Levelup.V2.Utils.Entity.General.IDateRangObject => {
+export const isDateRangObject = (obj: any): obj is Levelup.CMS.V1.Utils.Entity.General.IDateRangObject => {
   if (obj && obj.start && obj.end) {
     return true;
   }

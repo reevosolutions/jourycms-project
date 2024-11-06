@@ -269,8 +269,6 @@ export const formatNotificationSpace = (
     office?: string;
     store?: string;
     role?: string;
-    role_group?: Levelup.V2.Auth.Entity.TRoleGroup;
-    parcelStatus?: Levelup.V2.Shipping.Entity.TParcelStatus;
   }
 ): string | null => {
   if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
@@ -281,8 +279,6 @@ export const formatNotificationSpace = (
     .replace("[STORE]", infos.store || "")
     .replace("[USER]", infos.user || "")
     .replace("[ROLE]", infos.role || "")
-    .replace("[ROLE_GROUP]", infos.role_group || "")
-    .replace("[PARCEL_STATUS]", infos.parcelStatus || "");
 };
 
 /**

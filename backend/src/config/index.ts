@@ -18,7 +18,7 @@ type LeafKeys<T> = T extends object
     }[Extract<keyof T, string | number>]
   : never;
 
-export type TCacheDurationKey = Levelup.V2.Utils.LeafKeys<typeof cacheDuration>;
+export type TCacheDurationKey = Levelup.CMS.V1.Utils.LeafKeys<typeof cacheDuration>;
 
 if (envFound.error) {
   // This error should crash whole process
@@ -27,17 +27,17 @@ if (envFound.error) {
 
 const SERVICE_NAME = (
   process.env.SERVICE_NAME || ""
-).toLowerCase() as Levelup.V2.SystemStructure.TMicroservice;
+).toLowerCase() as Levelup.CMS.V1.Utils.SystemStructure.TMicroService;
 
-const SERVICES_API_PREFIX = process.env.SYSTEM_API_PREFIX || "/api/v2";
+const SERVICES_API_PREFIX = process.env.SYSTEM_API_PREFIX || "/api/v1";
 
 
 const internalGateway =
   process.env.INTERNAL_GATEWAY_URL ||
-  `http://localhost:${SERVICE_PORTS.gateway}/`;
+  `http://localhost:${SERVICE_PORTS.DEFAULT}/`;
 
 const serviceApiUrls: {
-  [service in Levelup.V2.SystemStructure.TMicroservice]?: string;
+  [service in Levelup.CMS.V1.Utils.SystemStructure.TMicroService]?: string;
 } = SERVICES.reduce(
   (prev, service) => ({
     ...prev,
@@ -47,7 +47,7 @@ const serviceApiUrls: {
 );
 
 const serviceHosts: {
-  [service in Levelup.V2.SystemStructure.TMicroservice]?: string;
+  [service in Levelup.CMS.V1.Utils.SystemStructure.TMicroService]?: string;
 } = SERVICES.reduce(
   (prev, service) => ({
     ...prev,
@@ -293,7 +293,7 @@ export default {
      */
     url: `${
       process.env.INTERNAL_GATEWAY_URL ||
-      `http://localhost:${SERVICE_PORTS.gateway}/`
+      `http://localhost:${SERVICE_PORTS.DEFAULT}/`
     }activity/api/logs`,
   },
 
@@ -326,7 +326,7 @@ export default {
      * SDK Configuration
      */
     sdk: {
-      baseURL: process.env.SDK_BASE_URL || "http://localhost:5100",
+      baseURL: process.env.SDK_BASE_URL || "http://localhost:6000",
       appId: process.env.SDK_APP_ID || "",
       appSecret: process.env.SDK_APP_SECRET || "",
       debug: [true, 1, "1", "true"].includes(process.env.SDK_DEBUG || "false"),
@@ -352,7 +352,7 @@ export default {
        * The default language for the application.
        */
       defaultLanguage: (process.env.DEFAULT_LANGUAGE ||
-        "en") as Levelup.V2.Cm.Translation.Entity.TLanguageCode,
+        "en") as Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode,
     },
 
     /**
@@ -374,77 +374,10 @@ export default {
        * The default count for items listing.
        */
       defaultCount:
-        parseInt(process.env.SYSTEM_LISTING_DEFAULT_COUNT || "25") || 25,
+        parseInt(process.env.SYSTEM_LISTING_DEFAULT_COUNT || "24") || 24,
     },
 
-    /**
-     * Configuration for delivery.
-     */
-    delivery: {
-      /**
-       * The maximum attempts for delivery.
-       */
-      maxAttempts:
-        parseInt(process.env.SYSTEM_DELIVERY_MAX_ATTEMPTS || "3") || 3,
-    },
-
-    defaultPricing: {
-      delivery: {
-        apply_sub_zone_in_price_calculation:
-          process.env.DEFAULT_PRICING_APPLY_SUBZONE_IN_PRICE_CALCULATION ===
-            "true" ||
-          process.env.DEFAULT_PRICING_APPLY_SUBZONE_IN_PRICE_CALCULATION ===
-            "1",
-        max_free_weight:
-          parseInt(process.env.DEFAULT_PRICING_MAX_FREE_WEIGHT || "5") || 5,
-        overweight_unit_price:
-          parseInt(process.env.DEFAULT_PRICING_OVERWEIGHT_UNIT_PRICE || "50") ||
-          50,
-        deliverer_fees:
-          parseInt(
-            process.env.DEFAULT_PRICING_DEFAULT_DELIVERY_MAN_FEES || "250"
-          ) || 250,
-        cod_assurance_percentage:
-          parseFloat(
-            process.env.DEFAULT_PRICING_COD_ASSURANCE_PERCENTAGE || "0"
-          ) || 0,
-        tax_return:
-          parseFloat(process.env.DEFAULT_PRICING_TAX_RETURN || "0") || 0,
-      },
-      warehouse: {
-        returned_outbounds:
-          parseInt(
-            process.env.DEFAULT_PRICING_WAREHOUSE_PRICING_RETURNED_OUTBOUNDS ||
-              "0"
-          ) || 0,
-        delivered_outbounds:
-          parseInt(
-            process.env.DEFAULT_PRICING_WAREHOUSE_PRICING_DELIVERED_OUTBOUNDS ||
-              "100"
-          ) || 0,
-      },
-      callcenter: {
-        not_confirmed_orders:
-          parseInt(
-            process.env
-              .DEFAULT_PRICING_CALLCENTER_PRICING_NOT_CONFIRMED_ORDERS || "10"
-          ) || 0,
-        confirmed_not_delivered_orders:
-          parseInt(
-            process.env
-              .DEFAULT_PRICING_CALLCENTER_PRICING_CONFIRMED_NOT_DELIVERED_ORDERS ||
-              "30"
-          ) || 0,
-        confirmed_delivered_orders:
-          parseInt(
-            process.env
-              .DEFAULT_PRICING_CALLCENTER_PRICING_CONFIRMED_DELIVERED_ORDERS ||
-              "100"
-          ) || 0,
-      },
-    },
   },
-
   /**
    * Configuration for the current service.
    */

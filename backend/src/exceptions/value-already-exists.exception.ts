@@ -6,11 +6,11 @@ import LevelupException from './levelup-exception.exception';
 class ValueAlreadyExistsException extends LevelupException {
 
   public status: number = StatusCodes.CONFLICT;
-  public fields: Levelup.V2.Utils.Api.Response.ErrorFields;
+  public fields: Levelup.CMS.V1.Utils.Api.Response.ErrorFields;
 
   public is_mongoose: boolean = false;
 
-  public constructor(message: string, fields?: Levelup.V2.Utils.Api.Response.ErrorFields) {
+  public constructor(message: string, fields?: Levelup.CMS.V1.Utils.Api.Response.ErrorFields) {
     super(message)
 
     // assign the error class name in your custom error (as a shortcut)

@@ -8,7 +8,7 @@ import { defaults } from '../../../../utilities/helpers/utils.helpers';
  * @description Cache manager for ApiKeys
  */
 export default class ApiKeysCacheManager
-  implements Levelup.V2.CacheManager.EntityCacheManager<"apiKey">
+  implements Levelup.CMS.V1.CacheManager.EntityCacheManager<"apiKey">
 {
   private logger: LoggerService;
 
@@ -63,22 +63,22 @@ export default class ApiKeysCacheManager
   public async list(
     config: {
       company?: string | null;
-      query?: Levelup.V2.CacheManager.TListQueryParams<"apiKey">;
+      query?: Levelup.CMS.V1.CacheManager.TListQueryParams<"apiKey">;
       force_load_from_db?: boolean;
       filter?: (
-        item: Levelup.V2.SystemStructure.EntityType<"apiKey">
+        item: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"apiKey">
       ) => boolean;
     } = {
       query: {} as any,
       force_load_from_db: true,
     }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<"apiKey">[]> {
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"apiKey">[]> {
     return this.cache.list(this.ENTITY, config);
   }
 
   public async set(
     id: string,
-    value: Partial<Levelup.V2.SystemStructure.EntityType<"apiKey">>,
+    value: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"apiKey">>,
     company?: string | null
   ) {
     return this.cache.set(this.ENTITY, id, value as any, company);

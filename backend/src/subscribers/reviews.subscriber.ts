@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class ReviewSubscriber {
   /**
    * @method onReviewCreated
    * @alias ON_REVIEW_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Review.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Review.created} payload
    */
-  @On(events.cm.review.created)
-  public async onReviewCreated({data}: Levelup.V2.Events.Payloads.Cm.Review.created): Promise < void> {
+  @On(events.content.review.created)
+  public async onReviewCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Review.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class ReviewSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.review.created, identifier);
+        logger.event(events.content.review.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class ReviewSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.review.created}:ERROR`, error);
+        logger.error(`${events.content.review.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.review.created,
+        name: events.content.review.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class ReviewSubscriber {
   /**
    * @method onReviewUpdated
    * @alias ON_REVIEW_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Review.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Review.updated} payload
    */
-  @On(events.cm.review.updated)
-  public async onReviewUpdated({data}: Levelup.V2.Events.Payloads.Cm.Review.updated): Promise < void> {
+  @On(events.content.review.updated)
+  public async onReviewUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Review.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class ReviewSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.review.updated, identifier);
+        logger.event(events.content.review.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class ReviewSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.review.updated}:ERROR`, error);
+        logger.error(`${events.content.review.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.review.updated,
+        name: events.content.review.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class ReviewSubscriber {
   /**
    * @method onReviewDeleted
    * @alias ON_REVIEW_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Review.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Review.deleted} payload
    */
-  @On(events.cm.review.deleted)
-  public async onReviewDeleted({data}: Levelup.V2.Events.Payloads.Cm.Review.deleted): Promise < void> {
+  @On(events.content.review.deleted)
+  public async onReviewDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Review.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class ReviewSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.review.deleted, identifier);
+        logger.event(events.content.review.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class ReviewSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.review.deleted}:ERROR`, error);
+        logger.error(`${events.content.review.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.review.deleted,
+        name: events.content.review.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class ReviewSubscriber {
   /**
    * @method onReviewRestored
    * @alias ON_REVIEW_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Review.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Review.restored} payload
    */
-  @On(events.cm.review.restored)
-  public async onReviewRestored({data}: Levelup.V2.Events.Payloads.Cm.Review.restored): Promise < void> {
+  @On(events.content.review.restored)
+  public async onReviewRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Review.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class ReviewSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.review.restored, identifier);
+        logger.event(events.content.review.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class ReviewSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.review.restored}:ERROR`, error);
+        logger.error(`${events.content.review.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.review.restored,
+        name: events.content.review.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

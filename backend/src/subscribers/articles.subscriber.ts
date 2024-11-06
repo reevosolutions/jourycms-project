@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class ArticleSubscriber {
   /**
    * @method onArticleCreated
    * @alias ON_ARTICLE_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Article.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Article.created} payload
    */
-  @On(events.cm.article.created)
-  public async onArticleCreated({data}: Levelup.V2.Events.Payloads.Cm.Article.created): Promise < void> {
+  @On(events.content.article.created)
+  public async onArticleCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Article.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class ArticleSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.article.created, identifier);
+        logger.event(events.content.article.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class ArticleSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.article.created}:ERROR`, error);
+        logger.error(`${events.content.article.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.article.created,
+        name: events.content.article.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class ArticleSubscriber {
   /**
    * @method onArticleUpdated
    * @alias ON_ARTICLE_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Article.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Article.updated} payload
    */
-  @On(events.cm.article.updated)
-  public async onArticleUpdated({data}: Levelup.V2.Events.Payloads.Cm.Article.updated): Promise < void> {
+  @On(events.content.article.updated)
+  public async onArticleUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Article.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class ArticleSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.article.updated, identifier);
+        logger.event(events.content.article.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class ArticleSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.article.updated}:ERROR`, error);
+        logger.error(`${events.content.article.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.article.updated,
+        name: events.content.article.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class ArticleSubscriber {
   /**
    * @method onArticleDeleted
    * @alias ON_ARTICLE_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Article.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Article.deleted} payload
    */
-  @On(events.cm.article.deleted)
-  public async onArticleDeleted({data}: Levelup.V2.Events.Payloads.Cm.Article.deleted): Promise < void> {
+  @On(events.content.article.deleted)
+  public async onArticleDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Article.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class ArticleSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.article.deleted, identifier);
+        logger.event(events.content.article.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class ArticleSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.article.deleted}:ERROR`, error);
+        logger.error(`${events.content.article.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.article.deleted,
+        name: events.content.article.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class ArticleSubscriber {
   /**
    * @method onArticleRestored
    * @alias ON_ARTICLE_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Article.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Article.restored} payload
    */
-  @On(events.cm.article.restored)
-  public async onArticleRestored({data}: Levelup.V2.Events.Payloads.Cm.Article.restored): Promise < void> {
+  @On(events.content.article.restored)
+  public async onArticleRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Article.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class ArticleSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.article.restored, identifier);
+        logger.event(events.content.article.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class ArticleSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.article.restored}:ERROR`, error);
+        logger.error(`${events.content.article.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.article.restored,
+        name: events.content.article.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

@@ -7,17 +7,17 @@
 import exceptions from '../../exceptions';
 import { sanitizeObjectStrings } from './utils';
 
-import ApiAlias = Levelup.V2.Cm.Api.Terms;
-type PropType<TObj, TProp extends keyof TObj> = Levelup.V2.Utils.PropType<TObj, TProp>;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Terms;
+type PropType<TObj, TProp extends keyof TObj> = Levelup.CMS.V1.Utils.PropType<TObj, TProp>;
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Terms.Create.Request['data']} body
- * @returns {Levelup.V2.Cm.Api.Terms.Create.Request['data']}
+ * @param {Levelup.CMS.V1.Content.Api.Terms.Create.Request['data']} body
+ * @returns {Levelup.CMS.V1.Content.Api.Terms.Create.Request['data']}
  */
 const sanitizeCreateBody = async (
   body: PropType<ApiAlias.Create.Request, 'data'>,
-  authData: Levelup.V2.Security.AuthData
+  authData: Levelup.CMS.V1.Security.AuthData
 ) => {
   /**
    * @description Sanitize all string values in the object
@@ -55,10 +55,7 @@ const sanitizeCreateBody = async (
    */
   body.created_by = authData?.current?.user?._id;
   body.app = authData?.current?.user?.app ? authData?.current?.user?.app : body.app || authData?.current?.app?._id;
-  body.company = authData?.current?.user?.company
-    ? authData?.current?.user?.company
-    : body.company || authData?.current?.company?._id;
-
+  
   if (!body.slug) {
     body.slug = body.name.toKebabCase();
   }
@@ -71,12 +68,12 @@ const sanitizeCreateBody = async (
 
 /**
  * @description
- * @param {Levelup.V2.Cm.Api.Terms.Update.Request['data']} body
- * @returns {Levelup.V2.Cm.Api.Terms.Update.Request['data']}
+ * @param {Levelup.CMS.V1.Content.Api.Terms.Update.Request['data']} body
+ * @returns {Levelup.CMS.V1.Content.Api.Terms.Update.Request['data']}
  */
 const sanitizeUpdateBody = async (
   body: PropType<ApiAlias.Update.Request, 'data'>,
-  authData: Levelup.V2.Security.AuthData
+  authData: Levelup.CMS.V1.Security.AuthData
 ) => {
   /**
    * @description Sanitize all string values in the object

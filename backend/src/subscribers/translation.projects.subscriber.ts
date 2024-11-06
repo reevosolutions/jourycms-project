@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class TranslationProjectSubscriber {
   /**
    * @method onTranslationProjectCreated
    * @alias ON_TRANSLATION_PROJECT_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Project.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.created} payload
    */
-  @On(events.cm.translation.project.created)
-  public async onTranslationProjectCreated({data}: Levelup.V2.Events.Payloads.Cm.Translation.Project.created): Promise < void> {
+  @On(events.content.translation.project.created)
+  public async onTranslationProjectCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class TranslationProjectSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.project.created, identifier);
+        logger.event(events.content.translation.project.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class TranslationProjectSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.project.created}:ERROR`, error);
+        logger.error(`${events.content.translation.project.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.project.created,
+        name: events.content.translation.project.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class TranslationProjectSubscriber {
   /**
    * @method onTranslationProjectUpdated
    * @alias ON_TRANSLATION_PROJECT_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Project.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.updated} payload
    */
-  @On(events.cm.translation.project.updated)
-  public async onTranslationProjectUpdated({data}: Levelup.V2.Events.Payloads.Cm.Translation.Project.updated): Promise < void> {
+  @On(events.content.translation.project.updated)
+  public async onTranslationProjectUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class TranslationProjectSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.project.updated, identifier);
+        logger.event(events.content.translation.project.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class TranslationProjectSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.project.updated}:ERROR`, error);
+        logger.error(`${events.content.translation.project.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.project.updated,
+        name: events.content.translation.project.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class TranslationProjectSubscriber {
   /**
    * @method onTranslationProjectDeleted
    * @alias ON_TRANSLATION_PROJECT_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Project.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.deleted} payload
    */
-  @On(events.cm.translation.project.deleted)
-  public async onTranslationProjectDeleted({data}: Levelup.V2.Events.Payloads.Cm.Translation.Project.deleted): Promise < void> {
+  @On(events.content.translation.project.deleted)
+  public async onTranslationProjectDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class TranslationProjectSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.project.deleted, identifier);
+        logger.event(events.content.translation.project.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class TranslationProjectSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.project.deleted}:ERROR`, error);
+        logger.error(`${events.content.translation.project.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.project.deleted,
+        name: events.content.translation.project.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class TranslationProjectSubscriber {
   /**
    * @method onTranslationProjectRestored
    * @alias ON_TRANSLATION_PROJECT_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Translation.Project.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.restored} payload
    */
-  @On(events.cm.translation.project.restored)
-  public async onTranslationProjectRestored({data}: Levelup.V2.Events.Payloads.Cm.Translation.Project.restored): Promise < void> {
+  @On(events.content.translation.project.restored)
+  public async onTranslationProjectRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class TranslationProjectSubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.translation.project.restored, identifier);
+        logger.event(events.content.translation.project.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class TranslationProjectSubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.translation.project.restored}:ERROR`, error);
+        logger.error(`${events.content.translation.project.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.translation.project.restored,
+        name: events.content.translation.project.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

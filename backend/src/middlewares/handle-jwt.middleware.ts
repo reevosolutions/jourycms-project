@@ -1,5 +1,5 @@
 import express from 'express';
-import { expressjwt } from 'express-jwt';
+const { expressjwt } = require("express-jwt");
 import * as jwt from 'jsonwebtoken';
 import config from '../config';
 

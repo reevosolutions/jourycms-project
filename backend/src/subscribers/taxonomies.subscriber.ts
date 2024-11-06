@@ -7,7 +7,6 @@
 
 import { EventSubscriber, On } from 'event-dispatch';
 import CacheManager from '../managers/cache-manager';
-import AmqpManager from '../managers/amqp-manager';
 import Container from 'typedi';
 import initLogger from '../utilities/logging';
 import events from '../config/events.config';
@@ -24,17 +23,17 @@ export default class TaxonomySubscriber {
   /**
    * @method onTaxonomyCreated
    * @alias ON_TAXONOMY_CREATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Taxonomy.created} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.created} payload
    */
-  @On(events.cm.taxonomy.created)
-  public async onTaxonomyCreated({data}: Levelup.V2.Events.Payloads.Cm.Taxonomy.created): Promise < void> {
+  @On(events.content.taxonomy.created)
+  public async onTaxonomyCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.created): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -48,7 +47,7 @@ export default class TaxonomySubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.taxonomy.created, identifier);
+        logger.event(events.content.taxonomy.created, identifier);
         
       }
       else {
@@ -60,10 +59,10 @@ export default class TaxonomySubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.taxonomy.created}:ERROR`, error);
+        logger.error(`${events.content.taxonomy.created}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.taxonomy.created,
+        name: events.content.taxonomy.created,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -79,17 +78,17 @@ export default class TaxonomySubscriber {
   /**
    * @method onTaxonomyUpdated
    * @alias ON_TAXONOMY_UPDATE
-   * @param {Levelup.V2.Events.Payloads.Cm.Taxonomy.updated} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.updated} payload
    */
-  @On(events.cm.taxonomy.updated)
-  public async onTaxonomyUpdated({data}: Levelup.V2.Events.Payloads.Cm.Taxonomy.updated): Promise < void> {
+  @On(events.content.taxonomy.updated)
+  public async onTaxonomyUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.updated): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -103,7 +102,7 @@ export default class TaxonomySubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.taxonomy.updated, identifier);
+        logger.event(events.content.taxonomy.updated, identifier);
         
       }
       else {
@@ -115,10 +114,10 @@ export default class TaxonomySubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.taxonomy.updated}:ERROR`, error);
+        logger.error(`${events.content.taxonomy.updated}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.taxonomy.updated,
+        name: events.content.taxonomy.updated,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -134,17 +133,17 @@ export default class TaxonomySubscriber {
   /**
    * @method onTaxonomyDeleted
    * @alias ON_TAXONOMY_DELETE
-   * @param {Levelup.V2.Events.Payloads.Cm.Taxonomy.deleted} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.deleted} payload
    */
-  @On(events.cm.taxonomy.deleted)
-  public async onTaxonomyDeleted({data}: Levelup.V2.Events.Payloads.Cm.Taxonomy.deleted): Promise < void> {
+  @On(events.content.taxonomy.deleted)
+  public async onTaxonomyDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.deleted): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -158,7 +157,7 @@ export default class TaxonomySubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.taxonomy.deleted, identifier);
+        logger.event(events.content.taxonomy.deleted, identifier);
         
       }
       else {
@@ -170,10 +169,10 @@ export default class TaxonomySubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.taxonomy.deleted}:ERROR`, error);
+        logger.error(`${events.content.taxonomy.deleted}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.taxonomy.deleted,
+        name: events.content.taxonomy.deleted,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,
@@ -189,17 +188,17 @@ export default class TaxonomySubscriber {
   /**
    * @method onTaxonomyRestored
    * @alias ON_TAXONOMY_RESTORE
-   * @param {Levelup.V2.Events.Payloads.Cm.Taxonomy.restored} payload
+   * @param {Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.restored} payload
    */
-  @On(events.cm.taxonomy.restored)
-  public async onTaxonomyRestored({data}: Levelup.V2.Events.Payloads.Cm.Taxonomy.restored): Promise < void> {
+  @On(events.content.taxonomy.restored)
+  public async onTaxonomyRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Taxonomy.restored): Promise < void> {
     
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
        */ 
       const cache = Container.get(CacheManager);
-      const amqpManager = Container.get(AmqpManager);
+      
 
       /**
        * Map object to exposed
@@ -213,7 +212,7 @@ export default class TaxonomySubscriber {
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-        logger.event(events.cm.taxonomy.restored, identifier);
+        logger.event(events.content.taxonomy.restored, identifier);
         
       }
       else {
@@ -225,10 +224,10 @@ export default class TaxonomySubscriber {
       }
     } catch (error) {
       if (config.environement === 'development') {
-        logger.error(`${events.cm.taxonomy.restored}:ERROR`, error);
+        logger.error(`${events.content.taxonomy.restored}:ERROR`, error);
       }
       logger.save.error({
-        name: events.cm.taxonomy.restored,
+        name: events.content.taxonomy.restored,
         payload: {
           related_to: data['tracking_id'] || data['_id'],
           data,

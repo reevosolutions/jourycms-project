@@ -6,9 +6,8 @@ import { loadServicePermissions } from './../utilities/system/permissions.utilit
 
 import config from '../config';
 import { toKebabCase } from '../utilities/strings';
-import DevService from '../services/dev.service';
 import Container from 'typedi';
-import BuilderService from '../services/builder.service';
+import ContentBuilderService from '../features/content/services/builder.service';
 
 const logger = initLogger('SUBSCRIBER', 'service');
 
@@ -21,17 +20,15 @@ export default class ServiceSubscriber {
 
       await loadServicePermissions();
 
-      const builderService = Container.get(BuilderService);
-      await builderService.run();
+      const contentBuilderService = Container.get(ContentBuilderService);
+      await contentBuilderService.run();
 
       if (config.environement === 'development') {
         /**
          * Here you can add any logic to run after the service has started in development
          * e.g. start seeding the database, tests, etc.
          */
-        const devService = Container.get(DevService);
-        // await devService.parseTemuCategories();
-        // await devService.resetTranslationProjects();
+
       } else {
         /**
          * Here you can add any logic to run after the service has started in production

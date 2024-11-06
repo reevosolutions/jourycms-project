@@ -7,7 +7,7 @@ import { defaults } from "../../../../utilities/helpers/utils.helpers";
  * @description Cache manager for Users
  */
 export default class UsersCacheManager
-  implements Levelup.V2.CacheManager.EntityCacheManager<"user">
+  implements Levelup.CMS.V1.CacheManager.EntityCacheManager<"user">
 {
   private logger: LoggerService;
 
@@ -63,21 +63,21 @@ export default class UsersCacheManager
 
   public async list(
     config: {
-      query?: Levelup.V2.CacheManager.TListQueryParams<"user">;
+      query?: Levelup.CMS.V1.CacheManager.TListQueryParams<"user">;
       force_load_from_db?: boolean;
-      filter?: (item: Levelup.V2.SystemStructure.EntityType<"user">) => boolean;
+      filter?: (item: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"user">) => boolean;
       company?: string | null;
     } = {
       query: {} as any,
       force_load_from_db: true,
     }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<"user">[]> {
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"user">[]> {
     return this.cache.list(this.ENTITY, config);
   }
 
   public async set(
     id: string,
-    value: Partial<Levelup.V2.SystemStructure.EntityType<"user">>,
+    value: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"user">>,
     company?: string | null
   ) {
     return this.cache.set(this.ENTITY, id, value as any, company);

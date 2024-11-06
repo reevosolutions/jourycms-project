@@ -23,11 +23,11 @@ export const phoneNumberValidator = (value: string, helpers: Joi.CustomHelpers) 
 
 /**
  * @description
- * @param {Levelup.V2.Users.Api.Users.ChangeRole.Request['data']} body
- * @returns {Joi.ValidationResult<Levelup.V2.Users.Api.Users.ChangeRole.Request['data']>}
+ * @param {Levelup.CMS.V1.Users.Api.Users.ChangeRole.Request['data']} body
+ * @returns {Joi.ValidationResult<Levelup.CMS.V1.Users.Api.Users.ChangeRole.Request['data']>}
  */
 export const validateRouteID = (body: {
-  id: Levelup.V2.Utils.Common.ID;
+  id: Levelup.CMS.V1.Utils.Common.ID;
 }) => {
   if (!body) throw new exceptions.ValidationException('Body data object is required');
   const schema = Joi.object({

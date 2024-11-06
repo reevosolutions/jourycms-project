@@ -4,7 +4,7 @@ import LevelupException from "./levelup-exception.exception";
 class ValidationException extends LevelupException {
 
   public status: number = 422;
-  public fields: Levelup.V2.Utils.Api.Response.ErrorFields;
+  public fields: Levelup.CMS.V1.Utils.Api.Response.ErrorFields;
 
   public is_joi: boolean = false;
   public is_mongoose: boolean = false;
@@ -13,7 +13,7 @@ class ValidationException extends LevelupException {
   /**
    * ValidationException code: 422
    */
-  public constructor(message: string = 'Validation Exception', fields: Levelup.V2.Utils.Api.Response.ErrorFields | Joi.ValidationError = {}) {
+  public constructor(message: string = 'Validation Exception', fields: Levelup.CMS.V1.Utils.Api.Response.ErrorFields | Joi.ValidationError = {}) {
     super(message)
 
     // assign the error class name in your custom error (as a shortcut)
@@ -25,7 +25,7 @@ class ValidationException extends LevelupException {
           message: curr.message
         }
         return acc;
-      }, {} as Levelup.V2.Utils.Api.Response.ErrorFields);
+      }, {} as Levelup.CMS.V1.Utils.Api.Response.ErrorFields);
     }
     else
       this.fields = fields;

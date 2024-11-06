@@ -98,34 +98,3 @@ export function deepMergeUnlessNull<X extends object, Y extends object>(
   return result as X & Y;
 }
 
-/**
- * Extracts the items from a payment.
- * @param items - The items to extract.
- * @returns The extracted items.
- */
-export function extractPaymentItems(items: Levelup.V2.Payment.Entity.IPaymentItem[]): {
-  entity: Levelup.V2.Payment.Entity.IPaymentItem["entity"];
-  tracking_id: Levelup.V2.Payment.Entity.IPaymentItem["tracking_id"];
-}[] {
-
-  if (!items) return [];
-  
-  const result: {
-    entity: Levelup.V2.Payment.Entity.IPaymentItem["entity"];
-    tracking_id: Levelup.V2.Payment.Entity.IPaymentItem["tracking_id"];
-  }[] = [];
-
-  function iterateItem(item: Levelup.V2.Payment.Entity.IPaymentItem) {
-    result.push({ entity: item.entity, tracking_id: item.tracking_id });
-    if (item.sub_item) {
-      iterateItem(item.sub_item);
-    }
-    if (item.sub_item_list) {
-      item.sub_item_list.forEach((subItem) => iterateItem(subItem));
-    }
-  }
-
-  items.forEach((item) => iterateItem(item));
-
-  return result;
-}

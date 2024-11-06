@@ -4,57 +4,63 @@ import {
   LuFiles,
   LuFileText,
   LuGlobe,
+  LuImage,
+  LuImagePlus,
   LuLayoutTemplate,
   LuList,
   LuMessageSquare,
   LuNetwork,
   LuPencil,
   LuPencilLine,
+  LuPlug,
+  LuPlugZap,
   LuPlus,
   LuSubtitles,
   LuUserCircle,
   LuUsers,
   LuUsers2,
+  LuView,
 } from "react-icons/lu";
 
 const routes = {
-  // articles: {
-  //   path: "/admin/articles" as const,
-  //   title: "Articles",
-  //   icon: LuFileText,
-  //   ac: ["articles.read" ] as any[],
-  //   _: {
-  //     list: {
-  //       path: "/admin/articles" as const,
-  //       title: "All Articles",
-  //       icon: LuList,
-  //       ac: ["articles.read" ] as any[],
-  //     },
-  //     create: {
-  //       path: "/admin/articles/new" as const,
-  //       title: "Create Article",
-  //       ac: ["articles.create" ] as any[],
-  //       icon: LuPlus,
-  //     },
-  //     edit: {
-  //       path: "/admin/articles/edit/:id" as const,
-  //       title: "Edit Article",
-  //       ac: ["articles.update" ] as any[],
-  //       hideOnMenu: true,
-  //       icon: LuPencilLine,
-  //     },
-  //   },
-  // },
+  articles: {
+    path: "/admin/articles" as const,
+    title: "Articles",
+    icon: LuFileText,
+    hideOnMenu: true,
+    ac: ["articles.read"] as any[],
+    _: {
+      list: {
+        path: "/admin/articles" as const,
+        title: "All Articles",
+        icon: LuList,
+        ac: ["articles.read"] as any[],
+      },
+      create: {
+        path: "/admin/articles/new" as const,
+        title: "Create Article",
+        ac: ["articles.create"] as any[],
+        icon: LuPlus,
+      },
+      edit: {
+        path: "/admin/articles/edit/:id" as const,
+        title: "Edit Article",
+        ac: ["articles.update"] as any[],
+        hideOnMenu: true,
+        icon: LuPencilLine,
+      },
+    },
+  },
 
   articleTypesSlot: () => {
     return {
       slot: "articleTypes" as const,
       result: async (types: Levelup.CMS.V1.Content.Entity.ArticleType[]) => {
-        const res: { [id: string]: Levelup.CMS.V1.UI.Admin.RouteItem } =
+        const res: { [id: string]: Levelup.CMS.V1.UI.Routes.RouteItem } =
           types.reduce(
             (prev, type) => ({
               ...prev,
-              [type._id]: {
+              [type._id ? type._id : type.slug || type.name]: {
                 path: `/admin/articles/types/${type.slug}` as const,
                 title: type.labels.plural,
                 icon: LuFileText,
@@ -142,6 +148,35 @@ const routes = {
       },
     },
   },
+
+  media: {
+    path: "/admin/media" as const,
+    title: "Media",
+    icon: LuImage,
+    ac: ["media.read"] as any[],
+    _: {
+      list: {
+        path: "/admin/media" as const,
+        title: "All Media",
+        ac: ["media.read"] as any[],
+        icon: LuList,
+      },
+      create: {
+        path: "/admin/media/new" as const,
+        title: "Add Media",
+        ac: ["media.create"] as any[],
+        icon: LuImagePlus,
+      },
+      edit: {
+        path: "/admin/media/edit/:id" as const,
+        title: "Edit Media",
+        ac: ["media.update"] as any[],
+        hideOnMenu: true,
+        icon: LuPencil,
+      },
+    },
+  },
+
   comments: {
     path: "/admin/comments" as const,
     title: "Comments",
@@ -226,6 +261,27 @@ const routes = {
         hideOnMenu: true,
         icon: LuPencil,
       },
+      roles: {
+        path: "/admin/users/roles" as const,
+        title: "Roles",
+        ac: ["roles.manage"] as any[],
+        icon: LuView,
+        _: {
+          create: {
+            path: "/admin/users/roles/new" as const,
+            title: "New Role",
+            ac: ["roles.create"] as any[],
+            icon: LuPlus,
+          },
+          edit: {
+            path: "/admin/users/roles/edit/:id" as const,
+            title: "Update Role",
+            ac: ["roles.update"] as any[],
+            hideOnMenu: true,
+            icon: LuPencil,
+          },
+        },
+      },
     },
   },
   account: {
@@ -266,10 +322,24 @@ const routes = {
         ac: ["users.create"] as any[],
         icon: LuUsers2,
       },
+      extensions: {
+        path: "/admin/settings/extensions" as const,
+        title: "Extensions",
+        ac: ["website.manage"] as any[],
+        icon: LuPlug,
+        _: {
+          install: {
+            path: "/admin/settings/extensions/install" as const,
+            title: "Install Extension",
+            ac: ["website.manage"] as any[],
+            icon: LuPlugZap,
+          },
+        }
+      },
     },
   },
 } as const;
 
-const __routes: Levelup.CMS.V1.UI.Admin.RouteItems = routes;
+const __routes: Levelup.CMS.V1.UI.Routes.RouteItems = routes;
 
 export default routes;

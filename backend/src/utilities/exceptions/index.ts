@@ -15,7 +15,7 @@ import exceptions from "../../exceptions";
  * @returns Error
  */
 export const generateErrorFromHttpException = (
-  error: Levelup.V2.Utils.Api.Response.Error,
+  error: Levelup.CMS.V1.Utils.Api.Response.Error,
   status: number,
   statusText: string
 ) => {
@@ -28,8 +28,8 @@ export const errorToObject = (
     | Joi.ValidationError
     | Error
     | AxiosError
-    | Levelup.V2.Utils.Api.Response.Error
-): Levelup.V2.Utils.Api.Response.ErrorObject | undefined => {
+    | Levelup.CMS.V1.Utils.Api.Response.Error
+): Levelup.CMS.V1.Utils.Api.Response.ErrorObject | undefined => {
   if (!error) return error as any;
   if (axios.isAxiosError(error)) {
     const status = error.status ? error.status : error.code || 500;

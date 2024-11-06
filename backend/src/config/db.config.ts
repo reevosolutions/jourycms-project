@@ -51,16 +51,15 @@ export const getDatabaseName = (service: string) => {
 const getDatabaseConfig = () => {
 
   // Define the service name based on the environment variable
-  const SERVICE_NAME = (process.env.SERVICE_NAME || '').toLowerCase() as Levelup.V2.SystemStructure.TMicroservice;
+  const SERVICE_NAME = (process.env.SERVICE_NAME || '').toLowerCase() as Levelup.CMS.V1.Utils.SystemStructure.TMicroService;
 
   // Define the list of services excluded from Atlas
-  const SERVICES_EXCLUDED_FROM_ATLAS: Levelup.V2.SystemStructure.TMicroservice[] = [
+  const SERVICES_EXCLUDED_FROM_ATLAS: Levelup.CMS.V1.Utils.SystemStructure.TMicroService[] = [
     // 'cm',
-    'activity'
   ];
 
   // Define the list of services excluded from Replica Set
-  const SERVICES_EXCLUDED_FROM_RS: Levelup.V2.SystemStructure.TMicroservice[] = [];
+  const SERVICES_EXCLUDED_FROM_RS: Levelup.CMS.V1.Utils.SystemStructure.TMicroService[] = [];
 
 
   // Get the database name prefix from the environment variable

@@ -24,12 +24,14 @@ const EXCLUDED_FILES = [
 ];
 
 type ExportObject = {
-  levelupExportServicePermissions?: Levelup.V2.SystemStructure.ExportServicePermissions<string>;
+  levelupExportServicePermissions?: any;
 };
 
 export const loadServicePermissions = async () => {
   try {
 
+    return;
+    
     // Handle the app attribution
     const cache = Container.get(CacheManager);
     const apps = await cache.apps.list();
@@ -75,7 +77,7 @@ export const loadServicePermissions = async () => {
 
                 const group = Object.keys(GROUPS)[idx];
                 try {
-                  const { data: { data, error } } = await levelupHttpClient.post<Levelup.V2.Auth.Api.PermissionGroups.Create.Response>(`${config.http.services.api.auth}/permission-groups`, {
+                  const { data: { data, error } } = await levelupHttpClient.post<Levelup.CMS.V1.Auth.Api.PermissionGroups.Create.Response>(`${config.http.services.api.auth}/permission-groups`, {
                     data: {
                       app: app?._id,
                       name: group,
@@ -95,7 +97,7 @@ export const loadServicePermissions = async () => {
                 for (let index = 0; index < perms.length; index++) {
                   const name = perms[index];
                   try {
-                    const { data: { data, error } } = await levelupHttpClient.post<Levelup.V2.Auth.Api.Permissions.Create.Response>(`${config.http.services.api.auth}/permissions`, {
+                    const { data: { data, error } } = await levelupHttpClient.post<Levelup.CMS.V1.Auth.Api.Permissions.Create.Response>(`${config.http.services.api.auth}/permissions`, {
                       data: {
                         app: app?._id,
                         group,

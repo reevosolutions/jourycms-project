@@ -5,7 +5,6 @@
  */
 
 import colors from "colors";
-import { log } from "lup-log-client";
 import moment from "moment";
 import config from "../../config";
 import treeify from "treeify";
@@ -15,35 +14,35 @@ import { initTimer } from "../system/timer.utilities";
  * Represents a logger service.
  */
 export class LoggerService {
-  private context: Levelup.V2.SystemStructure.Logger.InstanceContext;
-  private config: Levelup.V2.SystemStructure.Logger.InstanceConfig;
+  private context: Levelup.CMS.V1.Lib.Logger.InstanceContext;
+  private config: Levelup.CMS.V1.Lib.Logger.InstanceConfig;
   private contextId: string;
   private static muted: {
-    [context in Levelup.V2.SystemStructure.Logger.InstanceContext]: {
+    [context in Levelup.CMS.V1.Lib.Logger.InstanceContext]: {
       [contextId: string]: boolean;
     };
   } = {
-    APPLICATION: {},
-    SUBSCRIBER: {},
-    BROKER: {},
-    MIDDLEWARE: {},
-    MAPPER: {},
-    VALIDATOR: {},
-    SANITIZER: {},
-    UTILITY: {},
-    SEED: {},
-    COMPONENT: {},
-    SERVICE: {},
-    CONTROLLER: {},
-    LOADER: {},
-    MODEL: {},
-    HOOK: {},
-    PAGE: {},
-    MODAL: {},
-    FORM: {},
-    REDUX: {},
-    GUARD: {},
-  };
+      APPLICATION: {},
+      SUBSCRIBER: {},
+      BROKER: {},
+      MIDDLEWARE: {},
+      MAPPER: {},
+      VALIDATOR: {},
+      SANITIZER: {},
+      UTILITY: {},
+      SEED: {},
+      COMPONENT: {},
+      SERVICE: {},
+      CONTROLLER: {},
+      LOADER: {},
+      MODEL: {},
+      HOOK: {},
+      PAGE: {},
+      MODAL: {},
+      FORM: {},
+      REDUX: {},
+      GUARD: {},
+    };
   private _showLine: boolean = false;
   private _trace: boolean;
 
@@ -55,12 +54,12 @@ export class LoggerService {
    * @returns An instance of the LoggerService.
    */
   public static getInstance(
-    context: Levelup.V2.SystemStructure.Logger.InstanceContext = "APPLICATION",
+    context: Levelup.CMS.V1.Lib.Logger.InstanceContext = "APPLICATION",
     contextId: string = "",
-    config: Levelup.V2.SystemStructure.Logger.InstanceConfig = {}
+    config: Levelup.CMS.V1.Lib.Logger.InstanceConfig = {}
   ): LoggerService {
     return new LoggerService(
-      context as Levelup.V2.SystemStructure.Logger.InstanceContext,
+      context as Levelup.CMS.V1.Lib.Logger.InstanceContext,
       contextId,
       config
     );
@@ -72,7 +71,7 @@ export class LoggerService {
    * @param contextId The context ID of the logger instance.
    */
   public static mute(
-    context: Levelup.V2.SystemStructure.Logger.InstanceContext = "APPLICATION",
+    context: Levelup.CMS.V1.Lib.Logger.InstanceContext = "APPLICATION",
     contextId: string = ""
   ) {
     this.muted[context][contextId] = true;
@@ -84,7 +83,7 @@ export class LoggerService {
    * @param contextId The context ID of the logger instance.
    */
   public static unmute(
-    context: Levelup.V2.SystemStructure.Logger.InstanceContext = "APPLICATION",
+    context: Levelup.CMS.V1.Lib.Logger.InstanceContext = "APPLICATION",
     contextId: string = ""
   ) {
     this.muted[context][contextId] = false;
@@ -97,9 +96,9 @@ export class LoggerService {
    * @param config The configuration of the logger instance.
    */
   private constructor(
-    context: Levelup.V2.SystemStructure.Logger.InstanceContext,
+    context: Levelup.CMS.V1.Lib.Logger.InstanceContext,
     contextId: string,
-    config: Levelup.V2.SystemStructure.Logger.InstanceConfig
+    config: Levelup.CMS.V1.Lib.Logger.InstanceConfig
   ) {
     this.context = context;
     this.contextId = contextId;
@@ -133,7 +132,7 @@ export class LoggerService {
    * @param args Additional arguments to be logged.
    */
   public log(
-    type: Levelup.V2.SystemStructure.Logger.LogType,
+    type: Levelup.CMS.V1.Lib.Logger.LogType,
     message: string,
     ...args: any[]
   ) {
@@ -145,25 +144,24 @@ export class LoggerService {
 
     const label = `${colors.grey(
       moment().format("HH:mm:ss,SSS")
-    )} ${colors.bold.gray(`[${this.context}:${this.contextId}]`)} ${
-      type === "DEBUG"
+    )} ${colors.bold.gray(`[${this.context}:${this.contextId}]`)} ${type === "DEBUG"
         ? colors.bold.cyan(message)
         : type === "WARN"
-        ? colors.bold.yellow(message)
-        : type === "ERROR"
-        ? colors.bold.red(message)
-        : type === "SUCCESS"
-        ? colors.bold.green(message)
-        : type === "HTTP"
-        ? colors.bold.blue(message)
-        : type === "EVENT"
-        ? colors.gray(message)
-        : type === "INFO"
-        ? colors.bold.cyan(message)
-        : type === "VALUE"
-        ? colors.bold.magenta(message)
-        : colors.bold.gray(message)
-    }`;
+          ? colors.bold.yellow(message)
+          : type === "ERROR"
+            ? colors.bold.red(message)
+            : type === "SUCCESS"
+              ? colors.bold.green(message)
+              : type === "HTTP"
+                ? colors.bold.blue(message)
+                : type === "EVENT"
+                  ? colors.gray(message)
+                  : type === "INFO"
+                    ? colors.bold.cyan(message)
+                    : type === "VALUE"
+                      ? colors.bold.magenta(message)
+                      : colors.bold.gray(message)
+      }`;
     if (this._showLine) {
       console.log(formattedLine.gray);
       this._showLine = false;
@@ -337,7 +335,7 @@ export type ILogItem = {
 class DBLogger {
   private static instance: DBLogger;
 
-  private constructor() {}
+  private constructor() { }
 
   /**
    * Gets the DBLogger instance.
@@ -349,19 +347,7 @@ class DBLogger {
   }
 
   private log(args: ILogItem & { type: LogItemType }) {
-    log(
-      null,
-      {
-        service: args.service || config.currentService.name,
-        name: args.name.toSnakeCase(),
-        type: args.type,
-        severity: args.severity || "info",
-        payload: args.related_to
-          ? { ...(args.payload || {}), related_to: args.related_to }
-          : args.payload,
-      },
-      config.activityLog
-    );
+    console.log('DB Logger not handled'.red)
   }
 
   /**
@@ -441,9 +427,9 @@ export enum LoggerContext {
  * @returns The initialized logger instance.
  */
 const initLogger = (
-  context: Levelup.V2.SystemStructure.Logger.InstanceContext = "APPLICATION",
+  context: Levelup.CMS.V1.Lib.Logger.InstanceContext = "APPLICATION",
   contextId: string,
-  config: Levelup.V2.SystemStructure.Logger.InstanceConfig = {}
+  config: Levelup.CMS.V1.Lib.Logger.InstanceConfig = {}
 ) => {
   const logger = LoggerService.getInstance(context, contextId, config);
   logger.event("...Initialized", contextId);

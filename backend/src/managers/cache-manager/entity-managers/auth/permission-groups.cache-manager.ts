@@ -8,7 +8,7 @@ import { defaults } from '../../../../utilities/helpers/utils.helpers';
  * @description Cache manager for PermissionGroups
  */
 export default class PermissionGroupsCacheManager
-  implements Levelup.V2.CacheManager.EntityCacheManager<"permissionGroup">
+  implements Levelup.CMS.V1.CacheManager.EntityCacheManager<"permissionGroup">
 {
   private logger: LoggerService;
 
@@ -64,22 +64,22 @@ export default class PermissionGroupsCacheManager
   public async list(
     config: {
       company?: string | null;
-      query?: Levelup.V2.CacheManager.TListQueryParams<"permissionGroup">;
+      query?: Levelup.CMS.V1.CacheManager.TListQueryParams<"permissionGroup">;
       force_load_from_db?: boolean;
       filter?: (
-        item: Levelup.V2.SystemStructure.EntityType<"permissionGroup">
+        item: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permissionGroup">
       ) => boolean;
     } = {
       query: {} as any,
       force_load_from_db: true,
     }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<"permissionGroup">[]> {
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permissionGroup">[]> {
     return this.cache.list(this.ENTITY, config);
   }
 
   public async set(
     id: string,
-    value: Partial<Levelup.V2.SystemStructure.EntityType<"permissionGroup">>,
+    value: Partial<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<"permissionGroup">>,
     company?: string | null
   ) {
     return this.cache.set(this.ENTITY, id, value as any, company);

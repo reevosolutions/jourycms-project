@@ -15,7 +15,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/customized.sidebar";
 import initLogger, { LoggerContext } from "@/lib/logging";
-import { ROUTES } from "@/config";
+import { adminRoutes } from "@/config";
 import mock from "@/lib/mock/generators";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -40,36 +40,37 @@ const AdminSidebar: React.FC<Props> = () => {
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
   const [routes, setRoutes] = useState<{
-    [id: string]: Levelup.CMS.V1.UI.Admin.RouteItem;
+    [id: string]: Levelup.CMS.V1.UI.Routes.RouteItem;
   }>({});
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
   const buildMenu = useCallback(async () => {
-    logger.value("ROUTES", ROUTES);
+    logger.value("adminRoutes", adminRoutes);
 
     let _routes: {
-      [id: string]: Levelup.CMS.V1.UI.Admin.RouteItem;
+      [id: string]: Levelup.CMS.V1.UI.Routes.RouteItem;
     } = {};
 
-    for (const routeKey of Object.keys(ROUTES)) {
-      if (typeof ROUTES[routeKey as keyof typeof ROUTES] === "function") {
+    for (const routeKey of Object.keys(adminRoutes)) {
+      if (typeof adminRoutes[routeKey as keyof typeof adminRoutes] === "function") {
         const slotResult: ReturnType<
-          Levelup.CMS.V1.UI.Admin.TMenuSlot<Levelup.CMS.V1.UI.Admin.TMenuSlotName>
-        > = (ROUTES[routeKey as keyof typeof ROUTES] as any)();
+          Levelup.CMS.V1.UI.Routes.TMenuSlot<Levelup.CMS.V1.UI.Routes.TMenuSlotName>
+        > = (adminRoutes[routeKey as keyof typeof adminRoutes] as any)();
         /**
          * Handle the articleTypes slot
          * TODO: Add more slot handlers here
          */
         if (slotResult.slot === "articleTypes") {
-          const types = mock.content.articleTypes(5);
+          const types = mock.content.seedTypes() as Levelup.CMS.V1.Content.Entity.ArticleType[];
+          logger.value('seed', types);
           const res = await slotResult.result(types);
           _routes = { ..._routes, ...res };
         }
       } else {
         _routes = {
           ..._routes,
-          [routeKey]: ROUTES[routeKey as keyof typeof ROUTES] as any,
+          [routeKey]: adminRoutes[routeKey as keyof typeof adminRoutes] as any,
         };
       }
     }
@@ -108,9 +109,9 @@ const AdminSidebar: React.FC<Props> = () => {
             <Collapsible key={key} className="group/collapsible">
               <SidebarGroup>
                 <SidebarGroupLabel asChild>
-                  <CollapsibleTrigger>
-                    <span className="flex items-center gap-3 text-start text-base font-bold text-primary-700">
-                      {route.icon && <route.icon />}
+                  <CollapsibleTrigger className="text-start text-base font-bold text-primary-700 hocus:text-primary-900  hover:text-primary-900 hover:bg-primary-100 transition-all duration-200">
+                    <span className="flex items-center gap-3 text-base font-bold text-text-600">
+                      {route.icon && <route.icon className="w-5 h-5 opacity-50" />}
                       <span>{route.menuTitle || route.title}</span>
                     </span>
                     <LuChevronDown className="ms-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -125,7 +126,7 @@ const AdminSidebar: React.FC<Props> = () => {
                           <SidebarMenuItem key={subKey}>
                             <Link href={subRoute.path}>
                               <SidebarMenuButton>
-                                {subRoute.icon && <subRoute.icon />}
+                                {subRoute.icon && <subRoute.icon className="opacity-50" />}
                                 <span>
                                   {subRoute.menuTitle || subRoute.title}
                                 </span>

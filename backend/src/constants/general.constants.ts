@@ -1,4 +1,4 @@
-export const ISO_WEEKDAYS: { [days in Levelup.V2.Utils.Common.TDay]: number } =
+export const ISO_WEEKDAYS: { [days in Levelup.CMS.V1.Utils.Common.TDay]: number } =
   {
     sunday: 7,
     monday: 1,
@@ -8,7 +8,7 @@ export const ISO_WEEKDAYS: { [days in Levelup.V2.Utils.Common.TDay]: number } =
     friday: 5,
     saturday: 6,
   };
-export const DAYS: { [days: number]: Levelup.V2.Utils.Common.TDay } = {
+export const DAYS: { [days: number]: Levelup.CMS.V1.Utils.Common.TDay } = {
   7: "sunday",
   1: "monday",
   2: "tuesday",

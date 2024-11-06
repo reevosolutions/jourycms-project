@@ -8,11 +8,11 @@ const logger = initLogger("UTILITY", "HAS_PERMISSIONS");
 
 /**
  * 
- * @param {Levelup.V2.Users.Entity.ExposedUser | null} user 
+ * @param {Levelup.CMS.V1.Users.Entity.ExposedUser | null} user 
  * @param {string} permissionName 
  * @returns {Promise<boolean>}
  */
-const hasPermission: (user: Levelup.V2.Users.Entity.ExposedUser | null, permissionName: string) => Promise<boolean> = async (user, permissionName) => {
+const hasPermission: (user: Levelup.CMS.V1.Users.Entity.ExposedUser | null, permissionName: string) => Promise<boolean> = async (user, permissionName) => {
   const cacheManager = Container.get(CacheManager);
 
   if (!user) return false;

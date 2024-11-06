@@ -1,0 +1,323 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.formatNotificationSpace = exports.formatAmount = exports.toKebabCase = exports.toSnakeCase = exports.generateSlug = exports.formatBytes = exports.generateStringNgrams = exports.checkSimilarity = exports.createBigram = exports.abbreviateNumber = exports.isNumeric = exports.toPriceAmount = exports.addLeadingZeros = exports.stringToBoolean = exports.splitString = void 0;
+exports.capitalizeFirstLetter = capitalizeFirstLetter;
+exports.kebabToCamel = kebabToCamel;
+exports.camelToKebab = camelToKebab;
+exports.camelToWords = camelToWords;
+exports.pluralize = pluralize;
+exports.singularize = singularize;
+exports.replaceAll = replaceAll;
+exports.buildUserFullName = buildUserFullName;
+exports.generatePinCode = generatePinCode;
+exports.getSubstringUntilFirstWhitespaceAfterNChars = getSubstringUntilFirstWhitespaceAfterNChars;
+exports.generateItemAlphabetCode = generateItemAlphabetCode;
+exports.countCharacterOccurrenceInString = countCharacterOccurrenceInString;
+/**
+ * @generator Levelup
+ * @author dr. Salmi <reevosolutions@gmail.com>
+ * @since 24-02-2024 20:47:22
+ */
+const lodash_1 = require("lodash");
+const crypto_1 = require("crypto");
+/**
+ * @description Uses lodash flatten to split a string by , / ; +
+ * @param str string to split
+ * @returns {string[]}
+ */
+const splitString = (str, use_plus_character = true) => {
+    return (0, lodash_1.flatten)((0, lodash_1.flatten)((0, lodash_1.flatten)(str.split(",").map((v) => v.split("/"))).map((v) => v.split(";"))).map((v) => (use_plus_character ? v.split("+") : v)))
+        .map((v) => v.trim())
+        .filter((v) => !!v);
+};
+exports.splitString = splitString;
+const stringToBoolean = (str) => {
+    if (!str.length)
+        return false;
+    str = str.trim().toLowerCase();
+    if (["1", "true", "yes", "oui", "y"].includes(str))
+        return true;
+    return false;
+};
+exports.stringToBoolean = stringToBoolean;
+const addLeadingZeros = (num, totalLength) => {
+    return String(num).padStart(totalLength, "0");
+};
+exports.addLeadingZeros = addLeadingZeros;
+const toPriceAmount = (str) => {
+    if (!str.length)
+        return 0;
+    const str2 = str
+        .toLowerCase()
+        // start excel number format to number
+        .replace(",", "#")
+        .replace(".", ",")
+        .replace("#", ".")
+        // end excel number format to number
+        .replace("dza", "")
+        .replace("dz", "")
+        .replace("da", "")
+        .replace(",", "")
+        .trim();
+    try {
+        console.log("EXCEL_NUMBER", str, str2, parseFloat(str2));
+        if (!str2.length)
+            return 0;
+        return parseFloat(str2);
+    }
+    catch (error) {
+        return 0;
+    }
+};
+exports.toPriceAmount = toPriceAmount;
+const isNumeric = (val) => {
+    return !isNaN(val);
+};
+exports.isNumeric = isNumeric;
+const abbreviateNumber = (n) => {
+    function rnd(num, precision) {
+        const prec = 10 ** precision;
+        return Math.round(num * prec) / prec;
+    }
+    const abbrev = ["K", "M", "B"]; // abbreviations in steps of 1000x; extensible if need to edit
+    let base = Math.floor(Math.log(Math.abs(n)) / Math.log(1000));
+    const suffix = abbrev[Math.min(abbrev.length - 1, base - 1)];
+    base = abbrev.indexOf(suffix) + 1;
+    return suffix ? `${rnd(n / 1000 ** base, 2)} ${suffix}` : "" + n;
+};
+exports.abbreviateNumber = abbreviateNumber;
+// Similarity
+// https://stackoverflow.com/questions/10473745/compare-strings-javascript-return-of-likely
+const createBigram = (word) => {
+    const input = word.toLowerCase();
+    const vector = [];
+    for (let i = 0; i < input.length; ++i) {
+        vector.push(input.slice(i, i + 2));
+    }
+    return vector;
+};
+exports.createBigram = createBigram;
+const checkSimilarity = (a, b) => {
+    if (a.length > 0 && b.length > 0) {
+        const aBigram = (0, exports.createBigram)(a);
+        const bBigram = (0, exports.createBigram)(b);
+        let hits = 0;
+        for (let x = 0; x < aBigram.length; ++x) {
+            for (let y = 0; y < bBigram.length; ++y) {
+                if (aBigram[x] === bBigram[y]) {
+                    hits += 1;
+                }
+            }
+        }
+        if (hits > 0) {
+            const union = aBigram.length + bBigram.length;
+            return (2.0 * hits) / union;
+        }
+    }
+    return 0;
+};
+exports.checkSimilarity = checkSimilarity;
+const generateStringNgrams = (str) => {
+    // Remove non-alphanumeric characters
+    if (!str)
+        return [];
+    const sanitizedText = str.toLowerCase().replace(/[^a-zA-Z0-9]/g, "");
+    const ngrams = [];
+    for (let n = 2; n <= sanitizedText.length; n++) {
+        for (let i = 0; i <= sanitizedText.length - n; i++) {
+            ngrams.push(sanitizedText.slice(i, i + n));
+        }
+    }
+    return ngrams;
+};
+exports.generateStringNgrams = generateStringNgrams;
+const formatBytes = (bytes, decimals = 2) => {
+    if (bytes === 0)
+        return "0 Byte";
+    const k = 1024;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return (parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]);
+};
+exports.formatBytes = formatBytes;
+const generateSlug = async (title) => {
+    return (0, exports.toKebabCase)(title);
+    // Replace Arabic and other non-ASCII characters with ASCII equivalents if possible
+    const arabicMap = {
+        ش: "sh",
+        س: "s",
+        ذ: "z",
+        ز: "z",
+        ض: "d",
+        ص: "s",
+        ث: "t",
+        ق: "q",
+        ف: "f",
+        غ: "gh",
+        // Add more mappings as needed
+    };
+    // const replacedTitle = title.replace(/[\u0621-\u064A]/g, (char) => arabicMap[char] || char);
+    const replacedTitle = title;
+    // Convert to lowercase
+    const lowerCaseTitle = replacedTitle.toLowerCase();
+    // Remove non-word characters, except for Arabic characters, dashes, and spaces
+    const cleanedTitle = lowerCaseTitle.replace(/[^\u0621-\u064A\w\s-]/g, "");
+    // Replace spaces and dashes with a single dash
+    const dashedTitle = cleanedTitle.replace(/[\s-]+/g, "-");
+    return dashedTitle;
+};
+exports.generateSlug = generateSlug;
+const toSnakeCase = (str) => {
+    return str.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+};
+exports.toSnakeCase = toSnakeCase;
+const toKebabCase = (input) => {
+    return (input
+        .toLowerCase() // Convert to lowercase
+        .replace(/[^\p{L}\p{N}]+/gu, "-") // Replace non-letter and non-digit characters with a dash
+        // .replace(/[^a-zA-Z0-9\u00C0-\u024F\u1E00-\u1EFF]+/g, '-') // Replace non-alphanumeric and non-Latin chars with a dash
+        .replace(/^-+|-+$/g, "") // Remove leading or trailing dashes
+        .replace(/-{2,}/g, "-")); // Replace multiple dashes with a single dash
+};
+exports.toKebabCase = toKebabCase;
+function capitalizeFirstLetter(str) {
+    if (str.length === 0)
+        return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+function kebabToCamel(kebabString) {
+    return kebabString.replace(/-([a-z])/g, (_, match) => match.toUpperCase());
+}
+function camelToKebab(camelCaseString) {
+    return camelCaseString.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
+}
+function camelToWords(camelCaseString) {
+    return camelCaseString.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
+}
+function pluralize(word) {
+    if (word.endsWith("ing")) {
+        // Words ending with 's' or 'es', return the word as is
+        return word;
+    }
+    else if (word.endsWith("y") &&
+        !word.endsWith("ay") &&
+        !word.endsWith("ey") &&
+        !word.endsWith("oy") &&
+        !word.endsWith("uy") &&
+        !word.endsWith("iy")) {
+        // Words ending with 'y', replace 'y' with 'ies'
+        return word.slice(0, -1) + "ies";
+    }
+    else {
+        // For other words, simply add 's'
+        return word + "s";
+    }
+}
+function singularize(word) {
+    if (word.endsWith("ies")) {
+        // Words ending with 'ies', replace 'ies' with 'y'
+        return word.slice(0, -3) + "y";
+    }
+    else if (word.endsWith("s")) {
+        // Words ending with 's', remove 's'
+        return word.slice(0, -1);
+    }
+    else {
+        // For other words, return the word as is
+        return word;
+    }
+}
+function replaceAll(input, search, replace) {
+    const regex = new RegExp(search, "g");
+    return input.replace(regex, replace);
+}
+function buildUserFullName(names) {
+    return `${names.family_name || ""} ${names.first_name || ""}`.trim();
+}
+const formatAmount = (x, separator = ",", decimals = 2) => {
+    const str = x.toFixed(decimals).split(".");
+    const part1 = str[0].replace(/\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g, `$2${separator}$1`);
+    return str.length === 2 ? `${part1}.${str[1]}` : part1;
+};
+exports.formatAmount = formatAmount;
+const formatNotificationSpace = (space, infos) => {
+    if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
+        return null;
+    return space
+        .replace("[COMPANY]", infos.company || "")
+        .replace("[OFFICE]", infos.office || "")
+        .replace("[STORE]", infos.store || "")
+        .replace("[USER]", infos.user || "")
+        .replace("[ROLE]", infos.role || "");
+};
+exports.formatNotificationSpace = formatNotificationSpace;
+/**
+ * @description Generate a random 4-digit pin code between 1000 and 9999 (inclusive)
+ * @returns {string} a random 4-digit pin code
+ */
+function generatePinCode() {
+    const pin = (0, crypto_1.randomInt)(1000, 10000);
+    return pin.toString();
+}
+/**
+ * Function to get a substring from position 0 to the first whitespace after threshold characters
+ * @param str - The input string
+ * @param threshold - The threshold number of characters
+ * @returns - The extracted substring
+ */
+function getSubstringUntilFirstWhitespaceAfterNChars(str, threshold = 100, dots = " ...") {
+    // Define the start position and the threshold length
+    const startPos = 0;
+    // Find the first whitespace position after the threshold
+    const substring = str.substring(threshold);
+    const firstWhitespacePos = substring.search(/\s/);
+    if (firstWhitespacePos === -1) {
+        // If no whitespace is found, return the substring from 0 to the end of the string
+        return str;
+    }
+    // Calculate the actual position in the original string
+    const endPos = threshold + firstWhitespacePos;
+    // Return the substring from 0 to the first whitespace after the threshold
+    return str.length > threshold
+        ? `${str.substring(startPos, endPos)}${dots}`
+        : str;
+}
+/**
+ * @generator Levelup
+ * @author dr. Salmi <reevosolutions@gmail.com>
+ * @since 23-07-2024 08:43:03
+ */
+function generateItemAlphabetCode(usedCodes) {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const base = alphabet.length;
+    // Converts a number to a base-26 "column name"
+    const toCode = (number) => {
+        let code = "";
+        while (number > 0) {
+            number -= 1; // Adjust for 0-indexing in modulo calculation
+            code = alphabet[number % base] + code;
+            number = Math.floor(number / base);
+        }
+        return code || "A"; // Default to "A" if number is 0
+    };
+    // Generate a set of used codes for quick lookup
+    const usedCodesSet = new Set(usedCodes);
+    let index = 1; // Start from 1 which corresponds to "A"
+    let code = toCode(index);
+    // Find the first code that is not used
+    while (usedCodesSet.has(code)) {
+        index++;
+        code = toCode(index);
+    }
+    return code;
+}
+function countCharacterOccurrenceInString(str, character) {
+    let count = 0;
+    for (let i = 0; i < str.length; i++) {
+        if (str.charAt(i) === ".") {
+            count++;
+        }
+    }
+    return count;
+}
+//# sourceMappingURL=index.js.map

@@ -15,7 +15,8 @@ export default function Page() {
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout title="New post">
-      <PostForm />
+      <PostForm articleType={""}      
+      />
     </AdminLayout.PageLayout>
   );
 }

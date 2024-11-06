@@ -29,7 +29,7 @@ const attachAuthData = async (
     req.attached_entities.token = token;
 
     let loadUser = true;
-    let user: Levelup.V2.Users.Entity.ExposedUser | undefined;
+    let user: Levelup.CMS.V1.Users.Entity.ExposedUser | undefined;
     if (!token || req.jwt_expired) {
       if (!token) logger.warn("! JWT: No Token");
       else logger.error("x JWT: Expired");
@@ -58,125 +58,17 @@ const attachAuthData = async (
         throw new exceptions.UnauthorizedException("User not found");
       }
 
-      /* -------------------------------------------------------------------------- */
-      /*                                ORIGINAL USER                               */
-      /* -------------------------------------------------------------------------- */
-      const original_user_id = req.headers["x-original-user"] as string;
-      if (original_user_id) {
-        const original_user = await cache.users.get(original_user_id);
-        if (original_user) {
-          if (
-            original_user.is_deleted ||
-            original_user.attributes?.is_suspended
-          )
-            throw new exceptions.UnauthorizedException(
-              "Original user deleted or suspended"
-            );
-          req.attached_entities.original_user = original_user;
-        } else {
-          throw new exceptions.BadRequestException("Original user not found");
-        }
-      }
+     
     }
 
-    /* -------------------------------------------------------------------------- */
-    /*                                 LOAD STORE                                 */
-    /* -------------------------------------------------------------------------- */
-    let store_id = req.headers["x-store-id"] as string;
-    if (
-      !store_id &&
-      user &&
-      user.role_group === "sellers" &&
-      user.attributes?.seller?.stores?.length >= 1
-    ) {
-      store_id =
-        user.attributes?.seller?.last_managed_store ||
-        user.attributes?.seller?.stores[0];
-    }
-    if (store_id) {
-      // TODO reactivate this after;
-      if (
-        user &&
-        (user.role_group !== "sellers" ||
-          !(user.attributes?.seller?.stores || []).includes(store_id))
-      ) {
-        throw new exceptions.UnauthorizedException("User do not own store");
-      }
-      const store = await cache.stores.get(store_id);
-      if (store) {
-        if (store.is_deleted || store.attributes.is_suspended) {
-          throw new exceptions.UnauthorizedException("Store deleted or banned");
-        }
-        req.attached_entities.store = store;
-      } else throw new exceptions.UnauthorizedException("Store not found");
-    }
+   
 
-    /* -------------------------------------------------------------------------- */
-    /*                                 LOAD OFFICE                                */
-    /* -------------------------------------------------------------------------- */
-    const office_id = req.headers["x-office-id"] as string;
-    if (office_id) {
-      // if(!user.assignments.office_snapshots.map(office=>office._id).includes(office_id)){
-      //   logger.error('exceptions.UnauthorizedException: user do not belong to this office');
-      //   return next(new exceptions.UnauthorizedException('User do not belong to this office'));
-      // }
-      const office = await cache.offices.get(office_id);
-      if (office) {
-        req.attached_entities.office = office;
-      }
-    }
-
-    /* -------------------------------------------------------------------------- */
-    /*                                   COMPANY                                  */
-    /* -------------------------------------------------------------------------- */
-    let company_id: string | undefined;
-    if (req.attached_entities.store?.company)
-      company_id = req.attached_entities.store.company;
-    else if (req.attached_entities.user?.company)
-      company_id = req.attached_entities.user.company;
-    else if (req.attached_entities.office?.company)
-      company_id = req.attached_entities.office.company;
-    else if (req.headers["x-company-id"])
-      company_id = req.headers["x-company-id"] as string;
-    if (company_id) {
-      const company = await cache.companies.get(company_id);
-
-      if (company) {
-        if (company.is_deleted || company.attributes?.is_suspended)
-          throw new exceptions.UnauthorizedException(
-            "Company deleted or suspended"
-          );
-        req.attached_entities.company = company;
-      }
-    }
-
-    /* -------------------------------------------------------------------------- */
-    /*                                   COUNTRY                                  */
-    /* -------------------------------------------------------------------------- */
-    if (req.attached_entities.office?.address?.country_code)
-      req.attached_entities.country =
-        req.attached_entities.office.address.country_code;
-    else if (req.attached_entities.company?.address?.country_code)
-      req.attached_entities.country =
-        req.attached_entities.company.address.country_code;
-    else if (req.attached_entities.store?.address?.country_code)
-      req.attached_entities.country =
-        req.attached_entities.store.address.country_code;
-    else if (req.attached_entities.user?.profile?.address?.country_code)
-      req.attached_entities.country =
-        req.attached_entities.user.profile.address.country_code;
     /* -------------------------------------------------------------------------- */
     /*                                     APP                                    */
     /* -------------------------------------------------------------------------- */
     let app_id: string | undefined;
-    if (req.attached_entities.store?.app)
-      app_id = req.attached_entities.store.app;
-    else if (req.attached_entities.user?.app)
+    if (req.attached_entities.user?.app)
       app_id = req.attached_entities.user.app;
-    else if (req.attached_entities.company?.app)
-      app_id = req.attached_entities.company.app;
-    else if (req.attached_entities.office?.app)
-      app_id = req.attached_entities.office.app;
     else if (req.headers["x-app-id"])
       app_id = req.headers["x-app-id"] as string;
     if (app_id) {
@@ -214,27 +106,7 @@ const attachAuthData = async (
           req.attached_entities.app.name
         )
       : logger.warn("x no app");
-    req.attached_entities.company
-      ? logger.success(
-          "✔️ company",
-          req.attached_entities.company._id,
-          req.attached_entities.company.name
-        )
-      : logger.warn("x no company");
-    req.attached_entities.office
-      ? logger.success(
-          "✔️ office",
-          req.attached_entities.office._id,
-          req.attached_entities.office.name
-        )
-      : logger.warn("x no office");
-    req.attached_entities.store
-      ? logger.success(
-          "✔️ store",
-          req.attached_entities.store._id,
-          req.attached_entities.store.name
-        )
-      : logger.warn("x no store");
+    
 
     return next();
   } catch (error) {

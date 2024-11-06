@@ -1,0 +1,24 @@
+{
+  "name": "jourycms-project",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "push": "git add . && git commit -m 'update' && git push",
+    "add:sdk:local": "cd frontend && add file:../lup-sdk",
+    "add:sdk": "cd frontend && yarn add @levelup-system/sdk@latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reevosolutions/jourycms-project.git"
+  },
+  "keywords": [
+    "CMS"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/reevosolutions/jourycms-project/issues"
+  },
+  "homepage": "https://github.com/reevosolutions/jourycms-project#readme",
+  "description": ""
+}

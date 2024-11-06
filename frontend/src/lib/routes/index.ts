@@ -1,1 +1,1 @@
-export {default as filterRoutes} from './filter-routes';
+export { filterRoutes, setPathParams, getRouteTree } from './utills.routes';

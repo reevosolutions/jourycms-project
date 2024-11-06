@@ -1,0 +1,22 @@
+{
+  "folders": [
+    {
+      "path": "."
+    },
+    {
+      "path": "../yal-front13.2"
+    },
+    {
+      "path": "../levelup-project/lup-frontend"
+    },
+    {
+      "path": "../levelup-project/lup-sdk"
+    },
+    {
+      "path": "../levelup-project/lup-support"
+    }
+  ],
+  "settings": {
+    "editor.tabSize": 2
+  }
+}

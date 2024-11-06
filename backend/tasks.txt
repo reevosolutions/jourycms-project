@@ -1,0 +1,1 @@
+npm i nanoid google-translate-api-x globby hash-wasm country-data chroma-js dotenv say

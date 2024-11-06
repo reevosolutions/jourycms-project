@@ -7,7 +7,7 @@ import moment from "moment";
  * @since 27-02-2024 19:03:02
  * 
  */
-export const isDiscountApplicable = (parcelData: Levelup.V2.Offers.Entity.IDiscountRequiredDataType, offer: Levelup.V2.Offers.Entity.DiscountOffer, otherDiscountsApplied: string[]): boolean => {
+export const isDiscountApplicable = (parcelData: Levelup.CMS.V1.Offers.Entity.IDiscountRequiredDataType, offer: Levelup.CMS.V1.Offers.Entity.DiscountOffer, otherDiscountsApplied: string[]): boolean => {
   try {
 
     return true;
@@ -17,7 +17,7 @@ export const isDiscountApplicable = (parcelData: Levelup.V2.Offers.Entity.IDisco
 }
 
 
-export const applyDiscounts: (amounts: Entities.IDeposit["amounts"], parcel: Partial<Levelup.V2.Shipping.Entity.Parcel>) => Entities.IDeposit["amounts"] = (amounts, parcel) => {
+export const applyDiscounts: (amounts: Entities.IDeposit["amounts"], parcel: Partial<Levelup.CMS.V1.Shipping.Entity.Parcel>) => Entities.IDeposit["amounts"] = (amounts, parcel) => {
   const otherDiscountsApplied: string[] = []
   discounts.forEach(discount => {
 
@@ -50,7 +50,7 @@ export const applyDiscounts: (amounts: Entities.IDeposit["amounts"], parcel: Par
 
 };
 
-export const applyDiscountsToDeliveryFees: (value: number, parcelData: Levelup.V2.Offers.Entity.IDiscountRequiredDataType) => number = (value, parcelData) => {
+export const applyDiscountsToDeliveryFees: (value: number, parcelData: Levelup.CMS.V1.Offers.Entity.IDiscountRequiredDataType) => number = (value, parcelData) => {
 
   /* -------------------------------------------------------------------------- */
   /*                   START INJECT BLACK FRIDAY 2023 DISCOUNT                  */
@@ -126,7 +126,7 @@ export const applyDiscountsToDeliveryFees: (value: number, parcelData: Levelup.V
   return new_value || 0;
 };
 
-export const applyDiscountsToReturnTax: (value: number, parcel: Partial<Levelup.V2.Shipping.Entity.Parcel>) => number = (value, parcel) => {
+export const applyDiscountsToReturnTax: (value: number, parcel: Partial<Levelup.CMS.V1.Shipping.Entity.Parcel>) => number = (value, parcel) => {
   const otherDiscountsApplied: string[] = []
   let new_value = value;
   if (new_value === 0) return new_value;

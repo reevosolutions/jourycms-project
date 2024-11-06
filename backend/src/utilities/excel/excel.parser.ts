@@ -1,4 +1,4 @@
-import BaseService from "../../services/base.service";
+import BaseService from "../../common/base.service";
 import exceptions from "../../exceptions";
 import * as XLSX from "xlsx";
 import * as fs from "fs";
@@ -20,7 +20,7 @@ export default class ExcelParser extends BaseService {
     filePath?: string,
     mapper?: T,
     sheet_name?: string
-  ): Promise<Levelup.V2.Utils.NonUndefined<InferReturnType<T>>[]> => {
+  ): Promise<Levelup.CMS.V1.Utils.NonUndefined<InferReturnType<T>>[]> => {
     const scenario = this.initScenario(this.logger, this.parse);
     try {
       if (!filePath && !this.filePath) {
@@ -56,7 +56,7 @@ export default class ExcelParser extends BaseService {
       if (mapper) {
         const result = json
           .map((row, index) => mapper(row, index))
-          .filter((row) => row !== undefined) as Levelup.V2.Utils.NonUndefined<
+          .filter((row) => row !== undefined) as Levelup.CMS.V1.Utils.NonUndefined<
           InferReturnType<T>
         >[];
         return result;

@@ -35,7 +35,7 @@ export default class FCMTokensCacheManager {
    * @author dr. Salmi <reevosolutions@gmail.com>
    * @since 25-02-2024 17:06:22
    */
-  public async set(tokenObject: Levelup.V2.CacheManager.Store.Firebase.FCMTokenObjectOnRedis) {
+  public async set(tokenObject: Levelup.CMS.V1.CacheManager.Store.Firebase.FCMTokenObjectOnRedis) {
     try {
       const now = new Date();
       const client = await this.cache.getClient();
@@ -54,13 +54,13 @@ export default class FCMTokensCacheManager {
    * @generator Levelup
    * @since 25-02-2024 17:06:22
    */
-  public async get(token: string): Promise<Levelup.V2.CacheManager.Store.Firebase.FCMTokenObjectOnRedis | null> {
+  public async get(token: string): Promise<Levelup.CMS.V1.CacheManager.Store.Firebase.FCMTokenObjectOnRedis | null> {
     try {
       if (!token) return null;
 
       const client = await this.cache.getClient();
       const val = await client.hGet(this.cache.generateForeignKey(this.CACHE_KEY), token);
-      let oldDoc: Levelup.V2.CacheManager.Store.TStoredForeignObject<Levelup.V2.CacheManager.Store.Firebase.FCMTokenObjectOnRedis>;
+      let oldDoc: Levelup.CMS.V1.CacheManager.Store.TStoredForeignObject<Levelup.CMS.V1.CacheManager.Store.Firebase.FCMTokenObjectOnRedis>;
 
       if (val) {
         oldDoc = JSON.parse(val);
@@ -104,11 +104,11 @@ export default class FCMTokensCacheManager {
     try {
       const client = await this.cache.getClient();
       const val = await client.hGetAll(this.cache.generateForeignKey(this.CACHE_KEY));
-      const FCMTokens: Levelup.V2.CacheManager.Store.Firebase.FCMTokenObjectOnRedis[] = [];
+      const FCMTokens: Levelup.CMS.V1.CacheManager.Store.Firebase.FCMTokenObjectOnRedis[] = [];
       if (val && Object.values(val).length) {
         Object.values(val).forEach(value => {
           const v: {
-            FCMToken: Levelup.V2.CacheManager.Store.Firebase.FCMTokenObjectOnRedis;
+            FCMToken: Levelup.CMS.V1.CacheManager.Store.Firebase.FCMTokenObjectOnRedis;
             last_update: Date;
           } = JSON.parse(value);
           FCMTokens.push(v.FCMToken);

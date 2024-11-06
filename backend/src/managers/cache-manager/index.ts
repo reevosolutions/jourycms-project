@@ -3,39 +3,20 @@ import { RedisClientType, RedisFlushModes, createClient } from "redis";
 import Container, { Service } from "typedi";
 import { errorToObject } from "../../utilities/exceptions";
 import initLogger, { LoggerService } from "../../utilities/logging";
-import PdfPregenerationKeysCacheManager from "./managers/pdf-pregeneration-keys.cache-manager";
 import HeavyComputingCacheManager from "./managers/heavy-computing.cache-manager";
 import ActionsCacheManager from "./managers/actions.cache-manager";
 import TasksCacheManager from "./managers/tasks.cache-manager";
-import PricingCacheManager from "./managers/pricing.cache-manager";
-import ParcelListingRequestsCacheManager from "./managers/parcel-listing-requests.cache-manager";
 import FCMTokensCacheManager from "./managers/fcm-tokens.cache-manager";
 import config from "../../config";
 import { defaults } from "../../utilities/helpers/utils.helpers";
 import UsersCacheManager from "./entity-managers/auth/users.cache-manager";
-import CompaniesCacheManager from "./entity-managers/accounts/companies.cache-manager";
-import StoresCacheManager from "./entity-managers/accounts/stores.cache-manager";
 import RolesCacheManager from "./entity-managers/auth/roles.cache-manager";
 import PermissionGroupsCacheManager from "./entity-managers/auth/permission-groups.cache-manager";
 import ApiKeysCacheManager from "./entity-managers/auth/api-keys.cache-manager";
 import PermissionsCacheManager from "./entity-managers/auth/permissions.cache-manager";
-import WebhookListenersCacheManager from "./entity-managers/eventbus/webhook-listeners.cache-manager";
-import CitiesCacheManager from "./entity-managers/locations/cities.cache-manager";
-import CountriesCacheManager from "./entity-managers/locations/countries.cache-manager";
-import StatesCacheManager from "./entity-managers/locations/states.cache-manager";
-import OfficesCacheManager from "./entity-managers/logistics/offices.cache-manager";
-import VehiclesCacheManager from "./entity-managers/logistics/vahicles.cache-manager";
-import VehicleTypesCacheManager from "./entity-managers/logistics/vahicle-types.cache-manager";
-import VehicleMissionsCacheManager from "./entity-managers/logistics/vahicle-missions.cache-manager";
-import WarehousesCacheManager from "./entity-managers/logistics/warehouses.cache-manager";
 import AppsCacheManager from "./entity-managers/system/apps.cache-manager";
-import { initLevelupSdk } from "../../utilities/data/sdk";
-import ProductsCacheManager from "./entity-managers/products/products.cache-manager";
-import ProductCategoriesCacheManager from "./entity-managers/products/product-categories.cache-manager";
-import SpcCacheManager from "./entity-managers/payment/spc.cache-manager";
+import { initJouryCMSSdk } from "../../utilities/data/sdk";
 import exceptions from "../../exceptions";
-import CityDistanceMatrixCacheManager from "./managers/city-distance-matrix.cache-manager";
-import StateDistanceMatrixCacheManager from "./managers/state-distance-matrix.cache-manager";
 
 @Service()
 export default class CacheManager {
@@ -53,7 +34,7 @@ export default class CacheManager {
     this.client = createClient({
       url: config.cacheManager.redis.url,
     });
-    
+
 
     this.client.on("error", (err) => {
       this.logger.error(this.getClient.name, "Redis Client Error", err);
@@ -70,39 +51,32 @@ export default class CacheManager {
   }
 
   protected _entityRelatedToCompany(
-    entity: Levelup.V2.CacheManager.TEntity
+    entity: Levelup.CMS.V1.CacheManager.TEntity
   ): boolean {
-    const notRelated: Levelup.V2.CacheManager.TEntity[] = [
+    const notRelated: Levelup.CMS.V1.CacheManager.TEntity[] = [
       "app",
-      "company",
-      "country",
-      "state",
-      "city",
     ];
     return !notRelated.includes(entity);
   }
 
   public generateEntityKey(
-    entity: Levelup.V2.CacheManager.TEntity,
+    entity: Levelup.CMS.V1.CacheManager.TEntity,
     company?: string | null
   ): string {
     if (this._entityRelatedToCompany(entity) && company)
-      return `${
-        config.cacheManager.keyPrefix || "LUP_V2:"
-      }${company}:${entity}`;
+      return `${config.cacheManager.keyPrefix || "LUP_V2:"
+        }${company}:${entity}`;
     else
       return `${config.cacheManager.keyPrefix || "LUP_V2:"}noCompany:${entity}`;
   }
 
   public generateForeignKey(id: string, company?: string | null): string {
     if (company)
-      return `${
-        config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"
-      }${company}:${id}`;
+      return `${config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"
+        }${company}:${id}`;
     else
-      return `${
-        config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"
-      }noCompany:${id}`;
+      return `${config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"
+        }noCompany:${id}`;
   }
 
   public async getCollectionEntries<T = any>(
@@ -166,9 +140,9 @@ export default class CacheManager {
       expiration?: number;
       company?: string | null;
     } = {
-      expiration: 3600 * 24,
-      company: null,
-    }
+        expiration: 3600 * 24,
+        company: null,
+      }
   ): Promise<T | null> {
     try {
       /**
@@ -230,96 +204,35 @@ export default class CacheManager {
 
   public async loadObjectByIdFormDB<
     E extends
-      | Levelup.V2.CacheManager.TEntity
-      | Levelup.V2.CacheManager.TPharmadzEntity
-  >(entity: E, id: string): Promise<Levelup.V2.SystemStructure.EntityType<E>> {
+    | Levelup.CMS.V1.CacheManager.TEntity
+
+  >(entity: E, id: string): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>> {
     try {
       let data: { data: any };
-      let result: Levelup.V2.SystemStructure.EntityType<E>;
+      let result: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>;
 
-      const sdk = initLevelupSdk();
+      const sdk = initJouryCMSSdk();
 
       switch (entity) {
         // auth
         case "user":
           data = await sdk.auth.users.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>;
           break;
         case "apiKey":
           data = await sdk.auth.apiKeys.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>;
           break;
         case "role":
           data = await sdk.auth.roles.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>;
           break;
         case "permission":
           data = await sdk.auth.permissions.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>;
           break;
 
-        // locations
-        case "country":
-          data = await sdk.locations.countries.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "state":
-          data = await sdk.locations.states.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "city":
-          data = await sdk.locations.cities.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-
-        // accounts
-        case "company":
-          data = await sdk.accounts.companies.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "store":
-          data = await sdk.accounts.stores.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-
-        // logistics
-        case "office":
-          data = await sdk.logistics.offices.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "warehouse":
-          data = await sdk.logistics.warehouses.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "vehicle":
-          data = await sdk.logistics.vehicles.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "vehicleType":
-          data = await sdk.logistics.vehicleTypes.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "vehicleMission":
-          data = await sdk.logistics.vehicleMissions.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-
-        // products
-        case "product":
-          data = await sdk.products.products.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-        case "productCategory":
-          data = await sdk.products.productCategories.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-
-        // system
-        case "app":
-          data = await sdk.system.apps.getById(id);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>;
-          break;
-
+        
         default:
           throw new exceptions.InternalServerError(
             `Data loading not handled for this entity: ${entity}`
@@ -348,14 +261,14 @@ export default class CacheManager {
     }
   }
 
-  public async loadListFromDB<E extends Levelup.V2.CacheManager.TEntity>(
+  public async loadListFromDB<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
-    query: Levelup.V2.CacheManager.TListQueryParams<E>,
+    query: Levelup.CMS.V1.CacheManager.TListQueryParams<E>,
     company: string | null
-  ): Promise<Levelup.V2.SystemStructure.EntityType<E>[]> {
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]> {
     try {
       let data: { data: any[] };
-      let result: Levelup.V2.SystemStructure.EntityType<E>[] = [];
+      let result: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[] = [];
 
       query = {
         ...(query || {}),
@@ -367,107 +280,28 @@ export default class CacheManager {
       if (company && this._entityRelatedToCompany(entity))
         (query.filters as any)!.company = company;
 
-      const sdk = initLevelupSdk();
+      const sdk = initJouryCMSSdk();
 
       switch (entity) {
         // auth
         case "user":
           data = await sdk.auth.users.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[];
           break;
         case "role":
           data = await sdk.auth.roles.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[];
           break;
         case "apiKey":
           data = await sdk.auth.apiKeys.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[];
           break;
         case "permission":
           data = await sdk.auth.permissions.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
+          result = data?.data as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[];
           break;
 
-        // locations
-        case "country":
-          data = await sdk.locations.countries.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "state":
-          data = await sdk.locations.states.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "city":
-          data = await sdk.locations.cities.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
-        // accounts
-        case "company":
-          data = await sdk.accounts.companies.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "store":
-          data = await sdk.accounts.stores.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
-        // logistics
-        case "office":
-          data = await sdk.logistics.offices.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "warehouse":
-          data = await sdk.logistics.warehouses.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "vehicle":
-          data = await sdk.logistics.vehicles.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "vehicleType":
-          data = await sdk.logistics.vehicleTypes.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "vehicleMission":
-          data = await sdk.logistics.vehicleMissions.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
-        // payment
-        case "spcCityBasedZoning":
-          data = await sdk.payment.spcCityBasedZoning.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "spcStateBasedZoning":
-          data = await sdk.payment.spcStateBasedZoning.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "spcCityZone":
-          data = await sdk.payment.spcCityZones.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "spcStateZone":
-          data = await sdk.payment.spcStateZones.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
-        // products
-        case "product":
-          data = await sdk.products.products.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-        case "productCategory":
-          data = await sdk.products.productCategories.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
-        // system
-        case "app":
-          data = await sdk.system.apps.list(query as any);
-          result = data?.data as Levelup.V2.SystemStructure.EntityType<E>[];
-          break;
-
+      
         default:
           throw new exceptions.InternalServerError(
             `Data loading not handled for this entity: ${entity}`
@@ -498,16 +332,16 @@ export default class CacheManager {
   /*                            START COMMON METHODS                            */
   /* -------------------------------------------------------------------------- */
 
-  public async set<E extends Levelup.V2.CacheManager.TEntity>(
+  public async set<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     id: string,
-    value: Levelup.V2.SystemStructure.EntityType<E>,
+    value: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>,
     company: string | null = null,
     config: {
       customKey?: string | null;
     } = {
-      customKey: null,
-    }
+        customKey: null,
+      }
   ) {
     try {
       /**
@@ -545,7 +379,7 @@ export default class CacheManager {
     }
   }
 
-  public async get<E extends Levelup.V2.CacheManager.TEntity>(
+  public async get<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     id: string,
     config: {
@@ -554,12 +388,12 @@ export default class CacheManager {
       company?: string | null;
       customKey?: string | null;
     } = {
-      expiration: 3600 * 24,
-      force_load_from_db: true,
-      company: null,
-      customKey: null,
-    }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<E>> {
+        expiration: 3600 * 24,
+        force_load_from_db: true,
+        company: null,
+        customKey: null,
+      }
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>> {
     try {
       /**
        * Apply defaults on config
@@ -580,7 +414,7 @@ export default class CacheManager {
         id.toString()
       );
 
-      let oldDoc: Levelup.V2.CacheManager.Store.TStoredLevelupObject<E>;
+      let oldDoc: Levelup.CMS.V1.CacheManager.Store.TStoredLevelupObject<E>;
       if (val) {
         oldDoc = JSON.parse(val);
       }
@@ -612,7 +446,7 @@ export default class CacheManager {
     }
   }
 
-  public async getMany<E extends Levelup.V2.CacheManager.TEntity>(
+  public async getMany<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     ids: string[],
     config: {
@@ -620,11 +454,11 @@ export default class CacheManager {
       force_load_from_db?: boolean;
       company?: string | null;
     } = {
-      expiration: 3600 * 24,
-      force_load_from_db: true,
-      company: null,
-    }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<E>[]> {
+        expiration: 3600 * 24,
+        force_load_from_db: true,
+        company: null,
+      }
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]> {
     try {
       if (!ids?.length) return [];
 
@@ -641,7 +475,7 @@ export default class CacheManager {
         const accumulator = await previousPromise;
         const result = await this.get(entity, currentItem?.toString(), config);
         return [...accumulator, result];
-      }, Promise.resolve([] as Levelup.V2.SystemStructure.EntityType<E>[]));
+      }, Promise.resolve([] as Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]));
     } catch (error) {
       this.logger.save.error({
         name: this.generateLogItemName(this.get),
@@ -656,7 +490,7 @@ export default class CacheManager {
     }
   }
 
-  public async unset<E extends Levelup.V2.CacheManager.TEntity>(
+  public async unset<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     id: string,
     company: string | null = null
@@ -677,7 +511,7 @@ export default class CacheManager {
     }
   }
 
-  public async unsetAll<E extends Levelup.V2.CacheManager.TEntity>(
+  public async unsetAll<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     company: string | null = null
   ) {
@@ -696,28 +530,28 @@ export default class CacheManager {
     }
   }
 
-  public async list<E extends Levelup.V2.CacheManager.TEntity>(
+  public async list<E extends Levelup.CMS.V1.CacheManager.TEntity>(
     entity: E,
     config: {
-      query?: Levelup.V2.CacheManager.TListQueryParams<E>;
+      query?: Levelup.CMS.V1.CacheManager.TListQueryParams<E>;
       force_load_from_db?: boolean;
-      filter?: (item: Levelup.V2.SystemStructure.EntityType<E>) => boolean;
+      filter?: (item: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>) => boolean;
       company?: string | null;
       customKey?: string | null;
     } = {
-      query: {} as Levelup.V2.CacheManager.TListQueryParams<E>,
-      force_load_from_db: true,
-      filter: () => true,
-      company: null,
-      customKey: null,
-    }
-  ): Promise<Levelup.V2.SystemStructure.EntityType<E>[]> {
+        query: {} as Levelup.CMS.V1.CacheManager.TListQueryParams<E>,
+        force_load_from_db: true,
+        filter: () => true,
+        company: null,
+        customKey: null,
+      }
+  ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]> {
     try {
       /**
        * Apply defaults on config
        */
       config = defaults(config, {
-        query: {} as Levelup.V2.CacheManager.TListQueryParams<E>,
+        query: {} as Levelup.CMS.V1.CacheManager.TListQueryParams<E>,
         force_load_from_db: true,
         filter: () => true,
         company: null,
@@ -726,7 +560,7 @@ export default class CacheManager {
 
       const customKey = config.customKey ? (config.customKey as E) : entity;
 
-      let result: Levelup.V2.SystemStructure.EntityType<E>[] = [];
+      let result: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[] = [];
       const client = await this.getClient();
       const valuesObject = await client.hGetAll(
         this.generateEntityKey(
@@ -739,7 +573,7 @@ export default class CacheManager {
         for (let idx = 0; idx < Object.values(valuesObject).length; idx++) {
           const val = Object.values(valuesObject)[idx];
 
-          let oldDoc: Levelup.V2.CacheManager.Store.TStoredLevelupObject<E>;
+          let oldDoc: Levelup.CMS.V1.CacheManager.Store.TStoredLevelupObject<E>;
           if (val) {
             oldDoc = JSON.parse(val);
           }
@@ -798,34 +632,13 @@ export default class CacheManager {
   public get heavyComputing() {
     return HeavyComputingCacheManager.getInstance();
   }
-  public get parcelListingRequests() {
-    return ParcelListingRequestsCacheManager.getInstance();
-  }
-  public get pdfPreGenerationKeys() {
-    return PdfPregenerationKeysCacheManager.getInstance();
-  }
-  public get pricing() {
-    return PricingCacheManager.getInstance();
-  }
   public get tasks() {
     return TasksCacheManager.getInstance();
-  }
-  public get cityDistanceMatrix() {
-    return CityDistanceMatrixCacheManager.getInstance();
-  }
-  public get stateDistanceMatrix() {
-    return StateDistanceMatrixCacheManager.getInstance();
   }
 
   /* -------------------------------------------------------------------------- */
   /*                               ENTITY MANAGERS                              */
   /* -------------------------------------------------------------------------- */
-  public get companies() {
-    return CompaniesCacheManager.getInstance();
-  }
-  public get stores() {
-    return StoresCacheManager.getInstance();
-  }
   public get apiKeys() {
     return ApiKeysCacheManager.getInstance();
   }
@@ -842,45 +655,8 @@ export default class CacheManager {
   public get users() {
     return UsersCacheManager.getInstance();
   }
-  public get webhookListeners() {
-    return WebhookListenersCacheManager.getInstance();
-  }
-  public get cities() {
-    return CitiesCacheManager.getInstance();
-  }
-  public get countries() {
-    return CountriesCacheManager.getInstance();
-  }
-  public get states() {
-    return StatesCacheManager.getInstance();
-  }
-  public get offices() {
-    return OfficesCacheManager.getInstance();
-  }
-  public get vehicles() {
-    return VehiclesCacheManager.getInstance();
-  }
-  public get vehicleTypes() {
-    return VehicleTypesCacheManager.getInstance();
-  }
-  public get vehicleMissions() {
-    return VehicleMissionsCacheManager.getInstance();
-  }
-  public get warehouses() {
-    return WarehousesCacheManager.getInstance();
-  }
   public get apps() {
     return AppsCacheManager.getInstance();
-  }
-
-  public get products() {
-    return ProductsCacheManager.getInstance();
-  }
-  public get productCategories() {
-    return ProductCategoriesCacheManager.getInstance();
-  }
-  public get spc() {
-    return SpcCacheManager.getInstance();
   }
 
   public async flushAll() {

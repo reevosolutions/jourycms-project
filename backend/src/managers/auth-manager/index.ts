@@ -15,9 +15,9 @@ export default class AuthManager {
 
   public generateToken(
     payload:
-      | Levelup.V2.Security.JWTUserAuthPayload
-      | Levelup.V2.Security.JWTPaymentAuthPayload,
-    space: Levelup.V2.Auth.Entity.TJWTTokenSpace,
+      | Levelup.CMS.V1.Security.JWTUserAuthPayload
+      | Levelup.CMS.V1.Security.JWTPaymentAuthPayload,
+    space: Levelup.CMS.V1.Auth.Entity.TJWTTokenSpace,
     isRefreshToken: boolean
   ): string {
     const expiration = isRefreshToken
@@ -50,8 +50,8 @@ export default class AuthManager {
     return jwt.verify(token, config.security.jwt.secret);
   }
 
-  public decodeToken(token: string): Levelup.V2.Security.JWTUserAuthPayload {
-    return jwt.decode(token) as Levelup.V2.Security.JWTUserAuthPayload;
+  public decodeToken(token: string): Levelup.CMS.V1.Security.JWTUserAuthPayload {
+    return jwt.decode(token) as Levelup.CMS.V1.Security.JWTUserAuthPayload;
   }
 
   public async verifyPassword(password: string, hash: string) {

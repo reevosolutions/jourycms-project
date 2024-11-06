@@ -1,0 +1,1 @@
+{"version":3,"file":"user-can-update.js","sourceRoot":"","sources":["../../../../src/utilities/security/user-can/user-can-update.ts"],"names":[],"mappings":";;;AACO,MAAM,mBAAmB,GAAG,CACjC,MAAS,EACT,GAAuE,EACvE,QAA0C,EAClC,EAAE;;IACV,IAAI,MAAA,QAAQ,aAAR,QAAQ,uBAAR,QAAQ,CAAE,OAAO,0CAAE,OAAO;QAAE,OAAO,IAAI,CAAC;IAE5C;;OAEG;IACH,OAAO,IAAI,CAAC;AACd,CAAC,CAAA;AAXY,QAAA,mBAAmB,uBAW/B"}

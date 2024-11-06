@@ -23,7 +23,7 @@ export class ObjectUpdatedPropertyObject {
 }
 
 
-export default class ObjectUpdatedProperties<T extends object, E extends Levelup.V2.Utils.DocumentProperties<T>> {
+export default class ObjectUpdatedProperties<T extends object, E extends Levelup.CMS.V1.Utils.DocumentProperties<T>> {
   private updates: TUpdatedProperties;
   private _exclude: Array<E>;
 
@@ -81,12 +81,12 @@ export default class ObjectUpdatedProperties<T extends object, E extends Levelup
 
   public get asArray() {
     const flattenObjectKeys = (obj: Record<string, any>, prefix: string = '') =>
-      Object.keys(obj).reduce((acc: { field: Levelup.V2.Utils.DocumentProperties<T>; old_value: any; new_value: any; }[], k) => {
+      Object.keys(obj).reduce((acc: { field: Levelup.CMS.V1.Utils.DocumentProperties<T>; old_value: any; new_value: any; }[], k) => {
         const pre = prefix.length ? prefix + '.' : '';
         if (this._exclude.includes((pre + k) as E)) return acc;
         if (obj[k] instanceof ObjectUpdatedPropertyObject) {
           acc.push({
-            field: (pre + k) as Levelup.V2.Utils.DocumentProperties<T>,
+            field: (pre + k) as Levelup.CMS.V1.Utils.DocumentProperties<T>,
             old_value: obj[k].old_value,
             new_value: obj[k].new_value
           });
@@ -98,7 +98,7 @@ export default class ObjectUpdatedProperties<T extends object, E extends Levelup
     return flattenObjectKeys(this.updates)
   }
 
-  public isModified(field: Levelup.V2.Utils.DocumentProperties<T>) {
+  public isModified(field: Levelup.CMS.V1.Utils.DocumentProperties<T>) {
     return this.asArray.findIndex(x => x.field === field) > -1;
   }
 
