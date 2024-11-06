@@ -3,7 +3,7 @@ declare module Levelup {
 		namespace V1 {
 			namespace Utils {
 				namespace SystemStructure {
-					export type TMicroService = 'DEFAULT' | 'auth' | 'content' | 'storage';
+					export type TMicroService = 'DEFAULT' | 'auth' | 'content' | 'storage' | 'system';
 				}
 			}
 		}

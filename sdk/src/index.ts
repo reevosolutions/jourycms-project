@@ -20,6 +20,7 @@ import JouryCMSSdkHelpers from "./utils/helpers";
 colors.enable();
 
 import SDK = Levelup.CMS.V1.SDK;
+import SystemServiceContainer from "./containers/system/service-container";
 
 export default class JouryCMSSdk implements SDK.ISdk {
   readonly httpClient: HttpClient;
@@ -63,6 +64,12 @@ export default class JouryCMSSdk implements SDK.ISdk {
     if (!this.serviceContainers.storage)
       this.serviceContainers.storage = new StorageServiceContainer(this);
     return this.serviceContainers.storage as StorageServiceContainer;
+  }
+
+  get system() {
+    if (!this.serviceContainers.system)
+      this.serviceContainers.system = new SystemServiceContainer(this);
+    return this.serviceContainers.system as SystemServiceContainer;
   }
 
   get helpers() {

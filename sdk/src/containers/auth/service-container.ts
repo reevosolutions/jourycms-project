@@ -21,7 +21,7 @@ type TClientName =
 export default class AuthServiceContainer extends BaseServiceContainer<TClientName> {
 
   constructor(sdk: SDK.ISdk) {
-    super(sdk, '/auth/api/v2');
+    super(sdk, '/api/v1/auth');
   }
 
   get auth() {

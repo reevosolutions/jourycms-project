@@ -29,7 +29,7 @@ type TClientName =
 export default class CmServiceContainer extends BaseServiceContainer<TClientName> {
 
   constructor(sdk: SDK.ISdk) {
-    super(sdk, '/cm/api/v2');
+    super(sdk, '/api/v1/content');
   }
 
   get articles() {

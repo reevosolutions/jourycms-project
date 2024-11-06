@@ -16,7 +16,7 @@ import UploadedFilesClient from './clients/files.client';
 import UtilsClient from './clients/utils.client';
 export default class StorageServiceContainer extends BaseServiceContainer<TClientName> {
   constructor(sdk: SDK.ISdk) {
-    super(sdk, "/storage/api/v2");
+    super(sdk, "/api/v1/storage");
   }
 
   async upload(
