@@ -55,9 +55,9 @@ export default class TaxonomiesClient extends BaseClient {
     });
   }
 
-  // getByTrackingId
-  async getByTrackingId(tracking_id: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
-    return await this.container.sdk.httpClient.get(this.generatePrefix("/by-tracking-id/:tracking_id", {tracking_id}), params, {
+  // getBySlug
+  async getBySlug(tracking_id: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
+    return await this.container.sdk.httpClient.get(this.generatePrefix("/by-slug/:tracking_id", {tracking_id}), params, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }

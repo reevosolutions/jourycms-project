@@ -54,16 +54,16 @@ export default class ArticlesClient extends BaseClient {
     });
   }
 
-  // getByTrackingId
-  async getByTrackingId(tracking_id: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
-    return await this.container.sdk.httpClient.get(this.generatePrefix("/by-tracking-id/:tracking_id", {tracking_id}), params, {
+  // getByName
+  async getByName(tracking_id: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
+    return await this.container.sdk.httpClient.get(this.generatePrefix("/by-name/:tracking_id", {tracking_id}), params, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
-  // getByName
-  async getByName(name: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
-    return await this.container.sdk.httpClient.get(this.generatePrefix(`/by-name/${name}`), params, {
+  // getBySlug
+  async getBySlug(name: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
+    return await this.container.sdk.httpClient.get(this.generatePrefix(`/by-slug/${name}`), params, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }
