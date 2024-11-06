@@ -26,11 +26,11 @@ declare module Levelup {
               /**
                * The default language for the app.
                */
-              default_language: Levelup.V2.ContentManagement.Entity.TranslationManager.TLanguageCode;
+              default_language: Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode;
               /**
                * The supported languages for the app.
                */
-              supported_languages: Levelup.V2.ContentManagement.Entity.TranslationManager.TLanguageCode[];
+              supported_languages: Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode[];
             };
             /**
              * The locations configuration.

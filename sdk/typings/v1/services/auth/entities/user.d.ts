@@ -24,7 +24,7 @@ declare module Levelup {
 
           export interface IUserPreferences {
             ui_mode?: UI.Mode;
-            ui_language?: Levelup.V2.Cm.Translation.Entity.TLanguageCode;
+            ui_language?: Levelup.CMS.V1.Content.Translation.Entity.TLanguageCode;
             printer_format?: Reports.Settings.PrinterFormat;
           }
           export interface IDelivererData {

@@ -72,21 +72,21 @@ declare global {
           type TEnvironment = "production" | "development";
           type PathPrefix = '' | `/${string}`;
 
-          type TResponseDatum<T extends { data?: object | Array<object>; } & Levelup.V2.Utils.Api.Response.DefaultResponse & Levelup.V2.Utils.Api.Response.PagedResponse> =
-            Levelup.V2.Utils.NonUndefined<T['data']> extends Array<any> ? {
-              data: Levelup.V2.Utils.NonUndefined<T['data']>;
-              edge: Levelup.V2.Utils.NonUndefined<T['edge']>;
-              pagination?: Levelup.V2.Utils.NonUndefined<Levelup.V2.Utils.Api.Response.PagedResponse['pagination']>;
+          type TResponseDatum<T extends { data?: object | Array<object>; } & Levelup.CMS.V1.Utils.Api.Response.DefaultResponse & Levelup.CMS.V1.Utils.Api.Response.PagedResponse> =
+            Levelup.CMS.V1.Utils.NonUndefined<T['data']> extends Array<any> ? {
+              data: Levelup.CMS.V1.Utils.NonUndefined<T['data']>;
+              edge: Levelup.CMS.V1.Utils.NonUndefined<T['edge']>;
+              pagination?: Levelup.CMS.V1.Utils.NonUndefined<Levelup.CMS.V1.Utils.Api.Response.PagedResponse['pagination']>;
             } : {
-              data: Levelup.V2.Utils.NonUndefined<T['data']>;
-              edge: Levelup.V2.Utils.NonUndefined<T['edge']>;
+              data: Levelup.CMS.V1.Utils.NonUndefined<T['data']>;
+              edge: Levelup.CMS.V1.Utils.NonUndefined<T['edge']>;
             };
 
           type IResponse = {
             data?: any;
             edge?: any;
-            error?: Levelup.V2.Utils.Api.Response.Error;
-          } & Levelup.V2.Utils.Api.Response.PagedResponse;
+            error?: Levelup.CMS.V1.Utils.Api.Response.Error;
+          } & Levelup.CMS.V1.Utils.Api.Response.PagedResponse;
 
           type IError = Error & object;
 

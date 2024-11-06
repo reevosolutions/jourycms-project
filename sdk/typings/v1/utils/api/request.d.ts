@@ -17,11 +17,11 @@ declare module Levelup {
               page?: number;
             };
             type SortableRequestFields<T extends object> = {
-              sort_by: Levelup.V2.Utils.DocumentProperties<T>;
+              sort_by: Levelup.CMS.V1.Utils.DocumentProperties<T>;
               sort: "desc" | "asc";
             };
             type Sortable<T extends object> = {
-              sort_by?: Levelup.V2.Utils.DocumentProperties<T>;
+              sort_by?: Levelup.CMS.V1.Utils.DocumentProperties<T>;
               sort?: "desc" | "asc";
             };
             type Searchable = {
@@ -121,20 +121,20 @@ declare module Levelup {
             type BuildSearchablePagedFilterable<T> = Request<
               Searchable &
                 Paged &
-                Filterable<Levelup.V2.Utils.DocumentProperties<T>>
+                Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>>
             >;
             type BuildSearchablePagedFilterableProjectable<T extends object> =
               Request<
                 Searchable &
                   Paged &
-                  Filterable<Levelup.V2.Utils.DocumentProperties<T>> &
+                  Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                   Projectable<T>
               >;
             type BuildSearchablePagedSortableFilterable<T extends object> =
               Request<
                 Searchable &
                   Paged &
-                  Filterable<Levelup.V2.Utils.DocumentProperties<T>> &
+                  Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                   Sortable<T>
               >;
             type BuildSearchablePagedSortableFilterableProjectable<
@@ -142,16 +142,16 @@ declare module Levelup {
             > = Request<
               Searchable &
                 Paged &
-                Filterable<Levelup.V2.Utils.DocumentProperties<T>> &
-                Filterable<Levelup.V2.Utils.DocumentProperties<T>> &
+                Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
+                Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                 Sortable<T> &
                 Projectable<T>
             >;
             type BuildSortableFilterable<T extends object> = Request<
-              Filterable<Levelup.V2.Utils.DocumentProperties<T>> & Sortable<T>
+              Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> & Sortable<T>
             >;
             type BuildSortableFilterableProjectable<T extends object> = Request<
-              Filterable<Levelup.V2.Utils.DocumentProperties<T>> &
+              Filterable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                 Sortable<T> &
                 Projectable<T>
             >;
@@ -159,14 +159,14 @@ declare module Levelup {
               Request<
                 Searchable &
                   Paged &
-                  FilterableDeliverable<Levelup.V2.Utils.DocumentProperties<T>>
+                  FilterableDeliverable<Levelup.CMS.V1.Utils.DocumentProperties<T>>
               >;
             type BuildSearchablePagedFilterableDeliverableProjectable<
               T extends object,
             > = Request<
               Searchable &
                 Paged &
-                FilterableDeliverable<Levelup.V2.Utils.DocumentProperties<T>> &
+                FilterableDeliverable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                 Projectable<T>
             >;
             type BuildSearchablePagedSortableFilterableDeliverable<
@@ -174,7 +174,7 @@ declare module Levelup {
             > = Request<
               Searchable &
                 Paged &
-                FilterableDeliverable<Levelup.V2.Utils.DocumentProperties<T>> &
+                FilterableDeliverable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                 Sortable<T>
             >;
             type BuildSearchablePagedSortableFilterableDeliverableProjectable<
@@ -182,7 +182,7 @@ declare module Levelup {
             > = Request<
               Searchable &
                 Paged &
-                FilterableDeliverable<Levelup.V2.Utils.DocumentProperties<T>> &
+                FilterableDeliverable<Levelup.CMS.V1.Utils.DocumentProperties<T>> &
                 Sortable<T> &
                 Projectable<T>
             >;

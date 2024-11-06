@@ -10,14 +10,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionGroupsService.Create
-             * @param {Levelup.V2.Auth.Api.PermissionGroups.Create.Request} query
-             * @returns {Levelup.V2.Auth.Api.PermissionGroups.Create.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.PermissionGroups.Create.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.PermissionGroups.Create.Response}
              * @method POST
              *
              */
             export namespace Create {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildCreateRequest<Entity.PermissionGroup>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<Entity.PermissionGroup>;
               export type Response =
                 Utils.Api.Response.BuildSingleItemResponse<Entity.PermissionGroup>;
             }
@@ -27,14 +27,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionGroupsService.Update
-             * @param {Levelup.V2.Auth.Api.PermissionGroups.Update.Request} query
-             * @returns {Levelup.V2.Auth.Api.PermissionGroups.Update.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.PermissionGroups.Update.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.PermissionGroups.Update.Response}
              * @method PUT
              *
              */
             export namespace Update {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildUpdateRequest<Entity.PermissionGroup>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildUpdateRequest<Entity.PermissionGroup>;
               export type Response =
                 Utils.Api.Response.BuildSingleItemResponse<Entity.PermissionGroup>;
             }
@@ -45,8 +45,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionGroupsService.Delete
-             * @param {Levelup.V2.Auth.Api.PermissionGroups.Delete.Request} query
-             * @returns {Levelup.V2.Auth.Api.PermissionGroups.Delete.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.PermissionGroups.Delete.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.PermissionGroups.Delete.Response}
              * @method DELETE
              *
              */
@@ -60,8 +60,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionGroupsService.Get
-             * @param {Levelup.V2.Auth.Api.PermissionGroups.GetOne.Request} query
-             * @returns {Levelup.V2.Auth.Api.PermissionGroups.GetOne.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.PermissionGroups.GetOne.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.PermissionGroups.GetOne.Response}
              * @method GET
              *
              */
@@ -76,14 +76,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionGroupsService.List
-             * @param {Levelup.V2.Auth.Api.PermissionGroups.List.Request} query
-             * @returns {Levelup.V2.Auth.Api.PermissionGroups.List.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.PermissionGroups.List.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.PermissionGroups.List.Response}
              * @method GET
              *
              */
             export namespace List {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Entity.PermissionGroup>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Entity.PermissionGroup>;
               export type Response =
                 Utils.Api.Response.BuildListResponse<Entity.PermissionGroup>;
             }

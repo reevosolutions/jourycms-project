@@ -3,8 +3,8 @@ namespace Express {
 
   export interface Request {
     auth?: (
-      | Levelup.V2.Security.JWTPaymentAuthPayload
-      | Levelup.V2.Security.JWTUserAuthPayload
+      | Levelup.CMS.V1.Security.JWTPaymentAuthPayload
+      | Levelup.CMS.V1.Security.JWTUserAuthPayload
     ) & {
       iss?: string | undefined;
       sub?: string | undefined;
@@ -20,9 +20,9 @@ namespace Express {
 
     attached_entities: {
       token?: string;
-      app?: Levelup.V2.System.Entity.App | null;
-      user?: Levelup.V2.Users.Entity.User | null;
-      api_key?: Levelup.V2.Auth.Entity.ExposedApiKey | null;
+      app?: Levelup.CMS.V1.System.Entity.App | null;
+      user?: Levelup.CMS.V1.Users.Entity.User | null;
+      api_key?: Levelup.CMS.V1.Auth.Entity.ExposedApiKey | null;
       service?: {
         name: string;
         is_external: boolean;
@@ -31,7 +31,7 @@ namespace Express {
 
     has_access_if?: {
       filters?: {
-        user?: Levelup.V2.Utils.Common.ID;
+        user?: Levelup.CMS.V1.Utils.Common.ID;
       };
       condition?: () => boolean;
     } | null;

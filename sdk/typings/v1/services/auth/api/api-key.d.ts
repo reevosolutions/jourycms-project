@@ -13,8 +13,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.Create
-           * @param {Levelup.V2.Auth.Api.ApiKeys.Create.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.Create.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.Create.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.Create.Response}
            * @method POST
            *
            */
@@ -30,8 +30,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.Update
-           * @param {Levelup.V2.Auth.Api.ApiKeys.Update.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.Update.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.Update.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.Update.Response}
            * @method PUT
            *
            */
@@ -46,8 +46,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.Delete
-           * @param {Levelup.V2.Auth.Api.ApiKeys.Delete.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.Delete.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.Delete.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.Delete.Response}
            * @method DELETE
            *
            */
@@ -62,8 +62,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.BulkDelete
-           * @param {Levelup.V2.Auth.Api.ApiKeys.BulkDelete.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.BulkDelete.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.BulkDelete.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.BulkDelete.Response}
            * @method DELETE
            *
            */
@@ -83,8 +83,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.GetOne
-           * @param {Levelup.V2.Auth.Api.ApiKeys.GetOne.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.GetOne.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.GetOne.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.GetOne.Response}
            * @method GET
            *
            */
@@ -100,8 +100,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.List
-           * @param {Levelup.V2.Auth.Api.ApiKeys.List.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.List.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.List.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.List.Response}
            * @method GET
            *
            */
@@ -125,8 +125,8 @@ declare module Levelup {
            * -------------------------------------------------------------------------- 
            * @link
            * @fires ApiKeysService.GetByToken
-           * @param {Levelup.V2.Auth.Api.ApiKeys.GetByToken.Request} query
-           * @returns {Levelup.V2.Auth.Api.ApiKeys.GetByToken.Response}
+           * @param {Levelup.CMS.V1.Auth.Api.ApiKeys.GetByToken.Request} query
+           * @returns {Levelup.CMS.V1.Auth.Api.ApiKeys.GetByToken.Response}
            * @method GET
            *
            */

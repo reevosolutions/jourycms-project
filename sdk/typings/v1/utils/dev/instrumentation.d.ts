@@ -10,17 +10,17 @@ declare module Levelup {
             interface IEvent {
               auth: {
                 app: string; // name
-                company: Levelup.V2.Utils.Entity.Snapshots.Accounts.Company | null;
-                user: Levelup.V2.Utils.Entity.Snapshots.Auth.User | null;
-                store: Levelup.V2.Utils.Entity.Snapshots.Accounts.Store | null;
-                office: Levelup.V2.Utils.Entity.Snapshots.Logistics.Office | null;
+                company: Levelup.CMS.V1.Utils.Entity.Snapshots.Accounts.Company | null;
+                user: Levelup.CMS.V1.Utils.Entity.Snapshots.Auth.User | null;
+                store: Levelup.CMS.V1.Utils.Entity.Snapshots.Accounts.Store | null;
+                office: Levelup.CMS.V1.Utils.Entity.Snapshots.Logistics.Office | null;
               };
               date: Date;
               status: TStatus;
               event: TEventName;
               name: string;
               duration?: number; // in milliseconds
-              entity?: Levelup.V2.SystemStructure.Services.Models.LevelupModels;
+              entity?: Levelup.CMS.V1.SystemStructure.Services.Models.LevelupModels;
               description?: string;
               error?: boolean;
               /**

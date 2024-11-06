@@ -10,14 +10,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.Signup
-             * @param {Levelup.V2.Auth.Api.Auth.Signup.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.Signup.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.Signup.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.Signup.Response}
              * @method POST
              *
              */
             export namespace Signup {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildCreateRequest<{
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
                   name: string;
                   email: string;
                   password: string;
@@ -35,14 +35,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.Signin
-             * @param {Levelup.V2.Auth.Api.Auth.Signin.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.Signin.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.Signin.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.Signin.Response}
              * @method POST
              *
              */
             export namespace Signin {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildCreateRequest<{
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
                   email: string;
                   password: string;
                 }>;
@@ -60,13 +60,13 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.RefreshToken
-             * @param {Levelup.V2.Auth.Api.Auth.RefreshToken.Request}
-             * @returns {Levelup.V2.Auth.Api.Auth.RefreshToken.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.RefreshToken.Request}
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.RefreshToken.Response}
              * @method POST
              */
             export namespace RefreshToken {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildCreateRequest<{
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
                   refresh_token?: string;
                 }>;
               export type Response =
@@ -84,12 +84,12 @@ declare module Levelup {
              * @method POST
              * @link /api/v2/auth/login-with-id
              * @fires AuthService.SigninWithId
-             * @param {Levelup.V2.Auth.Api.Auth.SigninWithId.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.SigninWithId.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.SigninWithId.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.SigninWithId.Response}
              *
              */
             export namespace SigninWithId {
-              export type Request = Levelup.V2.Utils.Api.Request.Build<{
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<{
                 user_id: Utils.Common.ID;
               }>;
               export type Response =
@@ -105,13 +105,13 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.SigninForPayment
-             * @param {Levelup.V2.Auth.Api.Auth.SigninForPayment.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.SigninForPayment.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.SigninForPayment.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.SigninForPayment.Response}
              * @method POST
              *
              */
             export namespace SigninForPayment {
-              export type Request = Levelup.V2.Utils.Api.Request.Build<{
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<{
                 password: string;
               }>;
               export type Response = Utils.Api.Response.DefaultResponse & {
@@ -125,13 +125,13 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.UpdatePaymentPassword
-             * @param {Levelup.V2.Auth.Api.Auth.UpdatePaymentPassword.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.UpdatePaymentPassword.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.UpdatePaymentPassword.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.UpdatePaymentPassword.Response}
              * @method PUT
              *
              */
             export namespace UpdatePaymentPassword {
-              export type Request = Levelup.V2.Utils.Api.Request.Build<{
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<{
                 old_password: string;
                 password: string;
               }>;
@@ -146,13 +146,13 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires AuthService.ChangeSellerPaymentPassword
-             * @param {Levelup.V2.Auth.Api.Auth.ChangeSellerPaymentPassword.Request} query
-             * @returns {Levelup.V2.Auth.Api.Auth.ChangeSellerPaymentPassword.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.ChangeSellerPaymentPassword.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.ChangeSellerPaymentPassword.Response}
              * @method PUT
              *
              */
             export namespace ChangeSellerPaymentPassword {
-              export type Request = Levelup.V2.Utils.Api.Request.Build<{
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<{
                 password: string;
               }>;
               export type Response = Utils.Api.Response.DefaultResponse & {

@@ -17,8 +17,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.Create
-             * @param {Levelup.V2.System.Api.Apps.Create.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.Create.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.Create.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.Create.Response}
              * @method POST
              *
              */
@@ -34,8 +34,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.Update
-             * @param {Levelup.V2.System.Api.Apps.Update.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.Update.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.Update.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.Update.Response}
              * @method PUT
              *
              */
@@ -50,8 +50,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.Delete
-             * @param {Levelup.V2.System.Api.Apps.Delete.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.Delete.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.Delete.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.Delete.Response}
              * @method DELETE
              *
              */
@@ -66,8 +66,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.BulkDelete
-             * @param {Levelup.V2.System.Api.Apps.BulkDelete.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.BulkDelete.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.BulkDelete.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.BulkDelete.Response}
              * @method DELETE
              *
              */
@@ -87,8 +87,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.GetOne
-             * @param {Levelup.V2.System.Api.Apps.GetOne.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.GetOne.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.GetOne.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.GetOne.Response}
              * @method GET
              *
              */
@@ -104,8 +104,8 @@ declare module Levelup {
              * -------------------------------------------------------------------------- 
              * @link
              * @fires AppsService.List
-             * @param {Levelup.V2.System.Api.Apps.List.Request} query
-             * @returns {Levelup.V2.System.Api.Apps.List.Response}
+             * @param {Levelup.CMS.V1.System.Api.Apps.List.Request} query
+             * @returns {Levelup.CMS.V1.System.Api.Apps.List.Response}
              * @method GET
              *
              */

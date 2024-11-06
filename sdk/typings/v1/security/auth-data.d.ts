@@ -11,9 +11,9 @@ declare global {
              */
             current?: {
               token?: string;
-              app?: Levelup.V2.System.Entity.App | null;
-              user?: Levelup.V2.Users.Entity.User | null;
-              api_key?: Levelup.V2.Auth.Entity.ExposedApiKey | null;
+              app?: Levelup.CMS.V1.System.Entity.App | null;
+              user?: Levelup.CMS.V1.Users.Entity.User | null;
+              api_key?: Levelup.CMS.V1.Auth.Entity.ExposedApiKey | null;
               service?: {
                 name: string;
                 is_external: boolean;

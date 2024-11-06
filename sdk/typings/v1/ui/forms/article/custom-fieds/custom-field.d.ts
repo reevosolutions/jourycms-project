@@ -19,8 +19,8 @@ declare module Levelup {
 						type ExtendFieldProps<T> = T &
 							Partial<{
 								role_group:
-								| Levelup.V2.Auth.Entity.TRoleGroup
-								| Levelup.V2.Auth.Entity.TRoleGroup[];
+								| Levelup.CMS.V1.Auth.Entity.TRoleGroup
+								| Levelup.CMS.V1.Auth.Entity.TRoleGroup[];
 							}>;
 
 						export type Field<

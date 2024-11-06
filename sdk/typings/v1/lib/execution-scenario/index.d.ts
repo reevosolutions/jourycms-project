@@ -16,7 +16,7 @@ declare module Levelup {
           export interface Scenario<T> {
             method: string;
             args: Record<string, any>;
-            authData: Levelup.V2.Security.AuthData;
+            authData: Levelup.CMS.V1.Security.AuthData;
             execution: T
           }
         }

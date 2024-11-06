@@ -21,7 +21,7 @@ declare module Levelup {
                   created_permissions: number;
                   created_roles: number;
                   owner_already_linked: boolean;
-                  owner: Levelup.V2.Users.Entity.ExposedUser | null;
+                  owner: Levelup.CMS.V1.Users.Entity.ExposedUser | null;
                   error: any;
                 }>;
             }

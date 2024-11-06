@@ -10,14 +10,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires RolesService.Create
-             * @param {Levelup.V2.Auth.Api.Permissions.Create.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.Create.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.Create.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.Create.Response}
              * @method POST
              *
              */
             export namespace Create {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildCreateRequest<Entity.Permission>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<Entity.Permission>;
               export type Response =
                 Utils.Api.Response.BuildSingleItemResponse<Entity.Permission>;
             }
@@ -28,14 +28,14 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionService.Update
-             * @param {Levelup.V2.Auth.Api.Permissions.Update.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.Update.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.Update.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.Update.Response}
              * @method PUT
              *
              */
             export namespace Update {
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildUpdateRequest<Entity.Permission>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildUpdateRequest<Entity.Permission>;
               export type Response =
                 Utils.Api.Response.BuildSingleItemResponse<Entity.Permission>;
             }
@@ -46,8 +46,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionService.Delete
-             * @param {Levelup.V2.Auth.Api.Permissions.Delete.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.Delete.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.Delete.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.Delete.Response}
              * @method DELETE
              *
              */
@@ -61,15 +61,15 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionService.One
-             * @param {Levelup.V2.Auth.Api.Permissions.GetOne.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.GetOne.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.GetOne.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.GetOne.Response}
              * @method GET
              *
              */
             export namespace GetOne {
               export type Scope = "";
 
-              export type Request = Levelup.V2.Utils.Api.Request.Build<never>;
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<never>;
               export type Response =
                 Utils.Api.Response.BuildSingleItemResponse<Entity.Permission>;
             }
@@ -80,8 +80,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionService.List
-             * @param {Levelup.V2.Auth.Api.Permissions.List.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.List.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.List.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.List.Response}
              * @method GET
              *
              */
@@ -89,7 +89,7 @@ declare module Levelup {
               export type Scope = "";
 
               export type Request =
-                Levelup.V2.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Entity.Permission>;
+                Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Entity.Permission>;
               export type Response =
                 Utils.Api.Response.BuildListResponse<Entity.Permission>;
             }
@@ -100,13 +100,13 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires PermissionService.AssignPermissionToUser
-             * @param {Levelup.V2.Auth.Api.Permissions.AssignPermissionToUser.Request} query
-             * @returns {Levelup.V2.Auth.Api.Permissions.AssignPermissionToUser.Response}
+             * @param {Levelup.CMS.V1.Auth.Api.Permissions.AssignPermissionToUser.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Permissions.AssignPermissionToUser.Response}
              * @method POST
              *
              */
             export namespace AssignPermissionToUser {
-              export type Request = Levelup.V2.Utils.Api.Request.Build<{
+              export type Request = Levelup.CMS.V1.Utils.Api.Request.Build<{
                 permissions: {
                   group: string;
                   permissions: string[];

@@ -9,8 +9,8 @@ declare module Levelup {
            * --------------------------------------------------------------------------
            * @link
            * @fires UploadedFilesService.Upload
-           * @param {Levelup.V2.Storage.Api.Upload.Request} query
-           * @returns {Levelup.V2.Storage.Api.Upload.Response}
+           * @param {Levelup.CMS.V1.Storage.Api.Upload.Request} query
+           * @returns {Levelup.CMS.V1.Storage.Api.Upload.Response}
            * @method POST
            *
            */
@@ -26,8 +26,8 @@ declare module Levelup {
            * --------------------------------------------------------------------------
            * @link
            * @fires UploadedFilesService.LoadRemote
-           * @param {Levelup.V2.Storage.Api.LoadRemote.Request} query
-           * @returns {Levelup.V2.Storage.Api.LoadRemote.Response}
+           * @param {Levelup.CMS.V1.Storage.Api.LoadRemote.Request} query
+           * @returns {Levelup.CMS.V1.Storage.Api.LoadRemote.Response}
            * @method POST
            *
            */
@@ -46,8 +46,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.Create
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.Create.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.Create.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.Create.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.Create.Response}
              * @method POST
              *
              */
@@ -64,8 +64,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.Update
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.Update.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.Update.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.Update.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.Update.Response}
              * @method PUT
              *
              */
@@ -82,8 +82,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.Delete
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.Delete.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.Delete.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.Delete.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.Delete.Response}
              * @method DELETE
              *
              */
@@ -97,8 +97,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.BulkDelete
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.BulkDelete.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.BulkDelete.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.BulkDelete.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.BulkDelete.Response}
              * @method DELETE
              *
              */
@@ -118,8 +118,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.GetOne
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.GetOne.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.GetOne.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.GetOne.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.GetOne.Response}
              * @method GET
              *
              */
@@ -138,8 +138,8 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires UploadedFilesService.List
-             * @param {Levelup.V2.Storage.Api.UploadedFiles.List.Request} query
-             * @returns {Levelup.V2.Storage.Api.UploadedFiles.List.Response}
+             * @param {Levelup.CMS.V1.Storage.Api.UploadedFiles.List.Request} query
+             * @returns {Levelup.CMS.V1.Storage.Api.UploadedFiles.List.Response}
              * @method GET
              *
              */

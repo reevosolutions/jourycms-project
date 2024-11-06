@@ -39,7 +39,7 @@ declare module Levelup {
             };
             type ErrorFieldsInObjectProperties<
               Obj extends object,
-              F extends Levelup.V2.Utils.DocumentRootProperties<Obj>,
+              F extends Levelup.CMS.V1.Utils.DocumentRootProperties<Obj>,
             > = {
               [key in F]?: {
                 value: any;

@@ -20,14 +20,14 @@ declare module Levelup {
           _id: string;
           tracking_id: string;
           role: string;
-          space: Levelup.V2.Auth.Entity.TJWTTokenSpace;
+          space: Levelup.CMS.V1.Auth.Entity.TJWTTokenSpace;
         }
 
         export type JWTUserAuthPayload = {
           _id: string;
           tracking_id: string;
           role: string;
-          space: Levelup.V2.Auth.Entity.TJWTTokenSpace;
+          space: Levelup.CMS.V1.Auth.Entity.TJWTTokenSpace;
         }
 
       }

@@ -13,7 +13,7 @@ declare module Levelup {
               force_load_from_db?: boolean;
               company?: string | null;
             }
-          ): Promise<Levelup.V2.CacheManager.EntityType<E>>;
+          ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>>;
 
           getMany(
             ids: string[],
@@ -22,17 +22,17 @@ declare module Levelup {
               force_load_from_db?: boolean;
               company?: string | null;
             }
-          ): Promise<Levelup.V2.CacheManager.EntityType<E>[]>;
+          ): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]>;
 
           list(config?: {
-            query: Levelup.V2.CacheManager.TListQueryParams<E>;
+            query: Levelup.CMS.V1.CacheManager.TListQueryParams<E>;
             force_load_from_db?: boolean;
             company?: string | null;
-          }): Promise<Levelup.V2.CacheManager.EntityType<E>[]>;
+          }): Promise<Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>[]>;
 
           set(
             id: string,
-            value: Levelup.V2.CacheManager.EntityType<E>,
+            value: Levelup.CMS.V1.Utils.SystemStructure.Models.EntityType<E>,
             company?: string | null
           ): Promise<void>;
 
@@ -41,16 +41,8 @@ declare module Levelup {
           unsetAll(company?: string | null): Promise<void>;
         }
 
-        export type TLevelupEntity =
-          // auth
-          | "user"
-          | "apiKey"
-          | "role"
-          | "permission"
-          | "permissionGroup"
-          // system
-          | "app"
-          ;
+
+        export type TEntity = Utils.SystemStructure.Models.AllModels;
 
         export type TLevelupListQueryParams<E extends TEntity> =
           // auth
@@ -71,11 +63,10 @@ declare module Levelup {
 
 
 
-        export type TEntity = TLevelupEntity;
 
         export type TListQueryParams<E extends TEntity> =
-          E extends Levelup.V2.CacheManager.TLevelupEntity
-          ? Levelup.V2.CacheManager.TLevelupListQueryParams<E>
+          E extends Levelup.CMS.V1.CacheManager.TLevelupEntity
+          ? Levelup.CMS.V1.CacheManager.TLevelupListQueryParams<E>
           : never;
       }
     }
