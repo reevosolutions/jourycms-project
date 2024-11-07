@@ -95,10 +95,11 @@ declare module Levelup {
                   Entity.Article & {
                     tag: any;
                     tag_slug: any;
+                    populate_linked_articles: Utils.Api.Request.TProjectableFields<Entity.Article>[] | boolean;
                   }
                 >;
               export type Response<T extends Entity.Article = Entity.Article> =
-                Utils.Api.Response.BuildListResponse<T>;
+                Utils.Api.Response.BuildListResponse<T, 'users'>;
             }
           }
         }

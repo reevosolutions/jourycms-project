@@ -5,7 +5,7 @@ declare module Levelup {
   namespace CMS {
     namespace V1 {
       namespace Utils {
-        
+
         export namespace Api {
           export namespace Response {
             type ErrorObject = {
@@ -41,13 +41,13 @@ declare module Levelup {
               Obj extends object,
               F extends Levelup.CMS.V1.Utils.DocumentRootProperties<Obj>,
             > = {
-              [key in F]?: {
-                value: any;
-                message: string;
-                label?: string;
-                meta?: any;
+                [key in F]?: {
+                  value: any;
+                  message: string;
+                  label?: string;
+                  meta?: any;
+                };
               };
-            };
 
             type Error = {
               message: string;
@@ -118,58 +118,14 @@ declare module Levelup {
             } & DefaultResponse;
 
             type TResponseEdge = {
-              companies: {
-                [ID: string]: Utils.Entity.Snapshots.Accounts.Company | null;
-              };
-              company:
-                | Utils.Entity.Snapshots.Accounts.Company
-                | Accounts.Entity.Company
-                | null;
-              stores: {
-                [ID: string]: Utils.Entity.Snapshots.Accounts.Store | null;
-              };
-              store:
-                | Utils.Entity.Snapshots.Accounts.Store
-                | Accounts.Entity.Store
-                | null;
               users: {
                 [ID: string]: Utils.Entity.Snapshots.Auth.User | null;
               };
               user: Utils.Entity.Snapshots.Auth.User | Users.Entity.User | null;
-              offices: {
-                [ID: string]: Utils.Entity.Snapshots.Logistics.Office | null;
-              };
-              office:
-                | Utils.Entity.Snapshots.Logistics.Office
-                | Logistics.Entity.Office
-                | null;
-              regional_managements: {
-                [
-                  ID: string
-                ]: Utils.Entity.Snapshots.Logistics.RegionalManagement | null;
-              };
-              warehouses: {
-                [ID: string]: Utils.Entity.Snapshots.Logistics.Warehouse | null;
-              };
-              product_categories: {
-                [
-                  ID: string
-                ]: Utils.Entity.Snapshots.Products.ProductCategory | null;
-              };
-              products: {
-                [ID: string]: Products.Entity.Product | null;
-              };
-              product_snapshots: {
-                [
-                  TrackingID: string
-                ]: Utils.Entity.Snapshots.Products.ProductCategory | null;
-              };
-              parcels: {
-                [ID: string]: Shipping.Entity.Parcel | null;
-              };
-
-              deposits: Payment.Entity.Deposit[];
-              payments: Payment.Entity.Payment[];
+              article_types: {
+                [ID: string]: Content.Entity.ArticleType | null;
+              }
+              
             };
 
             type BuildResponseEdge<K extends keyof TResponseEdge> = Pick<

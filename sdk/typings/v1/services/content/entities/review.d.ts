@@ -22,7 +22,7 @@ declare module Levelup {
 
             body: string;
             body_unformatted: string;
-            body_structured: { [Key: string]: any };
+            body_structured: JSONContent;
 
             value: number;
 

@@ -26,13 +26,11 @@ declare module Levelup {
             body: string;
             body_unformatted: string;
             body_structured: { [Key: string]: any };
-
+            is_published: boolean;
+            published_at: Date | null;
             is_featured: boolean;
-
             featured_image: Utils.Common.FileAttribute | null;
-
             article_type: Utils.Common.ID;
-
             related_tags: {
               _id: Utils.Common.ID;
               taxonomy: Utils.Common.ID;

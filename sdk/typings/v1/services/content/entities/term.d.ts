@@ -31,7 +31,7 @@ declare module Levelup {
 
             description: string;
             description_unformatted: string;
-            description_structured: { [Key: string]: any };
+            description_structured: JSONContent;
 
             snapshots: ITermSnapshots;
             insights: ITermInsights;

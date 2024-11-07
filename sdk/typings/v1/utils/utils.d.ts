@@ -56,6 +56,9 @@ declare module Levelup {
         export type DocumentProperties<T> = T extends object & {
           push?: never;
           unshift?: never;
+          getUTCDate?: never;
+          getUTCFullYear?: never;
+          getUTCHours?: never;
         }
           ? {
               [K in keyof T]-?: K extends string | number

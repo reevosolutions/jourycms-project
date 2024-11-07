@@ -36,7 +36,7 @@ declare module Levelup {
             };
             description: string;
             description_unformatted: string;
-            description_structured: { [Key: string]: any };
+            description_structured: JSONContent;
 
             custom_meta_fields: ICustomMetaField[];
             related_taxonomies: Utils.Common.ID[];
