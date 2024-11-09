@@ -4,7 +4,7 @@ import {
 import { Input } from "@/components/ui/input";
 import React from 'react';
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'text'>;
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'text'>;
 
 const TextCustomField: React.FC<Props> = ({
   label,

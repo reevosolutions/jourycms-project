@@ -19,7 +19,7 @@ export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {
 
 const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({ children }) => {
   return (
-    <div className=" bg-gray-50/50">
+    <section className=" bg-gray-50/50">
 
       <div className="container mx-auto py-10">
         <Tabs defaultValue="omrah" className="w-full" dir='rtl'>
@@ -54,7 +54,7 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({ childre
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </section>
   );
 }
 

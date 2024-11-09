@@ -27,6 +27,7 @@ import ArticleSanitizers from '../../../utils/sanitizers/article.sanitizers';
 import ArticleValidators from '../../../utils/validators/article.validators';
 import { ArticleSchemaFields } from '../models/article.model';
 import { slugify } from '../../../utilities/strings/slugify.utilities';
+import { uniq } from 'lodash';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -249,19 +250,14 @@ export default class ArticlesService extends BaseService {
       q = filter.q; totalQ = filter.totalQ;
     }
     // -- slug
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.slug, 'slug' as any);
+    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.slug, 'slug' as any);
     q = filter.q; totalQ = filter.totalQ;
 
     // -- article_type
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.article_type, 'article_type' as any);
+    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.article_type, 'article_type' as any);
     q = filter.q; totalQ = filter.totalQ;
 
 
-    // -- tracking_id
-    if (ArticleSchemaFields['tracking_id']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['tracking_id'], 'tracking_id' as any);
-      q = filter.q; totalQ = filter.totalQ;
-    }
 
     // -- name
     if (ArticleSchemaFields['name']) {
@@ -357,7 +353,7 @@ export default class ArticlesService extends BaseService {
       scenario.found = items?.length;
       scenario.total = total;
 
-      const result = {
+      const result: ApiAlias.List.Response = {
         data: items.map(doc => mapDocumentToExposed(doc)),
         pagination: {
           total,
@@ -365,6 +361,7 @@ export default class ArticlesService extends BaseService {
         }
       }
 
+      result.edge = await this._buildResponseEdge(result.data);
       /**
        * Log execution result before returning the result
        */
@@ -373,6 +370,64 @@ export default class ArticlesService extends BaseService {
       return result;
     } catch (error) {
       this.logError(this.list, error);
+      throw error;
+    }
+  }
+  private async _buildResponseEdge(data: EntityAlias[]): Promise<ApiAlias.List.Response['edge']> {
+    const scenario = this.initScenario(this.logger, this._buildResponseEdge,);
+    try {
+      const types = await this.articleTypeModel.find({
+        is_deleted: false
+      }).lean().exec();
+      const result: ApiAlias.List.Response['edge'] = {
+        users: {},
+        article_types: {},
+        linked_articles: {},
+      };
+      this.logger.tree('types', types,);
+      const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
+      const articleIds: string[] = [];
+      for (const item of data) {
+        const type = types.find(t => t._id.toString() === item.article_type.toString()) || null;
+        this.logger.tree('type', item.article_type, type?.slug, type?.custom_meta_fields);
+
+        if (item.article_type) result.article_types[item.article_type] = type;
+
+        if (Object.keys(item.meta_fields).length && type) {
+          for (const field of type.custom_meta_fields) {
+            if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
+              articleIds.push(item.meta_fields[field.field_key]);
+            }
+          }
+        }
+      }
+
+      scenario.set({ articleIds });
+
+      if (articleIds.length) {
+        const articles = await this.articleModel.find({
+          _id: { $in: uniq(articleIds) }
+        }).lean().exec();
+        this.logger.value('linked_articles', articles.length);
+        for (const article of articles) {
+          linked_articles[article._id] = {
+            ...article,
+            body: undefined,
+            body_unformatted: undefined,
+            body_structured: undefined,
+            attributes: undefined,
+            snapshots: undefined,
+            insights: undefined,
+          } as any;
+        }
+      }
+
+      result.linked_articles = linked_articles;
+
+      scenario.end();
+      return result;
+    } catch (error) {
+      scenario.error(error);
       throw error;
     }
   }

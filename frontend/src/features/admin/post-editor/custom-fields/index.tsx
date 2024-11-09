@@ -45,7 +45,7 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
             default_value={field.field_options.default_value}
 
           />
-        ): field.field_type === 'date' ? (
+        ) : field.field_type === 'date' ? (
           <DateCustomField
             label={field.field_label}
             required={field.field_options.required}
@@ -55,7 +55,7 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
             default_value={field.field_options.default_value}
 
           />
-        ): field.field_type === 'time' ? (
+        ) : field.field_type === 'time' ? (
           <TimeCustomField
             label={field.field_label}
             required={field.field_options.required}
@@ -65,7 +65,7 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
             default_value={field.field_options.default_value}
 
           />
-        ): field.field_type === 'text' ? (
+        ) : field.field_type === 'text' ? (
           <TextCustomField
             label={field.field_label}
             required={field.field_options.required}
@@ -93,7 +93,7 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
             onChange={onChange}
             options={field.field_options as any}
             default_value={field.field_options.default_value}
-            image_ratio={1/3}
+            image_ratio={1 / 1}
 
           />
         ) : null}

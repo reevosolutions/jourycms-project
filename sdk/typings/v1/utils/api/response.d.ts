@@ -125,7 +125,17 @@ declare module Levelup {
               article_types: {
                 [ID: string]: Content.Entity.ArticleType | null;
               }
-              
+              linked_articles: {
+                [ID: string]: Omit<Content.Entity.Article,
+                  'body' |
+                  'body_unformatted' |
+                  'body_structured' |
+                  'attributes' |
+                  'snapshots' |
+                  'insights'
+                > | null;
+              }
+
             };
 
             type BuildResponseEdge<K extends keyof TResponseEdge> = Pick<

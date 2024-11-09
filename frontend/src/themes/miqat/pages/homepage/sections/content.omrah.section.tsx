@@ -66,16 +66,16 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
 
   const { data, error, refetch, isFetching, isFetched } = useQuery({
     queryKey: ['articleType', articleType_slug, search, page, count, fields],
-    enabled: !!articleType_slug,
+    enabled: !!articleType,
 
     queryFn: async () => {
-      if (articleType_slug) {
+      if (articleType) {
         const data = await sdk.content.articles.list({
           count: count,
           page: page,
           search: search,
           filters: {
-            article_type: articleType_slug
+            article_type: articleType._id
           },
           fields,
         });
@@ -127,9 +127,9 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
           لا يوجد عناصر الان
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
           {filteredItems.map((item, index) => (
-            <OmrahPostCard key={index} data={item} />
+            <OmrahPostCard key={index} data={item} edge={data?.edge} />
           ))
           }
         </div >

@@ -17,6 +17,7 @@ import { Taxonomy } from '../features/content/models/taxonomy.model';
 import { TranslationItem } from '../features/content/models/translation.item.model';
 import { TranslationNamespace } from '../features/content/models/translation.namespace.model';
 import { TranslationProject } from '../features/content/models/translation.project.model';
+import { UploadedFile } from '../features/storage/models/uploaded-file.model';
 
 /**
  * Load the service models.
@@ -37,6 +38,7 @@ const getServiceModels: () => { [name: string]: any } = () => {
 		translationItemModel: TranslationItem,
 		translationNamespaceModel: TranslationNamespace,
 		translationProjectModel: TranslationProject,
+		uploadedFileModel: UploadedFile,
 
 	}
 }

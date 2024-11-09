@@ -39,15 +39,17 @@ export default (app: Router): void => {
     try {
       const filesServiceInstance = Container.get(UploadedFilesService);
       const { data: file } = await filesServiceInstance.getById(req.params.id);
-      if (!file) throw new exceptions.ItemNotFoundException('File not found');
+      if (!file){
+        logger.error('File not found', req.params.id);
+        throw new exceptions.ItemNotFoundException('File not found');}
       else {
         const width = parseInt(req.params.width);
         const height = parseInt(req.params.height);
-        const filePath = path.join(__dirname, '../../', file.file_path);
+        const filePath = path.join(__dirname, '../../../../', file.file_path);
         const basename = path.parse(file.file_path).name;
         const dir = path.parse(file.file_path).dir;
         const extension = path.extname(file.file_path);
-        const output = path.join(__dirname, '../../', `${dir}/${basename}-${width}x${height}${extension}`);
+        const output = path.join(__dirname, '../../../../', `${dir}/${basename}-${width}x${height}${extension}`);
 
         logger.value('image', {
           width,
@@ -59,7 +61,7 @@ export default (app: Router): void => {
           output
         });
 
-        if (!fs.existsSync(filePath)) throw new exceptions.ItemNotFoundException('File not found');
+        if (!fs.existsSync(filePath)) throw new exceptions.ItemNotFoundException('File not found.');
         if (!fs.existsSync(output)) {
           logger.warn('Generating resized image');
           sharp(filePath)

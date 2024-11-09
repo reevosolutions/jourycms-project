@@ -28,7 +28,7 @@ import { LuCheck, LuChevronsUpDown, LuX } from "react-icons/lu";
 import { Badge } from "@/components/ui/badge";
 
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'select', boolean>;
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'select', boolean>;
 
 const SelectCustomField: React.FC<Props> = ({
   label,

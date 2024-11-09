@@ -7,6 +7,7 @@ import Icons from '@/features/admin/ui/icons';
 import HomepageSearchForm from '@/themes/miqat/components/homepage-search-form';
 import Link from 'next/link';
 import React from 'react';
+import useCMSContent from '@/hooks/use-cms-content';
 
 export type HomepageHeroSectionProps = JouryCMS.Theme.ComponentProps & {
 };
@@ -23,6 +24,9 @@ const socialLinks = {
 
 
 const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({ children }) => {
+
+  const { getWebsiteConfig, getWebsiteConfigValue } = useCMSContent();
+
   return (
     <ParallaxProvider>
       <div className="jcms-hero-section relative ">
@@ -43,27 +47,27 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({ children }) =
           <div className="container flex items-center justify-between gap-12">
             <div className="d">
 
-              <h2 className=' text-beige-800 mb-2 text-5xl font-bold'>عن ميقات</h2>
+              <h2 className=' text-beige-800 mb-2 text-5xl font-bold'>عن {getWebsiteConfig().name}</h2>
               <p className=" text-2xl ">
                 نحن أول منصة جزائرية، تجمع كل عروض العمرة
               </p>
               <div className="flex items-center gap-10 text-darkblue-950 pt-6">
                 <b className="text-3xl">تجدنا على</b>
                 <div className="flex items-center gap-4">
-                  {Object.entries(socialLinks).map(([network, url]: [string, string]) => (
-                    url ? <Link key={network} href={url} className=" text-white bg-darkblue-950 p-2 hocus:bg-red2-700 duration-200 transition-all rounded-full">
+                  {getWebsiteConfig()?.social_links?.map((network) => (
+                    network.url ? <a target='_blank' key={network.network} href={network.url} className=" text-beige-50 bg-darkblue-900 p-2 hocus:bg-red2-700 duration-200 transition-all rounded-full">
                       {
-                        network === 'facebook' ? <Icons.Social.Facebook className="w-6 h-6 " />
-                          : network === 'instagram' ? <Icons.Social.Instagram className="w-6 h-6 " />
-                            : network === 'twitter' ? <Icons.Social.Twitter className="w-6 h-6 " />
-                              : network === 'youtube' ? <Icons.Social.Youtube className="w-6 h-6 " />
-                                : network === 'pinterest' ? <Icons.Social.Pinterest className="w-6 h-6 " />
-                                  : network === 'tiktok' ? <Icons.Social.Tiktok className="w-6 h-6 " />
-                                    : network === 'linkedIn' ? <Icons.Social.LinkedIn className="w-6 h-6 " />
+                        network.network === 'facebook' ? <Icons.Social.Facebook className="w-6 h-6 " />
+                          : network.network === 'instagram' ? <Icons.Social.Instagram className="w-6 h-6 " />
+                            : network.network === 'twitter' ? <Icons.Social.Twitter className="w-6 h-6 " />
+                              : network.network === 'youtube' ? <Icons.Social.Youtube className="w-6 h-6 " />
+                                : network.network === 'pinterest' ? <Icons.Social.Pinterest className="w-6 h-6 " />
+                                  : network.network === 'tiktok' ? <Icons.Social.Tiktok className="w-6 h-6 " />
+                                    : network.network === 'linkedin' ? <Icons.Social.LinkedIn className="w-6 h-6 " />
                                       : null
                       }
 
-                    </Link> : null
+                    </a> : null
                   ))}
 
                 </div>

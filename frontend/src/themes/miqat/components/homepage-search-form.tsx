@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Label } from '@/components/ui/label';
+import Image from 'next/image';
 import { Button } from "@/components/ui/button"
 import {
   Command,
@@ -180,7 +181,7 @@ export const OmrahSearchForm: React.FC = () => {
       <div className="grid grid-cols-2 gap-4">
         {/* field */}
         <div className="field mb-4">
-          <Label className=' text-darkblue-500 text-lg'>{"الولاية"}</Label>
+          <Label className=' text-darkblue-500 text-lg'>{"شهر الانطلاق"}</Label>
           <Popover open={monthOpen} onOpenChange={setMonthOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -191,7 +192,7 @@ export const OmrahSearchForm: React.FC = () => {
               >
                 <div className="value text-xl">
                   {!month
-                    ? <span className=' text-darkblue-500'>{"اختر ولاية..."}</span>
+                    ? <span className=' text-darkblue-500'>{"اختر..."}</span>
                     : <span>{months.find(i => i.value === month)?.label || ''}</span>
                   }
                 </div>
@@ -315,7 +316,13 @@ export const OmrahSearchForm: React.FC = () => {
             حدد ميزانيتك          </span>
         </p>
         <div className=" mb-10">
-          <Slider inverted minStepsBetweenThumbs={5} defaultValue={priceRange} min={10} max={50} step={1} value={priceRange} onValueChange={setPriceRange}>
+          <Slider 
+          tooltip={(value) => (
+            <span dir="ltr">
+              {value} M
+            </span>
+          )}
+          inverted minStepsBetweenThumbs={5} defaultValue={priceRange} min={10} max={50} step={1} value={priceRange} onValueChange={setPriceRange}>
           </Slider>
         </div>
       </div>
@@ -340,9 +347,18 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
     <div className="jcms-hero-section rounded-4xl shadow-darkblue-900/10 shadow-lg bg-beige-50 min-h-[600px] w-[500px] transition-all" >
       <Tabs defaultValue="omrah" className="w-full">
         <TabsList className='w-full justify-around h-auto items-center bg-transparent'>
-          <TabsTrigger className='bg-transparent px-4 py-4   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="bids">مناقصات</TabsTrigger>
-          <TabsTrigger className='bg-transparent px-4 py-4   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="tombolas">طنبولات</TabsTrigger>
-          <TabsTrigger className='bg-transparent px-4 py-4   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="omrah">عروض العمرة</TabsTrigger>
+          <TabsTrigger className='bg-transparent px-4 py-4 group relative   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="bids">
+            <span>مناقصات</span>
+            <Image src="/assets/miqat/svg/search-tab-anchor.svg" className=' absolute opacity-0 group-data-[state=active]:opacity-100 w-8 h-auto -bottom-4 ' width={20} height={32}  alt="" />
+          </TabsTrigger>
+          <TabsTrigger className='bg-transparent px-4 py-4 group   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none relative  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="tombolas">
+            <span>طنبولات</span>
+            <Image src="/assets/miqat/svg/search-tab-anchor.svg" className=' absolute opacity-0 group-data-[state=active]:opacity-100 w-8 h-auto -bottom-4 ' width={20} height={32}  alt="" />
+          </TabsTrigger>
+          <TabsTrigger className='bg-transparent px-4 py-4 group   active:bg-transparent data-[state=active]:bg-transparent data-[state=active]:shadow-none relative  data-[state=active]:font-medium text-beige-950 data-[state=active]:text-red-600 data-[state=active]:text-3xl text-3xl hover:text-red-600 transition-all ' value="omrah">
+            <span>عروض العمرة</span>
+            <Image src="/assets/miqat/svg/search-tab-anchor.svg" className=' absolute opacity-0 group-data-[state=active]:opacity-100 w-8 h-auto -bottom-4 ' width={20} height={32}  alt="" />
+          </TabsTrigger>
         </TabsList>
         <TabsContent value="omrah" dir='rtl'>
           <div className="rounded-4xl bg-white p-4 px-8 min-h-[560px]">
@@ -352,7 +368,6 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
         </TabsContent>
         <TabsContent value="tombolas">
           <div className="rounded-4xl bg-white p-4 px-8 min-h-[560px]">
-
             Change your password here.
           </div>
         </TabsContent>
@@ -363,7 +378,6 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
           </div>
         </TabsContent>
       </Tabs>
-
     </div>
   );
 }

@@ -1,41 +1,23 @@
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/customized.form';
-import { Label } from "@/components/ui/label";
-import React, { useState, useCallback, useEffect } from 'react';
-import { format } from "date-fns"
+import { format } from "date-fns";
+import React, { useEffect, useState } from 'react';
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { Button } from "@/components/ui/button";
+import {
+  Command,
+  CommandGroup,
+  CommandItem,
+  CommandList
+} from "@/components/ui/command";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/customized.popover"
-import { LuCalendar, LuCheck } from "react-icons/lu";
-import {
-  InputOTP,
-  InputOTPGroup,
-  InputOTPSeparator,
-  InputOTPSlot,
-} from "@/components/ui/customized.input-otp"
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command"
+} from "@/components/ui/customized.popover";
 import { addLeadingZeros } from "@/lib/utilities/strings";
+import { cn } from "@/lib/utils";
+import { LuCheck } from "react-icons/lu";
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'time'>;
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'time'>;
 
 const MINUTES = new Array(60).fill(null).map((n, minute) => addLeadingZeros(minute, 2));
 const HOURS = new Array(24).fill(null).map((n, index) => addLeadingZeros(index, 2));

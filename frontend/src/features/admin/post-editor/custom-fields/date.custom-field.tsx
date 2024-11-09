@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/customized.popover"
 import { LuCalendar } from "react-icons/lu";
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'date'>;
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'date'>;
 
 const DateCustomField: React.FC<Props> = ({
   label,

@@ -9,7 +9,7 @@ import {
 import { Label } from "@/components/ui/label";
 import React, { useState, useCallback, useEffect } from 'react';
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'checkbox'>;
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'checkbox'>;
 
 const CheckboxCustomField: React.FC<Props> = ({
   label,

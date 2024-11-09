@@ -2,14 +2,13 @@ declare module Levelup {
 
   namespace CMS {
     namespace V1 {
-      export namespace UI {
-        export namespace Forms {
+        export namespace Content {
           export namespace CustomFields {
-            export namespace TextField {
+            export namespace NumberField {
 
-              export type Key = "text";
+              export type Key = "number";
 
-              export type Input = string | null;
+              export type Input = number | null;
 
               export type Output = Input;
 
@@ -23,4 +22,3 @@ declare module Levelup {
       }
     }
   }
-}

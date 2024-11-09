@@ -1,31 +1,12 @@
-import { Checkbox } from "@/components/ui/checkbox"
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/customized.form';
-import { Label } from "@/components/ui/label";
-import React, { useState, useCallback, useEffect } from 'react';
-import { format } from "date-fns"
-import Image from 'next/image'
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/customized.popover"
-import { LuCalendar } from "react-icons/lu";
 import ImageUploader from "@/features/storage/form-components/image.uploader";
-import initLogger, { LoggerContext } from "@/lib/logging";
 import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import Image from 'next/image';
+import React from 'react';
 
 const logger = initLogger(LoggerContext.COMPONENT, 'ImageCustomField');
 
-type Props = Levelup.CMS.V1.UI.Forms.CustomFields.MetaFieldInputProps<'image'> & {
+type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'image'> & {
   image_ratio: number;
 };
 

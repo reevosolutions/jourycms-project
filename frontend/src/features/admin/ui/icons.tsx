@@ -18,7 +18,7 @@ import {
 } from "react-icons/bs";
 import { CgMenuLeftAlt } from "react-icons/cg";
 import { FaFacebookF, FaFemale, FaMale, FaMinusCircle, FaRegUser } from "react-icons/fa";
-import { FaBoxesStacked, FaPeopleCarryBox, FaUser } from "react-icons/fa6";
+import { FaBoxesStacked, FaEnvelope, FaPeopleCarryBox, FaUser } from "react-icons/fa6";
 import { FiCheck, FiInstagram, FiMinusCircle, FiPlus, FiSave } from "react-icons/fi";
 import { GiBoxUnpacking, GiMoneyStack, GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
 import { GoDesktopDownload, GoPasskeyFill, GoStop, GoTag } from "react-icons/go";
@@ -166,6 +166,7 @@ const Icons = {
   Phone: ImPhone,
   Marker: HiLocationMarker,
   MarkerOutline: HiOutlineLocationMarker,
+  Envelope: FaEnvelope,
 
   Category: GoTag,
   // navigation

@@ -3,6 +3,7 @@ import * as React from 'react';
 import DefaultLayout from '../../layouts/default.layout';
 import HomepageHeroSection from '../homepage/sections/hero.section';
 import HomepageContentSection from '../homepage/sections/content.section';
+import HomepageCallToActionSection from '../homepage/sections/account-call-to-action.section';
 
 
 
@@ -12,10 +13,11 @@ export type PageProps = JouryCMS.Theme.PageProps & {
 
 const DesignPage: React.FC<PageProps> = ({ }) => {
 
-  const darkblue = chroma.scale(['#dfebf1', '#273248']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
+  // const darkblue = chroma.scale(['#dfebf1', '#273248']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
+  const darkblue = chroma.scale(['#dfebf1', '#7c8898', '#1c2232']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
   const beige = chroma.scale(['#e5d3a5', '#97655f']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
   const red2 = chroma.scale(['#f1d5d2', '#cc3827']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
-  const turqoi = chroma.scale(['#afe1f1', '#8fd1c1']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
+  const turqoi = chroma.scale(['#cff2f8', '#8fd1c1']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
 
 
   /* -------------------------------------------------------------------------- */
@@ -26,6 +28,7 @@ const DesignPage: React.FC<PageProps> = ({ }) => {
 
       <HomepageHeroSection />
       <HomepageContentSection />
+      <HomepageCallToActionSection />
 
 
 
@@ -42,9 +45,9 @@ const DesignPage: React.FC<PageProps> = ({ }) => {
           </div>
         ))}
 
-        {/* <pre dir="ltr">
+        <pre dir="ltr">
           {JSON.stringify({ darkblue, beige, red2, turqoi }, null, 2)}
-        </pre> */}
+        </pre>
       </div>
     </DefaultLayout>
   )

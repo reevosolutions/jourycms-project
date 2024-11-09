@@ -11,7 +11,7 @@ const HeaderLink: React.FC<{ title: string, href: string, isCurrent: boolean }> 
   return (
     <Link href={href} className={cn(
       " border-b-[6px] h-28 duration-200 flex items-center px-8 justify-center ",
-      isCurrent ? "  border-beige-50 text-beige-50 font-semibold bg-darkblue-950" : " border-transparent text-white hocus:border-beige-50 hocus:text-beige-50"
+      isCurrent ? "  border-beige-50 text-beige-50 font-semibold bg-darkblue-950/50" : " border-transparent text-white hocus:border-beige-50 hocus:text-beige-50"
     )}>
       {title}
     </Link>
@@ -60,7 +60,7 @@ const Header: React.FC<LayoutProps> = ({ children }) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="jcms-header h-28 bg-gradient-to-r from-darkblue-950 to-darkblue-900">
+    <div className="jcms-header h-28 bg-gradient-to-r from-darkblue-900 to-darkblue-800">
       <div className="inner container mx-auto flex items-center justify-between text-2xl font-medium">
         <nav className="d flex items-center  ">
           {menuItems.map((item, index) => (

@@ -224,17 +224,13 @@ export default class ArticleTypesService extends BaseService {
     }
 
 
-    // -- tracking_id
-    if (ArticleTypeSchemaFields['tracking_id']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['tracking_id'], 'tracking_id' as any);
-      q = filter.q; totalQ = filter.totalQ;
-    }
 
     // -- name
-    if (ArticleTypeSchemaFields['name']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['name'], 'name' as any);
-      q = filter.q; totalQ = filter.totalQ;
-    }
+    filter = createStringFilter<DocumentProperties>(q, totalQ, filters['name'], 'name' as any);
+    q = filter.q; totalQ = filter.totalQ;
+
+    filter = createStringFilter<DocumentProperties>(q, totalQ, filters['slug'], 'slug' as any);
+    q = filter.q; totalQ = filter.totalQ;
 
     return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
 
@@ -251,9 +247,9 @@ export default class ArticleTypesService extends BaseService {
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-      load_deleted: false,
-      dont_lean: false
-    }
+        load_deleted: false,
+        dont_lean: false
+      }
   ): Promise<ApiAlias.List.Response> {
     try {
 
@@ -318,11 +314,11 @@ export default class ArticleTypesService extends BaseService {
 
       const total = await totalQ.countDocuments();
       const pages = limit === -1 ? 1 : Math.ceil(total / limit);
-     
-     scenario.skip = skip;
-     scenario.take = take;
-     scenario.found = items?.length;
-     scenario.total = total;
+
+      scenario.skip = skip;
+      scenario.take = take;
+      scenario.found = items?.length;
+      scenario.total = total;
 
       const result = {
         data: items.map(doc => mapDocumentToExposed(doc)),
@@ -582,7 +578,7 @@ export default class ArticleTypesService extends BaseService {
        * Auto-fill system data
        */
       data.app = authData?.current?.app?._id ? authData?.current?.app?._id : opt?.bypass_authorization || (authData.current?.service?.name && !authData.current?.service?.is_external) ? data.app : undefined;
-      
+
 
       /** 
        * Check if the user can create the object
@@ -601,7 +597,7 @@ export default class ArticleTypesService extends BaseService {
       /**
        * Create tracking ID
        */
-      
+
       /**
        * Create search meta
        */
@@ -666,7 +662,7 @@ export default class ArticleTypesService extends BaseService {
       /**
        * Extract the required in block variables from the data object
        */
-      const {} = data;
+      const { } = data;
 
       /**
        * load old object and check if it exists
@@ -783,7 +779,7 @@ export default class ArticleTypesService extends BaseService {
       if (!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
 
       const doc = await this.articleTypeModel.findByIdAndUpdate(id, {
-        is_deleted: true, 
+        is_deleted: true,
         deleted_at: new Date(),
         $addToSet: {
           updates: updateObject
@@ -794,7 +790,7 @@ export default class ArticleTypesService extends BaseService {
 
       const result = {
         data: {
-            deleted: true
+          deleted: true
         }
       };
 
@@ -841,7 +837,7 @@ export default class ArticleTypesService extends BaseService {
       if (!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
 
       const doc = await this.articleTypeModel.findByIdAndUpdate(id, {
-        is_deleted: false, 
+        is_deleted: false,
         deleted_at: null,
         $addToSet: {
           updates: updateObject

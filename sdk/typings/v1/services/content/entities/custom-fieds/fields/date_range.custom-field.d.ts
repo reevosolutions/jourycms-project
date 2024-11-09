@@ -2,14 +2,16 @@ declare module Levelup {
 
   namespace CMS {
     namespace V1 {
-      export namespace UI {
-        export namespace Forms {
+        export namespace Content {
           export namespace CustomFields {
-            export namespace DateField {
+            export namespace DateRangeField {
 
-              export type Key = "date";
+              export type Key = "date_range";
 
-              export type Input = Date | null;
+              export type Input = {
+                start: Date | null;
+                end: Date | null;
+              } | null;
 
               export type Output = Input;
 
@@ -20,4 +22,3 @@ declare module Levelup {
       }
     }
   }
-}

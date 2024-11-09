@@ -7,8 +7,10 @@ import { cn } from "@/lib/utils";
 
 const Slider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root>
->(({ className, ...props }, ref) => (
+  React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> & {
+    tooltip: (value: number) => React.ReactNode;
+  }
+>(({ className, tooltip, ...props }, ref) => (
   <SliderPrimitive.Root
     ref={ref}
     className={cn(
@@ -23,20 +25,14 @@ const Slider = React.forwardRef<
     <SliderPrimitive.Thumb className="block h-5 w-5 cursor-col-resize relative rounded-full border border-orange-300 bg-orange-300 shadow transition-colors focus-visible:outline-none focus-visible:ring-orange-300 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
       <div className=" w-16 absolute flex items-center justify-center top-full left-1/2  -translate-x-1/2 pt-2">
         <span className=" h-7 rounded-sm border border-orange-300 px-2 py-0 text-orange-300 text-xl font-bold ">
-          <span>
-
-            {props.value?.[0]} M
-          </span>
+          {tooltip && tooltip(props.value?.[0] as number)}
         </span>
       </div>
     </SliderPrimitive.Thumb>
     <SliderPrimitive.Thumb className="block h-5 w-5  cursor-col-resize relative rounded-full border border-orange-300 bg-orange-300 shadow transition-colors focus-visible:outline-none focus-visible:ring-orange-300 focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
       <div className=" w-16 absolute flex items-center justify-center top-full left-1/2  -translate-x-1/2 pt-2">
         <span className=" h-7 rounded-sm border border-orange-300 px-2 py-0 text-orange-300 text-xl font-bold ">
-          <span>
-
-            {props.value?.[1]} M
-          </span>
+          {tooltip && tooltip(props.value?.[1] as number)}
         </span>
       </div>
     </SliderPrimitive.Thumb>

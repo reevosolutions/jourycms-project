@@ -16,6 +16,4 @@ yarn-error.log*
 
 # Log files
 /logs/*
-
-
-
+/uploads/*

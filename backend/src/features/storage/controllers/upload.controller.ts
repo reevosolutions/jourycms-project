@@ -14,12 +14,14 @@ export default (app: Router): void => {
   const logger = initLogger('CONTROLLER', 'UploaderController');
   const route = Router();
 
-  app.use(ROOT_PATH, middlewares.AUTH.requireUser, route);
+  app.use(ROOT_PATH, 
+    // middlewares.AUTH.requireUser, 
+    route);
 
   // POST /
   route.post(
     '/',
-    middlewares.AUTH.requireUser,
+    // middlewares.AUTH.requireUser,
     // async (req: Request, res: Response, next: NextFunction) => {
     //   const logger: Logger = Container.get('logger');
     //   logger.debug('[UploadFiles] before upload body: %o', req.body);
@@ -42,6 +44,7 @@ export default (app: Router): void => {
         logger.value('uploaded files', files);
         respond<ApiAlias.Upload.Response>(res, { data: { files } });
       } catch (e) {
+        logger.error(e.message,e);
         return next(e);
       }
     }

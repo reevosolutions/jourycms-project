@@ -112,6 +112,7 @@ export default class UploadService extends BaseService {
       return results.map(doc => mapDocumentToExposed(doc));
     } catch (error) {
       this.logError(this.saveMultipleFilesToDB, error);
+      
       throw error;
     }
   }

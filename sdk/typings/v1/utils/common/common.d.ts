@@ -28,6 +28,7 @@ declare module Levelup {
 
           type SocialNetworks =
             | "facebook"
+            | "pinterest"
             | "youtube"
             | "linkedin"
             | "instagram"
@@ -46,6 +47,10 @@ declare module Levelup {
             | "thursday"
             | "friday"
             | "saturday";
+
+          export type SingleValue<Option> = Option | null;
+          export type MultiValue<Option> = Option[];
+
         }
       }
     }

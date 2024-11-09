@@ -1,4 +1,5 @@
 'use client';
+import websiteConfig from "@/themes/miqat/config";
 import AppConfigManager from "@lib/app-config-manager";
 import initLogger, { LoggerContext } from "@lib/logging";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
@@ -47,10 +48,19 @@ const useCMSContent = () => {
       field.field_type === 'checkbox' ||
       field.field_type === 'radiobox'
     ) {
-      return ((field as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<'select'>).field_options?.choices)?.find(item => item.value.toString() === value.toString())?.label || value;
+      return ((field as Levelup.CMS.V1.Content.CustomFields.MetaField<'select'>).field_options?.choices)?.find(item => item.value.toString() === value.toString())?.label || value;
     }
     return value;
   }, [articleTypes]);
+
+  const getWebsiteConfig = useCallback(() => {
+    return websiteConfig;
+  }, []);
+
+  const getWebsiteConfigValue = useCallback(<T = any>(key: keyof Levelup.CMS.V1.System.Entity.WebsiteConfig, defaultValue?: T): T => {
+    const websiteConfig = getWebsiteConfig();
+    return websiteConfig[key] as T;
+  }, [getWebsiteConfig]);
 
 
   /* -------------------------------------------------------------------------- */
@@ -70,6 +80,8 @@ const useCMSContent = () => {
     getArticleTypeMetaFields,
     getMetaFieldLabel,
     getMetaFieldValueLabel,
+    getWebsiteConfigValue,
+    getWebsiteConfig
   };
 };
 

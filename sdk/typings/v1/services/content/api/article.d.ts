@@ -99,7 +99,7 @@ declare module Levelup {
                   }
                 >;
               export type Response<T extends Entity.Article = Entity.Article> =
-                Utils.Api.Response.BuildListResponse<T, 'users'>;
+                Utils.Api.Response.BuildListResponse<T, 'users' | 'article_types' | 'linked_articles'>;
             }
           }
         }

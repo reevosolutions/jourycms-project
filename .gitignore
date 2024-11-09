@@ -16,6 +16,7 @@
 /coverage
 
 # next.js
+/design
 /.next/
 /**/.next/
 /out/

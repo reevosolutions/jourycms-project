@@ -2,8 +2,7 @@ declare module Levelup {
 
   namespace CMS {
     namespace V1 {
-      export namespace UI {
-        export namespace Forms {
+        export namespace Content {
           export namespace CustomFields {
             export namespace ImageField {
 
@@ -22,4 +21,3 @@ declare module Levelup {
       }
     }
   }
-}
