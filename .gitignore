@@ -17,13 +17,17 @@
 
 # next.js
 /design
-/.next/
+/frontend/.next/
 /**/.next/
 /out/
 
 # production
 /build
 /**/build
+/backend/build
+
+/dist
+/sdk/dist
 
 # misc
 .DS_Store
@@ -35,7 +39,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # env files (can opt-in for commiting if needed)
-.env*
+# .env*
 
 # vercel
 .vercel
