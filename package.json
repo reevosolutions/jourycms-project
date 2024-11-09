@@ -4,8 +4,8 @@
   "main": "index.js",
   "scripts": {
     "push": "git add . && git commit -m 'update' && git push",
-    "add:sdk:local": "cd frontend && add file:../lup-sdk",
-    "add:sdk": "cd frontend && yarn add @levelup-system/sdk@latest"
+    "add:sdk:local": "cd frontend && npm i file:../sdk",
+    "add:sdk": "cd frontend && npm i jourycms-sdk@latest"
   },
   "repository": {
     "type": "git",

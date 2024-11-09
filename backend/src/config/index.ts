@@ -12,10 +12,10 @@ process.env.NODE_ENV = process.env.NODE_ENV || "development";
 
 type LeafKeys<T> = T extends object
   ? {
-      [K in Extract<keyof T, string | number>]: T[K] extends object
-        ? `${K}.${LeafKeys<T[K]>}`
-        : `${K}`;
-    }[Extract<keyof T, string | number>]
+    [K in Extract<keyof T, string | number>]: T[K] extends object
+    ? `${K}.${LeafKeys<T[K]>}`
+    : `${K}`;
+  }[Extract<keyof T, string | number>]
   : never;
 
 export type TCacheDurationKey = Levelup.CMS.V1.Utils.LeafKeys<typeof cacheDuration>;
@@ -147,53 +147,53 @@ export default {
   amqplib:
     process.env.NODE_ENV === "production"
       ? {
-          /**
-           * The host for amqplib.
-           */
+        /**
+         * The host for amqplib.
+         */
 
-          host: process.env.AMQPLIB_HOST || "localhost",
-          /**
-           * The port for amqplib.
-           */
-          port: parseInt(process.env.AMQPLIB_PORT || "5672"),
+        host: process.env.AMQPLIB_HOST || "localhost",
+        /**
+         * The port for amqplib.
+         */
+        port: parseInt(process.env.AMQPLIB_PORT || "5672"),
 
-          /**
-           * The retry delay for amqplib.
-           */
-          retryDelay: parseInt(process.env.AMQPLIB_RETRY_DELAY || "5000"),
+        /**
+         * The retry delay for amqplib.
+         */
+        retryDelay: parseInt(process.env.AMQPLIB_RETRY_DELAY || "5000"),
 
-          /**
-           * The maximum retries for amqplib.
-           */
-          maxRetries: parseInt(process.env.AMQPLIB_MAX_RETRIES || "5"),
+        /**
+         * The maximum retries for amqplib.
+         */
+        maxRetries: parseInt(process.env.AMQPLIB_MAX_RETRIES || "5"),
 
-          user: process.env.AMQPLIB_USER || undefined,
-          password: process.env.AMQPLIB_PASS || undefined,
-        }
+        user: process.env.AMQPLIB_USER || undefined,
+        password: process.env.AMQPLIB_PASS || undefined,
+      }
       : {
-          /**
-           * The host for amqplib.
-           */
+        /**
+         * The host for amqplib.
+         */
 
-          host: process.env.DEV_AMQPLIB_HOST || "localhost",
-          /**
-           * The port for amqplib.
-           */
-          port: parseInt(process.env.DEV_AMQPLIB_PORT || "5672"),
+        host: process.env.DEV_AMQPLIB_HOST || "localhost",
+        /**
+         * The port for amqplib.
+         */
+        port: parseInt(process.env.DEV_AMQPLIB_PORT || "5672"),
 
-          /**
-           * The retry delay for amqplib.
-           */
-          retryDelay: parseInt(process.env.DEV_AMQPLIB_RETRY_DELAY || "5000"),
+        /**
+         * The retry delay for amqplib.
+         */
+        retryDelay: parseInt(process.env.DEV_AMQPLIB_RETRY_DELAY || "5000"),
 
-          /**
-           * The maximum retries for amqplib.
-           */
-          maxRetries: parseInt(process.env.DEV_AMQPLIB_MAX_RETRIES || "5"),
+        /**
+         * The maximum retries for amqplib.
+         */
+        maxRetries: parseInt(process.env.DEV_AMQPLIB_MAX_RETRIES || "5"),
 
-          user: process.env.DEV_AMQPLIB_USER || undefined,
-          password: process.env.DEV_AMQPLIB_PASS || undefined,
-        },
+        user: process.env.DEV_AMQPLIB_USER || undefined,
+        password: process.env.DEV_AMQPLIB_PASS || undefined,
+      },
 
   /**
    * Configuration for email services.
@@ -291,10 +291,9 @@ export default {
     /**
      * The URL for logging.
      */
-    url: `${
-      process.env.INTERNAL_GATEWAY_URL ||
+    url: `${process.env.INTERNAL_GATEWAY_URL ||
       `http://localhost:${SERVICE_PORTS.DEFAULT}/`
-    }activity/api/logs`,
+      }activity/api/logs`,
   },
 
   /**
@@ -483,17 +482,17 @@ export default {
         waitForNewParcelsToBeSynchronized:
           process.env
             .INTEGRATION_YALIDINE_PARCELS_WAIT_FOR_NEW_PARCELS_TO_BE_SYNCHRONIZED ===
-            "true" ||
+          "true" ||
           process.env
             .INTEGRATION_YALIDINE_PARCELS_WAIT_FOR_NEW_PARCELS_TO_BE_SYNCHRONIZED ===
-            "1",
+          "1",
         /**
          * Whether to delete failed sync parcels or not.
          */
         deleteFailedSyncParcels:
           process.env
             .INTEGRATION_YALIDINE_PARCELS_DELETE_FAILED_SYNC_PARCELS ===
-            "true" ||
+          "true" ||
           process.env
             .INTEGRATION_YALIDINE_PARCELS_DELETE_FAILED_SYNC_PARCELS === "1",
       },

@@ -26,6 +26,7 @@ import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
 import ArticleSanitizers from '../../../utils/sanitizers/article.sanitizers';
 import ArticleValidators from '../../../utils/validators/article.validators';
 import { ArticleSchemaFields } from '../models/article.model';
+import { slugify } from '../../../utilities/strings/slugify.utilities';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -44,20 +45,20 @@ export default class ArticlesService extends BaseService {
 
   constructor(
     @Inject('articleTypeModel') private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
-		@Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
-		@Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
-		@Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
-		@Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
-		@Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
-		@Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
-		@Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
-		@Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
+    @Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
+    @Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
+    @Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
+    @Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
+    @Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
+    @Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
+    @Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
+    @Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
     @EventDispatcher() private eventDispatcher: EventDispatcher,
   ) {
     super();
   }
 
-  
+
 
   /**
   * @description Generates the snapshots object for the entity.
@@ -82,10 +83,10 @@ export default class ArticlesService extends BaseService {
       throw error;
     }
   }
-  
 
 
-  
+
+
   /**
    * @description Create search meta
    * @param {Partial<EntityAlias>} data
@@ -97,23 +98,23 @@ export default class ArticlesService extends BaseService {
      * Define the search meta object
      */
     const search_meta: { [Key in DocumentProperties]?: string } = {
-      
+
       /**
        * TODO: Add more fields to the search meta
        */
       // ...
     };
-    
+
     /**
      * Add old values if not provided in the new data
     */
-   if (old) {
-      
+    if (old) {
+
       /**
        * TODO: Add more fields to the search meta
        */
       // ...
-    }  
+    }
 
     this.logExecutionResult(this._createSearchMeta, { data, old }, null, { search_meta });
 
@@ -123,6 +124,31 @@ export default class ArticlesService extends BaseService {
     return Object.values(search_meta).filter(s => !!s).join(' ').replaceAll('  ', ' ').trim();
   }
 
+  async _generateSlug(title: string, slug?: string | null): Promise<string> {
+    const scenario = this.initScenario(this.logger, this._generateSlug, { title, slug });
+    try {
+      let value = slug || slugify(title);
+      let retries = 0;
+      let exists = true;
+      while (exists) {
+        const res = await this.articleModel.exists({ slug: value });
+        exists = !!res;
+        if (exists) {
+          retries++;
+          value = slugify(title) + '-' + retries;
+        }
+      }
+      scenario.set({
+        slug: value,
+        retries
+      })
+      scenario.end();
+      return value;
+    } catch (error) {
+      scenario.error(error);
+      throw error;
+    }
+  }
 
 
   /**
@@ -188,7 +214,7 @@ export default class ArticlesService extends BaseService {
     if (authData?.current?.app) (filters).app = authData?.current.app._id;
 
     // -- attributed:app
-    if(ArticleSchemaFields['app']){
+    if (ArticleSchemaFields['app']) {
       filter = createStringFilter<DocumentProperties>(q, totalQ, filters['app'], 'app' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
@@ -216,22 +242,29 @@ export default class ArticlesService extends BaseService {
     // -- _id
     filter = createStringFilter<DocumentProperties>(q, totalQ, filters._id, '_id');
     q = filter.q; totalQ = filter.totalQ;
-    
+
     // -- created_by
-    if(ArticleSchemaFields['created_by']){
+    if (ArticleSchemaFields['created_by']) {
       filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters['created_by'], 'created_by' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
-    
-    
+    // -- slug
+    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.slug, 'slug' as any);
+    q = filter.q; totalQ = filter.totalQ;
+
+    // -- article_type
+    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.article_type, 'article_type' as any);
+    q = filter.q; totalQ = filter.totalQ;
+
+
     // -- tracking_id
-    if(ArticleSchemaFields['tracking_id']){
+    if (ArticleSchemaFields['tracking_id']) {
       filter = createStringFilter<DocumentProperties>(q, totalQ, filters['tracking_id'], 'tracking_id' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
 
     // -- name
-    if(ArticleSchemaFields['name']){
+    if (ArticleSchemaFields['name']) {
       filter = createStringFilter<DocumentProperties>(q, totalQ, filters['name'], 'name' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
@@ -251,9 +284,9 @@ export default class ArticlesService extends BaseService {
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-      load_deleted: false,
-      dont_lean: false
-    }
+        load_deleted: false,
+        dont_lean: false
+      }
   ): Promise<ApiAlias.List.Response> {
     try {
 
@@ -261,9 +294,9 @@ export default class ArticlesService extends BaseService {
        * Fill options argument with the defaults
        */
       opt = defaults(opt, {
-        load_deleted: false, 
+        load_deleted: false,
         dont_lean: false,
-      }); 
+      });
       /**
        * Define the execution scenario object
        */
@@ -287,7 +320,7 @@ export default class ArticlesService extends BaseService {
       q = filter.q;
       totalQ = filter.totalQ;
 
-      
+
       const limit = (count === undefined || count === null) ? authData?.current?.app?.settings?.listing?.default_count || config.settings.listing.defaultCount : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
       const sortOptions = this.getSortOptions(sort, sort_by);
@@ -318,14 +351,14 @@ export default class ArticlesService extends BaseService {
 
       const total = await totalQ.countDocuments();
       const pages = limit === -1 ? 1 : Math.ceil(total / limit);
-     
-     scenario.skip = skip;
-     scenario.take = take;
-     scenario.found = items?.length;
-     scenario.total = total;
+
+      scenario.skip = skip;
+      scenario.take = take;
+      scenario.found = items?.length;
+      scenario.total = total;
 
       const result = {
-        data: items.map(doc=>mapDocumentToExposed(doc)),
+        data: items.map(doc => mapDocumentToExposed(doc)),
         pagination: {
           total,
           pages,
@@ -387,9 +420,9 @@ export default class ArticlesService extends BaseService {
        */
       if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
 
-       /**
-       * Check if the user can view the object
-       */
+      /**
+      * Check if the user can view the object
+      */
       if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
 
       const result = {
@@ -409,9 +442,73 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-  
-  
-  
+  /**
+  * @description getBySlug
+  */
+  public async getBySlug(
+    slug: string,
+    authData: Levelup.CMS.V1.Security.AuthData,
+    opt: { load_deleted?: boolean; dont_lean?: boolean; ignore_not_found_error?: boolean, bypass_authorization?: boolean } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+  ): Promise<ApiAlias.GetOne.Response> {
+    try {
+      /**
+       * Fill options argument with the defaults
+       */
+      opt = defaults(opt, {
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+      });
+
+      /**
+       * Define the execution scenario object
+       */
+      const scenario: {
+        [Key: string]: any
+      } = {}
+
+      const q = this.articleModel.findOne({ slug });
+      /**
+       * @description Lean the query else if needed to not do so
+       */
+      if (!opt.dont_lean) q.lean();
+
+
+      const doc = await q.exec();
+
+
+      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+
+      /**
+       * Check if the document is deleted and the user does not want to load deleted documents
+       */
+      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+
+      /**
+      * Check if the user can view the object
+      */
+      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+
+      const result = {
+        data: mapDocumentToExposed(doc)
+      };
+
+      /**
+       * Log execution result before returning the result
+       */
+      this.logExecutionResult(this.getById, result, authData, scenario);
+
+      return result;
+    } catch (error) {
+      if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException) return { data: undefined };
+      this.logError(this.getById, error);
+      throw error;
+    }
+  }
+
+
+
+
 
   /**
    * @description Create
@@ -442,7 +539,7 @@ export default class ArticlesService extends BaseService {
       const { error } = ArticleValidators.validateCreateBody(data);
       if (error) throw error;
 
-      let {} = data;
+      let { } = data;
 
       /**
        * Auto-fill system data
@@ -452,7 +549,7 @@ export default class ArticlesService extends BaseService {
         : opt?.bypass_authorization || (authData.current?.service?.name && !authData.current?.service?.is_external)
           ? data.app
           : undefined;
-      
+
       /**
        * Check if the user can create the object
        */
@@ -465,8 +562,11 @@ export default class ArticlesService extends BaseService {
        * Create data object
        */
       const docObject: Partial<EntityAlias> = {
-        ...data
+        ...data,
+        slug: await this._generateSlug(data.title, data.slug),
       };
+
+
 
       /**
        * Create tracking ID
@@ -510,6 +610,7 @@ export default class ArticlesService extends BaseService {
     }
   }
 
+
   /**
   * @description Update
   */
@@ -540,7 +641,7 @@ export default class ArticlesService extends BaseService {
       /**
        * Extract the required in block variables from the data object
        */
-      const {} = data;
+      const { } = data;
 
       /**
        * load old object and check if it exists
@@ -652,12 +753,12 @@ export default class ArticlesService extends BaseService {
 
 
       const old = await this.articleModel.findById(id);
-      if(!old) throw new exceptions.ItemNotFoundException('Object not found');
-      if(old.is_deleted) throw new exceptions.UnauthorizedException('Object already deleted');
-      if(!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
+      if (!old) throw new exceptions.ItemNotFoundException('Object not found');
+      if (old.is_deleted) throw new exceptions.UnauthorizedException('Object already deleted');
+      if (!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
 
       const doc = await this.articleModel.findByIdAndUpdate(id, {
-        is_deleted: true, 
+        is_deleted: true,
         deleted_at: new Date(),
         $addToSet: {
           updates: updateObject
@@ -668,7 +769,7 @@ export default class ArticlesService extends BaseService {
 
       const result = {
         data: {
-            deleted: true
+          deleted: true
         }
       };
 
@@ -710,12 +811,12 @@ export default class ArticlesService extends BaseService {
 
 
       const old = await this.articleModel.findById(id);
-      if(!old) throw new exceptions.ItemNotFoundException('Object not found');
-      if(!old.is_deleted) throw new exceptions.UnauthorizedException('Object already exists');
-      if(!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
+      if (!old) throw new exceptions.ItemNotFoundException('Object not found');
+      if (!old.is_deleted) throw new exceptions.UnauthorizedException('Object already exists');
+      if (!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
 
       const doc = await this.articleModel.findByIdAndUpdate(id, {
-        is_deleted: false, 
+        is_deleted: false,
         deleted_at: null,
         $addToSet: {
           updates: updateObject

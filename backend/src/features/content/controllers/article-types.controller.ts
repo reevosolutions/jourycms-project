@@ -162,6 +162,48 @@ export default (app: Router): void => {
       }
     });
 
+  /**
+   * GetBySlug
+   */
+  route.get('/by-slug/:slug',
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+
+        /**
+         * Always get the auth data at the beginning of the function
+         */
+        const AUTH_DATA = await getAuthData(req);
+
+        /**
+         * Load the required services and managers
+         */
+        const articleTypesService = Container.get(ArticleTypesService);
+
+        /**
+         * Call the service method if the validation conditions are fulfilled
+         */
+
+        const { slug } = req.params;
+
+        const result = await articleTypesService.getBySlug(slug, AUTH_DATA);
+
+        /**
+         * Respond to the client
+         */
+        respond<ApiAlias.GetOne.Response>(res, result);
+
+      } catch (error) {
+
+        /**
+         * Pass the error to the next middleware
+         * the error logging logic is handled on the service layer
+         */
+
+        return next(error);
+
+      }
+    });
+
 
   /**
    * Create

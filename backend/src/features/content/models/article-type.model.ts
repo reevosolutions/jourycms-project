@@ -56,9 +56,9 @@ const ArticleTypeSchemaFields: StrictSchemaDefinition<Omit<_Entity, '_id' | 'cre
   /**
    * Inherited from ICreatable
    */
-  app: { type: String, required: true },
+  app: { type: String, required: false, default: null },
   company: { type: String, default: null },
-  created_by: { type: Schema.Types.String, required: true },
+  created_by: { type: Schema.Types.String, required: false, default: null },
   created_by_original_user: {
     type: _UserSnapshotSchemaFields,
     default: null
@@ -93,7 +93,7 @@ const ArticleTypeSchemaFields: StrictSchemaDefinition<Omit<_Entity, '_id' | 'cre
     field_label: { type: String },
     field_type: { type: String },
     field_options: { type: Schema.Types.Mixed },
-  })],
+  }, {_id: false})],
 
   related_taxonomies: [{ type: Schema.Types.ObjectId as any, ref: 'Taxonomy' }],
   labels: {
@@ -140,6 +140,8 @@ ArticleTypeSchema.plugin(fuzzySearching, {
     },
   ]
 });
+
+ArticleTypeSchema.index({ app: 1, slug: 1 }, { unique: true });
 
 /**
  * The Mongoose model for the ArticleType model.

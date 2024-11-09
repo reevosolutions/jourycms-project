@@ -4,11 +4,12 @@
  * @since 26-10-2024 23:24:33
  */
 
-import Container, { Service } from 'typedi';
+import Container, { Inject, Service } from 'typedi';
 import BaseService from '../../../common/base.service';
 import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
 import CacheManager from '../../../managers/cache-manager';
 import TranslationToolsService from './translation.tools.service';
+import { faker } from '@faker-js/faker';
 
 /**
  * @generator Levelup
@@ -18,7 +19,17 @@ import TranslationToolsService from './translation.tools.service';
  */
 @Service()
 export default class BuilderService extends BaseService {
-  public constructor(@EventDispatcher() private eventDispatcher: EventDispatcher) {
+  public constructor(
+    @Inject('articleTypeModel') private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
+    @Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
+    @Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
+    @Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
+    @Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
+    @Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
+    @Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
+    @Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
+    @Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
+    @EventDispatcher() private eventDispatcher: EventDispatcher) {
     super();
   }
 
@@ -45,10 +56,35 @@ export default class BuilderService extends BaseService {
     try {
       const translationToolsService = Container.get(TranslationToolsService);
       await translationToolsService.translateUsingGoogleAPI();
+      const type = await this.articleTypeModel.findOne({
+        slug: 'trip'
+      });
+
+      if (type) {
+        const articles = await this.articleModel.find({
+          article_type: type._id,
+        });
+        for (const article of articles) {
+          article.title = 'عمرة رمضان';
+          article.meta_fields.price = faker.number.int({ min: 11, max: 50 }) * 10000 + faker.number.int({ min: 1, max: 9 }) * 1000;
+          article.meta_fields.duarttion = undefined;
+          article.meta_fields.trip_duration = faker.helpers.arrayElement([15, 21, 30, 45]);
+          this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
+          await this.articleModel.updateOne({
+            _id: article._id
+          }, {
+            $set: {
+              meta_fields: article.meta_fields,
+            }
+          }).exec();
+        }
+      }
     } catch (error) {
       scenario.error(error);
     }
   }
+
+
 
   /**
    * @description this is used to clean up data

@@ -65,12 +65,12 @@ const ArticleSchemaFields: DeepStrictSchemaDefinition<Omit<_Entity, '_id' | 'cre
   /**
    * Inherited from ICreatable
    */
-  app: { type: String, required: true },
+  app: { type: String, required: false, default: null },
   company: { type: String, default: null },
-  created_by: { type: Schema.Types.String, required: true },
+  created_by: { type: Schema.Types.String, required: false, default: null },
   created_by_original_user: {
     type: _UserSnapshotSchemaFields,
-        default: null
+    default: null
   },
   is_deleted: { type: Boolean, default: false },
   deleted_at: { type: Date, default: null },
@@ -78,17 +78,19 @@ const ArticleSchemaFields: DeepStrictSchemaDefinition<Omit<_Entity, '_id' | 'cre
   updates: [_ItemUpdateSchemaFields],
   /**
    * Inherited from IHasSearchMeta
-   */
+  */
   search_meta: { type: String },
 
   /**
    * Inject the embedded objects
-   */
+  */
   ...EmbeddedObjects,
 
   /**
    * Specific to Entity
-   */
+  */
+  is_published: { type: Boolean, default: false },
+  published_at: { type: Date, default: null },
   slug: { type: String },
   //
   body: { type: String },
@@ -150,7 +152,7 @@ ArticleSchema.plugin(fuzzySearching, {
     }
   ]
 });
-
+ArticleSchema.index({ app: 1, slug: 1 }, { unique: true });
 /**
  * The Mongoose model for the Article model.
  *

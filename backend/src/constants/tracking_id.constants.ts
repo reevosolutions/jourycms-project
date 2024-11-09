@@ -25,6 +25,7 @@ export const LEVELUP_ITEM_SHORTCUTS: {
   translationItem: "TRI",
   translationProject: "TRP",
   translationNamespace: "TRN",
+  uploadedFile: "FLE"
 } as const;
 
 

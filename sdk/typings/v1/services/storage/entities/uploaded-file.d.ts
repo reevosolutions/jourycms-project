@@ -4,11 +4,9 @@ declare module Levelup {
       namespace Storage {
         export namespace Entity {
           export interface IUploadedFileAttributes {
-            store?: Utils.Common.ID;
           }
 
           export interface IUploadedFileSnapshots {
-            store?: Utils.Entity.Snapshots.Accounts.Store;
           }
 
           export interface UploadedFile

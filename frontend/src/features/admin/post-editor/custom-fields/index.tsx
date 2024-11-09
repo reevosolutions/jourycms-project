@@ -6,6 +6,7 @@ import DateCustomField from './date.custom-field';
 import TimeCustomField from './time.custom-field';
 import TextCustomField from './text.custom-field';
 import NumberCustomField from './number.custom-field';
+import ImageCustomField from './image.custom-field';
 
 type Props = {
   field: Levelup.CMS.V1.Content.Entity.ICustomMetaField
@@ -82,6 +83,17 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
             onChange={onChange}
             options={field.field_options as any}
             default_value={field.field_options.default_value}
+
+          />
+        ) : field.field_type === 'image' ? (
+          <ImageCustomField
+            label={field.field_label}
+            required={field.field_options.required}
+            value={value}
+            onChange={onChange}
+            options={field.field_options as any}
+            default_value={field.field_options.default_value}
+            image_ratio={1/3}
 
           />
         ) : null}

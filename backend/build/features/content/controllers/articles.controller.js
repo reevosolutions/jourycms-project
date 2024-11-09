@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ROOT_PATH = void 0;
 const express_1 = require("express");
 const typedi_1 = __importDefault(require("typedi"));
-const middlewares_1 = __importDefault(require("../../../middlewares"));
 const logging_1 = __importDefault(require("../../../utilities/logging"));
 const requests_1 = require("../../../utilities/requests");
 const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
@@ -25,7 +24,7 @@ exports.ROOT_PATH = '/articles';
 exports.default = (app) => {
     const logger = (0, logging_1.default)("CONTROLLER", "ArticlesController");
     const route = (0, express_1.Router)();
-    app.use(exports.ROOT_PATH, middlewares_1.default.AUTH.requireUser, route);
+    app.use(exports.ROOT_PATH, route);
     /**
      * List
      */
@@ -78,6 +77,37 @@ exports.default = (app) => {
              * Respond to the client
              */
             return (0, requests_1.respond)(res, result);
+        }
+        catch (error) {
+            /**
+             * Pass the error to the next middleware
+             * the error logging logic is handled on the service layer
+             */
+            return next(error);
+        }
+    });
+    /**
+     * GetBySlug
+     */
+    route.get('/by-slug/:slug', async (req, res, next) => {
+        try {
+            /**
+             * Always get the auth data at the beginning of the function
+             */
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            /**
+             * Load the required services and managers
+             */
+            const articlesService = typedi_1.default.get(articles_service_1.default);
+            /**
+             * Call the service method if the validation conditions are fulfilled
+             */
+            const { slug } = req.params;
+            const result = await articlesService.getBySlug(slug, AUTH_DATA);
+            /**
+             * Respond to the client
+             */
+            (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**

@@ -1,0 +1,14 @@
+{
+  "Name is required": "الاسم مطلوب",
+  "Category is required": "الفئة مطلوبة",
+  "You don't have the right permissions": "ليس لديك الأذونات الصحيحة",
+  "Current office is required": "المكتب الحالي مطلوب",
+  "Order cannot be loaded": "لا يمكن تحميل الطلب",
+  "Network Error": "خطأ في الشبكة",
+  "The report is not generated yet, plese revisite the page in few minutes!": "لم يتم إنشاء التقرير حتى الآن ، plese revisite الصفحة في دقائق قليلة!",
+  "Data not found": "البيانات غير موجودة",
+  "Address city required": "معالجة المدينة المطلوبة",
+  "Passwords do not match": "كلمات المرور لا تتطابق",
+  "Password must be at least 6 characters": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "Email invalid": "البريد الإلكتروني غير صالح"
+}

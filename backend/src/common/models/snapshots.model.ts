@@ -67,4 +67,4 @@ export const _ItemUpdateSchemaFields = new Schema<Levelup.CMS.V1.Utils.Entity.Ge
     _id: false,
     default: []
   }
-});
+}, {_id: false});

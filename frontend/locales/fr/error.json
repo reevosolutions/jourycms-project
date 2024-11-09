@@ -1,0 +1,14 @@
+{
+  "Name is required": "Le nom est requis",
+  "Category is required": "La catégorie est requise",
+  "You don't have the right permissions": "Vous n'avez pas les bonnes autorisations",
+  "Current office is required": "Le bureau actuel est requis",
+  "Order cannot be loaded": "L'ordre ne peut pas être chargé",
+  "Network Error": "Erreur de réseau",
+  "The report is not generated yet, plese revisite the page in few minutes!": "Le rapport n'est pas encore généré, Plese revisite la page en quelques minutes!",
+  "Data not found": "Données introuvables",
+  "Address city required": "Adressez la ville requise",
+  "Passwords do not match": "Les mots de passe ne correspondent pas",
+  "Password must be at least 6 characters": "Le mot de passe doit comporter au moins 6 caractères",
+  "Email invalid": "E-mail non valide"
+}

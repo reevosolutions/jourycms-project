@@ -12,7 +12,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ROOT_PATH = void 0;
 const express_1 = require("express");
 const typedi_1 = __importDefault(require("typedi"));
-const middlewares_1 = __importDefault(require("../../../middlewares"));
 const logging_1 = __importDefault(require("../../../utilities/logging"));
 const requests_1 = require("../../../utilities/requests");
 const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
@@ -25,7 +24,7 @@ exports.ROOT_PATH = '/translation/items';
 exports.default = (app) => {
     const logger = (0, logging_1.default)("CONTROLLER", "ItemsController");
     const route = (0, express_1.Router)();
-    app.use(exports.ROOT_PATH, middlewares_1.default.AUTH.requireUser, route);
+    app.use(exports.ROOT_PATH, route);
     /**
      * List
      */

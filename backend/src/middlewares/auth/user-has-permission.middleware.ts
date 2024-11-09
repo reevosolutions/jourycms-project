@@ -38,9 +38,7 @@ const userHasPermission = (
     /**
      * Masters always have all the role groups
      */
-    if (req.attached_entities.user?.role_group === 'master')
-      return next();
-
+    
     if (!permission || !permission.length) {
       return next();
     }

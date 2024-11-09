@@ -51,18 +51,18 @@ const ArticleSchemaFields = Object.assign(Object.assign({
     /**
      * Inherited from ICreatable
      */
-    app: { type: String, required: true }, company: { type: String, default: null }, created_by: { type: mongoose_1.Schema.Types.String, required: true }, created_by_original_user: {
+    app: { type: String, required: false, default: null }, company: { type: String, default: null }, created_by: { type: mongoose_1.Schema.Types.String, required: false, default: null }, created_by_original_user: {
         type: snapshots_model_1._UserSnapshotSchemaFields,
         default: null
     }, is_deleted: { type: Boolean, default: false }, deleted_at: { type: Date, default: null }, tags: snapshots_model_1._ItemTagsSchemaFields, updates: [snapshots_model_1._ItemUpdateSchemaFields], 
     /**
      * Inherited from IHasSearchMeta
-     */
+    */
     search_meta: { type: String } }, EmbeddedObjects), { 
     /**
      * Specific to Entity
-     */
-    slug: { type: String }, 
+    */
+    is_published: { type: Boolean, default: false }, published_at: { type: Date, default: null }, slug: { type: String }, 
     //
     body: { type: String }, body_unformatted: { type: String }, body_structured: { type: mongoose_1.Schema.Types.Mixed }, title: { type: String }, _type: { type: String, default: 'base' }, is_featured: { type: Boolean, default: false }, featured_image: {
         type: snapshots_model_1._FileAttributeSchemaFields,
@@ -110,6 +110,7 @@ ArticleSchema.plugin(mongoose_fuzzy_searching_1.default, {
         }
     ]
 });
+ArticleSchema.index({ app: 1, slug: 1 }, { unique: true });
 /**
  * The Mongoose model for the Article model.
  *

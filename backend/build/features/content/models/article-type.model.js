@@ -42,7 +42,7 @@ const ArticleTypeSchemaFields = Object.assign(Object.assign({
     /**
      * Inherited from ICreatable
      */
-    app: { type: String, required: true }, company: { type: String, default: null }, created_by: { type: mongoose_1.Schema.Types.String, required: true }, created_by_original_user: {
+    app: { type: String, required: false, default: null }, company: { type: String, default: null }, created_by: { type: mongoose_1.Schema.Types.String, required: false, default: null }, created_by_original_user: {
         type: snapshots_model_1._UserSnapshotSchemaFields,
         default: null
     }, is_deleted: { type: Boolean, default: false }, deleted_at: { type: Date, default: null }, tags: snapshots_model_1._ItemTagsSchemaFields, updates: [snapshots_model_1._ItemUpdateSchemaFields], 
@@ -60,7 +60,7 @@ const ArticleTypeSchemaFields = Object.assign(Object.assign({
             field_label: { type: String },
             field_type: { type: String },
             field_options: { type: mongoose_1.Schema.Types.Mixed },
-        })], related_taxonomies: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Taxonomy' }], labels: {
+        }, { _id: false })], related_taxonomies: [{ type: mongoose_1.Schema.Types.ObjectId, ref: 'Taxonomy' }], labels: {
         type: {
             singular: { type: String },
             plural: { type: String },
@@ -100,6 +100,7 @@ ArticleTypeSchema.plugin(mongoose_fuzzy_searching_1.default, {
         },
     ]
 });
+ArticleTypeSchema.index({ app: 1, slug: 1 }, { unique: true });
 /**
  * The Mongoose model for the ArticleType model.
  *

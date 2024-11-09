@@ -56,7 +56,12 @@ const SelectCustomField: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
-
+  useEffect(() => {
+    const default_value: any[] = Array.isArray(options.default_value) ? options.default_value : options.default_value ? [options.default_value] : [];
+    const _value: string[] = Array.isArray(value) ? value : value ? [value] : [];
+    const selected = _value.length ? _value : default_value;
+    setSelected(selected);
+  }, [value, default_value]);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */

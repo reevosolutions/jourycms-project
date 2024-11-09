@@ -118,6 +118,37 @@ exports.default = (app) => {
         }
     });
     /**
+     * GetBySlug
+     */
+    route.get('/by-slug/:slug', async (req, res, next) => {
+        try {
+            /**
+             * Always get the auth data at the beginning of the function
+             */
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            /**
+             * Load the required services and managers
+             */
+            const articleTypesService = typedi_1.default.get(article_types_service_1.default);
+            /**
+             * Call the service method if the validation conditions are fulfilled
+             */
+            const { slug } = req.params;
+            const result = await articleTypesService.getBySlug(slug, AUTH_DATA);
+            /**
+             * Respond to the client
+             */
+            (0, requests_1.respond)(res, result);
+        }
+        catch (error) {
+            /**
+             * Pass the error to the next middleware
+             * the error logging logic is handled on the service layer
+             */
+            return next(error);
+        }
+    });
+    /**
      * Create
      */
     route.post('/', async (req, res, next) => {

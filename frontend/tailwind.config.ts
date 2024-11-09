@@ -9,6 +9,7 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/features/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./src/themes/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
     container: {
@@ -18,6 +19,10 @@ const config: Config = {
         "2xl": "1400px",
       },
     },
+    fontFamily: {
+      sans: ['var(--font-inter)'],
+      hammah: ['var(--font-hammah)'],
+    },
     extend: {
       typography: {
         DEFAULT: {
@@ -25,6 +30,59 @@ const config: Config = {
         },
       },
       colors: {
+        darkblue: {
+          "50": "#dfebf1",
+          "100": "#cdd9e0",
+          "200": "#bac6cf",
+          "300": "#a8b4be",
+          "400": "#95a1ad",
+          "500": "#838f9d",
+          "600": "#717c8c",
+          "700": "#5e6a7b",
+          "800": "#4c576a",
+          "900": "#394559",
+          "950": "#273248"
+        },
+        beige: {
+          "50": "#e5d3a5",
+          "100": "#ddc89e",
+          "200": "#d5bd97",
+          "300": "#ceb290",
+          "400": "#c6a789",
+          "500": "#be9c82",
+          "600": "#b6917b",
+          "700": "#ae8674",
+          "800": "#a77b6d",
+          "900": "#9f7066",
+          "950": "#97655f"
+        },
+        red2: {
+          "50": "#f1d5d2",
+          "100": "#edc5c1",
+          "200": "#eab6b0",
+          "300": "#e6a69f",
+          "400": "#e2968e",
+          "500": "#df877d",
+          "600": "#db776b",
+          "700": "#d7675a",
+          "800": "#d35749",
+          "900": "#d04838",
+          "950": "#cc3827"
+        },
+        turqoi: {
+          "50": "#afe1f1",
+          "100": "#acdfec",
+          "200": "#a9dee7",
+          "300": "#a5dce3",
+          "400": "#a2dbde",
+          "500": "#9fd9d9",
+          "600": "#9cd7d4",
+          "700": "#99d6cf",
+          "800": "#95d4cb",
+          "900": "#92d3c6",
+          "950": "#8fd1c1"
+        },
+
         text: {
           DEFAULT: colors.slate[900],
           "50": colors.slate[50],
@@ -115,6 +173,8 @@ const config: Config = {
         },
       },
       borderRadius: {
+        "4xl": "calc(var(--radius) + 1rem)",
+        "3xl": "calc(var(--radius) + 0.5rem)",
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
@@ -155,6 +215,68 @@ const config: Config = {
     }),
     require("precss"),
     require("autoprefixer"),
+    function ({ addVariant, addUtilities, matchUtilities, theme }: any) {
+      addVariant("hocus", ["&:focus", "&:hover", "&:active", "&:focus-within", "&:focus-visible"]);
+      addVariant("group-hocus", [":merge(.group):focus &", ":merge(.group):hover &"]);
+      matchUtilities(
+        {
+          density: (padding: number) => {
+            return {
+              "& > *": {
+                padding,
+              },
+            };
+          },
+          "density-x": (padding: number) => {
+            return {
+              "& > *": {
+                paddingLeft: padding,
+                paddingRight: padding,
+              },
+            };
+          },
+          "density-y": (padding: number) => {
+            return {
+              "& > *": {
+                paddingTop: padding,
+                paddingBottom: padding,
+              },
+            };
+          },
+          "space-x": (margin: number) => {
+            return {
+              "& > * + *": {
+                "--tw-space-x-reverse": "0",
+                marginRight: `calc(${margin} * var(--tw-space-x-reverse))`,
+                marginLeft: `calc(${margin} * calc(1 - var(--tw-space-x-reverse)))`,
+              },
+            };
+          },
+          "space-y": (margin: number) => {
+            return {
+              "& > * + *": {
+                "--tw-space-y-reverse": "0",
+                marginTop: `calc(${margin} * calc(1 - var(--tw-space-y-reverse)))`,
+                marginBottom: `calc(${margin} * var(--tw-space-y-reverse))`,
+              },
+            };
+          },
+        },
+        {
+          values: theme("space", {}),
+          type: "any",
+        }
+      );
+
+      addUtilities({
+        ".space-y-reverse > * + *": {
+          "--tw-space-y-reverse": "1",
+        },
+        ".space-x-reverse > * + *": {
+          "--tw-space-x-reverse": "1",
+        },
+      });
+    },
   ],
 };
 export default config;

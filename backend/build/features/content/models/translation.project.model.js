@@ -22,7 +22,7 @@ const TranslationProjectSchemaFields = {
     /**
      * Inherited from ICreatable
      */
-    app: { type: String, required: true },
+    app: { type: String, required: false, default: null },
     company: { type: String, default: null },
     created_by: { type: mongoose_1.Schema.Types.String },
     created_by_original_user: {

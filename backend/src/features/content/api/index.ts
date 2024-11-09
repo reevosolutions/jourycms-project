@@ -17,7 +17,7 @@ import translationNamespacesController from '../controllers/translation.namespac
 import translationProjectsController from '../controllers/translation.projects.controller';
 import translationToolsController from '../controllers/translation.tools.controller';
 import initLogger, { LoggerContext } from '../../../utilities/logging';
-import { respond } from 'src/utilities/requests';
+import { respond } from '../../../utilities/requests';
 
 const logger = initLogger(LoggerContext.CONTROLLER, "ContentController");
 

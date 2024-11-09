@@ -410,6 +410,58 @@ let ArticleTypesService = class ArticleTypesService extends base_service_1.defau
         }
     }
     /**
+    * @description GetByName
+    */
+    async getBySlug(slug, authData, opt = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }) {
+        try {
+            /**
+             * Fill options argument with the defaults
+             */
+            opt = (0, utils_helpers_1.defaults)(opt, {
+                load_deleted: false,
+                dont_lean: false,
+                ignore_not_found_error: false,
+            });
+            /**
+             * Define the execution scenario object
+             */
+            const scenario = {};
+            const q = this.articleTypeModel.findOne({ slug });
+            /**
+             * @description Lean the query else if needed to not do so
+             */
+            if (!opt.dont_lean)
+                q.lean();
+            const doc = await q.exec();
+            if (!doc)
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+            /**
+             * Check if the document is deleted and the user does not want to load deleted documents
+             */
+            if (doc.is_deleted && !opt.load_deleted)
+                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
+            /**
+            * Check if the user can view the object
+            */
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
+            const result = {
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+            };
+            /**
+             * Log execution result before returning the result
+             */
+            this.logExecutionResult(this.getByName, result, authData, scenario);
+            return result;
+        }
+        catch (error) {
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+                return { data: undefined };
+            this.logError(this.getByName, error);
+            throw error;
+        }
+    }
+    /**
      * @description Create
      */
     async create({ data }, authData, opt) {

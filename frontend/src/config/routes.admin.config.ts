@@ -37,7 +37,7 @@ const routes = {
         ac: ["articles.read"] as any[],
       },
       create: {
-        path: "/admin/articles/new" as const,
+        path: "/admin/articles/new/:type_slug" as const,
         title: "Create Article",
         ac: ["articles.create"] as any[],
         icon: LuPlus,

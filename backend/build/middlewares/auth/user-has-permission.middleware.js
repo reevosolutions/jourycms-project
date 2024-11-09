@@ -19,7 +19,7 @@ const index_1 = __importDefault(require("../../managers/cache-manager/index"));
  * @param {*} next  Express next Function
  */
 const userHasPermission = (permission) => async (req, res, next) => {
-    var _a, _b;
+    var _a;
     try {
         const cm = typedi_1.Container.get(index_1.default);
         /**
@@ -35,8 +35,6 @@ const userHasPermission = (permission) => async (req, res, next) => {
         /**
          * Masters always have all the role groups
          */
-        if (((_a = req.attached_entities.user) === null || _a === void 0 ? void 0 : _a.role_group) === 'master')
-            return next();
         if (!permission || !permission.length) {
             return next();
         }
@@ -46,7 +44,7 @@ const userHasPermission = (permission) => async (req, res, next) => {
         if (!req.attached_entities.user || !req.attached_entities.user.permissions || !req.attached_entities.user.permissions.length)
             throw new exceptions_1.default.UnauthorizedException('You must be logged in to access this resource');
         const permissionObjects = await cm.permissions.list();
-        const userPermissionNames = (((_b = req.attached_entities.user) === null || _b === void 0 ? void 0 : _b.permissions) || []).map(p => { var _a; return (_a = permissionObjects.find(po => po._id === p)) === null || _a === void 0 ? void 0 : _a.name; });
+        const userPermissionNames = (((_a = req.attached_entities.user) === null || _a === void 0 ? void 0 : _a.permissions) || []).map(p => { var _a; return (_a = permissionObjects.find(po => po._id === p)) === null || _a === void 0 ? void 0 : _a.name; });
         if (typeof permission === 'string' && userPermissionNames.indexOf(permission) > -1) {
             return next();
         }

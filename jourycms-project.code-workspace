@@ -4,16 +4,7 @@
       "path": "."
     },
     {
-      "path": "../yal-front13.2"
-    },
-    {
-      "path": "../levelup-project/lup-frontend"
-    },
-    {
-      "path": "../levelup-project/lup-sdk"
-    },
-    {
-      "path": "../levelup-project/lup-support"
+      "path": "../levelup-project/lup-storage"
     }
   ],
   "settings": {

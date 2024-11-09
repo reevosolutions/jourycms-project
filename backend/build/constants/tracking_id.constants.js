@@ -20,6 +20,7 @@ exports.LEVELUP_ITEM_SHORTCUTS = {
     translationItem: "TRI",
     translationProject: "TRP",
     translationNamespace: "TRN",
+    uploadedFile: "FLE"
 };
 exports.ITEM_SHORTCUTS = Object.assign({}, exports.LEVELUP_ITEM_SHORTCUTS);
 //# sourceMappingURL=tracking_id.constants.js.map

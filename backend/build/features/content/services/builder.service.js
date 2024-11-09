@@ -48,6 +48,7 @@ const base_service_1 = __importDefault(require("../../../common/base.service"));
 const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
 const cache_manager_1 = __importDefault(require("../../../managers/cache-manager"));
 const translation_tools_service_1 = __importDefault(require("./translation.tools.service"));
+const faker_1 = require("@faker-js/faker");
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
@@ -55,8 +56,17 @@ const translation_tools_service_1 = __importDefault(require("./translation.tools
  * @description this is used to perform build operations on service level on startup
  */
 let BuilderService = class BuilderService extends base_service_1.default {
-    constructor(eventDispatcher) {
+    constructor(articleTypeModel, articleModel, commentModel, reviewModel, termModel, taxonomyModel, translationItemModel, translationNamespaceModel, translationProjectModel, eventDispatcher) {
         super();
+        this.articleTypeModel = articleTypeModel;
+        this.articleModel = articleModel;
+        this.commentModel = commentModel;
+        this.reviewModel = reviewModel;
+        this.termModel = termModel;
+        this.taxonomyModel = taxonomyModel;
+        this.translationItemModel = translationItemModel;
+        this.translationNamespaceModel = translationNamespaceModel;
+        this.translationProjectModel = translationProjectModel;
         this.eventDispatcher = eventDispatcher;
     }
     /**
@@ -82,6 +92,28 @@ let BuilderService = class BuilderService extends base_service_1.default {
         try {
             const translationToolsService = typedi_1.default.get(translation_tools_service_1.default);
             await translationToolsService.translateUsingGoogleAPI();
+            const type = await this.articleTypeModel.findOne({
+                slug: 'trip'
+            });
+            if (type) {
+                const articles = await this.articleModel.find({
+                    article_type: type._id,
+                });
+                for (const article of articles) {
+                    article.title = 'عمرة رمضان';
+                    article.meta_fields.price = faker_1.faker.number.int({ min: 11, max: 50 }) * 10000 + faker_1.faker.number.int({ min: 1, max: 9 }) * 1000;
+                    article.meta_fields.duarttion = undefined;
+                    article.meta_fields.trip_duration = faker_1.faker.helpers.arrayElement([15, 21, 30, 45]);
+                    this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
+                    await this.articleModel.updateOne({
+                        _id: article._id
+                    }, {
+                        $set: {
+                            meta_fields: article.meta_fields,
+                        }
+                    }).exec();
+                }
+            }
         }
         catch (error) {
             scenario.error(error);
@@ -124,8 +156,17 @@ let BuilderService = class BuilderService extends base_service_1.default {
 };
 BuilderService = __decorate([
     (0, typedi_1.Service)(),
-    __param(0, (0, eventDispatcher_decorator_1.EventDispatcher)()),
-    __metadata("design:paramtypes", [Object])
+    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
+    __param(1, (0, typedi_1.Inject)('articleModel')),
+    __param(2, (0, typedi_1.Inject)('commentModel')),
+    __param(3, (0, typedi_1.Inject)('reviewModel')),
+    __param(4, (0, typedi_1.Inject)('termModel')),
+    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
+    __param(6, (0, typedi_1.Inject)('translationItemModel')),
+    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
+    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
+    __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
+    __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], BuilderService);
 exports.default = BuilderService;
 //# sourceMappingURL=builder.service.js.map

@@ -35,7 +35,9 @@ const CheckboxCustomField: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
-
+  useEffect(() => {
+    setSelected(value || default_value || []);
+  }, [value, default_value]);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -52,7 +54,6 @@ const CheckboxCustomField: React.FC<Props> = ({
                 checked={selected.includes(item.value)}
                 onCheckedChange={(checked) => {
                   const value = checked ? [...selected, item.value] : selected.filter((value) => value !== item.value);
-                  setSelected(value);
                   onChange(value);
                 }}
               />

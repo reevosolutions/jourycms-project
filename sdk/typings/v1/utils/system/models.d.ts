@@ -23,10 +23,12 @@ declare module Levelup {
 							| "article"
 							| "articleType";
 						export type SystemModels = "app";
+						export type StorageModels = "uploadedFile";
 
 						export type AllModels =
 							| AuthModels
 							| CmModels
+							| StorageModels
 							| SystemModels;
 
 						/**

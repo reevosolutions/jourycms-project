@@ -478,6 +478,71 @@ export default class ArticleTypesService extends BaseService {
     }
   }
 
+  /**
+  * @description GetByName
+  */
+  public async getBySlug(
+    slug: string,
+    authData: Levelup.CMS.V1.Security.AuthData,
+    opt: { load_deleted?: boolean; dont_lean?: boolean; ignore_not_found_error?: boolean, bypass_authorization?: boolean } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+  ): Promise<ApiAlias.GetOne.Response> {
+    try {
+
+      /**
+       * Fill options argument with the defaults
+       */
+      opt = defaults(opt, {
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+      });
+
+      /**
+       * Define the execution scenario object
+       */
+      const scenario: {
+        [Key: string]: any
+      } = {}
+
+      const q = this.articleTypeModel.findOne({ slug });
+      /**
+       * @description Lean the query else if needed to not do so
+       */
+      if (!opt.dont_lean) q.lean();
+
+
+      const doc = await q.exec();
+
+
+      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+
+      /**
+       * Check if the document is deleted and the user does not want to load deleted documents
+       */
+      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+
+      /**
+      * Check if the user can view the object
+      */
+      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+
+      const result = {
+        data: mapDocumentToExposed(doc)
+      };
+
+      /**
+       * Log execution result before returning the result
+       */
+      this.logExecutionResult(this.getByName, result, authData, scenario);
+
+      return result;
+    } catch (error) {
+      if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException) return { data: undefined };
+      this.logError(this.getByName, error);
+      throw error;
+    }
+  }
+
 
 
   /**

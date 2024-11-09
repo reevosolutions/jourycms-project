@@ -5,16 +5,26 @@ import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 
 import Toolbar from "./toolbar.tiptap";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { useEffect } from "react";
+
+
+const logger = initLogger(LoggerContext.COMPONENT, 'tiptap');
 
 type Props = {
-  onChange: (content: string) => void;
+  onChange: ({
+    content,
+    json,
+  }: {
+    content: string;
+    json: Record<string, any>;
+  }) => void;
   content: string;
+  defaultContent: string;
 };
 
-const Tiptap: React.FC<Props> = ({ onChange, content }) => {
-  const handleChange = (newContent: string) => {
-    onChange(newContent);
-  };
+const Tiptap: React.FC<Props> = ({ onChange, content, defaultContent = '' }) => {
+
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [StarterKit, Underline],
@@ -25,10 +35,20 @@ const Tiptap: React.FC<Props> = ({ onChange, content }) => {
       },
     },
     onUpdate: ({ editor }) => {
-      handleChange(editor.getHTML());
+      onChange({
+        content: editor.getHTML(),
+        json: editor.getJSON(),
+      });
     },
+    content: content || '',
   });
 
+  useEffect(() => {
+    if (editor) {
+      editor.commands.setContent(defaultContent);
+    }
+  }, [defaultContent]);
+  
   return (
     <div className="w-full">
       <Toolbar editor={editor} content={content} />

@@ -1,0 +1,14 @@
+{
+  "Name is required": "Name is required",
+  "Category is required": "Category is required",
+  "You don't have the right permissions": "You don't have the right permissions",
+  "Current office is required": "Current office is required",
+  "Order cannot be loaded": "Order cannot be loaded",
+  "Network Error": "Network Error",
+  "The report is not generated yet, plese revisite the page in few minutes!": "The report is not generated yet, plese revisite the page in few minutes!",
+  "Data not found": "Data not found",
+  "Address city required": "Address city required",
+  "Passwords do not match": "Passwords do not match",
+  "Password must be at least 6 characters": "Password must be at least 6 characters",
+  "Email invalid": "Email invalid"
+}

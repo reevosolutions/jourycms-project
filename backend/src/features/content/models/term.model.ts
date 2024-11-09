@@ -65,9 +65,9 @@ const TermSchemaFields: StrictSchemaDefinition<Omit<_Entity, '_id' | 'created_at
   /**
    * Inherited from ICreatable
    */
-  app: { type: String, required: true },
+  app: { type: String, required: false, default: null },
   company: { type: String, default: null },
-  created_by: { type: Schema.Types.String, required: true },
+  created_by: { type: Schema.Types.String, required: false, default: null },
   created_by_original_user: {
     type: _UserSnapshotSchemaFields,
     default: null

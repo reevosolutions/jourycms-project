@@ -56,5 +56,5 @@ exports._ItemUpdateSchemaFields = new mongoose_1.Schema({
         _id: false,
         default: []
     }
-});
+}, { _id: false });
 //# sourceMappingURL=snapshots.model.js.map

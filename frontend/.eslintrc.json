@@ -21,6 +21,7 @@
     "unicorn/no-document-cookie": "off",
     "unicorn/prefer-global-this": "off",
     "unicorn/explicit-length-check": "warn",
+    "unicorn/prefer-string-replace-all": "warn",
     "unicorn/prevent-abbreviations": [
       "warn",
       {

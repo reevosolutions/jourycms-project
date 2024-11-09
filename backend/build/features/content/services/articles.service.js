@@ -63,6 +63,7 @@ const general_mappers_1 = require("../../../utils/mappers/general.mappers");
 const article_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/article.sanitizers"));
 const article_validators_1 = __importDefault(require("../../../utils/validators/article.validators"));
 const article_model_1 = require("../models/article.model");
+const slugify_utilities_1 = require("../../../utilities/strings/slugify.utilities");
 /**
  * @description
  */
@@ -130,6 +131,32 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
          * Return the search meta
          */
         return Object.values(search_meta).filter(s => !!s).join(' ').replaceAll('  ', ' ').trim();
+    }
+    async _generateSlug(title, slug) {
+        const scenario = this.initScenario(this.logger, this._generateSlug, { title, slug });
+        try {
+            let value = slug || (0, slugify_utilities_1.slugify)(title);
+            let retries = 0;
+            let exists = true;
+            while (exists) {
+                const res = await this.articleModel.exists({ slug: value });
+                exists = !!res;
+                if (exists) {
+                    retries++;
+                    value = (0, slugify_utilities_1.slugify)(title) + '-' + retries;
+                }
+            }
+            scenario.set({
+                slug: value,
+                retries
+            });
+            scenario.end();
+            return value;
+        }
+        catch (error) {
+            scenario.error(error);
+            throw error;
+        }
     }
     /**
      * @description Apply filters based on the auth data
@@ -206,6 +233,14 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             q = filter.q;
             totalQ = filter.totalQ;
         }
+        // -- slug
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.slug, 'slug');
+        q = filter.q;
+        totalQ = filter.totalQ;
+        // -- article_type
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.article_type, 'article_type');
+        q = filter.q;
+        totalQ = filter.totalQ;
         // -- tracking_id
         if (article_model_1.ArticleSchemaFields['tracking_id']) {
             filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['tracking_id'], 'tracking_id');
@@ -354,6 +389,58 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     /**
+    * @description getBySlug
+    */
+    async getBySlug(slug, authData, opt = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }) {
+        try {
+            /**
+             * Fill options argument with the defaults
+             */
+            opt = (0, utils_helpers_1.defaults)(opt, {
+                load_deleted: false,
+                dont_lean: false,
+                ignore_not_found_error: false,
+            });
+            /**
+             * Define the execution scenario object
+             */
+            const scenario = {};
+            const q = this.articleModel.findOne({ slug });
+            /**
+             * @description Lean the query else if needed to not do so
+             */
+            if (!opt.dont_lean)
+                q.lean();
+            const doc = await q.exec();
+            if (!doc)
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+            /**
+             * Check if the document is deleted and the user does not want to load deleted documents
+             */
+            if (doc.is_deleted && !opt.load_deleted)
+                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
+            /**
+            * Check if the user can view the object
+            */
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
+            const result = {
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+            };
+            /**
+             * Log execution result before returning the result
+             */
+            this.logExecutionResult(this.getById, result, authData, scenario);
+            return result;
+        }
+        catch (error) {
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+                return { data: undefined };
+            this.logError(this.getById, error);
+            throw error;
+        }
+    }
+    /**
      * @description Create
      */
     async create({ data }, authData, opt) {
@@ -392,7 +479,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             /**
              * Create data object
              */
-            const docObject = Object.assign({}, data);
+            const docObject = Object.assign(Object.assign({}, data), { slug: await this._generateSlug(data.title, data.slug) });
             /**
              * Create tracking ID
              */

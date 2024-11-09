@@ -7,6 +7,8 @@
 
 import { Router } from 'express';
 import contentAppController from '../features/content/api/index';
+import storageAppController from '../features/storage/api/index';
+// import authAppController from '../features/storage/api/index';
 
 // guaranteed to get dependencies
 export default (): Router => {
@@ -16,6 +18,8 @@ export default (): Router => {
 	 * Always inject the export controller.
 	 */
 	contentAppController(app);
+	storageAppController(app);
+	// authAppController(app);
 	return app;
 };
 

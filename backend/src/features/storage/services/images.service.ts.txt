@@ -1,0 +1,44 @@
+import * as textToImage from "text-to-image";
+import sharp from 'sharp';
+import { Router, Request, Response, NextFunction } from 'express';
+import config from '../config';
+import Container, { Service, Inject } from 'typedi';
+import { EventDispatcher, EventDispatcherInterface } from '../decorators/eventDispatcher.decorator';
+import {events} from '../config';
+import { Types } from 'mongoose';
+import FilesService from './files.service';
+import { Logger } from 'winston';
+import path from 'path';
+import fs from 'fs';
+import downloadRemoteFile from '../utils/download-remote-file';
+import exceptions from '../exceptions';
+import initLogger, { LoggerService } from '../utils/logger';
+import axios from '../lib/levelup-http-client';
+import { last } from "lodash";
+
+@Service()
+export default class ImagesService {
+
+  private logger: LoggerService
+  constructor(
+    @Inject('uploadedFileModel') private uploadedFileModel: Models.UploadedFileModel,
+    @EventDispatcher() private eventDispatcher: EventDispatcherInterface,
+  ) {
+    this.logger = initLogger("SERVICE", this.constructor.name);
+    this.logger.event("CONSTRUCTOR");
+  }
+
+  public async GetFile(id: string): Promise<Entities.IUploadedFile | null> {
+    try {
+      this.logger.silly('getting file from database');
+
+      const file = await this.uploadedFileModel.findById(id);
+      return file || null;
+
+    } catch (e) {
+      // this.logger.error(e);
+      throw e;
+    }
+  }
+
+}

@@ -20,13 +20,23 @@
     ],
     "paths": {
       "@/*": ["./src/*"],
-      "@lib/*": ["./src/lib/*"],
       "@config/*": ["./src/config/*"],
       "@ui/*": ["./src/components/ui/*"],
       "@components/*": ["./src/components/*"],
       "@styles/*": ["./src/styles/*"],
-      "@fonts/*": ["./src/styles/fonts/*"]
-    }
+      "@fonts/*": ["./src/styles/fonts/*"],
+      "@features/*": ["./src/features/*"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@redux/*": ["./src/lib/redux/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@utilities/*": ["./src/lib/utilities/*"]
+    },
+    "typeRoots": [
+      "./node_modules/@types",
+      "./node_modules/jourycms-sdk/typings",
+      "./typings",
+      "../sdk/typings"
+    ]
   },
   "include": [
     "next-env.d.ts",
@@ -34,7 +44,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "typings/**/*.ts",
-    "../sdk/typings/**/*.ts",
+    "./node_modules/jourycms-sdk/typings",
+    "../sdk/typings/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

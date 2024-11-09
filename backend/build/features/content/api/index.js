@@ -45,7 +45,7 @@ const translation_namespaces_controller_1 = __importDefault(require("../controll
 const translation_projects_controller_1 = __importDefault(require("../controllers/translation.projects.controller"));
 const translation_tools_controller_1 = __importDefault(require("../controllers/translation.tools.controller"));
 const logging_1 = __importStar(require("../../../utilities/logging"));
-const requests_1 = require("src/utilities/requests");
+const requests_1 = require("../../../utilities/requests");
 const logger = (0, logging_1.default)(logging_1.LoggerContext.CONTROLLER, "ContentController");
 exports.ROOT_PATH = '/content';
 // guaranteed to get dependencies
