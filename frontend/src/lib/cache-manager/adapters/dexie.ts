@@ -6,15 +6,15 @@ export type AuthEntityType = JouryCMS_AuthEntityType;
 export type AuthEntity<E extends AuthEntityType> = E extends "user"
   ? Levelup.CMS.V1.Users.Entity.ExposedUser & { entity?: "user" }
   : E extends "original_user"
-  ? {
-    token: string;
-    refresh_token: string;
-    user: Levelup.CMS.V1.Users.Entity.ExposedUser & { entity?: "user" };
-    entity?: "original_user";
-  }
-  : E extends "app"
-  ? Levelup.CMS.V1.System.Entity.App & { entity?: "app" }
-  : never;
+    ? {
+        token: string;
+        refresh_token: string;
+        user: Levelup.CMS.V1.Users.Entity.ExposedUser & { entity?: "user" };
+        entity?: "original_user";
+      }
+    : E extends "app"
+      ? Levelup.CMS.V1.System.Entity.App & { entity?: "app" }
+      : never;
 
 type WithEntityKey<T> = T & { entity: AuthEntityType };
 
@@ -24,16 +24,14 @@ type WithEntityKey<T> = T & { entity: AuthEntityType };
 export type JouryCMS_AuthEntityDatum =
   | WithEntityKey<Levelup.CMS.V1.Users.Entity.ExposedUser>
   | WithEntityKey<{
-    token: string;
-    refresh_token: string;
-    user: Levelup.CMS.V1.Users.Entity.ExposedUser & { entity?: "user" };
-  }>
-  | WithEntityKey<Levelup.CMS.V1.System.Entity.App>
-  ;
+      token: string;
+      refresh_token: string;
+      user: Levelup.CMS.V1.Users.Entity.ExposedUser & { entity?: "user" };
+    }>
+  | WithEntityKey<Levelup.CMS.V1.System.Entity.App>;
 /* -------------------------------------------------------------------------- */
 /*                                  Pharmadz                                  */
 /* -------------------------------------------------------------------------- */
-
 
 /* -------------------------------------------------------------------------- */
 /*                                   MERGED                                   */
@@ -51,15 +49,21 @@ export default class JouryCMS_DexieDatabase extends Dexie {
   apps!: Dexie.Table<Levelup.CMS.V1.System.Entity.App, string>;
   // content
   articleTypes!: Dexie.Table<Levelup.CMS.V1.Content.Entity.ArticleType, string>;
-  states!: Dexie.Table<{
-    code: string;
-    name: string;
-  }, string>;
-  cities!: Dexie.Table<{
-    state_code: string;
-    code: string;
-    name: string;
-  }, string>;
+  states!: Dexie.Table<
+    {
+      code: string;
+      name: string;
+    },
+    string
+  >;
+  cities!: Dexie.Table<
+    {
+      state_code: string;
+      code: string;
+      name: string;
+    },
+    string
+  >;
 
   constructor(name: string, version: number) {
     super(name);

@@ -7,20 +7,20 @@ export async function fetchRemoteFileAsBlob(url: string): Promise<Blob> {
 
     return await response.blob();
   } catch (error) {
-    console.error('Error fetching remote file:', error);
+    console.error("Error fetching remote file:", error);
     throw error;
   }
 }
 
 export async function createFileObjectFromRemote(
   url: string,
-  filename: string
+  filename: string,
 ): Promise<File> {
   try {
     const blob = await fetchRemoteFileAsBlob(url);
     return new File([blob], filename);
   } catch (error) {
-    console.error('Error creating File object:', error);
+    console.error("Error creating File object:", error);
     throw error;
   }
 }

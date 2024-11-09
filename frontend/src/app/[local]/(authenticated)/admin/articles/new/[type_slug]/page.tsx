@@ -1,4 +1,3 @@
-
 import { adminRoutes } from "@/config";
 import AdminLayout from "@/features/admin/layout";
 import PostForm from "@/features/admin/post-editor/forms/post-form/post.form";
@@ -13,12 +12,11 @@ const PARENT_ROUTE =
     : undefined;
 const QUERY_ID = ROUTE.path;
 
-
 type PageProps = {
   params: Promise<{
     type_slug: string;
-  }>
-}
+  }>;
+};
 
 export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
@@ -41,7 +39,7 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   /*                                   NETHODS                                  */
   /* -------------------------------------------------------------------------- */
-  
+
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
@@ -50,7 +48,7 @@ export default async function Page({ params }: PageProps) {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <AdminLayout.PageLayout >
+    <AdminLayout.PageLayout>
       <PostForm articleType_slug={type_slug} />
     </AdminLayout.PageLayout>
   );

@@ -1,10 +1,16 @@
 {
   "folders": [
     {
-      "path": "."
+      "path": "../levelup-project/lup-storage"
     },
     {
-      "path": "../levelup-project/lup-storage"
+      "path": "frontend"
+    },
+    {
+      "path": "backend"
+    },
+    {
+      "path": "sdk"
     }
   ],
   "settings": {

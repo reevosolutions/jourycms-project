@@ -1,5 +1,8 @@
 import { Calendar } from "@/components/ui/calendar";
-import { SidebarGroup, SidebarGroupContent } from "@/components/ui/customized.sidebar";
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+} from "@/components/ui/customized.sidebar";
 
 export function DatePicker() {
   return (

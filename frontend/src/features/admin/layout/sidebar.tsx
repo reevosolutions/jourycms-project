@@ -53,7 +53,9 @@ const AdminSidebar: React.FC<Props> = () => {
     } = {};
 
     for (const routeKey of Object.keys(adminRoutes)) {
-      if (typeof adminRoutes[routeKey as keyof typeof adminRoutes] === "function") {
+      if (
+        typeof adminRoutes[routeKey as keyof typeof adminRoutes] === "function"
+      ) {
         const slotResult: ReturnType<
           Levelup.CMS.V1.UI.Routes.TMenuSlot<Levelup.CMS.V1.UI.Routes.TMenuSlotName>
         > = (adminRoutes[routeKey as keyof typeof adminRoutes] as any)();
@@ -62,8 +64,9 @@ const AdminSidebar: React.FC<Props> = () => {
          * TODO: Add more slot handlers here
          */
         if (slotResult.slot === "articleTypes") {
-          const types = mock.content.seedTypes() as Levelup.CMS.V1.Content.Entity.ArticleType[];
-          logger.value('seed', types);
+          const types =
+            mock.content.seedTypes() as Levelup.CMS.V1.Content.Entity.ArticleType[];
+          logger.value("seed", types);
           const res = await slotResult.result(types);
           _routes = { ..._routes, ...res };
         }
@@ -109,9 +112,11 @@ const AdminSidebar: React.FC<Props> = () => {
             <Collapsible key={key} className="group/collapsible">
               <SidebarGroup>
                 <SidebarGroupLabel asChild>
-                  <CollapsibleTrigger className="text-start text-base font-bold text-primary-700 hocus:text-primary-900  hover:text-primary-900 hover:bg-primary-100 transition-all duration-200">
+                  <CollapsibleTrigger className="text-start text-base font-bold text-primary-700 transition-all duration-200 hover:bg-primary-100 hover:text-primary-900 hocus:text-primary-900">
                     <span className="flex items-center gap-3 text-base font-bold text-text-600">
-                      {route.icon && <route.icon className="w-5 h-5 opacity-50" />}
+                      {route.icon && (
+                        <route.icon className="h-5 w-5 opacity-50" />
+                      )}
                       <span>{route.menuTitle || route.title}</span>
                     </span>
                     <LuChevronDown className="ms-auto transition-transform group-data-[state=open]/collapsible:rotate-180" />
@@ -126,7 +131,9 @@ const AdminSidebar: React.FC<Props> = () => {
                           <SidebarMenuItem key={subKey}>
                             <Link href={subRoute.path}>
                               <SidebarMenuButton>
-                                {subRoute.icon && <subRoute.icon className="opacity-50" />}
+                                {subRoute.icon && (
+                                  <subRoute.icon className="opacity-50" />
+                                )}
                                 <span>
                                   {subRoute.menuTitle || subRoute.title}
                                 </span>

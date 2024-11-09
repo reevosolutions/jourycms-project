@@ -1,14 +1,15 @@
 import ImageUploader from "@/features/storage/form-components/image.uploader";
 import { useSdk } from "@/hooks/use-sdk";
 import initLogger, { LoggerContext } from "@/lib/logging";
-import Image from 'next/image';
-import React from 'react';
+import Image from "next/image";
+import React from "react";
 
-const logger = initLogger(LoggerContext.COMPONENT, 'ImageCustomField');
+const logger = initLogger(LoggerContext.COMPONENT, "ImageCustomField");
 
-type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'image'> & {
-  image_ratio: number;
-};
+type Props =
+  Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"image"> & {
+    image_ratio: number;
+  };
 
 const ImageCustomField: React.FC<Props> = ({
   label,
@@ -17,9 +18,8 @@ const ImageCustomField: React.FC<Props> = ({
   onChange,
   options,
   default_value,
-  image_ratio = 1/1
+  image_ratio = 1 / 1,
 }) => {
-
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -35,7 +35,6 @@ const ImageCustomField: React.FC<Props> = ({
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
 
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
@@ -43,12 +42,12 @@ const ImageCustomField: React.FC<Props> = ({
   return (
     <ImageUploader
       value={value}
-      onUpload={(file) => {
+      onUpload={file => {
         logger.value("File uploaded", file);
         onChange({
           id: file._id,
           url: sdk.storage.utils.getFileUrl(file._id),
-        })
+        });
       }}
       onRemove={() => {
         logger.value("File removed");
@@ -61,21 +60,17 @@ const ImageCustomField: React.FC<Props> = ({
         height: 400 * image_ratio,
       }}
       placeholder={
-        <div className="flex w-full justify-center text-center ">
-          <Image src="/cms/assets/svg/upload-image.svg" width={100} height={100} alt="upload" />
+        <div className="flex w-full justify-center text-center">
+          <Image
+            src="/cms/assets/svg/upload-image.svg"
+            width={100}
+            height={100}
+            alt="upload"
+          />
         </div>
       }
     />
-
-
-
-
   );
-
 };
 
-
 export default ImageCustomField;
-
-
-

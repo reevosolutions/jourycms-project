@@ -8,8 +8,7 @@ import Toolbar from "./toolbar.tiptap";
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { useEffect } from "react";
 
-
-const logger = initLogger(LoggerContext.COMPONENT, 'tiptap');
+const logger = initLogger(LoggerContext.COMPONENT, "tiptap");
 
 type Props = {
   onChange: ({
@@ -23,8 +22,11 @@ type Props = {
   defaultContent: string;
 };
 
-const Tiptap: React.FC<Props> = ({ onChange, content, defaultContent = '' }) => {
-
+const Tiptap: React.FC<Props> = ({
+  onChange,
+  content,
+  defaultContent = "",
+}) => {
   const editor = useEditor({
     immediatelyRender: false,
     extensions: [StarterKit, Underline],
@@ -40,7 +42,7 @@ const Tiptap: React.FC<Props> = ({ onChange, content, defaultContent = '' }) => 
         json: editor.getJSON(),
       });
     },
-    content: content || '',
+    content: content || "",
   });
 
   useEffect(() => {
@@ -48,7 +50,7 @@ const Tiptap: React.FC<Props> = ({ onChange, content, defaultContent = '' }) => 
       editor.commands.setContent(defaultContent);
     }
   }, [defaultContent]);
-  
+
   return (
     <div className="w-full">
       <Toolbar editor={editor} content={content} />

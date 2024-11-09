@@ -4,7 +4,7 @@ import AdminLayout from "@/features/admin/layout";
 import PostForm from "@/features/admin/post-editor/forms/post-form/post.form";
 import { Tiptap } from "@/features/editors/tiptap";
 import React, { useCallback, useState } from "react";
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 import { adminRoutes } from "@/config";
 import { getRouteTree } from "@/lib/routes";
 import { count } from "console";
@@ -19,7 +19,6 @@ const PARENT_ROUTE =
     ? ROUTE_PARENTS[ROUTE_PARENTS.length - 2]
     : undefined;
 const QUERY_ID = ROUTE.path;
-
 
 export default function Page() {
   /* -------------------------------------------------------------------------- */
@@ -39,14 +38,12 @@ export default function Page() {
     queryFn: async () => {
       const data = await sdk.content.articleTypes.list({
         count: -1,
-        filters: {
-
-        }
+        filters: {},
       });
 
       return data;
     },
-  })
+  });
 
   /* -------------------------------------------------------------------------- */
   /*                                   NETHODS                                  */
@@ -55,9 +52,7 @@ export default function Page() {
     for (const type of mock.content.seedTypes()) {
       try {
         await sdk.content.articleTypes.create({ data: type });
-      } catch (error) {
-
-      }
+      } catch (error) {}
     }
     refetch();
   }, []);
@@ -66,13 +61,12 @@ export default function Page() {
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
 
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout title="New post">
-      <div className="flex gap-2 justify-end">
+      <div className="flex justify-end gap-2">
         <Button onClick={() => refetch()}>Refresh</Button>
         <Button onClick={() => seedData()}>Seed</Button>
       </div>

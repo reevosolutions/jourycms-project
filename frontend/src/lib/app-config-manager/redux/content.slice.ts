@@ -1,4 +1,4 @@
-  import AppConfigManager from "@lib/app-config-manager";
+import AppConfigManager from "@lib/app-config-manager";
 import initLogger from "@lib/logging";
 import { createAppSlice } from "@redux/create-app-slice";
 
@@ -35,7 +35,7 @@ export const slice = createAppSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
-  reducers: (create) => ({
+  reducers: create => ({
     load: create.asyncThunk<Partial<SliceState>, boolean>(
       async (forceLoadFormServer = true): Promise<Partial<SliceState>> => {
         try {
@@ -45,11 +45,11 @@ export const slice = createAppSlice({
           logger.value("manager.getContentData.data", data);
           return data
             ? {
-              ...data,
-              lastUpdated: (data.lastUpdated || new Date()).toString(),
-              isLoaded: true,
-              status: "idle",
-            }
+                ...data,
+                lastUpdated: (data.lastUpdated || new Date()).toString(),
+                isLoaded: true,
+                status: "idle",
+              }
             : { ...initialState, status: "failed" };
         } catch (error: any) {
           logger.error(error.message, error);
@@ -59,7 +59,7 @@ export const slice = createAppSlice({
         }
       },
       {
-        pending: (state) => {
+        pending: state => {
           logger.debug("load", "pending", {
             ...state,
           });
@@ -76,23 +76,24 @@ export const slice = createAppSlice({
           state.states = payload.states || [];
           state.cities = payload.cities || [];
         },
-        rejected: (state) => {
+        rejected: state => {
           logger.error("load", "rejected", {
             state,
           });
           state.status = "failed";
         },
-      }
+      },
     ),
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
-    selectStatus: (state) => state.status,
-    selectArticleTypes: (state) => state.articleTypes,
-    selectStates: (state) => state.states,
-    selectCities: (state) => state.cities,
-    selectStateCities: (state, state_code: string) => state.cities.filter((i) => (i.state_code = state_code)),
+    selectStatus: state => state.status,
+    selectArticleTypes: state => state.articleTypes,
+    selectStates: state => state.states,
+    selectCities: state => state.cities,
+    selectStateCities: (state, state_code: string) =>
+      state.cities.filter(i => (i.state_code = state_code)),
   },
 });
 
@@ -100,4 +101,10 @@ export const slice = createAppSlice({
 export const { load: loadContentConfig } = slice.actions;
 
 // Selectors returned by `slice.selectors` take the root state as their first argument.
-export const { selectStatus, selectCities, selectArticleTypes, selectStateCities, selectStates } = slice.selectors;
+export const {
+  selectStatus,
+  selectCities,
+  selectArticleTypes,
+  selectStateCities,
+  selectStates,
+} = slice.selectors;

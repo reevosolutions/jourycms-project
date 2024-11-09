@@ -19,14 +19,20 @@ const AppConfigLoader: React.FC<Props> = () => {
 
   const cache = useCache();
 
-  const current = useLiveQuery(() => cache.db?.current.where("entity").equals("user").toArray() as PromiseExtended<AuthEntityDatum[]>);
+  const current = useLiveQuery(
+    () =>
+      cache.db?.current
+        .where("entity")
+        .equals("user")
+        .toArray() as PromiseExtended<AuthEntityDatum[]>,
+  );
 
   const loadAppConfig = useCallback(
     (forceLoadFormServer: boolean = false) => {
       dispatch(loadContentConfig(true));
       dispatch(loadAuthenticationConfig(forceLoadFormServer));
     },
-    [dispatch]
+    [dispatch],
   );
 
   useEffect(() => {
@@ -42,7 +48,9 @@ const AppConfigLoader: React.FC<Props> = () => {
     loadAppConfig(forceLoadFormServer);
   }, [current, loadAppConfig]);
 
-  const loaded = useAppSelector((state) => state.authentication.status === "idle");
+  const loaded = useAppSelector(
+    state => state.authentication.status === "idle",
+  );
   const [state, setState] = useState<"loading" | "show">("loading");
 
   useEffect(() => {

@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-
-const logger = initLogger(LoggerContext.FORM, 'article');
+const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -42,27 +41,18 @@ const PostListFilter: React.FC<PostListProps> = ({ articleType_slug }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {
-
-  }, []);
+  const loadExtraData = useCallback(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
-  useEffect(() => {
-  }, []);
-
-
+  useEffect(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
 
-  return (
-    <div className="form-group upcms-form">
-
-    </div>
-  );
+  return <div className="form-group upcms-form"></div>;
 };
 
 export default PostListFilter;

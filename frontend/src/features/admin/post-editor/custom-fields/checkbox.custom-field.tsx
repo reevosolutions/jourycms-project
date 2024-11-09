@@ -1,15 +1,16 @@
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/customized.form';
+} from "@/components/ui/customized.form";
 import { Label } from "@/components/ui/label";
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback, useEffect } from "react";
 
-type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'checkbox'>;
+type Props =
+  Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"checkbox">;
 
 const CheckboxCustomField: React.FC<Props> = ({
   label,
@@ -17,9 +18,8 @@ const CheckboxCustomField: React.FC<Props> = ({
   value,
   onChange,
   options,
-  default_value
+  default_value,
 }) => {
-
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -45,29 +45,27 @@ const CheckboxCustomField: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col gap-2 py-2">
-      {options.choices.map((item) => (
+      {options.choices.map(item => (
         <div key={item.value} className="flex items-center gap-3">
-          <FormLabel className="font-normal flex items-center gap-3 w-full cursor-pointer">
-            <FormControl >
+          <FormLabel className="flex w-full cursor-pointer items-center gap-3 font-normal">
+            <FormControl>
               <Checkbox
                 className="rounded-xxs"
                 checked={selected.includes(item.value)}
-                onCheckedChange={(checked) => {
-                  const value = checked ? [...selected, item.value] : selected.filter((value) => value !== item.value);
+                onCheckedChange={checked => {
+                  const value = checked
+                    ? [...selected, item.value]
+                    : selected.filter(value => value !== item.value);
                   onChange(value);
                 }}
               />
             </FormControl>
-            <span>
-              {item.label}
-            </span>
+            <span>{item.label}</span>
           </FormLabel>
         </div>
       ))}
     </div>
   );
-
 };
-
 
 export default CheckboxCustomField;

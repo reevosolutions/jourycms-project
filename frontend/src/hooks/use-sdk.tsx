@@ -1,4 +1,7 @@
-import JouryCMSSdk, { initSdk, LevelupClientAppApiCallHeaders } from "jourycms-sdk";
+import JouryCMSSdk, {
+  initSdk,
+  LevelupClientAppApiCallHeaders,
+} from "jourycms-sdk";
 import config from "@config/index";
 import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 
@@ -25,7 +28,9 @@ export async function levelupApiCallHeadersInjector(): Promise<LevelupClientAppA
   return headers;
 }
 
-export async function refreshTokenHandler(sdk: Levelup.CMS.V1.SDK.ISdk): Promise<void> {
+export async function refreshTokenHandler(
+  sdk: Levelup.CMS.V1.SDK.ISdk,
+): Promise<void> {
   const authManager = AuthenticationManager.getInstance();
   const authData = await authManager.getAuthData();
   const refreshToken = await authManager.loadRefreshToken();
@@ -51,6 +56,6 @@ export function initSdkForLevelupClientApp(id: string = "DEFAULT") {
       headersInjector: levelupApiCallHeadersInjector,
       refreshTokenHandler: refreshTokenHandler,
     },
-    id
+    id,
   );
 }

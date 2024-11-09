@@ -1,10 +1,10 @@
-'use client';
-import Icons from '@/features/admin/ui/icons';
-import useCMSContent from '@/hooks/use-cms-content';
-import { multiLinesToHTML } from '@/lib/utilities/strings/html.utilities';
-import Link from 'next/link';
-import * as React from 'react';
-import { useState, useEffect } from 'react';
+"use client";
+import Icons from "@/features/admin/ui/icons";
+import useCMSContent from "@/hooks/use-cms-content";
+import { multiLinesToHTML } from "@/lib/utilities/strings/html.utilities";
+import Link from "next/link";
+import * as React from "react";
+import { useState, useEffect } from "react";
 
 const socialLinks = {
   facebook: "#",
@@ -16,10 +16,7 @@ const socialLinks = {
   linkedIn: "#",
 } as const;
 
-
-export type LayoutProps = JouryCMS.Theme.ComponentProps & {
-
-}
+export type LayoutProps = JouryCMS.Theme.ComponentProps & {};
 
 const Footer: React.FC<LayoutProps> = ({ children }) => {
   /* -------------------------------------------------------------------------- */
@@ -31,8 +28,6 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
 
-
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
@@ -40,59 +35,88 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
     <div className="jcms-footer bg-darkblue-950 text-white">
       <div className="grid grid-cols-1 lg:grid-cols-3">
         {/* about */}
-        <div className="py-6 lg:py-16 px-6 flex items-center justify-center bg-darkblue-900">
+        <div className="flex items-center justify-center bg-darkblue-900 px-6 py-6 lg:py-16">
           <div className="d">
-            <h2 className="text-8xl text-center  font-bold">{getWebsiteConfig()?.name}</h2>
+            <h2 className="text-center text-8xl font-bold">
+              {getWebsiteConfig()?.name}
+            </h2>
 
-            <div className="text-white text-lg mt-4 w-80" dangerouslySetInnerHTML={{ __html: multiLinesToHTML(getWebsiteConfig()?.description || '') }} />
+            <div
+              className="mt-4 w-80 text-lg text-white"
+              dangerouslySetInnerHTML={{
+                __html: multiLinesToHTML(getWebsiteConfig()?.description || ""),
+              }}
+            />
 
-            <div className="flex items-center gap-8 text-white mt-16">
+            <div className="mt-16 flex items-center gap-8 text-white">
               <b className="text-2xl">تجدنا على</b>
               <div className="flex items-center gap-4">
-                {getWebsiteConfig()?.social_links?.map((network) => (
-                  network.url ? <a target='_blank' key={network.network} href={network.url} className=" text-darkblue-900 bg-white p-2 hocus:bg-red2-700 duration-200 transition-all rounded-full">
-                    {
-                      network.network === 'facebook' ? <Icons.Social.Facebook className="w-4 h-4 " />
-                        : network.network === 'instagram' ? <Icons.Social.Instagram className="w-4 h-4 " />
-                          : network.network === 'twitter' ? <Icons.Social.Twitter className="w-4 h-4 " />
-                            : network.network === 'youtube' ? <Icons.Social.Youtube className="w-4 h-4 " />
-                              : network.network === 'pinterest' ? <Icons.Social.Pinterest className="w-4 h-4 " />
-                                : network.network === 'tiktok' ? <Icons.Social.Tiktok className="w-4 h-4 " />
-                                  : network.network === 'linkedin' ? <Icons.Social.LinkedIn className="w-4 h-4 " />
-                                    : null
-                    }
-
-                  </a> : null
-                ))}
-
+                {getWebsiteConfig()?.social_links?.map(network =>
+                  network.url ? (
+                    <a
+                      target="_blank"
+                      key={network.network}
+                      href={network.url}
+                      className="rounded-full bg-white p-2 text-darkblue-900 transition-all duration-200 hocus:bg-red2-700"
+                    >
+                      {network.network === "facebook" ? (
+                        <Icons.Social.Facebook className="h-4 w-4" />
+                      ) : network.network === "instagram" ? (
+                        <Icons.Social.Instagram className="h-4 w-4" />
+                      ) : network.network === "twitter" ? (
+                        <Icons.Social.Twitter className="h-4 w-4" />
+                      ) : network.network === "youtube" ? (
+                        <Icons.Social.Youtube className="h-4 w-4" />
+                      ) : network.network === "pinterest" ? (
+                        <Icons.Social.Pinterest className="h-4 w-4" />
+                      ) : network.network === "tiktok" ? (
+                        <Icons.Social.Tiktok className="h-4 w-4" />
+                      ) : network.network === "linkedin" ? (
+                        <Icons.Social.LinkedIn className="h-4 w-4" />
+                      ) : null}
+                    </a>
+                  ) : null,
+                )}
               </div>
             </div>
           </div>
         </div>
         {/* links */}
-        <div className="py-6 lg:py-24 px-6 flex items-top justify-center bg-darkblue-900">
+        <div className="items-top flex justify-center bg-darkblue-900 px-6 py-6 lg:py-24">
           <div className="d">
-            <h2 className="text-3xl  font-bold">روابط</h2>
+            <h2 className="text-3xl font-bold">روابط</h2>
 
-            <div className="flex text-2xl items-center gap-8 mt-16">
+            <div className="mt-16 flex items-center gap-8 text-2xl">
               <ul>
                 <li className="">
-                  <Link href="/" className="text-white transition-all duration-200 hocus:text-beige-50">
+                  <Link
+                    href="/"
+                    className="text-white transition-all duration-200 hocus:text-beige-50"
+                  >
                     الرئيسية
                   </Link>
                 </li>
                 <li className="">
-                  <Link href="/" className="text-white transition-all duration-200 hocus:text-beige-50">
+                  <Link
+                    href="/"
+                    className="text-white transition-all duration-200 hocus:text-beige-50"
+                  >
                     العروض
                   </Link>
                 </li>
                 <li className="">
-                  <Link href="/" className="text-white transition-all duration-200 hocus:text-beige-50">
+                  <Link
+                    href="/"
+                    className="text-white transition-all duration-200 hocus:text-beige-50"
+                  >
                     المقالات
                   </Link>
                 </li>
                 <li className="">
-                  <Link href="/" className="text-white transition-all duration-200 hocus:text-beige-50">
+                  <Link
+                    href="/"
+                    className="text-white transition-all duration-200 hocus:text-beige-50"
+                  >
                     المنتجات
                   </Link>
                 </li>
@@ -101,36 +125,48 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
         {/* contact */}
-        <div className="py-6 lg:py-24 px-6 flex items-top justify-center bg-darkblue-950 text-darkblue-50">
+        <div className="items-top flex justify-center bg-darkblue-950 px-6 py-6 text-darkblue-50 lg:py-24">
           <div className="d">
-            <h2 className="text-3xl  font-bold">الاتصال بنا</h2>
+            <h2 className="text-3xl font-bold">الاتصال بنا</h2>
 
-            <div className="flex text-2xl flex-col  gap-4 mt-16">
+            <div className="mt-16 flex flex-col gap-4 text-2xl">
               <div className="flex gap-3">
-                <Icons.Marker className="w-6 h-6 text-darkblue-500 mt-1" />
-                <div className="" dangerouslySetInnerHTML={{ __html: multiLinesToHTML(getWebsiteConfig()?.address || '') }} />
-
+                <Icons.Marker className="mt-1 h-6 w-6 text-darkblue-500" />
+                <div
+                  className=""
+                  dangerouslySetInnerHTML={{
+                    __html: multiLinesToHTML(getWebsiteConfig()?.address || ""),
+                  }}
+                />
               </div>
               <div className="flex gap-3">
-                <Icons.Envelope className="w-6 h-6 text-darkblue-500 mt-1" />
+                <Icons.Envelope className="mt-1 h-6 w-6 text-darkblue-500" />
                 <div className="">
-                  <a href={`mailto:${getWebsiteConfig()?.contact_email}`} className="t">{getWebsiteConfig()?.contact_email}</a>
+                  <a
+                    href={`mailto:${getWebsiteConfig()?.contact_email}`}
+                    className="t"
+                  >
+                    {getWebsiteConfig()?.contact_email}
+                  </a>
                 </div>
               </div>
               <div className="flex gap-3">
-                <Icons.Phone className="w-6 h-6 text-darkblue-500 mt-1" />
+                <Icons.Phone className="mt-1 h-6 w-6 text-darkblue-500" />
                 <div className="">
-                  <a href={`tel:${getWebsiteConfig()?.contact_phones?.[0]}`} className="t">{getWebsiteConfig()?.contact_phones?.[0]}</a>
+                  <a
+                    href={`tel:${getWebsiteConfig()?.contact_phones?.[0]}`}
+                    className="t"
+                  >
+                    {getWebsiteConfig()?.contact_phones?.[0]}
+                  </a>
                 </div>
               </div>
-
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
-}
-
+  );
+};
 
 export default Footer;

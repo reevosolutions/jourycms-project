@@ -15,7 +15,7 @@ export function isValidAlgerianPhoneNumber(phoneNumber: string): boolean {
   phoneNumber = phoneNumber
     .toString()
     .trim()
-    .replace(/[ .\-/]/g, "");
+    .replaceAll(/[ .\-/]/g, "");
 
   // Define a regular expression pattern for the desired formats
   const pattern = /^(\(?\+\d{1,3}\)?)?\s?0?\d{8,9}$/;
@@ -31,19 +31,24 @@ export function isValidAlgerianPhoneNumber(phoneNumber: string): boolean {
     return true;
   }
 
-  if (phoneNumber.substring(0, 1) !== "0" && isValidAlgerianPhoneNumber(`0${phoneNumber}`)) {
+  if (
+    phoneNumber.slice(0, 1) !== "0" &&
+    isValidAlgerianPhoneNumber(`0${phoneNumber}`)
+  ) {
     return true;
   }
   return result;
 }
 
-export function transformAlgerianPhoneNumberToStandardFormat(phoneNumber: string): string | null {
+export function transformAlgerianPhoneNumberToStandardFormat(
+  phoneNumber: string,
+): string | null {
   if (!phoneNumber) return null;
   // Remove whitespace, dashes, and parentheses
   phoneNumber = phoneNumber
     .toString()
     .trim()
-    .replace(/[ .\-/]/g, "");
+    .replaceAll(/[ .\-/]/g, "");
   // Define a regular expression pattern to match various formats
   const pattern = /(\(?\+\d{1,3}\)?)?\s?0?(\d{8,9})/;
 
@@ -51,11 +56,21 @@ export function transformAlgerianPhoneNumberToStandardFormat(phoneNumber: string
   const transformedNumber = phoneNumber.replace(pattern, "0$2");
 
   // Check if the transformation was successful
-  if (/^0\d{8}$/.test(transformedNumber) && !transformedNumber.startsWith("00")) {
+  if (
+    /^0\d{8}$/.test(transformedNumber) &&
+    !transformedNumber.startsWith("00")
+  ) {
     return transformedNumber;
   }
-  if (/^0\d{9}$/.test(transformedNumber) && !transformedNumber.startsWith("00")) {
-    if (transformedNumber && transformedNumber.substring(0, 1) !== "0" && transformedNumber.length === 9) {
+  if (
+    /^0\d{9}$/.test(transformedNumber) &&
+    !transformedNumber.startsWith("00")
+  ) {
+    if (
+      transformedNumber &&
+      transformedNumber.slice(0, 1) !== "0" &&
+      transformedNumber.length === 9
+    ) {
       return null;
     }
     return transformedNumber;
@@ -64,6 +79,8 @@ export function transformAlgerianPhoneNumberToStandardFormat(phoneNumber: string
   }
 }
 
-export function transformPhoneNumberToStandardFormat(phoneNumber: string): string | null {
+export function transformPhoneNumberToStandardFormat(
+  phoneNumber: string,
+): string | null {
   return transformAlgerianPhoneNumberToStandardFormat(phoneNumber);
 }

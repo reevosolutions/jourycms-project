@@ -15,9 +15,7 @@ export default function Page() {
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout title="New post">
-
       <div className="text-center">building</div>
-
     </AdminLayout.PageLayout>
   );
 }

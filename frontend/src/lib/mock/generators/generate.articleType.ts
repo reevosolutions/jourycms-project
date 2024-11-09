@@ -1,7 +1,7 @@
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { faker } from "@faker-js/faker";
 
-const logger = initLogger(LoggerContext.UTILITY, 'generateArticleTypes');
+const logger = initLogger(LoggerContext.UTILITY, "generateArticleTypes");
 
 export default function generateArticleTypes(count: number) {
   return faker.helpers
@@ -56,7 +56,7 @@ export default function generateArticleTypes(count: number) {
           article_count: faker.number.int({ min: 0, max: 10000 }),
         },
       };
-      logger.value('doc', doc);
+      logger.value("doc", doc);
       return doc;
     });
 }

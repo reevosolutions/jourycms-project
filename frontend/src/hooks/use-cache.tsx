@@ -1,4 +1,4 @@
-import CacheManager from '@lib/cache-manager';
+import CacheManager from "@lib/cache-manager";
 
 const useCache = (): CacheManager => {
   return CacheManager.getInstance();

@@ -1,35 +1,39 @@
 {
   "extends": [
+    "eslint:recommended",
     "next/core-web-vitals",
     "plugin:unicorn/recommended",
     "plugin:import/recommended",
     "plugin:playwright/recommended",
     "plugin:prettier/recommended",
-    "react-hooks",
     "prettier"
+    // "plugin:react-hooks/recommended"
   ],
-  "plugins": ["simple-import-sort"],
+  "plugins": ["simple-import-sort", "react-hooks"],
   "rules": {
     "simple-import-sort/exports": "warn",
     "unicorn/no-array-callback-reference": "warn",
     "unicorn/no-array-for-each": "warn",
     "unicorn/no-array-reduce": "warn",
-    "unicorn/no-null": "warn",
+    "unicorn/no-null": "off",
     "prettier/prettier": "warn",
     "simple-import-sort/imports": "warn",
     "unicorn/prefer-module": "warn",
-    "unicorn/no-negated-condition": "warn",
+    "unicorn/no-negated-condition": "off",
     "unicorn/no-useless-undefined": "warn",
     "unicorn/no-document-cookie": "warn",
     "unicorn/prefer-global-this": "off",
     "unicorn/explicit-length-check": "warn",
     "unicorn/prefer-string-replace-all": "warn",
     "react/display-name": "warn",
-    "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "error",
     "vars-on-top": "warn",
     "react/no-children-prop": "warn",
-
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "error",
+    "unicorn/no-empty-file": "warn",
+    "no-unused-vars": "warn",
+    "no-undef": "warn",
+    "unicorn/no-for-loop": "warn",
     "unicorn/prevent-abbreviations": [
       "warn",
       {

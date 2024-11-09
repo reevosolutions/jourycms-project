@@ -1,20 +1,12 @@
-'use client';
-import * as React from 'react';
-import { useState, useEffect } from 'react';
-import Header from '../components/header';
-import Footer from '../components/footer';
+"use client";
+import * as React from "react";
+import { useState, useEffect } from "react";
+import Header from "../components/header";
+import Footer from "../components/footer";
 
-
-
-export type LayoutProps = JouryCMS.Theme.LayoutProps & {
-
-}
+export type LayoutProps = JouryCMS.Theme.LayoutProps & {};
 
 const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
-
-
-
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
@@ -24,8 +16,7 @@ const DefaultLayout: React.FC<LayoutProps> = ({ children }) => {
       {children}
       <Footer />
     </div>
-  )
-}
-
+  );
+};
 
 export default DefaultLayout;

@@ -35,10 +35,14 @@ export function filterRoutes(
   return filteredRoutes;
 }
 
-
-
-export const getRouteTree = (childNode: Levelup.CMS.V1.UI.Routes.RouteItem, customRoutes: Levelup.CMS.V1.UI.Routes.RouteItems) => {
-  const findParents = (currentNode: Levelup.CMS.V1.UI.Routes.RouteItem, path: Levelup.CMS.V1.UI.Routes.RouteItem[] = []): Levelup.CMS.V1.UI.Routes.RouteItem[] | null => {
+export const getRouteTree = (
+  childNode: Levelup.CMS.V1.UI.Routes.RouteItem,
+  customRoutes: Levelup.CMS.V1.UI.Routes.RouteItems,
+) => {
+  const findParents = (
+    currentNode: Levelup.CMS.V1.UI.Routes.RouteItem,
+    path: Levelup.CMS.V1.UI.Routes.RouteItem[] = [],
+  ): Levelup.CMS.V1.UI.Routes.RouteItem[] | null => {
     const currentPath = [...path, currentNode];
     if (currentNode?.path === childNode.path) {
       return currentPath;
@@ -71,9 +75,13 @@ export const getRouteTree = (childNode: Levelup.CMS.V1.UI.Routes.RouteItem, cust
   return result[0] || [];
 };
 
-
-export const setPathParams = (path: string, params?: { [K: string]: string | null | undefined }) => {
+export const setPathParams = (
+  path: string,
+  params?: { [K: string]: string | null | undefined },
+) => {
   if (!Object.keys(params || {})) return path;
-  return Object.keys(params || {}).reduce((prev, curr) => prev.replaceAll(`:${curr}`, (params as any)[curr]), path);
+  return Object.keys(params || {}).reduce(
+    (prev, curr) => prev.replaceAll(`:${curr}`, (params as any)[curr]),
+    path,
+  );
 };
-

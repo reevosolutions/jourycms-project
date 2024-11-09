@@ -1,7 +1,14 @@
 import config from "@config/index";
 import initLogger, { LoggerService } from "@lib/logging";
-import LevelupDexieDatabase, { AuthEntity, AuthEntityType } from "./adapters/dexie";
-import { NON_INDEXED_FIELDS, applyEncryptionMiddleware, clearAllTables } from "dexie-encrypted";
+import LevelupDexieDatabase, {
+  AuthEntity,
+  AuthEntityType,
+} from "./adapters/dexie";
+import {
+  NON_INDEXED_FIELDS,
+  applyEncryptionMiddleware,
+  clearAllTables,
+} from "dexie-encrypted";
 import EncryptionManager from "@lib/encryption-manager";
 import JouryCMSSdk from "jourycms-sdk";
 
@@ -36,7 +43,10 @@ export default class CacheManager {
   async init() {
     try {
       this.logger.info("Initializing Cache Manager");
-      this._db = new LevelupDexieDatabase(config.cacheManager.dbName, config.cacheManager.dbVersion);
+      this._db = new LevelupDexieDatabase(
+        config.cacheManager.dbName,
+        config.cacheManager.dbVersion,
+      );
 
       /**
        * Apply encryption middleware
@@ -46,11 +56,16 @@ export default class CacheManager {
           acc[table.name] = NON_INDEXED_FIELDS;
           return acc;
         },
-        {} as Record<string, string>
+        {} as Record<string, string>,
       );
 
       if (!FORCE_NO_ENCRYPTION && process.env.NODE_ENV !== "development") {
-        applyEncryptionMiddleware(this._db, this.crypto.getIv(), tableSettings, clearAllTables);
+        applyEncryptionMiddleware(
+          this._db,
+          this.crypto.getIv(),
+          tableSettings,
+          clearAllTables,
+        );
       }
 
       this._db.open();
@@ -68,7 +83,10 @@ export default class CacheManager {
     this.logger.error("Cache Manager Error", error);
   }
 
-  async setCurrentAuthObject<E extends AuthEntityType>(entity: E, data: AuthEntity<E>) {
+  async setCurrentAuthObject<E extends AuthEntityType>(
+    entity: E,
+    data: AuthEntity<E>,
+  ) {
     try {
       await this._db.current.put({
         ...data,
@@ -78,7 +96,9 @@ export default class CacheManager {
       this.handleError(error);
     }
   }
-  async getCurrentAuthObject<E extends AuthEntityType>(entity: E): Promise<AuthEntity<E> | null> {
+  async getCurrentAuthObject<E extends AuthEntityType>(
+    entity: E,
+  ): Promise<AuthEntity<E> | null> {
     try {
       const user = await this._db.current.get(entity);
       if (!user) return null;
@@ -99,7 +119,16 @@ export default class CacheManager {
 
   async clearCurrentAuthData(supp: string[] = []) {
     try {
-      for (const entity of ["original_user", "user", "app", "company", "store", "office", "warehouse", ...supp]) {
+      for (const entity of [
+        "original_user",
+        "user",
+        "app",
+        "company",
+        "store",
+        "office",
+        "warehouse",
+        ...supp,
+      ]) {
         await this._db.current.delete(entity as AuthEntityType);
       }
     } catch (error) {

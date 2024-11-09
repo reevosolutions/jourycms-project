@@ -13,9 +13,9 @@ import {
   getCoreRowModel,
   RowSelectionState,
   useReactTable,
-} from '@tanstack/react-table';
+} from "@tanstack/react-table";
 
-const logger = initLogger(LoggerContext.FORM, 'article');
+const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -30,10 +30,14 @@ import { format } from "date-fns";
 type PostListProps = {
   data: Levelup.CMS.V1.Content.Entity.Article[];
   articleType?: Levelup.CMS.V1.Content.Entity.ArticleType | null;
-  edge?: Levelup.CMS.V1.Content.Api.Articles.List.Response['edge'];
+  edge?: Levelup.CMS.V1.Content.Api.Articles.List.Response["edge"];
 };
 
-const PostListTable: React.FC<PostListProps> = ({ articleType, data, edge }) => {
+const PostListTable: React.FC<PostListProps> = ({
+  articleType,
+  data,
+  edge,
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -60,15 +64,12 @@ const PostListTable: React.FC<PostListProps> = ({ articleType, data, edge }) => 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {
-
-  }, []);
+  const loadExtraData = useCallback(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
-  useEffect(() => {
-  }, []);
+  useEffect(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    TABLE                                   */
@@ -80,19 +81,30 @@ const PostListTable: React.FC<PostListProps> = ({ articleType, data, edge }) => 
         size: 24,
         meta: {
           className: "select-col py-2",
-
         },
-        header: ({ table }) => <Checkbox checked={table.getIsAllRowsSelected()} onChange={table.getToggleAllRowsSelectedHandler()} />,
-        cell: ({ row }) => <Checkbox checked={row.getIsSelected()} disabled={!row.getCanSelect()} onChange={row.getToggleSelectedHandler()} />,
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllRowsSelected()}
+            onChange={table.getToggleAllRowsSelectedHandler()}
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            disabled={!row.getCanSelect()}
+            onChange={row.getToggleSelectedHandler()}
+          />
+        ),
       },
       {
         id: "title",
         header: () => <span className="d">{tLabel("Title")}</span>,
-        cell: (info) => {
+        cell: info => {
           return (
-            <div className="flex gap-1 flex-col py-2 ">
-              <span className="text-sm font-medium text-text-700">{info.row.original.title}</span>
-
+            <div className="flex flex-col gap-1 py-2">
+              <span className="text-sm font-medium text-text-700">
+                {info.row.original.title}
+              </span>
             </div>
           );
         },
@@ -100,49 +112,53 @@ const PostListTable: React.FC<PostListProps> = ({ articleType, data, edge }) => 
       {
         id: "created_at",
         header: () => <span className="d">{tLabel("Created at")}</span>,
-        cell: (info) => {
+        cell: info => {
           return (
-            <span className="text-sm font-medium text-text-700">{format(info.row.original.created_at || new Date(), 'dd-MM-yyyy')}</span>
+            <span className="text-sm font-medium text-text-700">
+              {format(info.row.original.created_at || new Date(), "dd-MM-yyyy")}
+            </span>
           );
         },
       },
       {
         id: "controls",
         header: () => <span className="d"></span>,
-        cell: (info) => {
+        cell: info => {
           return (
-            <div className="flex gap-1 justify-end  py-2 ">
+            <div className="flex justify-end gap-1 py-2">
               <Link
-                href={setPathParams('/:slug', { slug: info.row.original.slug })}
-                className=" text-text-500 hover:text-text-900 duration-200 transition-all p-1"
+                href={setPathParams("/:slug", { slug: info.row.original.slug })}
+                className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
               >
-                <LuEye className="w-5 h5" />
+                <LuEye className="h5 w-5" />
               </Link>
               <Link
-                href={setPathParams(adminRoutes.articles._.edit.path, { id: info.row.original._id })}
-                className=" text-text-500 hover:text-text-900 duration-200 transition-all p-1"
+                href={setPathParams(adminRoutes.articles._.edit.path, {
+                  id: info.row.original._id,
+                })}
+                className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
               >
-                <LuPencil className="w-5 h5" />
+                <LuPencil className="h5 w-5" />
               </Link>
               <Link
-                href={'#'}
-                className=" text-red-500 hover:text-red-700 duration-200 transition-all p-1"
+                href={"#"}
+                className="p-1 text-red-500 transition-all duration-200 hover:text-red-700"
               >
-                <LuTrash2 className="w-5 h5" />
+                <LuTrash2 className="h5 w-5" />
               </Link>
             </div>
           );
         },
-      }
+      },
     ],
-    []
+    [],
   );
 
   const table = useReactTable({
     data: data || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
-    getRowId: (row) => row._id,
+    getRowId: row => row._id,
     onRowSelectionChange: setRowSelection, //hoist up the row selection state to your own scope
     state: {
       rowSelection, //pass the row selection state back to the table instance
@@ -155,7 +171,7 @@ const PostListTable: React.FC<PostListProps> = ({ articleType, data, edge }) => 
 
   return (
     <div className="form-group upcms-table upcms-posts-table">
-      <TanstackTable id={'post-list'} table={table} />
+      <TanstackTable id={"post-list"} table={table} />
     </div>
   );
 };

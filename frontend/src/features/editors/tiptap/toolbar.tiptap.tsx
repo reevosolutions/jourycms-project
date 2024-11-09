@@ -50,7 +50,7 @@ const Toolbar = ({ editor }: Props) => {
     return null;
   }
   return (
-    <div className="border-text-200 flex w-full flex-wrap items-start justify-between gap-5 rounded-tl-md rounded-tr-md border px-3 py-2">
+    <div className="flex w-full flex-wrap items-start justify-between gap-5 rounded-tl-md rounded-tr-md border border-text-200 px-3 py-2">
       <div className="flex w-full flex-wrap items-center justify-start gap-3 lg:w-10/12">
         <ToolbarButton
           onClick={() => {

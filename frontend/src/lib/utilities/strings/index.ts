@@ -10,10 +10,17 @@ import { flatten } from "lodash";
  * @param str string to split
  * @returns {string[]}
  */
-export const splitString = (str: string, use_plus_character: boolean = true): string[] => {
-  return flatten(flatten(flatten(str.split(",").map((v) => v.split("/"))).map((v) => v.split(";"))).map((v) => (use_plus_character ? v.split("+") : v)))
-    .map((v) => v.trim())
-    .filter((v) => !!v);
+export const splitString = (
+  str: string,
+  use_plus_character: boolean = true,
+): string[] => {
+  return flatten(
+    flatten(
+      flatten(str.split(",").map(v => v.split("/"))).map(v => v.split(";")),
+    ).map(v => (use_plus_character ? v.split("+") : v)),
+  )
+    .map(v => v.trim())
+    .filter(v => !!v);
 };
 
 export const stringToBoolean = (str: string): boolean => {
@@ -56,7 +63,7 @@ export const isNumeric = (val: string) => {
   return !isNaN(val as unknown as number);
 };
 
-export const abbreviateNumber: (n: number) => string = (n) => {
+export const abbreviateNumber: (n: number) => string = n => {
   function rnd(num: number, precision: number) {
     const prec = 10 ** precision;
     return Math.round(num * prec) / prec;
@@ -123,7 +130,9 @@ export const formatBytes = (bytes: number, decimals: number = 2): string => {
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i];
+  return (
+    parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]
+  );
 };
 
 export const generateSlug = async (title: string): Promise<string> => {
@@ -188,7 +197,14 @@ export function pluralize(word: string): string {
   if (word.endsWith("ing")) {
     // Words ending with 's' or 'es', return the word as is
     return word;
-  } else if (word.endsWith("y") && !word.endsWith("ay") && !word.endsWith("ey") && !word.endsWith("oy") && !word.endsWith("uy") && !word.endsWith("iy")) {
+  } else if (
+    word.endsWith("y") &&
+    !word.endsWith("ay") &&
+    !word.endsWith("ey") &&
+    !word.endsWith("oy") &&
+    !word.endsWith("uy") &&
+    !word.endsWith("iy")
+  ) {
     // Words ending with 'y', replace 'y' with 'ies'
     return word.slice(0, -1) + "ies";
   } else {
@@ -210,7 +226,11 @@ export function singularize(word: string): string {
   }
 }
 
-export function replaceAll(input: string, search: string, replace: string): string {
+export function replaceAll(
+  input: string,
+  search: string,
+  replace: string,
+): string {
   const regex = new RegExp(search, "g");
   return input.replace(regex, replace);
 }
@@ -219,14 +239,21 @@ export function buildUserFullName(
   names?: {
     first_name?: string | null;
     family_name?: string | null;
-  } | null
+  } | null,
 ): string {
   return `${names?.family_name || ""} ${names?.first_name || ""}`.trim();
 }
 
-export const formatAmount = (x: number, separator: string = ",", decimals: number = 2): string => {
+export const formatAmount = (
+  x: number,
+  separator: string = ",",
+  decimals: number = 2,
+): string => {
   const str = x.toFixed(decimals).split(".");
-  const part1 = str[0].replace(/\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g, `$2${separator}$1`);
+  const part1 = str[0].replace(
+    /\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g,
+    `$2${separator}$1`,
+  );
   return str.length === 2 ? `${part1}.${str[1]}` : part1;
 };
 
@@ -240,9 +267,10 @@ export const formatNotificationSpace = (
     role?: string;
     role_group?: Levelup.V2.Auth.Entity.TRoleGroup;
     parcelStatus?: Levelup.V2.Shipping.Entity.TParcelStatus;
-  }
+  },
 ): string | null => {
-  if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false)) return null;
+  if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
+    return null;
   return space
     .replace("[COMPANY]", infos.company || "")
     .replace("[OFFICE]", infos.office || "")

@@ -34,11 +34,9 @@ const geistMono = localFont({
 });
 const hammah = localFont({
   src: "../styles/fonts/ArbFONTS-Ara_Hamah_Sahet_AlAssi.ttf",
-  weight: '100 600 700',
+  weight: "100 600 700",
   variable: "--font-hammah",
-  
 });
-
 
 export const metadata: Metadata = {
   applicationName: appConfig.APP_NAME,
@@ -92,10 +90,10 @@ export default async function RootLayout({
   params: { locale, lang },
 }: Readonly<{
   children: React.ReactNode;
-  params: { locale: string, lang: string };
+  params: { locale: string; lang: string };
 }>) {
-  locale = locale ?? 'ar';
-  logger.value("LOCALE", {locale, lang});
+  locale = locale ?? "ar";
+  logger.value("LOCALE", { locale, lang });
 
   const { t, resources } = await initTranslations(locale, i18nNamespaces);
 
@@ -176,9 +174,15 @@ export default async function RootLayout({
         <meta name="msapplication-TileImage" content="/ms-icon-144x144.png" />
         <meta name="theme-color" content="#ffffff" />
       </head>
-      <body className={`${inter.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}>
+      <body
+        className={`${inter.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
+      >
         <ReactQueryDevtoolsProvider>
-          <TranslationsProvider namespaces={i18nNamespaces} locale={locale} resources={resources}>
+          <TranslationsProvider
+            namespaces={i18nNamespaces}
+            locale={locale}
+            resources={resources}
+          >
             <StoreProvider>
               {/* <ThemeLoader /> */}
               <ProvideFirestore>

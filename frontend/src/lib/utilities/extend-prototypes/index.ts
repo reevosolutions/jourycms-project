@@ -1,3 +1,3 @@
-import './string.prototype';
+import "./string.prototype";
 
-console.log('Prototyping extended', 'sadasd');
+console.log("Prototyping extended", "sadasd");

@@ -1,5 +1,11 @@
 import { AiFillCloseCircle, AiOutlineHome } from "react-icons/ai";
-import { BiLineChart, BiPieChartAlt2, BiPrinter, BiReset, BiTrash } from "react-icons/bi";
+import {
+  BiLineChart,
+  BiPieChartAlt2,
+  BiPrinter,
+  BiReset,
+  BiTrash,
+} from "react-icons/bi";
 import {
   BsApple,
   BsBookmarkCheck,
@@ -14,15 +20,49 @@ import {
   BsPinterest,
   BsTwitterX,
   BsUpcScan,
-  BsYoutube
+  BsYoutube,
 } from "react-icons/bs";
 import { CgMenuLeftAlt } from "react-icons/cg";
-import { FaFacebookF, FaFemale, FaMale, FaMinusCircle, FaRegUser } from "react-icons/fa";
-import { FaBoxesStacked, FaEnvelope, FaPeopleCarryBox, FaUser } from "react-icons/fa6";
-import { FiCheck, FiInstagram, FiMinusCircle, FiPlus, FiSave } from "react-icons/fi";
-import { GiBoxUnpacking, GiMoneyStack, GiPerspectiveDiceSixFacesRandom } from "react-icons/gi";
-import { GoDesktopDownload, GoPasskeyFill, GoStop, GoTag } from "react-icons/go";
-import { GrAttachment, GrDetach, GrLineChart, GrResume, GrSend, GrShieldSecurity, GrSystem } from "react-icons/gr";
+import {
+  FaFacebookF,
+  FaFemale,
+  FaMale,
+  FaMinusCircle,
+  FaRegUser,
+} from "react-icons/fa";
+import {
+  FaBoxesStacked,
+  FaEnvelope,
+  FaPeopleCarryBox,
+  FaUser,
+} from "react-icons/fa6";
+import {
+  FiCheck,
+  FiInstagram,
+  FiMinusCircle,
+  FiPlus,
+  FiSave,
+} from "react-icons/fi";
+import {
+  GiBoxUnpacking,
+  GiMoneyStack,
+  GiPerspectiveDiceSixFacesRandom,
+} from "react-icons/gi";
+import {
+  GoDesktopDownload,
+  GoPasskeyFill,
+  GoStop,
+  GoTag,
+} from "react-icons/go";
+import {
+  GrAttachment,
+  GrDetach,
+  GrLineChart,
+  GrResume,
+  GrSend,
+  GrShieldSecurity,
+  GrSystem,
+} from "react-icons/gr";
 import {
   HiArrowDown,
   HiArrowLeft,
@@ -49,30 +89,62 @@ import {
   HiUserGroup,
 } from "react-icons/hi";
 import { HiUserCircle } from "react-icons/hi2";
-import { ImArrowDown, ImArrowLeft, ImArrowRight, ImArrowUp, ImAttachment, ImEye, ImPhone, ImPieChart } from "react-icons/im";
-import { IoIosCopy, IoIosWarning, IoMdHelpCircle, IoMdStar, IoMdStarOutline } from "react-icons/io";
+import {
+  ImArrowDown,
+  ImArrowLeft,
+  ImArrowRight,
+  ImArrowUp,
+  ImAttachment,
+  ImEye,
+  ImPhone,
+  ImPieChart,
+} from "react-icons/im";
+import {
+  IoIosCopy,
+  IoIosWarning,
+  IoMdHelpCircle,
+  IoMdStar,
+  IoMdStarOutline,
+} from "react-icons/io";
 import {
   IoCalendarOutline,
   IoCamera,
-  IoCloudUploadOutline, IoCodeSlash, IoLinkOutline,
-  IoList, IoLogoTiktok, IoPauseSharp,
-  IoPlayOutline
+  IoCloudUploadOutline,
+  IoCodeSlash,
+  IoLinkOutline,
+  IoList,
+  IoLogoTiktok,
+  IoPauseSharp,
+  IoPlayOutline,
 } from "react-icons/io5";
 import { LiaRobotSolid } from "react-icons/lia";
 import { LuSearchX, LuSettings2 } from "react-icons/lu";
 import {
   MdAddShoppingCart,
-  MdCheckCircle, MdClose, MdError, MdErrorOutline,
+  MdCheckCircle,
+  MdClose,
+  MdError,
+  MdErrorOutline,
   MdFilterList,
   MdManageSearch,
   MdOutlineFilterListOff,
   MdProductionQuantityLimits,
   MdSelectAll,
   MdSettings,
-  MdTimer
+  MdTimer,
 } from "react-icons/md";
-import { PiChartLineUpBold, PiTable, PiTreeStructureBold } from "react-icons/pi";
-import { RiComputerLine, RiFolderSettingsFill, RiLinkedinFill, RiRestTimeFill, RiShieldUserFill } from "react-icons/ri";
+import {
+  PiChartLineUpBold,
+  PiTable,
+  PiTreeStructureBold,
+} from "react-icons/pi";
+import {
+  RiComputerLine,
+  RiFolderSettingsFill,
+  RiLinkedinFill,
+  RiRestTimeFill,
+  RiShieldUserFill,
+} from "react-icons/ri";
 import { SiAdblock } from "react-icons/si";
 import { TbApps } from "react-icons/tb";
 import { VscGroupByRefType, VscUngroupByRefType } from "react-icons/vsc";
@@ -270,6 +342,5 @@ const Icons = {
     Pending: MdTimer,
   },
 };
-
 
 export default Icons;

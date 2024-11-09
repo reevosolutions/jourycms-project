@@ -26,7 +26,7 @@ export const slice = createAppSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
-  reducers: (create) => ({
+  reducers: create => ({
     load: create.asyncThunk<Partial<SliceState>, boolean>(
       async (forceLoadFormServer = false): Promise<Partial<SliceState>> => {
         try {
@@ -49,7 +49,7 @@ export const slice = createAppSlice({
         }
       },
       {
-        pending: (state) => {
+        pending: state => {
           logger.debug("load", "pending", {
             ...state,
           });
@@ -65,21 +65,21 @@ export const slice = createAppSlice({
           state.roles = payload.roles || [];
           state.permissions = payload.permissions || [];
         },
-        rejected: (state) => {
+        rejected: state => {
           logger.error("load", "rejected", {
             state,
           });
           state.status = "failed";
         },
-      }
+      },
     ),
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
-    selectStatus: (state) => state.status,
-    selectRoles: (state) => state.roles,
-    selectPermissions: (state) => state.permissions,
+    selectStatus: state => state.status,
+    selectRoles: state => state.roles,
+    selectPermissions: state => state.permissions,
   },
 });
 

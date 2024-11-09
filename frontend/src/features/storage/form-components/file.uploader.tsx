@@ -23,7 +23,8 @@ export const PREDEFINED_ACCEPTED_FILES = {
   },
   word: {
     "application/msword": [],
-    "application/vnd.openxmlformats-officedocument.wordprocessingml.document": [],
+    "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      [],
   },
   pdf: {
     "application/pdf": [],
@@ -73,19 +74,24 @@ type Props<IsMulti extends boolean = true> = {
   canUpload?: boolean;
   autoUpload?: boolean;
   showUploadButton?: boolean;
-  defaultValue?: IsMulti extends true ? Levelup.CMS.V1.Storage.Entity.UploadedFile[] : Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
+  defaultValue?: IsMulti extends true
+    ? Levelup.CMS.V1.Storage.Entity.UploadedFile[]
+    : Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
   /**
    * Memoise this function using useCallback to avoid unnecessary re-renders
    */
   onChange?: IsMulti extends true
-  ? (value: {
-    files: UploadFileDatum[];
-    uploaded: {
-      index: number;
-      dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile;
-    }[];
-  }) => void
-  : (value: { file: UploadFileDatum | null; dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile | null }) => void;
+    ? (value: {
+        files: UploadFileDatum[];
+        uploaded: {
+          index: number;
+          dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile;
+        }[];
+      }) => void
+    : (value: {
+        file: UploadFileDatum | null;
+        dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
+      }) => void;
 
   onMoveFile?: (prevIndex: number, currIndex: number) => void;
   content?: React.ReactNode;
@@ -117,24 +123,25 @@ const FileUploader = <IsMulti extends boolean = true>({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [fileInfos, setFileInfos] = useState<any[]>([]);
 
-  const { getRootProps, getInputProps, isDragActive, isDragReject } = useDropzone({
-    accept,
-    multiple,
-    onDrop: (acceptedFiles) => {
-      const files: UploadFileDatum[] = acceptedFiles.map((file) =>
-        Object.assign(file, {
-          preview: URL.createObjectURL(file),
-          previewRevoked: false,
-          error: null,
-          status: "not_uploaded" as const,
-          percentage: 0,
-          dbRecord: null,
-        })
-      );
-      logger.debug("calling on change...");
-      setSelectedFiles((old) => (multiple ? [...old, ...files] : files));
-    },
-  });
+  const { getRootProps, getInputProps, isDragActive, isDragReject } =
+    useDropzone({
+      accept,
+      multiple,
+      onDrop: acceptedFiles => {
+        const files: UploadFileDatum[] = acceptedFiles.map(file =>
+          Object.assign(file, {
+            preview: URL.createObjectURL(file),
+            previewRevoked: false,
+            error: null,
+            status: "not_uploaded" as const,
+            percentage: 0,
+            dbRecord: null,
+          }),
+        );
+        logger.debug("calling on change...");
+        setSelectedFiles(old => (multiple ? [...old, ...files] : files));
+      },
+    });
 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
@@ -142,53 +149,58 @@ const FileUploader = <IsMulti extends boolean = true>({
   const upload = useCallback(
     async (idx: number, file: UploadFileDatum) => {
       try {
-        const { data } = await sdk.storage.upload(file, (event: AxiosProgressEvent) => {
-          const percentage = Math.round((100 * event.loaded) / (event.total || 1));
-          logger.event("PROGRESS", file.name, percentage);
-          setSelectedFiles((old) =>
-            [...old].map((file, index) =>
-              index === idx
-                ? Object.assign(file, {
-                  percentage,
-                  status: percentage === 100 ? "uploaded" : "uploading",
-                })
-                : file
-            )
-          );
-        });
+        const { data } = await sdk.storage.upload(
+          file,
+          (event: AxiosProgressEvent) => {
+            const percentage = Math.round(
+              (100 * event.loaded) / (event.total || 1),
+            );
+            logger.event("PROGRESS", file.name, percentage);
+            setSelectedFiles(old =>
+              [...old].map((file, index) =>
+                index === idx
+                  ? Object.assign(file, {
+                      percentage,
+                      status: percentage === 100 ? "uploaded" : "uploading",
+                    })
+                  : file,
+              ),
+            );
+          },
+        );
 
-        setSelectedFiles((old) =>
+        setSelectedFiles(old =>
           [...old].map((file, index) =>
             index === idx
               ? Object.assign(file, {
-                dbRecord: data?.files[0] || null,
-                status: "uploaded",
-              })
-              : file
-          )
+                  dbRecord: data?.files[0] || null,
+                  status: "uploaded",
+                })
+              : file,
+          ),
         );
       } catch (error) {
         logger.error("Catched upload error", error);
-        setSelectedFiles((old) =>
+        setSelectedFiles(old =>
           old.map((file, index) =>
             index === idx
               ? Object.assign(file, {
-                status: "failed",
-                error: error as any,
-              })
-              : file
-          )
+                  status: "failed",
+                  error: error as any,
+                })
+              : file,
+          ),
         );
       }
     },
-    [sdk.storage]
+    [sdk.storage],
   );
 
   const uploadFiles = useCallback(
     (files: UploadFileDatum[]) => {
       logger.event(
         "Uploading files",
-        files.map((file) => file.name)
+        files.map(file => file.name),
       );
       for (let i = 0; i < files.length; i++) {
         if (files[i].status === "not_uploaded") {
@@ -197,12 +209,17 @@ const FileUploader = <IsMulti extends boolean = true>({
         } else logger.debug("Ignoring file", files[i].name, files[i].status);
       }
     },
-    [upload]
+    [upload],
   );
 
   const loadServerFile = useCallback(
-    async (dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile): Promise<UploadFileDatum> => {
-      const file = await createFileObjectFromRemote(sdk.storage.getFileUrl(dbRecord._id), dbRecord.file_name);
+    async (
+      dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile,
+    ): Promise<UploadFileDatum> => {
+      const file = await createFileObjectFromRemote(
+        sdk.storage.getFileUrl(dbRecord._id),
+        dbRecord.file_name,
+      );
       return Object.assign(file, {
         preview: "",
         previewRevoked: true,
@@ -212,14 +229,14 @@ const FileUploader = <IsMulti extends boolean = true>({
         dbRecord,
       });
     },
-    [sdk.storage]
+    [sdk.storage],
   );
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
   useEffect(() => {
     logger.debug("Selected files updated", selectedFiles);
-    selectedFiles.forEach((file) => {
+    selectedFiles.forEach(file => {
       if (!file.previewRevoked) URL.revokeObjectURL(file.preview);
     });
     if (autoUpload) uploadFiles(selectedFiles);
@@ -231,7 +248,7 @@ const FileUploader = <IsMulti extends boolean = true>({
             dbRecord: file.dbRecord,
             index,
           }))
-          .filter((v) => v.dbRecord !== null) as any[],
+          .filter(v => v.dbRecord !== null) as any[],
       };
       logger.event("Calling onChange", value);
       if (multiple) {
@@ -247,13 +264,25 @@ const FileUploader = <IsMulti extends boolean = true>({
 
   useEffect(() => {
     logger.event("CHARGING DEFAULT VALUE FILES");
-    const values: Levelup.CMS.V1.Storage.Entity.UploadedFile[] = defaultValue instanceof Array ? defaultValue : defaultValue ? [defaultValue] : [];
-    const injectedFiles = [...selectedFiles.filter((f) => f.status === "uploaded").map((f) => f.dbRecord?._id), ...deletedFiles];
-    if (values.filter((v) => !injectedFiles.includes(v._id)).length) {
-      const promises = values.filter((v) => !injectedFiles.includes(v._id)).map((v) => loadServerFile(v));
-      Promise.all(promises).then((result) => {
+    const values: Levelup.CMS.V1.Storage.Entity.UploadedFile[] =
+      defaultValue instanceof Array
+        ? defaultValue
+        : defaultValue
+          ? [defaultValue]
+          : [];
+    const injectedFiles = [
+      ...selectedFiles
+        .filter(f => f.status === "uploaded")
+        .map(f => f.dbRecord?._id),
+      ...deletedFiles,
+    ];
+    if (values.filter(v => !injectedFiles.includes(v._id)).length) {
+      const promises = values
+        .filter(v => !injectedFiles.includes(v._id))
+        .map(v => loadServerFile(v));
+      Promise.all(promises).then(result => {
         logger.value("CHARGING DEFAULT VALUE FILES", result);
-        setSelectedFiles((old) => [...old, ...result]);
+        setSelectedFiles(old => [...old, ...result]);
       });
     }
   }, [defaultValue, loadServerFile, selectedFiles, deletedFiles]);
@@ -261,13 +290,19 @@ const FileUploader = <IsMulti extends boolean = true>({
   return (
     <section
       className={clsx(
-        "rounded-lg border-2 border-dashed text-center ",
-        !isDragActive && "cursor-pointer border-gray-200   text-gray-500",
-        isDragActive && !isDragReject && "cursor-grab border-sky-200 bg-sky-50   text-sky-500",
-        isDragReject && "cursor-not-allowed border-red-200 bg-red-50   text-red-500"
+        "rounded-lg border-2 border-dashed text-center",
+        !isDragActive && "cursor-pointer border-gray-200 text-gray-500",
+        isDragActive &&
+          !isDragReject &&
+          "cursor-grab border-sky-200 bg-sky-50 text-sky-500",
+        isDragReject &&
+          "cursor-not-allowed border-red-200 bg-red-50 text-red-500",
       )}
     >
-      <div {...getRootProps({ className: "dropzone" })} className="cursor-pointer rounded-lg p-6">
+      <div
+        {...getRootProps({ className: "dropzone" })}
+        className="cursor-pointer rounded-lg p-6"
+      >
         <input {...getInputProps()} />
         {content}
         <p className={clsx("p-6")}>
@@ -287,7 +322,7 @@ const FileUploader = <IsMulti extends boolean = true>({
               {file.status === "failed" ? (
                 <Tooltip overlay={tError(file.error?.message || "")}>
                   <span className="h-7 w-7 rounded-full text-red-500">
-                    <Icons.Alert.ErrorOutline className="h-7 w-7 " />
+                    <Icons.Alert.ErrorOutline className="h-7 w-7" />
                   </span>
                 </Tooltip>
               ) : file.percentage === 100 ? (
@@ -296,13 +331,24 @@ const FileUploader = <IsMulti extends boolean = true>({
                 </span>
               ) : (
                 <span className="h-7 w-7 rounded-full p-0">
-                  <svg className="h-7 w-7 -rotate-90 ">
-                    <circle className="text-gray-200" strokeWidth="3" stroke="currentColor" fill="transparent" r="11" cx="14" cy="14" />
+                  <svg className="h-7 w-7 -rotate-90">
+                    <circle
+                      className="text-gray-200"
+                      strokeWidth="3"
+                      stroke="currentColor"
+                      fill="transparent"
+                      r="11"
+                      cx="14"
+                      cy="14"
+                    />
                     <circle
                       className="text-blue-500"
                       strokeWidth="3"
                       strokeDasharray={11 * 2 * Math.PI}
-                      strokeDashoffset={11 * 2 * Math.PI - ((file.percentage || 0) / 100) * (11 * 2 * Math.PI)}
+                      strokeDashoffset={
+                        11 * 2 * Math.PI -
+                        ((file.percentage || 0) / 100) * (11 * 2 * Math.PI)
+                      }
                       strokeLinecap="round"
                       stroke="currentColor"
                       fill="transparent"
@@ -315,15 +361,23 @@ const FileUploader = <IsMulti extends boolean = true>({
                 </span>
               )}
 
-              <span className={`flex flex-grow flex-col truncate text-sm ${file.error && " text-red-700"}`}>
+              <span
+                className={`flex flex-grow flex-col truncate text-sm ${file.error && "text-red-700"}`}
+              >
                 <span>{file.name}</span>
-                {file.error && <span className="text-xs text-red-500">{file.error.message}</span>}
+                {file.error && (
+                  <span className="text-xs text-red-500">
+                    {file.error.message}
+                  </span>
+                )}
               </span>
 
               <button
-                onClick={(e) => {
-                  setDeletedFiles((old) => [...old, file.dbRecord?._id || ""]);
-                  setSelectedFiles((old) => [...old].filter((f, i) => i !== index));
+                onClick={e => {
+                  setDeletedFiles(old => [...old, file.dbRecord?._id || ""]);
+                  setSelectedFiles(old =>
+                    [...old].filter((f, i) => i !== index),
+                  );
                 }}
                 className="cursor-pointer text-red-300 hocus:text-red-600"
               >
@@ -336,7 +390,11 @@ const FileUploader = <IsMulti extends boolean = true>({
 
       {canUpload && !autoUpload ? (
         <aside className="flex justify-center p-4">
-          <Button className="btn btn-primary" disabled={!selectedFiles.length} onClick={() => uploadFiles(selectedFiles)}>
+          <Button
+            className="btn btn-primary"
+            disabled={!selectedFiles.length}
+            onClick={() => uploadFiles(selectedFiles)}
+          >
             {tLabel("Upload")}
           </Button>
         </aside>

@@ -4,7 +4,11 @@ import config from "@config/index";
 import { firebaseConfig } from "@config/firebase.config";
 import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
 import { Auth, getAuth } from "firebase/auth";
-import { enableIndexedDbPersistence, Firestore, getFirestore } from "firebase/firestore";
+import {
+  enableIndexedDbPersistence,
+  Firestore,
+  getFirestore,
+} from "firebase/firestore";
 
 import { getMessaging, Messaging } from "firebase/messaging";
 import initLogger, { LoggerContext, LoggerService } from "@lib/logging";
@@ -48,7 +52,7 @@ export default class FirebaseManager {
           .then(() => {
             console.log("persistance enabled");
           })
-          .catch((err) => {
+          .catch(err => {
             if (err.code == "failed-precondition") {
               // Multiple tabs open, persistence can only be enabled
               // in one tab at a a time.
@@ -71,7 +75,7 @@ export default class FirebaseManager {
             .then(() => {
               console.log("persistance enabled");
             })
-            .catch((err) => {
+            .catch(err => {
               if (err.code == "failed-precondition") {
                 // Multiple tabs open, persistence can only be enabled
                 // in one tab at a a time.

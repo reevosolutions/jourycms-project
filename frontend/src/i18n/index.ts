@@ -18,7 +18,12 @@ const ITEMS_SENT_BACKEND: {
   [key: string]: true;
 } = {};
 
-export default async function initTranslations(locale: string, namespaces: string[], i18nInstance?: i18n, resources?: Resource) {
+export default async function initTranslations(
+  locale: string,
+  namespaces: string[],
+  i18nInstance?: i18n,
+  resources?: Resource,
+) {
   logger.value("LOCALE", locale);
 
   i18nInstance =
@@ -48,7 +53,14 @@ export default async function initTranslations(locale: string, namespaces: strin
     },
     saveMissing: true,
     updateMissing: true,
-    missingKeyHandler: (lngs: readonly string[], ns: string, key: string, fallbackValue: string, updateMissing: boolean, options: any) => {
+    missingKeyHandler: (
+      lngs: readonly string[],
+      ns: string,
+      key: string,
+      fallbackValue: string,
+      updateMissing: boolean,
+      options: any,
+    ) => {
       const lang = options.lng || locale;
 
       // logger.warn("i18n MISSING KEY", { lngs, ns, key, fallbackValue, updateMissing, options, lang });
@@ -58,20 +70,23 @@ export default async function initTranslations(locale: string, namespaces: strin
         const hash = `levelup:${ns}:${key}`;
         if (ITEMS_SENT_BACKEND[hash]) return;
         axios
-          .post(`${config.sdk.baseURL}/cm/api/v2/translation/tools/missing-key`, {
-            data: {
-              project: "levelup",
-              default_language: "en",
-              languages: lngs,
-              namespace: ns,
-              key,
+          .post(
+            `${config.sdk.baseURL}/cm/api/v2/translation/tools/missing-key`,
+            {
+              data: {
+                project: "levelup",
+                default_language: "en",
+                languages: lngs,
+                namespace: ns,
+                key,
+              },
             },
-          })
-          .then((response) => {
+          )
+          .then(response => {
             // logger.success("MISSING KEY", response.data);
             ITEMS_SENT_BACKEND[hash] = true;
           })
-          .catch((error) => {});
+          .catch(error => {});
       } catch (error) {}
     },
   });

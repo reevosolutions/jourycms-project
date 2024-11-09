@@ -118,7 +118,7 @@ export class LoggerService {
       LoggerService.muted[this.context][this.contextId] ||
       LoggerService.muted[this.context]["all"]
     ) {
-      console.log('muted');
+      console.log("muted");
       return;
     }
     const label = `${moment().format("HH:mm:ss,SSS").gray} ${colors.bold(`[${this.context}:${this.contextId}]`.gray)} ${

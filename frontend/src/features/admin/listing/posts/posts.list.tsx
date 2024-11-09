@@ -7,8 +7,7 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-
-const logger = initLogger(LoggerContext.FORM, 'article');
+const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -22,7 +21,10 @@ type PostListProps = {
   showTitle?: boolean;
 };
 
-const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true }) => {
+const PostList: React.FC<PostListProps> = ({
+  articleType_slug,
+  showTitle = true,
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -36,18 +38,33 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
-  const [articleType, setArticleType] = useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
+  const [articleType, setArticleType] =
+    useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
   const [filteredItems, setFilteredItems] = useState<EntityAlias[]>([]);
   const [items, setItems] = useState<EntityAlias[]>([]);
   const [count, setCount] = useState(24);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [fields, setFields] = useState<Levelup.CMS.V1.Utils.Api.Request.TProjectableFields<EntityAlias>[]>(['title', 'slug', 'body', 'article_type', 'meta_fields', 'created_at', 'updated_at', 'published_at', 'is_featured', 'is_published', 'featured_image']);
+  const [search, setSearch] = useState("");
+  const [fields, setFields] = useState<
+    Levelup.CMS.V1.Utils.Api.Request.TProjectableFields<EntityAlias>[]
+  >([
+    "title",
+    "slug",
+    "body",
+    "article_type",
+    "meta_fields",
+    "created_at",
+    "updated_at",
+    "published_at",
+    "is_featured",
+    "is_published",
+    "featured_image",
+  ]);
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
   const articleTypeQuery = useQuery({
-    queryKey: ['articleType', articleType_slug],
+    queryKey: ["articleType", articleType_slug],
     enabled: !!articleType_slug,
     queryFn: async () => {
       if (articleType_slug) {
@@ -60,12 +77,11 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
   });
 
   const { data, error, refetch, isFetching, isFetched } = useQuery({
-    queryKey: ['articleType', articleType, search, page, count, fields],
+    queryKey: ["articleType", articleType, search, page, count, fields],
     enabled: !!articleType,
 
     queryFn: async () => {
       if (articleType) {
-
         const data = await sdk.content.articles.list({
           count: count,
           page: page,
@@ -77,7 +93,6 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
         });
         return data;
       }
-
     },
   });
 
@@ -88,9 +103,7 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {
-
-  }, []);
+  const loadExtraData = useCallback(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
@@ -107,8 +120,7 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
     setFilteredItems(items);
   }, [items]);
 
-
-  logger.value('filteredItems', filteredItems);
+  logger.value("filteredItems", filteredItems);
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
@@ -122,9 +134,11 @@ const PostList: React.FC<PostListProps> = ({ articleType_slug, showTitle = true 
               {articleType?.labels.list || tLabel("Posts")}
             </h1>
           )}
-          <Listing.Posts.PostListTable articleType={articleType} data={filteredItems} />
+          <Listing.Posts.PostListTable
+            articleType={articleType}
+            data={filteredItems}
+          />
         </section>
-
       </div>
     </div>
   );

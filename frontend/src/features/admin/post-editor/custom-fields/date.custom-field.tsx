@@ -1,26 +1,27 @@
-import { Checkbox } from "@/components/ui/checkbox"
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   FormControl,
   FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/customized.form';
+} from "@/components/ui/customized.form";
 import { Label } from "@/components/ui/label";
-import React, { useState, useCallback, useEffect } from 'react';
-import { format } from "date-fns"
+import React, { useState, useCallback, useEffect } from "react";
+import { format } from "date-fns";
 
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/customized.popover"
+} from "@/components/ui/customized.popover";
 import { LuCalendar } from "react-icons/lu";
 
-type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'date'>;
+type Props =
+  Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"date">;
 
 const DateCustomField: React.FC<Props> = ({
   label,
@@ -28,9 +29,8 @@ const DateCustomField: React.FC<Props> = ({
   value,
   onChange,
   options,
-  default_value
+  default_value,
 }) => {
-
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -46,7 +46,6 @@ const DateCustomField: React.FC<Props> = ({
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
 
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
@@ -57,8 +56,8 @@ const DateCustomField: React.FC<Props> = ({
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start text-left font-normal  rounded-xxs",
-            !value && "text-muted-foreground"
+            "w-[280px] justify-start rounded-xxs text-left font-normal",
+            !value && "text-muted-foreground",
           )}
         >
           <LuCalendar />
@@ -69,16 +68,14 @@ const DateCustomField: React.FC<Props> = ({
         <Calendar
           mode="single"
           selected={value || undefined}
-          onSelect={(value) => {
-            onChange(value || null)
+          onSelect={value => {
+            onChange(value || null);
           }}
           initialFocus
         />
       </PopoverContent>
     </Popover>
   );
-
 };
-
 
 export default DateCustomField;

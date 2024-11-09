@@ -334,7 +334,7 @@ const routes = {
             ac: ["website.manage"] as any[],
             icon: LuPlugZap,
           },
-        }
+        },
       },
     },
   },

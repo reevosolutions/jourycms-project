@@ -6,13 +6,13 @@
 
 export const combineArrays: (
   arg: string[][],
-  separator?: string
-) => string[] = ([head, ...[headTail, ...tailTail]], separator = ' ') => {
-  console.log('combineArrays', { head, headTail, tailTail });
+  separator?: string,
+) => string[] = ([head, ...[headTail, ...tailTail]], separator = " ") => {
+  console.log("combineArrays", { head, headTail, tailTail });
   if (!headTail) return head;
 
   const combined = headTail.reduce((acc, x) => {
-    return acc.concat(head.map((h) => `${h}${separator}${x}`));
+    return acc.concat(head.map(h => `${h}${separator}${x}`));
   }, [] as string[]);
 
   return combineArrays([combined, ...tailTail], separator);
@@ -29,7 +29,7 @@ export const chunkArray = <T>(arr: T[], chunkSize: number): T[][] => {
 export const applyOnChunkedArray = async <T, R>(
   arr: T[] | undefined,
   chunkSize: number,
-  callback: (chArr: T[], chunkIndex: number) => Promise<R>
+  callback: (chArr: T[], chunkIndex: number) => Promise<R>,
 ): Promise<void> => {
   arr = arr || [];
   const chunks = chunkArray(arr, chunkSize);

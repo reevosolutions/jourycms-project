@@ -10,19 +10,36 @@ type Props<TData> = {
   className?: string;
 };
 
-const TanstackTable = <TData extends RowData>({ id, className = "", table, headerGrouped, sortable = true }: Props<TData>) => {
+const TanstackTable = <TData extends RowData>({
+  id,
+  className = "",
+  table,
+  headerGrouped,
+  sortable = true,
+}: Props<TData>) => {
   const { t: tLabel } = useTranslation("label");
   return (
-    <div className={`up-table relative ${id} ${className} ${headerGrouped ? "header-grouped" : ""}`}>
+    <div
+      className={`up-table relative ${id} ${className} ${headerGrouped ? "header-grouped" : ""}`}
+    >
       <table className="w-full table-auto text-left rtl:text-right">
-        <thead className="overflow-hidden text-xs uppercase text-foreground-900">
-          {table.getHeaderGroups().map((headerGroup) => (
+        <thead className="text-foreground-900 overflow-hidden text-xs uppercase">
+          {table.getHeaderGroups().map(headerGroup => (
             <tr key={headerGroup.id} className="">
-              {headerGroup.headers.map((header) => (
-                <th key={header.id} className={`px-2 py-3 ${header.isPlaceholder ? "placeholder" : ""} ${header.id}`} colSpan={header.colSpan} scope="col">
+              {headerGroup.headers.map(header => (
+                <th
+                  key={header.id}
+                  className={`px-2 py-3 ${header.isPlaceholder ? "placeholder" : ""} ${header.id}`}
+                  colSpan={header.colSpan}
+                  scope="col"
+                >
                   {header.isPlaceholder ? null : (
                     <div
-                      className={sortable && header.column.getCanSort() ? "flex cursor-pointer select-none items-center gap-3" : ""}
+                      className={
+                        sortable && header.column.getCanSort()
+                          ? "flex cursor-pointer select-none items-center gap-3"
+                          : ""
+                      }
                       onClick={header.column.getToggleSortingHandler()}
                       title={
                         header.column.getCanSort()
@@ -34,10 +51,17 @@ const TanstackTable = <TData extends RowData>({ id, className = "", table, heade
                           : undefined
                       }
                     >
-                      {flexRender(header.column.columnDef.header, header.getContext())}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
                       {{
-                        asc: <Icons.Chevron.Up className="h-5 w-5 text-foreground-500" />,
-                        desc: <Icons.Chevron.Down className="h-5 w-5 text-foreground-500" />,
+                        asc: (
+                          <Icons.Chevron.Up className="text-foreground-500 h-5 w-5" />
+                        ),
+                        desc: (
+                          <Icons.Chevron.Down className="text-foreground-500 h-5 w-5" />
+                        ),
                       }[header.column.getIsSorted() as string] ?? null}
                     </div>
                   )}
@@ -47,9 +71,12 @@ const TanstackTable = <TData extends RowData>({ id, className = "", table, heade
           ))}
         </thead>
         <tbody>
-          {table.getRowModel().rows.map((row) => (
-            <tr key={row.id} className="border-b border-background-800 bg-background hocus:bg-foreground-100/50">
-              {row.getVisibleCells().map((cell) => (
+          {table.getRowModel().rows.map(row => (
+            <tr
+              key={row.id}
+              className="border-background-800 hocus:bg-foreground-100/50 border-b bg-background"
+            >
+              {row.getVisibleCells().map(cell => (
                 <td key={cell.id} className={`${cell.column.id}`}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>

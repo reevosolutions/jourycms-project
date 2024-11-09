@@ -1,4 +1,14 @@
-import { camelToKebab, capitalizeFirstLetter, kebabToCamel, camelToWords, pluralize, replaceAll, singularize, toSnakeCase, toKebabCase } from "../strings";
+import {
+  camelToKebab,
+  capitalizeFirstLetter,
+  kebabToCamel,
+  camelToWords,
+  pluralize,
+  replaceAll,
+  singularize,
+  toSnakeCase,
+  toKebabCase,
+} from "../strings";
 import {
   isValidPhoneNumber,
   isValidAlgerianPhoneNumber,

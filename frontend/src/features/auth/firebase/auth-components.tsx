@@ -14,7 +14,7 @@ export const FirebaseGoogleAuthButton: React.FC<{}> = () => {
 
     const provider = new GoogleAuthProvider();
     signInWithPopup(auth, provider)
-      .then((result) => {
+      .then(result => {
         logger.success("Google sign in success", result);
 
         // This gives you a Google Access Token. You can use it to access the Google API.
@@ -25,7 +25,7 @@ export const FirebaseGoogleAuthButton: React.FC<{}> = () => {
         // IdP data available using getAdditionalUserInfo(result)
         // ...
       })
-      .catch((error) => {
+      .catch(error => {
         logger.error("Google sign in error", error);
         // Handle Errors here.
         const errorCode = error.code;

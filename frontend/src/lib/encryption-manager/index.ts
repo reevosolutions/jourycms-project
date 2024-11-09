@@ -1,5 +1,5 @@
-import config from '@config/index';
-import initLogger, { LoggerService } from '@lib/logging';
+import config from "@config/index";
+import initLogger, { LoggerService } from "@lib/logging";
 
 export default class EncryptionManager {
   static instance: EncryptionManager;
@@ -16,19 +16,19 @@ export default class EncryptionManager {
   }
 
   private constructor() {
-    this.logger = initLogger('UTILITY', this.constructor.name);
+    this.logger = initLogger("UTILITY", this.constructor.name);
 
     // Generate a key
 
     this._generateIvAndKey()
       .then(() => {
-        this.logger.success('Keys Generated ');
+        this.logger.success("Keys Generated ");
       })
-      .catch((e) => this.logger.error('Keys generation failed', e));
+      .catch(e => this.logger.error("Keys generation failed", e));
   }
 
   private async _generateIvAndKey() {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
     if (this._keysGenerated) return;
     const { secret, passphrase } = config.security.localStorage;
     this._key = await this._stringToCryptoKey(passphrase);
@@ -42,25 +42,25 @@ export default class EncryptionManager {
 
     // Derive a key using the passphrase
     const key = await window.crypto.subtle.importKey(
-      'raw',
+      "raw",
       passphraseBuffer,
-      { name: 'PBKDF2' },
+      { name: "PBKDF2" },
       false,
-      ['deriveKey', 'deriveBits']
+      ["deriveKey", "deriveBits"],
     );
 
     // Export the derived key
     return window.crypto.subtle.deriveKey(
       {
-        name: 'PBKDF2',
+        name: "PBKDF2",
         salt: new Uint8Array(16), // Use a random salt
         iterations: 100000, // Adjust as needed for your security requirements
-        hash: 'SHA-256',
+        hash: "SHA-256",
       },
       key,
-      { name: 'AES-GCM', length: 256 }, // Or other desired parameters
+      { name: "AES-GCM", length: 256 }, // Or other desired parameters
       true,
-      ['encrypt', 'decrypt']
+      ["encrypt", "decrypt"],
     );
   }
 
@@ -86,7 +86,7 @@ export default class EncryptionManager {
   arrayBufferToBase64(buffer: ArrayBuffer): string {
     const binary = String.fromCharCode.apply(
       null,
-      Array.from(new Uint8Array(buffer))
+      Array.from(new Uint8Array(buffer)),
     );
     return btoa(binary);
   }
@@ -108,11 +108,11 @@ export default class EncryptionManager {
 
     const encrypted = await window.crypto.subtle.encrypt(
       {
-        name: 'AES-GCM',
+        name: "AES-GCM",
         iv: this._iv,
       },
       this._key,
-      encoded
+      encoded,
     );
 
     return encrypted;
@@ -123,11 +123,11 @@ export default class EncryptionManager {
       await this._generateIvAndKey();
       const decrypted = await window.crypto.subtle.decrypt(
         {
-          name: 'AES-GCM',
+          name: "AES-GCM",
           iv: this._iv,
         },
         this._key,
-        encrypted
+        encrypted,
       );
 
       const decoded = new TextDecoder().decode(decrypted);
@@ -145,14 +145,14 @@ export default class EncryptionManager {
   async test() {
     try {
       // Encrypt a token
-      const token = 'secret-token';
+      const token = "secret-token";
       const data = await this.encrypt(token);
 
       // Decrypt the token
       const decryptedToken = await this.decrypt(data);
-      console.log('Decrypted token:', decryptedToken);
+      console.log("Decrypted token:", decryptedToken);
     } catch (error) {
-      console.error('Encryption/Decryption error:', error);
+      console.error("Encryption/Decryption error:", error);
     }
   }
 }

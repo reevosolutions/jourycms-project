@@ -1,10 +1,9 @@
-import {
-  FormControl
-} from '@/components/ui/customized.form';
+import { FormControl } from "@/components/ui/customized.form";
 import { Input } from "@/components/ui/input";
-import React from 'react';
+import React from "react";
 
-type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<'number'>;
+type Props =
+  Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"number">;
 
 const NumberCustomField: React.FC<Props> = ({
   label,
@@ -12,9 +11,8 @@ const NumberCustomField: React.FC<Props> = ({
   value,
   onChange,
   options,
-  default_value
+  default_value,
 }) => {
-
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -30,25 +28,22 @@ const NumberCustomField: React.FC<Props> = ({
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
 
-
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
 
   return (
     <div className="flex flex-col gap-2 py-2">
-      <FormControl >
+      <FormControl>
         <Input
-          type='number'
+          type="number"
           className="rounded-xxs bg-body"
-          onChange={(e) => onChange(parseFloat(e.target.value || '') || null)}
+          onChange={e => onChange(parseFloat(e.target.value || "") || null)}
           value={`${value || 0}`}
         />
       </FormControl>
     </div>
   );
-
 };
-
 
 export default NumberCustomField;

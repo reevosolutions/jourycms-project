@@ -25,8 +25,8 @@ export default class AppConfigManager {
     }[];
     lastUpdated?: Date;
   } = {
-      loaded: false,
-    };
+    loaded: false,
+  };
 
   private _authenticationData: {
     loaded: boolean;
@@ -34,8 +34,8 @@ export default class AppConfigManager {
     roles?: Levelup.CMS.V1.Auth.Entity.Role[] | undefined;
     permissions?: Levelup.CMS.V1.Auth.Entity.Permission[] | undefined;
   } = {
-      loaded: false,
-    };
+    loaded: false,
+  };
 
   static getInstance() {
     if (!this.instance) {
@@ -62,7 +62,6 @@ export default class AppConfigManager {
     this.logger.error("Application Config Manager Error", error);
   }
 
-
   /* -------------------------------------------------------------------------- */
   /*                            Authentication cache data                            */
   /* -------------------------------------------------------------------------- */
@@ -76,7 +75,9 @@ export default class AppConfigManager {
       }
 
       // roles
-      let roles = !forceLoadFormServer ? await this.cache.db?.roles.toArray() : [];
+      let roles = !forceLoadFormServer
+        ? await this.cache.db?.roles.toArray()
+        : [];
       if (roles?.length === 0) {
         this.logger.info("roles data not found in cache, fetching from server");
         roles = (
@@ -84,25 +85,32 @@ export default class AppConfigManager {
             count: -1,
           })
         ).data;
-        await applyOnChunkedArray(roles, 50, async (arr) => {
+        await applyOnChunkedArray(roles, 50, async arr => {
           await this.cache.db?.roles.bulkPut(arr || []);
         });
         this.logger.success("roles data loaded from server", roles?.length);
       }
 
       // permissions
-      let permissions = !forceLoadFormServer ? await this.cache.db?.permissions.toArray() : [];
+      let permissions = !forceLoadFormServer
+        ? await this.cache.db?.permissions.toArray()
+        : [];
       if (permissions?.length === 0) {
-        this.logger.info("permissions data not found in cache, fetching from server");
+        this.logger.info(
+          "permissions data not found in cache, fetching from server",
+        );
         permissions = (
           await this.sdk.auth.permissions.list({
             count: -1,
           })
         ).data;
-        await applyOnChunkedArray(permissions, 50, async (arr) => {
+        await applyOnChunkedArray(permissions, 50, async arr => {
           await this.cache.db?.permissions.bulkPut(arr || []);
         });
-        this.logger.success("permissions data loaded from server", permissions?.length);
+        this.logger.success(
+          "permissions data loaded from server",
+          permissions?.length,
+        );
       }
 
       this.logger.info("Authentication data loaded from cache");
@@ -135,8 +143,6 @@ export default class AppConfigManager {
     await this.loadAuthenticationData(forceLoadFormServer);
   }
 
-
-
   /* -------------------------------------------------------------------------- */
   /*                            Content cache data                            */
   /* -------------------------------------------------------------------------- */
@@ -150,31 +156,46 @@ export default class AppConfigManager {
       }
 
       // articleTypes
-      let articleTypes = !forceLoadFormServer ? await this.cache.db?.articleTypes.toArray() : [];
+      let articleTypes = !forceLoadFormServer
+        ? await this.cache.db?.articleTypes.toArray()
+        : [];
       if (articleTypes?.length === 0) {
-        this.logger.info("articleTypes data not found in cache, fetching from server");
+        this.logger.info(
+          "articleTypes data not found in cache, fetching from server",
+        );
         articleTypes = (
           await this.sdk.content.articleTypes.list({
             count: -1,
           })
         ).data;
 
-        await this.cache.db?.articleTypes.bulkPut((articleTypes || []).map((v) => ({ ...v })));
-        this.logger.success("articleTypes data loaded from server", articleTypes?.length);
+        await this.cache.db?.articleTypes.bulkPut(
+          (articleTypes || []).map(v => ({ ...v })),
+        );
+        this.logger.success(
+          "articleTypes data loaded from server",
+          articleTypes?.length,
+        );
       }
 
       // states
-      let states = !forceLoadFormServer ? await this.cache.db?.states.toArray() : [];
+      let states = !forceLoadFormServer
+        ? await this.cache.db?.states.toArray()
+        : [];
       if (states?.length === 0) {
-        this.logger.info("States data not found in cache, fetching from server");
-
+        this.logger.info(
+          "States data not found in cache, fetching from server",
+        );
       }
 
       // cities
-      let cities = !forceLoadFormServer ? await this.cache.db?.cities.toArray() : [];
+      let cities = !forceLoadFormServer
+        ? await this.cache.db?.cities.toArray()
+        : [];
       if (cities?.length === 0) {
-        this.logger.info("Cities data not found in cache, fetching from server");
-
+        this.logger.info(
+          "Cities data not found in cache, fetching from server",
+        );
       }
       this.logger.info("Content data loaded from cache");
 

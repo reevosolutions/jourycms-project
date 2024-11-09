@@ -38,7 +38,10 @@ export default class AuthenticationManager {
 
   async saveAccessToken(token: string) {
     const encryptedToken = await this.crypto.encrypt(token);
-    window?.localStorage.setItem("token", this.crypto.arrayBufferToBase64(encryptedToken));
+    window?.localStorage.setItem(
+      "token",
+      this.crypto.arrayBufferToBase64(encryptedToken),
+    );
   }
   async loadAccessToken() {
     const encryptedToken = window?.localStorage.getItem("token") || null;
@@ -47,11 +50,15 @@ export default class AuthenticationManager {
   }
   async saveRefreshToken(token: string) {
     const encryptedToken = await this.crypto.encrypt(token);
-    window?.localStorage.setItem("refresh.token", this.crypto.arrayBufferToBase64(encryptedToken));
+    window?.localStorage.setItem(
+      "refresh.token",
+      this.crypto.arrayBufferToBase64(encryptedToken),
+    );
   }
 
   async loadRefreshToken() {
-    const encryptedToken = window?.localStorage.getItem("refresh.token") || null;
+    const encryptedToken =
+      window?.localStorage.getItem("refresh.token") || null;
     if (!encryptedToken) return null;
     return this.crypto.decrypt(this.crypto.base64ToArrayBuffer(encryptedToken));
   }
@@ -61,8 +68,13 @@ export default class AuthenticationManager {
     window?.localStorage.removeItem("refresh.token");
   }
 
-
-  async authenticate({ user, token, refresh_token }: Levelup.CMS.V1.Utils.NonUndefined<Levelup.CMS.V1.Auth.Api.Auth.Signin.Response["data"]>) {
+  async authenticate({
+    user,
+    token,
+    refresh_token,
+  }: Levelup.CMS.V1.Utils.NonUndefined<
+    Levelup.CMS.V1.Auth.Api.Auth.Signin.Response["data"]
+  >) {
     let result: {
       isAuthenticated: boolean;
       user: Levelup.CMS.V1.Users.Entity.ExposedUser | null;
@@ -88,14 +100,16 @@ export default class AuthenticationManager {
       await this.saveAccessToken(token);
       await this.saveRefreshToken(refresh_token);
 
-
       // user
       await this.cache.setCurrentAuthObject("user", user);
       // app
-      if (user.app) result.app = ((await this.sdk.system.apps.getById("current")).data as Levelup.CMS.V1.Utils.NonUndefined<typeof result.app>) || null;
+      if (user.app)
+        result.app =
+          ((await this.sdk.system.apps.getById("current"))
+            .data as Levelup.CMS.V1.Utils.NonUndefined<typeof result.app>) ||
+          null;
       if (result.app) await this.cache.setCurrentAuthObject("app", result.app);
       else this.cache.unsetCurrentAuthObject("app");
-
 
       result.user = user;
       result.isAuthenticated = true;
@@ -134,7 +148,7 @@ export default class AuthenticationManager {
     try {
       this.clearTokens();
       await this.cache.clearCurrentAuthData();
-    } catch (error) { }
+    } catch (error) {}
   }
 
   async getAuthData(): Promise<{
@@ -148,11 +162,8 @@ export default class AuthenticationManager {
       isAuthenticated: !!user,
       user,
       app,
-
     };
   }
-
-
 
   async updateCurrentUser(newUser: Levelup.CMS.V1.Users.Entity.ExposedUser) {
     const user = await this.cache.getCurrentAuthObject("user");

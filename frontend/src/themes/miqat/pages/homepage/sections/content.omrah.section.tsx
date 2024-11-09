@@ -1,7 +1,7 @@
-'use client';
-import { ParallaxBanner } from 'react-scroll-parallax';
-import { ParallaxProvider } from 'react-scroll-parallax';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+"use client";
+import { ParallaxBanner } from "react-scroll-parallax";
+import { ParallaxProvider } from "react-scroll-parallax";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useSdk } from "@/hooks/use-sdk";
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { useQuery } from "@tanstack/react-query";
@@ -9,28 +9,28 @@ import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
-
-const logger = initLogger(LoggerContext.FORM, 'article');
+const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import Listing from "..";
 
-import Icons from '@/features/admin/ui/icons';
-import HomepageSearchForm from '@/themes/miqat/components/homepage-search-form';
-import Link from 'next/link';
-import Image from 'next/image';
-import OmrahPostCard from '@/themes/miqat/components/post-card.omrah';
+import Icons from "@/features/admin/ui/icons";
+import HomepageSearchForm from "@/themes/miqat/components/homepage-search-form";
+import Link from "next/link";
+import Image from "next/image";
+import OmrahPostCard from "@/themes/miqat/components/post-card.omrah";
 
-export type HomepageContentOmrahSectionProps = JouryCMS.Theme.ComponentProps & {
-};
+export type HomepageContentOmrahSectionProps =
+  JouryCMS.Theme.ComponentProps & {};
 
-
-const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = ({ children }) => {
+const HomepageContentOmrahSection: React.FC<
+  HomepageContentOmrahSectionProps
+> = ({ children }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
-  const articleType_slug = 'trip';
+  const articleType_slug = "trip";
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -40,19 +40,34 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
-  const [articleType, setArticleType] = useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
+  const [articleType, setArticleType] =
+    useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
   const [filteredItems, setFilteredItems] = useState<EntityAlias[]>([]);
   const [items, setItems] = useState<EntityAlias[]>([]);
   const [count, setCount] = useState(12);
   const [page, setPage] = useState(1);
-  const [search, setSearch] = useState('');
-  const [fields, setFields] = useState<Levelup.CMS.V1.Utils.Api.Request.TProjectableFields<EntityAlias>[]>(['title', 'slug', 'body', 'article_type', 'meta_fields', 'created_at', 'updated_at', 'published_at', 'is_featured', 'is_published', 'featured_image']);
+  const [search, setSearch] = useState("");
+  const [fields, setFields] = useState<
+    Levelup.CMS.V1.Utils.Api.Request.TProjectableFields<EntityAlias>[]
+  >([
+    "title",
+    "slug",
+    "body",
+    "article_type",
+    "meta_fields",
+    "created_at",
+    "updated_at",
+    "published_at",
+    "is_featured",
+    "is_published",
+    "featured_image",
+  ]);
 
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
   const articleTypeQuery = useQuery({
-    queryKey: ['articleType', articleType_slug],
+    queryKey: ["articleType", articleType_slug],
     enabled: !!articleType_slug,
     queryFn: async () => {
       if (articleType_slug) {
@@ -65,7 +80,7 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
   });
 
   const { data, error, refetch, isFetching, isFetched } = useQuery({
-    queryKey: ['articleType', articleType_slug, search, page, count, fields],
+    queryKey: ["articleType", articleType_slug, search, page, count, fields],
     enabled: !!articleType,
 
     queryFn: async () => {
@@ -75,22 +90,19 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
           page: page,
           search: search,
           filters: {
-            article_type: articleType._id
+            article_type: articleType._id,
           },
           fields,
         });
         return data;
       }
-
     },
   });
 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {
-
-  }, []);
+  const loadExtraData = useCallback(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
@@ -107,35 +119,27 @@ const HomepageContentOmrahSection: React.FC<HomepageContentOmrahSectionProps> = 
     setFilteredItems(items);
   }, [items]);
 
-
-  logger.value('filteredItems', filteredItems);
+  logger.value("filteredItems", filteredItems);
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
     <div className="py-12">
       {isFetching ? (
-        <div className="text-center">
-          جار التحميل...
-        </div>
+        <div className="text-center">جار التحميل...</div>
       ) : error ? (
-        <div className="text-center">
-          حدث خطأ
-        </div>
+        <div className="text-center">حدث خطأ</div>
       ) : !filteredItems.length ? (
-        <div className="text-center">
-          لا يوجد عناصر الان
-        </div>
+        <div className="text-center">لا يوجد عناصر الان</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 lg:gap-10">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">
           {filteredItems.map((item, index) => (
             <OmrahPostCard key={index} data={item} edge={data?.edge} />
-          ))
-          }
-        </div >
+          ))}
+        </div>
       )}
-    </div >
+    </div>
   );
-}
+};
 
-export default HomepageContentOmrahSection; 
+export default HomepageContentOmrahSection;

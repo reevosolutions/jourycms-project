@@ -15,7 +15,9 @@ const AuthenticationLoader: React.FC<Props> = () => {
 
   const cache = useCache();
 
-  const current = useLiveQuery(() => cache.db?.current.toArray() as PromiseExtended<AuthEntityDatum[]>);
+  const current = useLiveQuery(
+    () => cache.db?.current.toArray() as PromiseExtended<AuthEntityDatum[]>,
+  );
 
   useEffect(() => {
     if (current) {
@@ -24,7 +26,7 @@ const AuthenticationLoader: React.FC<Props> = () => {
     }
   }, [dispatch, current]);
 
-  const authLoaded = useAppSelector((state) => state.auth.status === "idle");
+  const authLoaded = useAppSelector(state => state.auth.status === "idle");
   const [state, setState] = useState<"loading" | "show">("loading");
 
   useEffect(() => {

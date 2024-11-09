@@ -20,8 +20,8 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['var(--font-inter)'],
-      hammah: ['var(--font-hammah)'],
+      sans: ["var(--font-inter)"],
+      hammah: ["var(--font-hammah)"],
     },
     extend: {
       typography: {
@@ -41,7 +41,7 @@ const config: Config = {
           "700": "#565f6f",
           "800": "#424b5b",
           "900": "#2f3646",
-          "950": "#1c2232"
+          "950": "#1c2232",
         },
         beige: {
           "50": "#e5d3a5",
@@ -54,7 +54,7 @@ const config: Config = {
           "700": "#ae8674",
           "800": "#a77b6d",
           "900": "#9f7066",
-          "950": "#97655f"
+          "950": "#97655f",
         },
         red2: {
           "50": "#f1d5d2",
@@ -67,7 +67,7 @@ const config: Config = {
           "700": "#d7675a",
           "800": "#d35749",
           "900": "#d04838",
-          "950": "#cc3827"
+          "950": "#cc3827",
         },
         turqoi: {
           "50": "#cff2f8",
@@ -80,7 +80,7 @@ const config: Config = {
           "700": "#a2dbd2",
           "800": "#9cd8cc",
           "900": "#95d4c7",
-          "950": "#8fd1c1"
+          "950": "#8fd1c1",
         },
 
         text: {
@@ -216,8 +216,17 @@ const config: Config = {
     require("precss"),
     require("autoprefixer"),
     function ({ addVariant, addUtilities, matchUtilities, theme }: any) {
-      addVariant("hocus", ["&:focus", "&:hover", "&:active", "&:focus-within", "&:focus-visible"]);
-      addVariant("group-hocus", [":merge(.group):focus &", ":merge(.group):hover &"]);
+      addVariant("hocus", [
+        "&:focus",
+        "&:hover",
+        "&:active",
+        "&:focus-within",
+        "&:focus-visible",
+      ]);
+      addVariant("group-hocus", [
+        ":merge(.group):focus &",
+        ":merge(.group):hover &",
+      ]);
       matchUtilities(
         {
           density: (padding: number) => {
@@ -265,7 +274,7 @@ const config: Config = {
         {
           values: theme("space", {}),
           type: "any",
-        }
+        },
       );
 
       addUtilities({

@@ -27,7 +27,7 @@ export const authSlice = createAppSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   // The `reducers` field lets us define reducers and generate associated actions
-  reducers: (create) => ({
+  reducers: create => ({
     loadAuthData: create.asyncThunk(
       async (arg1: void) => {
         try {
@@ -46,7 +46,7 @@ export const authSlice = createAppSlice({
         }
       },
       {
-        pending: (state) => {
+        pending: state => {
           logger.debug("loadAuthData", "pending", {
             ...state,
           });
@@ -61,16 +61,20 @@ export const authSlice = createAppSlice({
           state.user = payload.user;
           state.app = payload.app;
         },
-        rejected: (state) => {
+        rejected: state => {
           logger.error("loadAuthData", "rejected", {
             state,
           });
           state.status = "failed";
         },
-      }
+      },
     ),
     authenticate: create.asyncThunk(
-      async (data: Levelup.CMS.V1.Utils.NonUndefined<Levelup.CMS.V1.Auth.Api.Auth.Signin.Response["data"]>) => {
+      async (
+        data: Levelup.CMS.V1.Utils.NonUndefined<
+          Levelup.CMS.V1.Auth.Api.Auth.Signin.Response["data"]
+        >,
+      ) => {
         try {
           logger.event("_authenticate", "triggered", data);
           const authManager = AuthenticationManager.getInstance();
@@ -92,7 +96,7 @@ export const authSlice = createAppSlice({
         }
       },
       {
-        pending: (state) => {
+        pending: state => {
           state.status = "loading";
         },
         fulfilled: (state, { payload }) => {
@@ -104,10 +108,10 @@ export const authSlice = createAppSlice({
           state.user = payload.user;
           state.app = payload.app;
         },
-        rejected: (state) => {
+        rejected: state => {
           state.status = "failed";
         },
-      }
+      },
     ),
     logout: create.asyncThunk(
       async (arg: void) => {
@@ -130,7 +134,7 @@ export const authSlice = createAppSlice({
         }
       },
       {
-        pending: (state) => {
+        pending: state => {
           state.status = "loading";
         },
         fulfilled: (state, { payload }) => {
@@ -139,19 +143,19 @@ export const authSlice = createAppSlice({
           state.user = payload.user;
           state.app = payload.app;
         },
-        rejected: (state) => {
+        rejected: state => {
           state.status = "failed";
         },
-      }
+      },
     ),
   }),
   // You can define your selectors here. These selectors receive the slice
   // state as their first argument.
   selectors: {
-    selectAuthStatus: (state) => state.status,
-    selectAuthIsAuthenticated: (state) => state.isAuthenticated,
-    selectAuthUser: (state) => state.user,
-    selectAuthApp: (state) => state.app,
+    selectAuthStatus: state => state.status,
+    selectAuthIsAuthenticated: state => state.isAuthenticated,
+    selectAuthUser: state => state.user,
+    selectAuthApp: state => state.app,
   },
 });
 
