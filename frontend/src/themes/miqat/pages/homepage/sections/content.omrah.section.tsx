@@ -1,32 +1,28 @@
 "use client";
-import { ParallaxBanner } from "react-scroll-parallax";
-import { ParallaxProvider } from "react-scroll-parallax";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
+
 const logger = initLogger(LoggerContext.FORM, "article");
 
+// eslint-disable-next-line no-undef
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
+// eslint-disable-next-line no-undef
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import Listing from "..";
 
-import Icons from "@/features/admin/ui/icons";
-import HomepageSearchForm from "@/themes/miqat/components/homepage-search-form";
-import Link from "next/link";
-import Image from "next/image";
 import OmrahPostCard from "@/themes/miqat/components/post-card.omrah";
 
 export type HomepageContentOmrahSectionProps =
+  // eslint-disable-next-line no-undef
   JouryCMS.Theme.ComponentProps & {};
 
 const HomepageContentOmrahSection: React.FC<
   HomepageContentOmrahSectionProps
-> = ({ children }) => {
+> = ({ }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -41,6 +37,7 @@ const HomepageContentOmrahSection: React.FC<
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
   const [articleType, setArticleType] =
+    // eslint-disable-next-line no-undef
     useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
   const [filteredItems, setFilteredItems] = useState<EntityAlias[]>([]);
   const [items, setItems] = useState<EntityAlias[]>([]);
@@ -102,7 +99,7 @@ const HomepageContentOmrahSection: React.FC<
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {}, []);
+  const loadExtraData = useCallback(() => { }, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
@@ -124,12 +121,12 @@ const HomepageContentOmrahSection: React.FC<
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="py-12">
+    <div className="py-4">
       {isFetching ? (
         <div className="text-center">جار التحميل...</div>
       ) : error ? (
         <div className="text-center">حدث خطأ</div>
-      ) : !filteredItems.length ? (
+      ) : filteredItems.length === 0 ? (
         <div className="text-center">لا يوجد عناصر الان</div>
       ) : (
         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">

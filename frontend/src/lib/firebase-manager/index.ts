@@ -1,17 +1,15 @@
 "use client";
 
-import config from "@config/index";
 import { firebaseConfig } from "@config/firebase.config";
-import { FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
-import { Auth, getAuth } from "firebase/auth";
+import initLogger, { LoggerContext, LoggerService } from "@lib/logging";
+import { type FirebaseApp, getApp, getApps, initializeApp } from "firebase/app";
+import { type Auth, getAuth } from "firebase/auth";
 import {
   enableIndexedDbPersistence,
   Firestore,
   getFirestore,
 } from "firebase/firestore";
-
-import { getMessaging, Messaging } from "firebase/messaging";
-import initLogger, { LoggerContext, LoggerService } from "@lib/logging";
+import { getMessaging, type Messaging } from "firebase/messaging";
 
 export default class FirebaseManager {
   private static instance: FirebaseManager;
@@ -34,7 +32,8 @@ export default class FirebaseManager {
 
   private async init() {
     // Initialize Firebase
-    this.app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+    this.app =
+      getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
   }
 
   public initializeFirebase(initMessaging: boolean = true) {
@@ -52,12 +51,12 @@ export default class FirebaseManager {
           .then(() => {
             console.log("persistance enabled");
           })
-          .catch(err => {
-            if (err.code == "failed-precondition") {
+          .catch(error => {
+            if (error.code == "failed-precondition") {
               // Multiple tabs open, persistence can only be enabled
               // in one tab at a a time.
               // ...
-            } else if (err.code == "unimplemented") {
+            } else if (error.code == "unimplemented") {
               // The current browser does not support all of the
               // features required to enable persistence
               // ...
@@ -75,12 +74,12 @@ export default class FirebaseManager {
             .then(() => {
               console.log("persistance enabled");
             })
-            .catch(err => {
-              if (err.code == "failed-precondition") {
+            .catch(error => {
+              if (error.code == "failed-precondition") {
                 // Multiple tabs open, persistence can only be enabled
                 // in one tab at a a time.
                 // ...
-              } else if (err.code == "unimplemented") {
+              } else if (error.code == "unimplemented") {
                 // The current browser does not support all of the
                 // features required to enable persistence
                 // ...

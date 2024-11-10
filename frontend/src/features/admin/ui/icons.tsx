@@ -149,7 +149,8 @@ import { SiAdblock } from "react-icons/si";
 import { TbApps } from "react-icons/tb";
 import { VscGroupByRefType, VscUngroupByRefType } from "react-icons/vsc";
 
-export { type IconType } from "react-icons/lib";
+// eslint-disable-next-line no-undef
+export type IconType = Levelup.CMS.V1.UI.IconType;
 
 const Icons = {
   /**

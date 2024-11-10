@@ -6,7 +6,7 @@ declare module Levelup {
           type ICustomMetaField = {
             field_key: string;
             field_label: string;
-            field_type: UI.Forms.CustomFields.CustomFieldType;
+            field_type: CustomFields.CustomFieldType;
             field_options: {
               [Key: string]: any;
             };

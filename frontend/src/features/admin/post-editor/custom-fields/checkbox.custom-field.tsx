@@ -50,7 +50,7 @@ const CheckboxCustomField: React.FC<Props> = ({
           <FormLabel className="flex w-full cursor-pointer items-center gap-3 font-normal">
             <FormControl>
               <Checkbox
-                className="rounded-xxs"
+                className="rounded-sm"
                 checked={selected.includes(item.value)}
                 onCheckedChange={checked => {
                   const value = checked

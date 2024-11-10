@@ -1,15 +1,7 @@
 import { createContext } from "react";
 
-export type FirestoreContextProps = {
-  subscribeParcelsInStatus: Levelup.V2.Features.Firestore.ParcelStatusSubscriber;
-  mapParcelToFirestoreDocument?: Levelup.V2.Features.Firestore.ParcelMapper;
-  setFirestoreParcel?: (
-    parcel: Levelup.V2.Features.Firestore.ParcelDocument,
-  ) => Promise<void>;
-};
+export type FirestoreContextProps = {};
 
-const PricingContext = createContext<FirestoreContextProps>({
-  subscribeParcelsInStatus: async status => {},
-});
+const PricingContext = createContext<FirestoreContextProps>({});
 
 export default PricingContext;

@@ -1,9 +1,10 @@
 import { initSdkForLevelupClientApp } from "@hooks/use-sdk";
-import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 import CacheManager from "@lib/cache-manager";
 import initLogger, { LoggerService } from "@lib/logging";
 import { applyOnChunkedArray } from "@lib/utilities/arrays";
 import JouryCMSSdk from "jourycms-sdk";
+
+import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 
 export default class AppConfigManager {
   cache: CacheManager;
@@ -13,6 +14,7 @@ export default class AppConfigManager {
 
   private _contentData: {
     loaded: boolean;
+    // eslint-disable-next-line no-undef
     articleTypes?: Levelup.CMS.V1.Content.Entity.ArticleType[];
     states?: {
       code: string;
@@ -25,8 +27,8 @@ export default class AppConfigManager {
     }[];
     lastUpdated?: Date;
   } = {
-    loaded: false,
-  };
+      loaded: false,
+    };
 
   private _authenticationData: {
     loaded: boolean;
@@ -34,8 +36,8 @@ export default class AppConfigManager {
     roles?: Levelup.CMS.V1.Auth.Entity.Role[] | undefined;
     permissions?: Levelup.CMS.V1.Auth.Entity.Permission[] | undefined;
   } = {
-    loaded: false,
-  };
+      loaded: false,
+    };
 
   static getInstance() {
     if (!this.instance) {
@@ -80,11 +82,10 @@ export default class AppConfigManager {
         : [];
       if (roles?.length === 0) {
         this.logger.info("roles data not found in cache, fetching from server");
-        roles = (
-          await this.sdk.auth.roles.list({
-            count: -1,
-          })
-        ).data;
+        const response = await this.sdk.auth.roles.list({
+          count: -1,
+        });
+        roles = response.data;
         await applyOnChunkedArray(roles, 50, async arr => {
           await this.cache.db?.roles.bulkPut(arr || []);
         });
@@ -99,11 +100,10 @@ export default class AppConfigManager {
         this.logger.info(
           "permissions data not found in cache, fetching from server",
         );
-        permissions = (
-          await this.sdk.auth.permissions.list({
-            count: -1,
-          })
-        ).data;
+        const response = await this.sdk.auth.permissions.list({
+          count: -1,
+        })
+        permissions = response.data;
         await applyOnChunkedArray(permissions, 50, async arr => {
           await this.cache.db?.permissions.bulkPut(arr || []);
         });
@@ -163,11 +163,10 @@ export default class AppConfigManager {
         this.logger.info(
           "articleTypes data not found in cache, fetching from server",
         );
-        articleTypes = (
-          await this.sdk.content.articleTypes.list({
-            count: -1,
-          })
-        ).data;
+        const response = await this.sdk.content.articleTypes.list({
+          count: -1,
+        })
+        articleTypes = response.data;
 
         await this.cache.db?.articleTypes.bulkPut(
           (articleTypes || []).map(v => ({ ...v })),

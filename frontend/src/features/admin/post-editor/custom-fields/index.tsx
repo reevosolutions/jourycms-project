@@ -7,6 +7,8 @@ import TimeCustomField from "./time.custom-field";
 import TextCustomField from "./text.custom-field";
 import NumberCustomField from "./number.custom-field";
 import ImageCustomField from "./image.custom-field";
+import BooleanCustomField from "./boolean.custom-field";
+import ArticleObjectCustomField from "./article-object.custom-field";
 
 type Props = {
   field: Levelup.CMS.V1.Content.Entity.ICustomMetaField;
@@ -19,74 +21,95 @@ type Props = {
 const CustomMetaField: React.FC<Props> = ({ field, value, onChange }) => {
   return (
     <div className="meta-field">
-      <Label className="font-bold">{field.field_label}</Label>
+      <Label className="font-semibold text-base mb-1 block">{field.field_label}</Label>
 
       <div className="f">
-        {field.field_type === "checkbox" ? (
-          <CheckboxCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "select" ? (
-          <SelectCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "date" ? (
-          <DateCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "time" ? (
-          <TimeCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "text" ? (
-          <TextCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "number" ? (
-          <NumberCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-          />
-        ) : field.field_type === "image" ? (
-          <ImageCustomField
-            label={field.field_label}
-            required={field.field_options.required}
-            value={value}
-            onChange={onChange}
-            options={field.field_options as any}
-            default_value={field.field_options.default_value}
-            image_ratio={1 / 1}
-          />
-        ) : null}
+        {
+          field.field_type === 'article_object' ? (
+            <ArticleObjectCustomField
+              label={field.field_label}
+              required={field.field_options.required}
+              value={value}
+              onChange={onChange}
+              options={field.field_options as any}
+              default_value={field.field_options.default_value}
+            />
+          ) :
+            field.field_type === "boolean" ? (
+              <BooleanCustomField
+                label={field.field_label}
+                required={field.field_options.required}
+                value={value}
+                onChange={onChange}
+                options={field.field_options as any}
+                default_value={field.field_options.default_value}
+              />
+            ) :
+              field.field_type === "checkbox" ? (
+                <CheckboxCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "select" ? (
+                <SelectCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "date" ? (
+                <DateCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "time" ? (
+                <TimeCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "text" ? (
+                <TextCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "number" ? (
+                <NumberCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                />
+              ) : field.field_type === "image" ? (
+                <ImageCustomField
+                  label={field.field_label}
+                  required={field.field_options.required}
+                  value={value}
+                  onChange={onChange}
+                  options={field.field_options as any}
+                  default_value={field.field_options.default_value}
+                  image_ratio={1 / 1}
+                />
+              ) : null}
       </div>
     </div>
   );

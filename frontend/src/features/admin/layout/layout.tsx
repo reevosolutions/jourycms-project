@@ -17,7 +17,7 @@ type Props = {
 
 const PageLyout: React.FC<Props> = ({ title, children }) => {
   return (
-    <div className="upcms-page-layout">
+    <div className="upcms-page-layout font-noto">
       <SidebarProvider>
         <div className="flex-grow">
           <main className="px-4">

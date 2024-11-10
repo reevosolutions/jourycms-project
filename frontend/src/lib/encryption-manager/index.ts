@@ -24,7 +24,7 @@ export default class EncryptionManager {
       .then(() => {
         this.logger.success("Keys Generated ");
       })
-      .catch(e => this.logger.error("Keys generation failed", e));
+      .catch(error => this.logger.error("Keys generation failed", error));
   }
 
   private async _generateIvAndKey() {
@@ -54,7 +54,7 @@ export default class EncryptionManager {
       {
         name: "PBKDF2",
         salt: new Uint8Array(16), // Use a random salt
-        iterations: 100000, // Adjust as needed for your security requirements
+        iterations: 100_000, // Adjust as needed for your security requirements
         hash: "SHA-256",
       },
       key,
@@ -64,9 +64,9 @@ export default class EncryptionManager {
     );
   }
 
-  stringToUint8Array(str: string): Uint8Array {
+  stringToUint8Array(string_: string): Uint8Array {
     const encoder = new TextEncoder();
-    return encoder.encode(str);
+    return encoder.encode(string_);
   }
 
   uint8ArrayToString(uint8Array: Uint8Array): string {
@@ -74,8 +74,8 @@ export default class EncryptionManager {
     return decoder.decode(uint8Array);
   }
 
-  stringToArrayBuffer(str: string): ArrayBuffer {
-    return this.stringToUint8Array(str).buffer;
+  stringToArrayBuffer(string_: string): ArrayBuffer {
+    return this.stringToUint8Array(string_).buffer;
   }
 
   arrayBufferToString(buffer: ArrayBuffer): string {
@@ -86,6 +86,7 @@ export default class EncryptionManager {
   arrayBufferToBase64(buffer: ArrayBuffer): string {
     const binary = String.fromCharCode.apply(
       null,
+      // eslint-disable-next-line unicorn/prefer-spread
       Array.from(new Uint8Array(buffer)),
     );
     return btoa(binary);
@@ -96,8 +97,9 @@ export default class EncryptionManager {
     const length = binaryString.length;
     const buffer = new ArrayBuffer(length);
     const view = new Uint8Array(buffer);
-    for (let i = 0; i < length; i++) {
-      view[i] = binaryString.charCodeAt(i);
+    for (let index = 0; index < length; index++) {
+      // eslint-disable-next-line unicorn/prefer-code-point
+      view[index] = binaryString.charCodeAt(index);
     }
     return buffer;
   }
@@ -132,7 +134,7 @@ export default class EncryptionManager {
 
       const decoded = new TextDecoder().decode(decrypted);
       return decoded;
-    } catch (error) {
+    } catch {
       return null;
     }
   }

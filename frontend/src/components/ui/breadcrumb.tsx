@@ -3,6 +3,7 @@ import { ChevronRightIcon, DotsHorizontalIcon } from "@radix-ui/react-icons";
 import { Slot } from "@radix-ui/react-slot";
 
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 const Breadcrumb = React.forwardRef<
   HTMLElement,
@@ -45,10 +46,17 @@ const BreadcrumbLink = React.forwardRef<
     asChild?: boolean;
   }
 >(({ asChild, className, ...props }, ref) => {
-  const Comp = asChild ? Slot : "a";
+  const Comp = asChild ? Slot : Link;
 
-  return (
+  return props.href ? (
     <Comp
+      ref={ref}
+      className={cn("transition-colors hover:text-foreground", className)}
+      {...props}
+      href={props.href as string}
+    />
+  ) : (
+    <span
       ref={ref}
       className={cn("transition-colors hover:text-foreground", className)}
       {...props}
@@ -106,10 +114,10 @@ BreadcrumbEllipsis.displayName = "BreadcrumbElipssis";
 
 export {
   Breadcrumb,
-  BreadcrumbList,
+  BreadcrumbEllipsis,
   BreadcrumbItem,
   BreadcrumbLink,
+  BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-  BreadcrumbEllipsis,
 };

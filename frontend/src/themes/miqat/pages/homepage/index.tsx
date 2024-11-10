@@ -9,12 +9,14 @@ import HomepageEscortsSection from "./sections/escorts.section";
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
-const Homepage: React.FC<PageProps> = ({ }) => {
+const Homepage: React.FC<PageProps> = ({ route }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <DefaultLayout>
+    <DefaultLayout
+      {...{route}}
+    >
       <HomepageHeroSection />
       <HomepageContentSection />
       <HomepageEscortsSection />

@@ -1,14 +1,13 @@
 import { adminRoutes } from "@/config";
 import AdminLayout from "@/features/admin/layout";
 import PostForm from "@/features/admin/post-editor/forms/post-form/post.form";
-import { useSdk } from "@/hooks/use-sdk";
 import { getRouteTree } from "@/lib/routes";
 
 const ROUTE = adminRoutes.articles._.create;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1
-    ? ROUTE_PARENTS[ROUTE_PARENTS.length - 2]
+    ? ROUTE_PARENTS.at(-2)
     : undefined;
 const QUERY_ID = ROUTE.path;
 
@@ -22,12 +21,11 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
-  const article_id = (await params).id;
+  const { id } = await params;
 
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const sdk = useSdk();
 
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
@@ -49,7 +47,7 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout>
-      <PostForm article_id={article_id} />
+      <PostForm article_id={id} />
     </AdminLayout.PageLayout>
   );
 }

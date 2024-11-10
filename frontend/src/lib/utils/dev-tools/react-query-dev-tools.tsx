@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prevent-abbreviations
 "use client";
 import initLogger from "@lib/logging";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -14,7 +15,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30000),
+      retryDelay: attemptIndex => Math.min(1000 * 2 ** attemptIndex, 30_000),
       retry: (failureCount, error: any) => {
         logger.error("retry", failureCount, { ...error });
         if ([404, 401, 403, 409].includes(error.status)) return false;

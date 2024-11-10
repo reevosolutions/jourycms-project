@@ -1,11 +1,11 @@
 "use client";
 
-import { useLiveQuery } from "dexie-react-hooks";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import React, { useEffect, useState } from "react";
 import useCache from "@hooks/use-cache";
-import { PromiseExtended } from "dexie";
 import { AuthEntityDatum } from "@lib/cache-manager/adapters/dexie";
+import { useAppDispatch, useAppSelector } from "@redux/hooks";
+import { type PromiseExtended } from "dexie";
+import { useLiveQuery } from "dexie-react-hooks";
+import React, { useEffect, useState } from "react";
 
 type Props = {};
 
@@ -26,7 +26,7 @@ const AuthenticationLoader: React.FC<Props> = () => {
   }, [dispatch, current]);
 
   const authLoaded = useAppSelector(state => state.auth.status === "idle");
-  const [state, setState] = useState<"loading" | "show">("loading");
+  const [, setState] = useState<"loading" | "show">("loading");
 
   useEffect(() => {
     if (!authLoaded) {

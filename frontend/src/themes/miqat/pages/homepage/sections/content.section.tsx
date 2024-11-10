@@ -1,23 +1,16 @@
 "use client";
-import { ParallaxBanner } from "react-scroll-parallax";
-import { ParallaxProvider } from "react-scroll-parallax";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { CiDiscount1 } from "react-icons/ci";
-import { IoTicketOutline } from "react-icons/io5";
-import Icons from "@/features/admin/ui/icons";
-import HomepageSearchForm from "@/themes/miqat/components/homepage-search-form";
-import Link from "next/link";
 import Image from "next/image";
 import React from "react";
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+
 import HomepageContentBidsSection from "./content.bids.section";
 import HomepageContentOmrahSection from "./content.omrah.section";
 import HomepageContentTombolasSection from "./content.tombolas.section";
 
 export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {};
 
-const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({
-  children,
-}) => {
+const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
   return (
     <section className="bg-gray-50/50">
       <div className="container mx-auto py-10">

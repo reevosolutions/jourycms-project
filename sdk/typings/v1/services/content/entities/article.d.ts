@@ -18,7 +18,7 @@ declare module Levelup {
 
           export interface Article
             extends Utils.Entity.General.ICreatable,
-              Utils.Entity.General.IHasSearchMeta {
+            Utils.Entity.General.IHasSearchMeta {
             _type: Utils.Common.ID | null;
             _id: Utils.Common.ID;
             slug: string;

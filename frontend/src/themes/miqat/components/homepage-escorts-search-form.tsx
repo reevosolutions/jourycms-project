@@ -1,5 +1,5 @@
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { LuCheck, LuChevronsUpDown, LuSearch } from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
@@ -19,24 +19,27 @@ import {
 import { Slider } from "@/components/ui/customized.slider";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCMSContent from "@/hooks/use-cms-content";
 import { cn } from "@/lib/utils";
-
-type State = {
-  code: string;
-  name: string;
-};
-type City = {
-  state_code: string;
-  code: string;
-  name: string;
-};
-
-const states: State[] = [];
+import { checkSimilarity } from "@/lib/utilities/strings";
 
 export const EscortsSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
+  /*                                    TOOLS                                   */
+  /* -------------------------------------------------------------------------- */
+  const { getWebsiteConfigValue } = useCMSContent();
+
+  /* -------------------------------------------------------------------------- */
   /*                                   STATE                                    */
   /* -------------------------------------------------------------------------- */
+  const states = useMemo(
+    () => getWebsiteConfigValue("states", []),
+    [getWebsiteConfigValue],
+  );
+  const cities = useMemo(
+    () => getWebsiteConfigValue("cities", []),
+    [getWebsiteConfigValue],
+  );
   const [wilayaOpen, setWilayaOpen] = useState(false);
   const [state, setState] = useState<string | undefined>();
   const [experianceRange, setExperianceRange] = useState<number[]>([2, 5]);
@@ -63,6 +66,7 @@ export const EscortsSearchForm: React.FC = () => {
                 : "border-slate-100 text-darkblue-500",
             )}
             onClick={() => setSex("male")}
+            aria-label="male"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -83,6 +87,7 @@ export const EscortsSearchForm: React.FC = () => {
                 : "border-slate-100 text-darkblue-500",
             )}
             onClick={() => setSex("female")}
+            aria-label="female"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -120,13 +125,14 @@ export const EscortsSearchForm: React.FC = () => {
               role="combobox"
               aria-expanded={wilayaOpen}
               className="w-full justify-between rounded-md border-2"
+              aria-label="state"
             >
               <div className="value text-xl">
                 {!state ? (
                   <span className="text-darkblue-500">{"اختر ولاية..."}</span>
                 ) : (
                   <span>
-                    {states.find(item => item.code === state)?.name || ""}
+                    {states?.find(item => item.code === state)?.name || ""}
                   </span>
                 )}
               </div>
@@ -137,14 +143,20 @@ export const EscortsSearchForm: React.FC = () => {
             className="w-[436px] p-0 font-hammah text-2xl"
             align="start"
           >
-            <Command>
+            <Command
+              filter={(value, search, keywords) => {
+                const name = states?.find(s => s.code === value)?.name;
+                const similarity = checkSimilarity(search, `${value} ${name}` || '');
+                return similarity;
+              }}
+            >
               <CommandInput className="text-xl" placeholder="ابحث هنا..." />
               <CommandList>
                 <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
                   لا توجد خيارات.
                 </CommandEmpty>
                 <CommandGroup>
-                  {states.map(item => (
+                  {states?.map(item => (
                     <CommandItem
                       key={item.code}
                       value={item.code}
@@ -152,7 +164,11 @@ export const EscortsSearchForm: React.FC = () => {
                         setState(value);
                         setWilayaOpen(false);
                       }}
+                      className="text-xl"
                     >
+                      <span className="inline-block text-darkblue-400">
+                        {item.code}
+                      </span>
                       {item.name}
                       <LuCheck
                         className={cn(

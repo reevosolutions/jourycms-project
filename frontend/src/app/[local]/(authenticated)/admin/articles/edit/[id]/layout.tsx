@@ -10,7 +10,7 @@ const ROUTE = adminRoutes.articles._.edit;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1
-    ? ROUTE_PARENTS[ROUTE_PARENTS.length - 2]
+    ? ROUTE_PARENTS.at(-2)
     : undefined;
 const QUERY_ID = ROUTE.path;
 

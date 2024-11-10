@@ -1,8 +1,15 @@
-import React, { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Label } from "@/components/ui/label";
+/* eslint-disable no-undef */
 import Image from "next/image";
+import React, { useMemo, useState } from "react";
+import {
+  LuCheck,
+  LuChevronsUpDown,
+  LuHelpCircle,
+  LuSearch,
+} from "react-icons/lu";
+
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
   CommandEmpty,
@@ -11,37 +18,22 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/ui/command";
+import { FormControl, FormLabel } from "@/components/ui/customized.form";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/customized.popover";
-import {
-  LuCheck,
-  LuChevronsUpDown,
-  LuHelpCircle,
-  LuSearch,
-  LuX,
-} from "react-icons/lu";
-import { cn } from "@/lib/utils";
-import { FormControl, FormLabel } from "@/components/ui/customized.form";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/customized.slider";
+import { Label } from "@/components/ui/label";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import useCMSContent from "@/hooks/use-cms-content";
+import { cn } from "@/lib/utils";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { checkSimilarity } from "@/lib/utilities/strings";
 
-type State = {
-  code: string;
-  name: string;
-};
-type City = {
-  state_code: string;
-  code: string;
-  name: string;
-};
+const logger = initLogger(LoggerContext.COMPONENT, "select.custom-field");
 
-const states: State[] = [];
-const cities: City[] = [];
-const months: Levelup.CMS.V1.Utils.Common.TLabelValue[] = [];
-const durations: Levelup.CMS.V1.Utils.Common.TLabelValue[] = [];
 const services: Levelup.CMS.V1.Utils.Common.TLabelValue[] = [
   {
     value: "transportation",
@@ -63,8 +55,35 @@ const services: Levelup.CMS.V1.Utils.Common.TLabelValue[] = [
 
 export const OmrahSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
+  /*                                    TOOLS                                   */
+  /* -------------------------------------------------------------------------- */
+  const { getWebsiteConfigValue, getArticleTypeBySlug } = useCMSContent();
+
+  /* -------------------------------------------------------------------------- */
   /*                                   STATE                                    */
   /* -------------------------------------------------------------------------- */
+  const states = useMemo(
+    () => getWebsiteConfigValue("states", []),
+    [getWebsiteConfigValue],
+  );
+  const durations = useMemo(
+    () =>
+      (
+        getArticleTypeBySlug("trip")?.custom_meta_fields?.find(
+          field => field.field_key === "trip_duration",
+        ) as Levelup.CMS.V1.Content.CustomFields.MetaField<"select"> | undefined
+      )?.field_options?.choices,
+    [getArticleTypeBySlug],
+  );
+  const cities = useMemo(
+    () => getWebsiteConfigValue("cities", []),
+    [getWebsiteConfigValue],
+  );
+  const months = useMemo(
+    () => getWebsiteConfigValue("months", []),
+    [getWebsiteConfigValue],
+  );
+
   const [wilayaOpen, setWilayaOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [monthOpen, setMonthOpen] = useState(false);
@@ -92,12 +111,15 @@ export const OmrahSearchForm: React.FC = () => {
               role="combobox"
               aria-expanded={wilayaOpen}
               className="w-full justify-between rounded-md border-2"
+              aria-label="state"
             >
               <div className="value text-xl">
                 {!state ? (
                   <span className="text-darkblue-500">{"اختر ولاية..."}</span>
                 ) : (
-                  <span>{states.find(i => i.code === state)?.name || ""}</span>
+                  <span>
+                    {states?.find(index => index.code === state)?.name || ""}
+                  </span>
                 )}
               </div>
               <LuChevronsUpDown className="opacity-50" />
@@ -107,22 +129,33 @@ export const OmrahSearchForm: React.FC = () => {
             className="w-[436px] p-0 font-hammah text-2xl"
             align="start"
           >
-            <Command>
+            <Command
+              filter={(value, search, keywords) => {
+                const name = states?.find(s => s.code === value)?.name;
+                const similarity = checkSimilarity(search, `${value} ${name}` || '');
+                return similarity;
+              }}
+            >
               <CommandInput className="text-xl" placeholder="ابحث هنا..." />
               <CommandList>
                 <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
                   لا توجد خيارات.
                 </CommandEmpty>
                 <CommandGroup>
-                  {states.map(item => (
+                  {states?.map(item => (
                     <CommandItem
                       key={item.code}
                       value={item.code}
                       onSelect={value => {
                         setState(value);
+                        setCity(null);
                         setWilayaOpen(false);
                       }}
+                      className="text-xl"
                     >
+                      <span className="inline-block text-darkblue-400">
+                        {item.code}
+                      </span>
                       {item.name}
                       <LuCheck
                         className={cn(
@@ -148,12 +181,15 @@ export const OmrahSearchForm: React.FC = () => {
               role="combobox"
               aria-expanded={cityOpen}
               className="w-full justify-between rounded-md border-2"
+              aria-label="city"
             >
               <div className="value text-xl">
                 {!city ? (
                   <span className="text-darkblue-500">{"اختر بلدية..."}</span>
                 ) : (
-                  <span>{cities.find(i => i.code === city)?.name || ""}</span>
+                  <span>
+                    {cities?.find(index => index.code === city)?.name || ""}
+                  </span>
                 )}
               </div>
               <LuChevronsUpDown className="opacity-50" />
@@ -163,7 +199,13 @@ export const OmrahSearchForm: React.FC = () => {
             className="w-[436px] p-0 font-hammah text-2xl"
             align="start"
           >
-            <Command>
+            <Command
+              filter={(value, search, keywords) => {
+                const name = cities?.find(s => s.code === value)?.name;
+                const similarity = checkSimilarity(search, name || '');
+                return similarity;
+              }}
+            >
               <CommandInput className="text-xl" placeholder="ابحث هنا..." />
               <CommandList>
                 <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
@@ -171,15 +213,16 @@ export const OmrahSearchForm: React.FC = () => {
                 </CommandEmpty>
                 <CommandGroup>
                   {cities
-                    .filter(i => i.state_code === state)
+                    ?.filter(item => item.state_code === state)
                     .map(item => (
                       <CommandItem
                         key={item.code}
                         value={item.code}
                         onSelect={value => {
-                          setState(value);
-                          setWilayaOpen(false);
+                          setCity(value);
+                          setCityOpen(false);
                         }}
+                        className="text-xl"
                       >
                         {item.name}
                         <LuCheck
@@ -207,14 +250,13 @@ export const OmrahSearchForm: React.FC = () => {
                 role="combobox"
                 aria-expanded={monthOpen}
                 className="w-full justify-between rounded-md border-2"
+                aria-label="month"
               >
                 <div className="value text-xl">
                   {!month ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
-                    <span>
-                      {months.find(i => i.value === month)?.label || ""}
-                    </span>
+                    <span>{months?.[Number.parseInt(month)] || ""}</span>
                   )}
                 </div>
                 <LuChevronsUpDown className="opacity-50" />
@@ -231,20 +273,21 @@ export const OmrahSearchForm: React.FC = () => {
                     لا توجد خيارات.
                   </CommandEmpty>
                   <CommandGroup>
-                    {months.map(item => (
+                    {Object.entries(months || {}).map(([value, label]) => (
                       <CommandItem
-                        key={item.value}
-                        value={item.value}
+                        key={value}
+                        value={value}
                         onSelect={value => {
                           setMonth(value);
                           setMonthOpen(false);
                         }}
+                        className="text-xl"
                       >
-                        {item.label}
+                        {label}
                         <LuCheck
                           className={cn(
                             "ms-auto",
-                            item.value === month ? "opacity-100" : "opacity-0",
+                            value === month ? "opacity-100" : "opacity-0",
                           )}
                         />
                       </CommandItem>
@@ -267,13 +310,15 @@ export const OmrahSearchForm: React.FC = () => {
                 role="combobox"
                 aria-expanded={durationOpen}
                 className="w-full justify-between rounded-md border-2"
+                aria-label="duration"
               >
                 <div className="value text-xl">
                   {!duration ? (
                     <span className="text-darkblue-500">{"اختر مدة..."}</span>
                   ) : (
                     <span>
-                      {durations.find(i => i.value === duration)?.label || ""}
+                      {durations?.find(index => index.value === duration)
+                        ?.label || ""}
                     </span>
                   )}
                 </div>
@@ -291,7 +336,7 @@ export const OmrahSearchForm: React.FC = () => {
                     لا توجد خيارات.
                   </CommandEmpty>
                   <CommandGroup>
-                    {durations.map(item => (
+                    {durations?.map(item => (
                       <CommandItem
                         key={item.value}
                         value={item.value}
@@ -299,6 +344,7 @@ export const OmrahSearchForm: React.FC = () => {
                           setDuration(value);
                           setDurationOpen(false);
                         }}
+                        className="text-xl"
                       >
                         {item.label}
                         <LuCheck
@@ -339,6 +385,8 @@ export const OmrahSearchForm: React.FC = () => {
                       : selectedServices.filter(value => value !== item.value);
                     setSelectedServices(value);
                   }}
+                  accessKey={item.label}
+                  title={item.label}
                 />
               </FormControl>
               <span className="text-xl">{item.label}</span>
@@ -375,9 +423,10 @@ export const OmrahSearchForm: React.FC = () => {
   );
 };
 
+// eslint-disable-next-line no-undef
 export type HomepageSearchFormProps = JouryCMS.Theme.ComponentProps & {};
 
-const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
+const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
   return (
     <div className="jcms-hero-section min-h-[600px] w-[500px] rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all">
       <Tabs defaultValue="omrah" className="w-full">

@@ -12,28 +12,28 @@ export const combineArrays: (
   if (!headTail) return head;
 
   const combined = headTail.reduce((acc, x) => {
-    return acc.concat(head.map(h => `${h}${separator}${x}`));
+    return [...acc, ...head.map(h => `${h}${separator}${x}`)];
   }, [] as string[]);
 
   return combineArrays([combined, ...tailTail], separator);
 };
 
-export const chunkArray = <T>(arr: T[], chunkSize: number): T[][] => {
+export const chunkArray = <T>(array: T[], chunkSize: number): T[][] => {
   const chunks: T[][] = [];
-  for (let i = 0; i < arr.length; i += chunkSize) {
-    chunks.push(arr.slice(i, i + chunkSize));
+  for (let index = 0; index < array.length; index += chunkSize) {
+    chunks.push(array.slice(index, index + chunkSize));
   }
   return chunks;
 };
 
 export const applyOnChunkedArray = async <T, R>(
-  arr: T[] | undefined,
+  array: T[] | undefined,
   chunkSize: number,
-  callback: (chArr: T[], chunkIndex: number) => Promise<R>,
+  callback: (chArray: T[], chunkIndex: number) => Promise<R>,
 ): Promise<void> => {
-  arr = arr || [];
-  const chunks = chunkArray(arr, chunkSize);
-  for (let i = 0; i < chunks.length; i += 1) {
-    await callback(chunks[i], i);
+  array = array || [];
+  const chunks = chunkArray(array, chunkSize);
+  for (const [index, chunk] of chunks.entries()) {
+    await callback(chunk, index);
   }
 };

@@ -33,13 +33,15 @@ const TextCustomField: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="flex flex-col gap-2 py-2">
+    <div className="">
       <FormControl>
-        <Input
-          className="rounded-xxs bg-body"
-          onChange={e => onChange(e.target.value || null)}
+
+      <Input
+          className="rounded-md bg-body"
+          onChange={event => onChange(event.target.value || null)}
           value={value || ""}
         />
+
       </FormControl>
     </div>
   );

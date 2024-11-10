@@ -16,9 +16,9 @@ const socialLinks = {
   linkedIn: "#",
 } as const;
 
-export type LayoutProps = JouryCMS.Theme.ComponentProps & {};
+export type FooterProps = JouryCMS.Theme.ComponentProps & {};
 
-const Footer: React.FC<LayoutProps> = ({ children }) => {
+const Footer: React.FC<FooterProps> = ({ children }) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -32,11 +32,11 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="jcms-footer bg-darkblue-950 text-white">
+    <footer className="jcms-footer bg-darkblue-950 text-white">
       <div className="grid grid-cols-1 lg:grid-cols-3">
         {/* about */}
         <div className="flex items-center justify-center bg-darkblue-900 px-6 py-6 lg:py-16">
-          <div className="d">
+          <div className=" w-80 max-w-full">
             <h2 className="text-center text-8xl font-bold">
               {getWebsiteConfig()?.name}
             </h2>
@@ -54,6 +54,7 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
                 {getWebsiteConfig()?.social_links?.map(network =>
                   network.url ? (
                     <a
+                      aria-label={network.network}
                       target="_blank"
                       key={network.network}
                       href={network.url}
@@ -83,7 +84,7 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
         </div>
         {/* links */}
         <div className="items-top flex justify-center bg-darkblue-900 px-6 py-6 lg:py-24">
-          <div className="d">
+          <div className="w-80 max-w-full">
             <h2 className="text-3xl font-bold">روابط</h2>
 
             <div className="mt-16 flex items-center gap-8 text-2xl">
@@ -126,7 +127,7 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
         </div>
         {/* contact */}
         <div className="items-top flex justify-center bg-darkblue-950 px-6 py-6 text-darkblue-50 lg:py-24">
-          <div className="d">
+          <div className="w-80 max-w-full">
             <h2 className="text-3xl font-bold">الاتصال بنا</h2>
 
             <div className="mt-16 flex flex-col gap-4 text-2xl">
@@ -165,7 +166,7 @@ const Footer: React.FC<LayoutProps> = ({ children }) => {
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 };
 

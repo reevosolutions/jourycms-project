@@ -53,7 +53,7 @@ const custom_meta_fields = {
       ],
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"select">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"select">,
 
   price: {
     field_key: "price",
@@ -72,7 +72,7 @@ const custom_meta_fields = {
       multiple: true,
       filter: {},
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object", true>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", true>,
   departure_airoport: {
     field_key: "departure_airoport",
     field_label: "مطار الإقلاع",
@@ -84,7 +84,7 @@ const custom_meta_fields = {
         "meta.country": "dz",
       },
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object">,
   arrival_airoport: {
     field_key: "arrival_airoport",
     field_label: "مطار الوصول",
@@ -96,7 +96,7 @@ const custom_meta_fields = {
         "meta.country": "ksa",
       },
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object">,
   airelines_company: {
     field_key: "airelines_company",
     field_label: "شركة الطيران",
@@ -148,7 +148,7 @@ const custom_meta_fields = {
       ],
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"select", false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"select", false>,
   flight_number: {
     field_key: "flight_number",
     field_label: "رقم الرحلة",
@@ -157,7 +157,7 @@ const custom_meta_fields = {
       min: 0,
       max: 255,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"text">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text">,
   flight_date: {
     field_key: "flight_date",
     field_label: "تاريخ الرحلة",
@@ -173,7 +173,7 @@ const custom_meta_fields = {
     field_options: {
       format: "HH:mm",
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"time">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"time">,
   agency: {
     field_key: "agency",
     field_label: "الوكالة",
@@ -182,7 +182,7 @@ const custom_meta_fields = {
       type: "agency",
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object", false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", false>,
   hotel: {
     field_key: "hotel",
     field_label: "الفندق",
@@ -191,7 +191,7 @@ const custom_meta_fields = {
       type: "hotel",
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object", false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", false>,
   mekkah_hotel: {
     field_key: "mekkah_hotel",
     field_label: "فندق مكة",
@@ -200,7 +200,7 @@ const custom_meta_fields = {
       type: "hotel",
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object", false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", false>,
   madina_hotel: {
     field_key: "madina_hotel",
     field_label: "فندق المدينة",
@@ -209,7 +209,7 @@ const custom_meta_fields = {
       type: "hotel",
       multiple: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"article_object", false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", false>,
 
   ramdhan_trip: {
     field_key: "ramdhan_trip",
@@ -218,7 +218,7 @@ const custom_meta_fields = {
     field_options: {
       default: false,
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"boolean">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"boolean">,
   subsistence_at_mekkah: {
     field_key: "subsistence_at_mekkah",
     field_label: "الإعاشة في مكة",
@@ -247,7 +247,7 @@ const custom_meta_fields = {
         },
       ],
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"checkbox">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox">,
   subsistence_at_madina: {
     field_key: "subsistence_at_madina",
     field_label: "الإعاشة في المدينة",
@@ -276,7 +276,7 @@ const custom_meta_fields = {
         },
       ],
     },
-  } as Levelup.CMS.V1.UI.Forms.CustomFields.MetaField<"checkbox">,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox">,
   shrines_at_mekkah: {
     field_key: "shrines_at_mekkah",
     field_label: "المزارات في مكة",

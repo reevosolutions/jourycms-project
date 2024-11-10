@@ -1,3 +1,4 @@
+/* eslint-disable no-async-promise-executor */
 import { initSdkForLevelupClientApp } from "@hooks/use-sdk";
 import CacheManager from "@lib/cache-manager";
 import EncryptionManager from "@lib/encryption-manager";
@@ -103,11 +104,14 @@ export default class AuthenticationManager {
       // user
       await this.cache.setCurrentAuthObject("user", user);
       // app
-      if (user.app)
+      if (user.app) {
+
+        const response = await this.sdk.system.apps.getById("current");
         result.app =
-          ((await this.sdk.system.apps.getById("current"))
-            .data as Levelup.CMS.V1.Utils.NonUndefined<typeof result.app>) ||
-          null;
+          (response.data as Levelup.CMS.V1.Utils.NonUndefined<
+            typeof result.app
+          >) || null;
+      }
       if (result.app) await this.cache.setCurrentAuthObject("app", result.app);
       else this.cache.unsetCurrentAuthObject("app");
 
@@ -127,7 +131,7 @@ export default class AuthenticationManager {
       try {
         const user = await this.cache.getCurrentAuthObject("user");
         resolve(user);
-      } catch (error) {
+      } catch {
         reject(null);
       }
     });
@@ -138,7 +142,7 @@ export default class AuthenticationManager {
       try {
         const user = await this.cache.getCurrentAuthObject("user");
         resolve(!!user);
-      } catch (error) {
+      } catch {
         reject(false);
       }
     });
@@ -148,7 +152,9 @@ export default class AuthenticationManager {
     try {
       this.clearTokens();
       await this.cache.clearCurrentAuthData();
-    } catch (error) {}
+    } catch {
+      /* empty */
+    }
   }
 
   async getAuthData(): Promise<{

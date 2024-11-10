@@ -1,3 +1,6 @@
+import { cities } from "./cities.config";
+import { states } from "./states.config";
+
 const algerianArabicMonths = {
   1: "جانفي", // January
   2: "فيفري", // February
@@ -13,6 +16,7 @@ const algerianArabicMonths = {
   12: "ديسمبر", // December
 };
 
+// eslint-disable-next-line no-undef
 const websiteConfig: Levelup.CMS.V1.System.Entity.WebsiteConfig = {
   name: "ميقات",
   description: `حدد ميزانيتك، حدد مكانك سنجلب لك أفضل العروض .. أقربها .. و بأفضل الأسعار ..
@@ -48,8 +52,8 @@ const websiteConfig: Levelup.CMS.V1.System.Entity.WebsiteConfig = {
   ],
 
   months: algerianArabicMonths,
-  states: [],
-  cities: [],
+  states,
+  cities,
 };
 
 export default websiteConfig;

@@ -1,18 +1,13 @@
-import { FormControl } from "@/components/ui/customized.form";
-import { Input } from "@/components/ui/input";
 import React from "react";
 
+import { FormControl } from "@/components/ui/customized.form";
+import { Input } from "@/components/ui/input";
+
 type Props =
+  // eslint-disable-next-line no-undef
   Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"number">;
 
-const NumberCustomField: React.FC<Props> = ({
-  label,
-  required,
-  value,
-  onChange,
-  options,
-  default_value,
-}) => {
+const NumberCustomField: React.FC<Props> = ({ value, onChange }) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -33,12 +28,14 @@ const NumberCustomField: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="flex flex-col gap-2 py-2">
+    <div className="">
       <FormControl>
         <Input
           type="number"
-          className="rounded-xxs bg-body"
-          onChange={e => onChange(parseFloat(e.target.value || "") || null)}
+          className="rounded-md bg-body"
+          onChange={event =>
+            onChange(Number.parseFloat(event.target.value || "") || null)
+          }
           value={`${value || 0}`}
         />
       </FormControl>

@@ -13,7 +13,7 @@ import { ReactQueryDevtoolsProvider } from "@lib/utils/dev-tools/react-query-dev
 import { StoreProvider } from "@redux/providers/store-provider";
 import colors from "colors";
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, Noto_Sans_Arabic } from "next/font/google";
 import localFont from "next/font/local";
 import "../styles/main.scss";
 
@@ -22,6 +22,10 @@ colors.enable();
 const logger = initLogger(LoggerContext.APPLICATION, "layout");
 
 const inter = Inter({ subsets: ["latin"] });
+const noto = Noto_Sans_Arabic({
+  variable: "--font-noto",
+  weight: ['400', '500', '600', '700', '100', '200', '300', '800', '900']
+});
 const geistSans = localFont({
   src: "../styles/fonts/GeistVF.woff",
   variable: "--font-geist-sans",
@@ -100,6 +104,8 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={locale !== "ar" ? "ltr" : "rtl"}>
       <head>
+        <link rel="preload" href="/assets/miqat/images/mosque2.webp" as="image" />
+
         <link
           rel="apple-touch-icon"
           sizes="57x57"
@@ -175,7 +181,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${inter.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
+        className={`${inter.className} ${noto.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
       >
         <ReactQueryDevtoolsProvider>
           <TranslationsProvider

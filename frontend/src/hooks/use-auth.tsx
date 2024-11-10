@@ -1,4 +1,3 @@
-import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 import {
   logout,
   selectAuthApp,
@@ -8,6 +7,8 @@ import {
 import initLogger from "@lib/logging";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
 import { useCallback, useMemo } from "react";
+
+import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 
 const logger = initLogger("HOOK", "useAuth");
 
@@ -26,22 +27,22 @@ const useAuth = () => {
     useCallback(
       permissionName => {
         if (!permissionName) return true;
-        if (permissionName instanceof Array && permissionName.length === 0)
+        if (Array.isArray(permissionName) && permissionName.length === 0)
           return true;
 
         // logger.debug('hasPermission', permissionName, currentUser?.email);
 
         let perms: string[] = [];
-        let permsObj: { [Name: string]: string } = {};
+        let permsObject: { [Name: string]: string } = {};
         if (typeof permissionName === "string") perms.push(permissionName);
         else
-          permissionName.forEach(p => {
+          for (const p of permissionName) {
             perms.push(p);
-          });
+          }
 
-        permissions.forEach(p => {
-          if (perms.indexOf(p.name) > -1) permsObj[p.name] = p._id;
-        });
+        for (const p of permissions) {
+          if (perms.includes(p.name)) permsObject[p.name] = p._id;
+        }
 
         // logger.debug('hasPermission', {
         //   perms,
@@ -52,17 +53,18 @@ const useAuth = () => {
 
         let granted = false;
         if (!currentUser || currentUser === null) {
+          /* empty */
         } else if (typeof permissionName === "string") {
-          granted =
-            currentUser.permissions.indexOf(permsObj[permissionName]) > -1;
+          granted = currentUser.permissions.includes(permsObject[permissionName]);
         } else {
           // TODO manage multiple permissions
 
+          // eslint-disable-next-line unicorn/no-array-reduce
           granted = permissionName.reduce(
-            (prev: boolean, _permissionName: string) => {
+            (previous: boolean, _permissionName: string) => {
               return (
-                prev ||
-                currentUser?.permissions?.includes(permsObj[_permissionName])
+                previous ||
+                currentUser?.permissions?.includes(permsObject[_permissionName])
               );
             },
             false,

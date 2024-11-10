@@ -1,11 +1,10 @@
-import React, { useEffect, useState, FC, useCallback, useMemo } from "react";
-import { DropEvent, useDropzone } from "react-dropzone";
-import Image from "next/image";
-import clsx from "clsx";
-import { MdEdit } from "react-icons/md";
-import { AxiosProgressEvent } from "axios";
 import { useSdk } from "@hooks/use-sdk";
 import initLogger, { LoggerContext } from "@lib/logging";
+import clsx from "clsx";
+import Image from "next/image";
+import React, { FC, useCallback, useEffect, useState } from "react";
+import { type DropEvent, useDropzone } from "react-dropzone";
+
 import Icons from "@/features/admin/ui/icons";
 
 const logger = initLogger(LoggerContext.COMPONENT, "ImageUploader");
@@ -44,9 +43,9 @@ const ImageUploader: FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   const [selectedFile, setSelectedFile] = useState<
     | (File & {
-        preview: string;
-        new: boolean;
-      })
+      preview: string;
+      new: boolean;
+    })
     | null
   >(null);
   const [progressInfos, setProgressInfos] = useState<{
@@ -116,8 +115,8 @@ const ImageUploader: FC<Props> = ({
           }
           setProcessing(false);
         })
-        .catch(e => {
-          console.log(e);
+        .catch(error => {
+          console.log(error);
           _progressInfos.percentage = 0;
           setMessage("Could not upload the file: " + file.name);
           setProgressInfos(_progressInfos);
@@ -173,29 +172,25 @@ const ImageUploader: FC<Props> = ({
           >
             <div className="relative flex w-full min-w-0 overflow-hidden rounded-md">
               {placeholder &&
-              !uploadedFile &&
-              !selectedFile?.preview &&
-              !value?.id &&
-              !value?.url ? (
+                !uploadedFile &&
+                !selectedFile?.preview &&
+                !value?.id &&
+                !value?.url ? (
                 placeholder
               ) : (
                 <Image
                   src={
                     uploadedFile
                       ? sdk.storage.utils.getImageUrl(uploadedFile._id, {
+                        width: dimensions?.width || 384,
+                        height: dimensions?.height || 384,
+                      })
+                      : selectedFile?.preview ?? (value?.id
+                        ? sdk.storage.utils.getImageUrl(value.id, {
                           width: dimensions?.width || 384,
                           height: dimensions?.height || 384,
                         })
-                      : selectedFile?.preview
-                        ? selectedFile.preview
-                        : value?.id
-                          ? sdk.storage.utils.getImageUrl(value.id, {
-                              width: dimensions?.width || 384,
-                              height: dimensions?.height || 384,
-                            })
-                          : value?.url
-                            ? value.url
-                            : "/img/placeholder.png"
+                        : value?.url ?? "/img/placeholder.png")
                   }
                   className="block w-auto"
                   alt=""

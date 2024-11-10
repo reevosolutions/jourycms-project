@@ -1,16 +1,9 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/customized.form";
-import { Label } from "@/components/ui/label";
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
+import { LuCheck, LuChevronsUpDown, LuX } from "react-icons/lu";
 
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
   CommandEmpty,
@@ -20,12 +13,22 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
+  FormControl,
+  FormDescription,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/customized.form";
+import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/customized.popover";
-import { LuCheck, LuChevronsUpDown, LuX } from "react-icons/lu";
-import { Badge } from "@/components/ui/badge";
+import { Label } from "@/components/ui/label";
+import { cn } from "@/lib/utils";
+import initLogger, { LoggerContext } from "@/lib/logging";
+
+const logger = initLogger(LoggerContext.COMPONENT, "select.custom-field");
 
 type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<
   "select",
@@ -68,9 +71,9 @@ const SelectCustomField: React.FC<Props> = ({
       : value
         ? [value]
         : [];
-    const selected = _value.length ? _value : default_value;
+    const selected = _value.length > 0 ? _value : default_value;
     setSelected(selected);
-  }, [value, default_value]);
+  }, [value, default_value, options.default_value]);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -83,11 +86,11 @@ const SelectCustomField: React.FC<Props> = ({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-full justify-between rounded-xxs"
+          className="w-full justify-between rounded-md"
         >
           <div className="value">
-            {!selected.length ? (
-              <span>{"Search option..."}</span>
+            {selected.length === 0 ? (
+              <span>{"ابحث..."}</span>
             ) : options.multiple ? (
               <div className="flex flex-wrap items-center gap-2">
                 {selected.map(item => (
@@ -104,7 +107,7 @@ const SelectCustomField: React.FC<Props> = ({
                       onClick={event => {
                         event.preventDefault();
                         event.stopPropagation();
-                        setSelected(prev => prev.filter(v => v !== item));
+                        setSelected(previous => previous.filter(v => v !== item));
                         onChange(selected.filter(v => v !== item));
                       }}
                       className="h-4 w-4 opacity-20 hover:opacity-100 hocus:opacity-100"
@@ -123,10 +126,15 @@ const SelectCustomField: React.FC<Props> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80 p-0" align="start">
-        <Command>
-          <CommandInput placeholder="Search option..." />
+        <Command
+          filter={(value, search, keywords) => {
+            logger.value('search', { value, search, keywords });
+            return 1;
+          }}
+        >
+          <CommandInput placeholder="ابحث..." />
           <CommandList>
-            <CommandEmpty>No option found.</CommandEmpty>
+            <CommandEmpty>لا توجد خيارات.</CommandEmpty>
             <CommandGroup>
               {options.choices.map(item => (
                 <CommandItem
@@ -149,7 +157,7 @@ const SelectCustomField: React.FC<Props> = ({
                     className={cn(
                       "ms-auto",
                       (typeof value === "string" && value === item.value) ||
-                        value?.includes(item.value)
+                        (Array.isArray(value) && value?.indexOf(item.value) > -1)
                         ? "opacity-100"
                         : "opacity-0",
                     )}

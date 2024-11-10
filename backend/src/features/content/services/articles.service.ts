@@ -28,6 +28,7 @@ import ArticleValidators from '../../../utils/validators/article.validators';
 import { ArticleSchemaFields } from '../models/article.model';
 import { slugify } from '../../../utilities/strings/slugify.utilities';
 import { uniq } from 'lodash';
+import { isObjectIdValid } from '../../../utilities/helpers/mogodb.helpers';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -179,16 +180,16 @@ export default class ArticlesService extends BaseService {
   /**
    * @description Apply filters on list queries
    */
-  _applyFilters({ query, q, totalQ, opt, authData }: {
+  async _applyFilters({ query, q, totalQ, opt, authData }: {
     q: mongoose.QueryWithFuzzySearch<EntityAlias>,
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
     query: ApiAlias.List.Request,
     authData: Levelup.CMS.V1.Security.AuthData,
     opt: { load_deleted?: boolean; dont_lean?: boolean; }
-  }): {
+  }): Promise<{
     q: mongoose.QueryWithFuzzySearch<EntityAlias>,
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
-  } {
+  }> {
     let { search, filters, load_deleted } = query;
     let filter: {
       q: typeof q;
@@ -254,8 +255,16 @@ export default class ArticlesService extends BaseService {
     q = filter.q; totalQ = filter.totalQ;
 
     // -- article_type
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.article_type, 'article_type' as any);
-    q = filter.q; totalQ = filter.totalQ;
+    if (filters.article_type) {
+      let article_type;
+      if (!isObjectIdValid(filters.article_type as string)) {
+        const { _id } = await this.articleTypeModel.exists({ slug: filters.article_type })
+        article_type = _id;
+      }
+      else article_type = filters.article_type;
+      filter = createStringFilter<DocumentProperties>(q, totalQ, article_type, 'article_type' as any);
+      q = filter.q; totalQ = filter.totalQ;
+    }
 
 
 
@@ -312,7 +321,7 @@ export default class ArticlesService extends BaseService {
       /**
        * Apply filters
        */
-      const filter = this._applyFilters({ q, totalQ, query, authData, opt });
+      const filter = await this._applyFilters({ q, totalQ, query, authData, opt });
       q = filter.q;
       totalQ = filter.totalQ;
 
@@ -388,12 +397,12 @@ export default class ArticlesService extends BaseService {
       const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
       const articleIds: string[] = [];
       for (const item of data) {
-        const type = types.find(t => t._id.toString() === item.article_type.toString()) || null;
+        const type = types.find(t => t._id.toString() === item.article_type?.toString()) || null;
         this.logger.tree('type', item.article_type, type?.slug, type?.custom_meta_fields);
 
         if (item.article_type) result.article_types[item.article_type] = type;
 
-        if (Object.keys(item.meta_fields).length && type) {
+        if (Object.keys(item.meta_fields || {}).length && type) {
           for (const field of type.custom_meta_fields) {
             if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
               articleIds.push(item.meta_fields[field.field_key]);

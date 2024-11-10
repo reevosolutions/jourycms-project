@@ -5,6 +5,13 @@ import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 import useAuth from "@/hooks/use-auth";
 import { LuBriefcase, LuChevronDown } from "react-icons/lu";
+import { publicRoutes } from "@/config";
+import { usePathname } from "next/navigation";
+import initLogger, { LoggerContext } from "@/lib/logging";
+
+
+const logger = initLogger(LoggerContext.COMPONENT, 'header');
+
 
 const HeaderLink: React.FC<{
   title: string;
@@ -26,53 +33,41 @@ const HeaderLink: React.FC<{
   );
 };
 
-export type LayoutProps = JouryCMS.Theme.ComponentProps & {};
 
 const menuItems = [
-  {
-    title: "الرئيسية",
-    href: "/",
-  },
-  {
-    title: "عروض العمرة",
-    href: "/omrah",
-  },
-  {
-    title: "طنبولات",
-    href: "/tombolas",
-  },
-  {
-    title: "مناقصات",
-    href: "/bids",
-  },
-  {
-    title: "خدمات صحية",
-    href: "/services",
-  },
-  {
-    title: "خدمات النقل",
-    href: "/transportation",
-  },
+  publicRoutes.homepage,
+  publicRoutes.homepage._.omrah,
+  publicRoutes.homepage._.tombolas,
+  publicRoutes.homepage._.healthServices,
+  publicRoutes.homepage._.transportation,
 ];
 
-const Header: React.FC<LayoutProps> = ({ children }) => {
+export type HeaderProps = JouryCMS.Theme.ComponentProps & {
+  route: Levelup.CMS.V1.UI.Routes.RouteItem;
+};
+
+const Header: React.FC<HeaderProps> = ({ children, route }) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const { isAuthenticated } = useAuth();
+  let pathname = usePathname();
+  if (pathname.startsWith('/ar') || pathname.startsWith('/fr') || pathname.startsWith('/en')) pathname = pathname.slice(3)
+
+  logger.value('pathname', pathname);
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="jcms-header h-28 bg-gradient-to-r from-darkblue-900 to-darkblue-800">
+    <header className="jcms-header h-28 bg-gradient-to-r from-darkblue-900 to-darkblue-800">
       <div className="inner container mx-auto flex items-center justify-between text-2xl font-medium">
         <nav className="d flex items-center">
           {menuItems.map((item, index) => (
             <HeaderLink
               key={index}
               title={item.title}
-              href={item.href}
-              isCurrent={index === 0}
+              href={item.path}
+              isCurrent={pathname === item.path || (pathname === '' && item.path === '/')}
             />
           ))}
         </nav>
@@ -99,7 +94,7 @@ const Header: React.FC<LayoutProps> = ({ children }) => {
           </Link>
         </nav>
       </div>
-    </div>
+    </header>
   );
 };
 

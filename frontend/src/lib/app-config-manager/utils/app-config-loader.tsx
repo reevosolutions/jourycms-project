@@ -2,12 +2,13 @@
 
 import useCache from "@hooks/use-cache";
 import { AuthEntityDatum } from "@lib/cache-manager/adapters/dexie";
+import initLogger, { LoggerContext } from "@lib/logging";
 import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { PromiseExtended } from "dexie";
+import { type PromiseExtended } from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
 import React, { useCallback, useEffect, useState } from "react";
+
 import { loadAuthenticationConfig } from "../redux/authentication.slice";
-import initLogger, { LoggerContext } from "@lib/logging";
 import { loadContentConfig } from "../redux/content.slice";
 
 const logger = initLogger(LoggerContext.LOADER, "app-config");
@@ -51,7 +52,7 @@ const AppConfigLoader: React.FC<Props> = () => {
   const loaded = useAppSelector(
     state => state.authentication.status === "idle",
   );
-  const [state, setState] = useState<"loading" | "show">("loading");
+  const [, setState] = useState<"loading" | "show">("loading");
 
   useEffect(() => {
     if (!loaded) {

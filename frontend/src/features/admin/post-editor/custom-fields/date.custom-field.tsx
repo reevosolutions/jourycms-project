@@ -56,7 +56,7 @@ const DateCustomField: React.FC<Props> = ({
         <Button
           variant={"outline"}
           className={cn(
-            "w-[280px] justify-start rounded-xxs text-left font-normal",
+            "w-[280px] justify-start rounded-md text-left font-normal",
             !value && "text-muted-foreground",
           )}
         >

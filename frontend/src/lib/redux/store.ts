@@ -1,6 +1,9 @@
+/* eslint-disable unicorn/prefer-spread */
 import { authSlice } from "@features/auth/redux/slice";
-import { authenticationSlice } from "@lib/app-config-manager/redux";
-import { contentSlice } from "@lib/app-config-manager/redux";
+import {
+  authenticationSlice,
+  contentSlice,
+} from "@lib/app-config-manager/redux";
 import type { Action, ThunkAction } from "@reduxjs/toolkit";
 import { combineSlices, configureStore } from "@reduxjs/toolkit";
 

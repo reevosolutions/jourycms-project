@@ -3,10 +3,11 @@
 import Underline from "@tiptap/extension-underline";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+import { useEffect } from "react";
+
+import initLogger, { LoggerContext } from "@/lib/logging";
 
 import Toolbar from "./toolbar.tiptap";
-import initLogger, { LoggerContext } from "@/lib/logging";
-import { useEffect } from "react";
 
 const logger = initLogger(LoggerContext.COMPONENT, "tiptap");
 
@@ -49,7 +50,7 @@ const Tiptap: React.FC<Props> = ({
     if (editor) {
       editor.commands.setContent(defaultContent);
     }
-  }, [defaultContent]);
+  }, [defaultContent, editor]);
 
   return (
     <div className="w-full">

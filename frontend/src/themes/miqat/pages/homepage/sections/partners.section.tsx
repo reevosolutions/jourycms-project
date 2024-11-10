@@ -1,18 +1,16 @@
 "use client";
-import useCMSContent from "@/hooks/use-cms-content";
 import Image from "next/image";
-import Link from "next/link";
 import React from "react";
 
+// eslint-disable-next-line no-undef
 export type HomepagePartnersSectionProps = JouryCMS.Theme.ComponentProps & {};
 
-const HomepagePartnersSection: React.FC<HomepagePartnersSectionProps> = ({
-  children,
-}) => {
+const HomepagePartnersSection: React.FC<
+  HomepagePartnersSectionProps
+> = ({}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const { getWebsiteConfig, getWebsiteConfigValue } = useCMSContent();
 
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */

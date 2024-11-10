@@ -1,15 +1,15 @@
+/* eslint-disable no-undef */
 "use client";
-import websiteConfig from "@/themes/miqat/config";
 import AppConfigManager from "@lib/app-config-manager";
 import initLogger, { LoggerContext } from "@lib/logging";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
+import { useAppSelector } from "@redux/hooks";
 import { useCallback, useEffect, useMemo } from "react";
+
+import websiteConfig from "@/themes/miqat/config";
 
 const logger = initLogger(LoggerContext.HOOK, "useCMSContent");
 
 const useCMSContent = () => {
-  const dispatch = useAppDispatch();
-
   const appConfigManager = useMemo(() => AppConfigManager.getInstance(), []);
 
   const articleTypes = useAppSelector(state => state.content.articleTypes);
@@ -56,13 +56,13 @@ const useCMSContent = () => {
       const field = articleTypes
         .find(item => item._id === type_id)
         ?.custom_meta_fields?.find(item => item.field_key === field_key);
-      logger.value("getMetaFieldValueLabel", {
-        articleTypes,
-        type_id,
-        field_key,
-        value,
-        field,
-      });
+      // logger.value("getMetaFieldValueLabel", {
+      //   articleTypes,
+      //   type_id,
+      //   field_key,
+      //   value,
+      //   field,
+      // });
       if (!field) return value;
       if (
         field.field_type === "select" ||
@@ -87,12 +87,15 @@ const useCMSContent = () => {
   }, []);
 
   const getWebsiteConfigValue = useCallback(
-    <T = any,>(
-      key: keyof Levelup.CMS.V1.System.Entity.WebsiteConfig,
-      defaultValue?: T,
-    ): T => {
+    <K extends keyof Levelup.CMS.V1.System.Entity.WebsiteConfig>(
+      key: K,
+      defaultValue?: Levelup.CMS.V1.System.Entity.WebsiteConfig[K],
+    ) => {
       const websiteConfig = getWebsiteConfig();
-      return websiteConfig[key] as T;
+      return (
+        (websiteConfig[key] as Levelup.CMS.V1.System.Entity.WebsiteConfig[K]) ||
+        defaultValue
+      );
     },
     [getWebsiteConfig],
   );
@@ -104,7 +107,7 @@ const useCMSContent = () => {
     if (articleTypes.length === 0) {
       appConfigManager.getContentData();
     }
-  }, [articleTypes]);
+  }, [appConfigManager, articleTypes]);
 
   return {
     getArticleTypes,

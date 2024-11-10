@@ -9,7 +9,9 @@ export interface SliceState {
   isLoaded: boolean;
   status: TStateStatus;
   lastUpdated?: string;
+  // eslint-disable-next-line no-undef
   roles: Levelup.CMS.V1.Auth.Entity.Role[];
+  // eslint-disable-next-line no-undef
   permissions: Levelup.CMS.V1.Auth.Entity.Permission[];
 }
 
@@ -42,7 +44,7 @@ export const slice = createAppSlice({
                 status: "idle",
               }
             : { ...initialState, status: "failed" };
-        } catch (error) {
+        } catch {
           return {
             status: "failed",
           };

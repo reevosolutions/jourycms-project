@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-module */
 /* eslint-disable prettier/prettier */
 import type { Config } from "tailwindcss";
 import colors from "tailwindcss/colors";
@@ -22,6 +23,7 @@ const config: Config = {
     fontFamily: {
       sans: ["var(--font-inter)"],
       hammah: ["var(--font-hammah)"],
+      noto: ["var(--font-noto)"],
     },
     extend: {
       typography: {
@@ -202,6 +204,52 @@ const config: Config = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+
+      height: {
+        "screen-25": "25vh",
+        "screen-33": "33.333vh",
+        "screen-50": "50vh",
+        "screen-60": "60vh",
+        "screen-80": "80vh",
+        "screen-90": "90vh",
+        "screen-desktop-without-header": "calc(100vh - 57px)",
+        "screen-desktop-with-subheader": "calc(100vh - 93px)",
+        "notification-container": "calc(100vh - 300px)",
+        "notification-content": "calc(100vh - 360px)",
+        "notification-footer": "60px",
+      },
+      minHeight: {
+        sm: "8px",
+        md: "16px",
+        lg: "24px",
+        xl: "48px",
+        "screen-25": "25vh",
+        "screen-33": "33.333vh",
+        "screen-50": "50vh",
+        "screen-60": "60vh",
+        "screen-80": "80vh",
+        "screen-90": "90vh",
+        "screen-desktop-without-header": "calc(100vh - 57px)",
+        "screen-desktop-with-subheader": "calc(100vh - 93px)",
+        "notification-container": "calc(100vh - 300px)",
+        "notification-content": "calc(100vh - 360px)",
+        "notification-footer": "60px",
+      },
+      maxHeight: {
+        sm: "8px",
+        md: "16px",
+        lg: "24px",
+        xl: "48px",
+        "screen-25": "25vh",
+        "screen-33": "33.333vh",
+        "screen-50": "50vh",
+        "screen-60": "60vh",
+        "screen-80": "80vh",
+        "screen-90": "90vh",
+        "notification-container": "calc(100vh - 200px)",
+        "notification-content": "calc(100vh - 260px)",
+        "notification-footer": "60px",
       },
     },
   },

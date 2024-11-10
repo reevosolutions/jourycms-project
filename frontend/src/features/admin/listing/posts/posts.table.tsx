@@ -1,31 +1,29 @@
 "use client";
 
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
-import { useQuery } from "@tanstack/react-query";
+import {
+  type ColumnDef,
+  getCoreRowModel,
+  type RowSelectionState,
+  useReactTable
+} from "@tanstack/react-table";
+import { format } from "date-fns";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import {
-  ColumnDef,
-  createColumnHelper,
-  flexRender,
-  getCoreRowModel,
-  RowSelectionState,
-  useReactTable,
-} from "@tanstack/react-table";
+import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
+
+import { Checkbox } from "@/components/ui/checkbox";
+import { adminRoutes } from "@/config";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { setPathParams } from "@/lib/routes";
+
+import TanstackTable from "../common/tanstack-table";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import { Checkbox } from "@/components/ui/checkbox";
-import TanstackTable from "../common/tanstack-table";
-import { setPathParams } from "@/lib/routes";
-import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
-import Link from "next/link";
-import { adminRoutes } from "@/config";
-import { format } from "date-fns";
 
 type PostListProps = {
   data: Levelup.CMS.V1.Content.Entity.Article[];
@@ -151,7 +149,7 @@ const PostListTable: React.FC<PostListProps> = ({
         },
       },
     ],
-    [],
+    [tLabel],
   );
 
   const table = useReactTable({

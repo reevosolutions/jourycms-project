@@ -51,16 +51,16 @@ export const toPriceAmount = (str: string): number => {
     .replace(",", "")
     .trim();
   try {
-    console.log("EXCEL_NUMBER", str, str2, parseFloat(str2));
+    console.log("EXCEL_NUMBER", str, str2, Number.parseFloat(str2));
     if (!str2.length) return 0;
-    return parseFloat(str2);
-  } catch (error) {
+    return Number.parseFloat(str2);
+  } catch {
     return 0;
   }
 };
 
 export const isNumeric = (val: string) => {
-  return !isNaN(val as unknown as number);
+  return !Number.isNaN(val as unknown as number);
 };
 
 export const abbreviateNumber: (n: number) => string = n => {
@@ -100,7 +100,7 @@ export const checkSimilarity = (a: string, b: string) => {
     }
     if (hits > 0) {
       const union = aBigram.length + bBigram.length;
-      return (2.0 * hits) / union;
+      return (2 * hits) / union;
     }
   }
   return 0;
@@ -131,7 +131,7 @@ export const formatBytes = (bytes: number, decimals: number = 2): string => {
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
   return (
-    parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]
+    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]
   );
 };
 
@@ -261,22 +261,12 @@ export const formatNotificationSpace = (
   space: string,
   infos: {
     user?: string;
-    company?: string | null;
-    office?: string;
-    store?: string;
     role?: string;
-    role_group?: Levelup.V2.Auth.Entity.TRoleGroup;
-    parcelStatus?: Levelup.V2.Shipping.Entity.TParcelStatus;
   },
 ): string | null => {
   if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
     return null;
   return space
-    .replace("[COMPANY]", infos.company || "")
-    .replace("[OFFICE]", infos.office || "")
-    .replace("[STORE]", infos.store || "")
     .replace("[USER]", infos.user || "")
     .replace("[ROLE]", infos.role || "")
-    .replace("[ROLE_GROUP]", infos.role_group || "")
-    .replace("[PARCEL_STATUS]", infos.parcelStatus || "");
 };

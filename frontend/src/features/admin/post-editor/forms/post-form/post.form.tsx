@@ -1,5 +1,13 @@
+/* eslint-disable react/no-children-prop */
 "use client";
 
+import { useForm, type Validator } from "@tanstack/react-form";
+import { useQuery } from "@tanstack/react-query";
+import { yupValidator } from "@tanstack/yup-form-adapter";
+import React, { useCallback, useEffect, useState } from "react";
+import * as yup from "yup";
+
+import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormDescription,
@@ -7,13 +15,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/customized.form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import React, { useCallback, useEffect, useState } from "react";
-import { yupValidator } from "@tanstack/yup-form-adapter";
-import * as yup from "yup";
-import { Tiptap } from "@/features/editors/tiptap";
 import {
   Sidebar,
   SidebarContent,
@@ -22,12 +23,14 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/customized.sidebar";
-import articleTypesSeedData from "@/lib/seed/miqat/ar.types.seed";
-import CustomMetaField from "../../custom-fields";
-import { useQuery } from "@tanstack/react-query";
-import { useForm, Validator } from "@tanstack/react-form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Tiptap } from "@/features/editors/tiptap";
 import { useSdk } from "@/hooks/use-sdk";
 import initLogger, { LoggerContext } from "@/lib/logging";
+import articleTypesSeedData from "@/lib/seed/miqat/ar.types.seed";
+
+import CustomMetaField from "../../custom-fields";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
@@ -125,7 +128,7 @@ const PostForm: React.FC<Props> = ({
         title: "",
         body: "",
         article_type: undefined,
-        ...(article || {}),
+        ...article,
       },
 
       onSubmit: async ({ value }) => {
@@ -163,8 +166,8 @@ const PostForm: React.FC<Props> = ({
   }, [article]);
 
   const handleMetaFieldChange = useCallback((key: string, value: any) => {
-    setMetaFieldsData(prev => ({
-      ...prev,
+    setMetaFieldsData(previous => ({
+      ...previous,
       [key]: value,
     }));
   }, []);
@@ -202,7 +205,7 @@ const PostForm: React.FC<Props> = ({
                     className="hocus:ring-none h-16 border-none text-3xl font-bold shadow-none focus:shadow-none focus-visible:shadow-none focus-visible:ring-0 hocus:shadow-none"
                     value={field.state.value}
                     onBlur={field.handleBlur}
-                    onChange={e => field.handleChange(e.target.value)}
+                    onChange={event => field.handleChange(event.target.value)}
                   />
                 </FormControl>
                 <FormMessage />
@@ -232,7 +235,7 @@ const PostForm: React.FC<Props> = ({
                     disabled={!canSubmit}
                     onClick={form.handleSubmit}
                   >
-                    {isSubmitting ? "submitting" : "Submit"}
+                    {isSubmitting ? "جار الحفظ" : "حفظ"}
                   </Button>
                 )}
               />
@@ -240,7 +243,7 @@ const PostForm: React.FC<Props> = ({
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <aside className="meta-fields flex flex-col gap-4">
+              <aside className="meta-fields flex flex-col gap-4 pb-6 px-4">
                 {metaFields.map(field => (
                   <CustomMetaField
                     key={field.field_key}

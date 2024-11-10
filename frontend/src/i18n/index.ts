@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /**
  * @link https://blog.stackademic.com/easy-way-to-add-translation-in-next-js-13-app-router-using-i18next-13b0663979c0
  * FIXME: The UI will not be translated on Dev Turbo mode
@@ -7,9 +8,8 @@ import i18nConfig from "@config/i18n.config";
 import config from "@config/index";
 import initLogger from "@lib/logging";
 import axios from "axios";
-import { Resource, createInstance, i18n } from "i18next";
-import { HttpBackendOptions } from "i18next-http-backend";
-import resourcesToBackend from "i18next-resources-to-backend";
+import { createInstance, type i18n, type Resource } from "i18next";
+import { type HttpBackendOptions } from "i18next-http-backend";
 import { initReactI18next } from "react-i18next/initReactI18next";
 
 const logger = initLogger("APPLICATION", "i18n");
@@ -58,10 +58,9 @@ export default async function initTranslations(
       ns: string,
       key: string,
       fallbackValue: string,
-      updateMissing: boolean,
+      _updateMissing: boolean,
       options: any,
     ) => {
-      const lang = options.lng || locale;
 
       // logger.warn("i18n MISSING KEY", { lngs, ns, key, fallbackValue, updateMissing, options, lang });
 
@@ -86,8 +85,10 @@ export default async function initTranslations(
             // logger.success("MISSING KEY", response.data);
             ITEMS_SENT_BACKEND[hash] = true;
           })
-          .catch(error => {});
-      } catch (error) {}
+          .catch(error => { });
+      } catch {
+        logger.error("error");
+      }
     },
   });
 

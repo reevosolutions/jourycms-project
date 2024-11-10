@@ -1,0 +1,7 @@
+# Allow all web crawlers to access the website except for paths starting with /admin
+
+User-agent: *
+Disallow: /admin
+
+# Allow access to all other pages
+Allow: /

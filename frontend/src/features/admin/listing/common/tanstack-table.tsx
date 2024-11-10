@@ -1,5 +1,6 @@
-import { RowData, Table, flexRender } from "@tanstack/react-table";
+import { flexRender, type RowData, type Table } from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
+
 import Icons from "../../ui/icons";
 
 type Props<TData> = {

@@ -56,11 +56,12 @@ const routes = {
     return {
       slot: "articleTypes" as const,
       result: async (types: Levelup.CMS.V1.Content.Entity.ArticleType[]) => {
+        // eslint-disable-next-line unicorn/prevent-abbreviations
         const res: { [id: string]: Levelup.CMS.V1.UI.Routes.RouteItem } =
-          types.reduce(
-            (prev, type) => ({
-              ...prev,
-              [type._id ? type._id : type.slug || type.name]: {
+          Object.fromEntries(
+            types.map(type => [
+              type._id ?? (type.slug || type.name),
+              {
                 path: `/admin/articles/types/${type.slug}` as const,
                 title: type.labels.plural,
                 icon: LuFileText,
@@ -86,10 +87,8 @@ const routes = {
                     icon: LuPencilLine,
                   },
                 },
-              },
-            }),
-            {},
-          );
+              }],
+            ));
         return res;
       },
     };
@@ -342,4 +341,100 @@ const routes = {
 
 const __routes: Levelup.CMS.V1.UI.Routes.RouteItems = routes;
 
-export default routes;
+const arabicTranslations: { [K: string]: string } = {
+  "Content Types": "أنواع المحتوى",
+  "All Content Types": "جميع أنواع المحتوى",
+  "Create Content Type": "إنشاء نوع محتوى",
+  "Edit Content Type": "تعديل نوع المحتوى",
+  Taxonomy: "التصنيف",
+  "All Taxonomy": "جميع التصنيفات",
+  "Create Taxonomy": "إنشاء تصنيف",
+  "Edit Taxonomy": "تعديل التصنيف",
+  Media: "الوسائط",
+  "All Media": "جميع الوسائط",
+  "Add Media": "إضافة وسائط",
+  "Edit Media": "تعديل الوسائط",
+  Comments: "التعليقات",
+  "All Comments": "جميع التعليقات",
+  "Edit Comment": "تعديل التعليق",
+  Forms: "النماذج",
+  "All Forms": "جميع النماذج",
+  "Create Form": "إنشاء نموذج",
+  "Edit Form": "تعديل النموذج",
+  "Form Entries": "إدخالات النموذج",
+  Users: "المستخدمين",
+  "All users": "جميع المستخدمين",
+  "Add User": "إضافة مستخدم",
+  "Update User Profile": "تحديث ملف المستخدم",
+  Roles: "الأدوار",
+  "New Role": "دور جديد",
+  "Update Role": "تحديث الدور",
+  Account: "الحساب",
+  "My Profile": "ملفي الشخصي",
+  Settings: "الإعدادات",
+  "Website Identity": "هوية الموقع",
+  "Content Settings": "إعدادات المحتوى",
+  "Members Settings": "إعدادات الأعضاء",
+  Extensions: "الإضافات",
+  "Install Extension": "تثبيت الإضافة",
+};
+
+const frenchTranslations: { [K: string]: string } = {
+  "Content Types": "Types de Contenu",
+  "All Content Types": "Tous les Types de Contenu",
+  "Create Content Type": "Créer un Type de Contenu",
+  "Edit Content Type": "Modifier le Type de Contenu",
+  Taxonomy: "Taxonomie",
+  "All Taxonomy": "Toute la Taxonomie",
+  "Create Taxonomy": "Créer une Taxonomie",
+  "Edit Taxonomy": "Modifier la Taxonomie",
+  Media: "Médias",
+  "All Media": "Tous les Médias",
+  "Add Media": "Ajouter des Médias",
+  "Edit Media": "Modifier les Médias",
+  Comments: "Commentaires",
+  "All Comments": "Tous les Commentaires",
+  "Edit Comment": "Modifier le Commentaire",
+  Forms: "Formulaires",
+  "All Forms": "Tous les Formulaires",
+  "Create Form": "Créer un Formulaire",
+  "Edit Form": "Modifier le Formulaire",
+  "Form Entries": "Entrées du Formulaire",
+  Users: "Utilisateurs",
+  "All users": "Tous les Utilisateurs",
+  "Add User": "Ajouter un Utilisateur",
+  "Update User Profile": "Mettre à Jour le Profil de l'Utilisateur",
+  Roles: "Rôles",
+  "New Role": "Nouveau Rôle",
+  "Update Role": "Mettre à Jour le Rôle",
+  Account: "Compte",
+  "My Profile": "Mon Profil",
+  Settings: "Paramètres",
+  "Website Identity": "Identité du Site",
+  "Content Settings": "Paramètres du Contenu",
+  "Members Settings": "Paramètres des Membres",
+  Extensions: "Extensions",
+  "Install Extension": "Installer l'Extension",
+};
+
+
+
+function translateTitles(object: Levelup.CMS.V1.UI.Routes.RouteItems, language: 'ar' | 'fr'): typeof routes {
+  const translatedObject = {} as Levelup.CMS.V1.UI.Routes.RouteItems;
+
+  for (const key in object) {
+    const item = object[key];
+
+    translatedObject[key] = typeof item === "object" && item !== null ? {
+      ...item,
+      title: language === 'fr' ? frenchTranslations[item.title] || item.title : arabicTranslations[item.title] || item.title,
+      _: item._ ? translateTitles(item._, language) : undefined,
+    } as any : item;
+  }
+
+  return translatedObject as typeof routes;
+}
+
+const translatedRoutes = translateTitles(routes, 'ar');
+
+export default translatedRoutes;

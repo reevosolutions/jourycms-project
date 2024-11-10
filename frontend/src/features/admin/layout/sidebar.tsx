@@ -1,6 +1,15 @@
 "use client";
 
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
+import { LuChevronDown } from "react-icons/lu";
+
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
 import {
   Sidebar,
   SidebarContent,
@@ -10,21 +19,11 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
+  SidebarMenuItem
 } from "@/components/ui/customized.sidebar";
-import initLogger, { LoggerContext } from "@/lib/logging";
 import { adminRoutes } from "@/config";
+import initLogger, { LoggerContext } from "@/lib/logging";
 import mock from "@/lib/mock/generators";
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { LuChevronDown } from "react-icons/lu";
 import { filterRoutes } from "@/lib/routes";
 
 const logger = initLogger(LoggerContext.COMPONENT, "AdminSidebar");
@@ -97,7 +96,7 @@ const AdminSidebar: React.FC<Props> = () => {
   useEffect(() => {
     logger.info("AdminSidebar mounted");
     buildMenu();
-  }, []);
+  }, [buildMenu]);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -113,7 +112,7 @@ const AdminSidebar: React.FC<Props> = () => {
               <SidebarGroup>
                 <SidebarGroupLabel asChild>
                   <CollapsibleTrigger className="text-start text-base font-bold text-primary-700 transition-all duration-200 hover:bg-primary-100 hover:text-primary-900 hocus:text-primary-900">
-                    <span className="flex items-center gap-3 text-base font-bold text-text-600">
+                    <span className="flex items-center gap-3 text-lg font-bold text-text-600">
                       {route.icon && (
                         <route.icon className="h-5 w-5 opacity-50" />
                       )}
@@ -128,13 +127,13 @@ const AdminSidebar: React.FC<Props> = () => {
                       {Object.keys(route._ || {}).map(subKey => {
                         const subRoute = route._?.[subKey];
                         return subRoute ? (
-                          <SidebarMenuItem key={subKey}>
-                            <Link href={subRoute.path}>
+                          <SidebarMenuItem key={subKey} className=" font-bold text-2xl text-slate-400">
+                            <Link href={subRoute.path} className=" ">
                               <SidebarMenuButton>
                                 {subRoute.icon && (
                                   <subRoute.icon className="opacity-50" />
                                 )}
-                                <span>
+                                <span className=" text-base">
                                   {subRoute.menuTitle || subRoute.title}
                                 </span>
                               </SidebarMenuButton>

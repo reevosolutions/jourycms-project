@@ -8,7 +8,7 @@ const ROUTE = adminRoutes.articles._.create;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1
-    ? ROUTE_PARENTS[ROUTE_PARENTS.length - 2]
+    ? ROUTE_PARENTS.at(-2)
     : undefined;
 const QUERY_ID = ROUTE.path;
 
@@ -22,13 +22,12 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
-  const type_slug = (await params).type_slug;
+  const {type_slug} = await params;
 
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const sdk = useSdk();
-
+  
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */

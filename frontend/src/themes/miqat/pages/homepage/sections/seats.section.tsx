@@ -1,19 +1,18 @@
 "use client";
-import Icons from "@/features/admin/ui/icons";
-import useCMSContent from "@/hooks/use-cms-content";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
+import Icons from "@/features/admin/ui/icons";
+
+// eslint-disable-next-line no-undef
 export type HomepageSeatsSectionProps = JouryCMS.Theme.ComponentProps & {};
 
-const HomepageSeatsSection: React.FC<HomepageSeatsSectionProps> = ({
-  children,
-}) => {
+const HomepageSeatsSection: React.FC<HomepageSeatsSectionProps> = ({}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const { getWebsiteConfig, getWebsiteConfigValue } = useCMSContent();
+  // const { getWebsiteConfig, getWebsiteConfigValue } = useCMSContent();
 
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */

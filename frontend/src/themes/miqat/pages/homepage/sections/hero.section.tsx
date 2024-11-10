@@ -1,6 +1,5 @@
 "use client";
-import { ParallaxBanner } from "react-scroll-parallax";
-import { ParallaxProvider } from "react-scroll-parallax";
+import { ParallaxBanner , ParallaxProvider } from "react-scroll-parallax";
 
 import Icons from "@/features/admin/ui/icons";
 import HomepageSearchForm from "@/themes/miqat/components/homepage-search-form";
@@ -30,7 +29,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
       <div className="jcms-hero-section relative">
         <div className="d"></div>
         <ParallaxBanner
-          layers={[{ image: "/assets/miqat/images/mosque2.png", speed: -40 }]}
+          layers={[{ image: "/assets/miqat/images/mosque2.webp", speed: -40 }]}
           className="aspect-[3/1] min-h-[600px]"
         >
           <div className="absolute inset-0 flex items-center justify-center"></div>
@@ -51,6 +50,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
                     network.url ? (
                       <a
                         target="_blank"
+                        aria-label={network.network}
                         key={network.network}
                         href={network.url}
                         className="rounded-full bg-darkblue-900 p-2 text-beige-50 transition-all duration-200 hocus:bg-red2-700"

@@ -1,10 +1,10 @@
 "use client";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+
 import { useSdk } from "@/hooks/use-sdk";
 import initLogger, { LoggerContext } from "@/lib/logging";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
@@ -13,8 +13,9 @@ import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 
 import Image from "next/image";
 import Link from "next/link";
-import { formatAmount } from "@/lib/utilities/strings";
+
 import useCMSContent from "@/hooks/use-cms-content";
+import { formatAmount } from "@/lib/utilities/strings";
 
 export type OmrahPostCardProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;

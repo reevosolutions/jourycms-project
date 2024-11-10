@@ -1,5 +1,6 @@
 import { format } from "date-fns";
 import React, { useEffect, useState } from "react";
+import { LuCheck } from "react-icons/lu";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -15,15 +16,14 @@ import {
 } from "@/components/ui/customized.popover";
 import { addLeadingZeros } from "@/lib/utilities/strings";
 import { cn } from "@/lib/utils";
-import { LuCheck } from "react-icons/lu";
 
 type Props =
   Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<"time">;
 
-const MINUTES = new Array(60)
+const MINUTES = Array.from({ length: 60 })
   .fill(null)
   .map((n, minute) => addLeadingZeros(minute, 2));
-const HOURS = new Array(24)
+const HOURS = Array.from({ length: 24 })
   .fill(null)
   .map((n, index) => addLeadingZeros(index, 2));
 
@@ -71,7 +71,7 @@ const TimeCustomField: React.FC<Props> = ({
             variant="outline"
             role="combobox"
             aria-expanded={hOpen}
-            className="w-12 justify-between rounded-xxs"
+            className="w-12 justify-between rounded-md text-center"
           >
             {hour}
           </Button>
@@ -86,7 +86,7 @@ const TimeCustomField: React.FC<Props> = ({
                     value={hour}
                     onSelect={currentValue => {
                       onChange(
-                        `${hour}:${addLeadingZeros(parseInt(minute), 2)}`,
+                        `${hour}:${addLeadingZeros(Number.parseInt(minute), 2)}`,
                       );
                     }}
                   >
@@ -95,7 +95,7 @@ const TimeCustomField: React.FC<Props> = ({
                       className={cn(
                         "ms-auto",
                         value ===
-                          `${hour}:${addLeadingZeros(parseInt(minute), 2)}`
+                          `${hour}:${addLeadingZeros(Number.parseInt(minute), 2)}`
                           ? "opacity-100"
                           : "opacity-0",
                       )}
@@ -115,7 +115,7 @@ const TimeCustomField: React.FC<Props> = ({
             variant="outline"
             role="combobox"
             aria-expanded={mOpen}
-            className="w-12 justify-between rounded-xxs"
+            className="w-12 justify-between rounded-md text-center"
           >
             {minute}
           </Button>
@@ -130,7 +130,7 @@ const TimeCustomField: React.FC<Props> = ({
                     value={minute}
                     onSelect={currentValue => {
                       onChange(
-                        `${addLeadingZeros(parseInt(hour), 2)}:${minute}`,
+                        `${addLeadingZeros(Number.parseInt(hour), 2)}:${minute}`,
                       );
                     }}
                   >
@@ -139,7 +139,7 @@ const TimeCustomField: React.FC<Props> = ({
                       className={cn(
                         "ms-auto",
                         value ===
-                          `${addLeadingZeros(parseInt(hour), 2)}:${minute}`
+                          `${addLeadingZeros(Number.parseInt(hour), 2)}:${minute}`
                           ? "opacity-100"
                           : "opacity-0",
                       )}

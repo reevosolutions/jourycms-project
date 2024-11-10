@@ -7,7 +7,6 @@ import React, { useCallback, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { adminRoutes } from "@/config";
 import { getRouteTree } from "@/lib/routes";
-import { count } from "console";
 import { useSdk } from "@/hooks/use-sdk";
 import { Button } from "@/components/ui/button";
 import mock from "@/lib/mock/generators";
@@ -16,7 +15,7 @@ const ROUTE = adminRoutes.types;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1
-    ? ROUTE_PARENTS[ROUTE_PARENTS.length - 2]
+    ? ROUTE_PARENTS.at(-2)
     : undefined;
 const QUERY_ID = ROUTE.path;
 
@@ -52,10 +51,10 @@ export default function Page() {
     for (const type of mock.content.seedTypes()) {
       try {
         await sdk.content.articleTypes.create({ data: type });
-      } catch (error) {}
+      } catch { /* empty */ }
     }
     refetch();
-  }, []);
+  }, [refetch, sdk.content.articleTypes]);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */

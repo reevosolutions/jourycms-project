@@ -1,8 +1,7 @@
-import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 import initLogger from "@lib/logging";
 import { createAppSlice } from "@redux/create-app-slice";
-import type { AppThunk } from "@redux/store";
-import type { PayloadAction } from "@reduxjs/toolkit";
+
+import AuthenticationManager from "@/features/auth/lib/authentication-manager";
 
 const logger = initLogger("REDUX", "auth");
 
@@ -36,7 +35,7 @@ export const authSlice = createAppSlice({
           const data = await authManager.getAuthData();
           logger.debug("_authenticate", "isAuthenticated: ", !!data.user);
           return { ...data, isAuthenticated: !!data.user, status: "idle" };
-        } catch (error) {
+        } catch {
           return {
             isAuthenticated: false,
             user: null,
@@ -124,7 +123,7 @@ export const authSlice = createAppSlice({
             app: null,
             status: "idle" as TAuthStateStatus,
           };
-        } catch (error) {
+        } catch {
           return {
             isAuthenticated: false,
             user: null,
@@ -170,13 +169,3 @@ export const {
   selectAuthApp,
 } = authSlice.selectors;
 
-// We can also write thunks by hand, which may contain both sync and async logic.
-// Here's an example of conditionally dispatching actions based on current state.
-export const incrementIfOdd =
-  (amount: number): AppThunk =>
-  (dispatch, getState) => {
-    // const currentValue = selectCount(getState());
-    // if (currentValue % 2 === 1 || currentValue % 2 === -1) {
-    //   dispatch(incrementByAmount(amount));
-    // }
-  };
