@@ -18,6 +18,8 @@ declare module Levelup {
             export namespace Signup {
               export type Request =
                 Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
+                  account_type: 'agency' | 'doctor' | 'escort';
+                  address: Utils.Entity.Snapshots.Locations.Address;
                   first_name: string;
                   family_name: string;
                   sex: Users.Entity.Sex | null;
