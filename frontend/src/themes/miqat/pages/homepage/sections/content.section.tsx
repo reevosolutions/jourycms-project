@@ -10,7 +10,7 @@ import HomepageContentTombolasSection from "./content.tombolas.section";
 
 export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {};
 
-const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
+const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({ }) => {
   return (
     <section className="bg-gray-50/50">
       <div className="container mx-auto py-10">
@@ -57,13 +57,19 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
             </TabsTrigger>
           </TabsList>
           <TabsContent value="omrah">
-            <HomepageContentOmrahSection />
+            <div className=" min-h-screen-60 relative">
+              <HomepageContentOmrahSection />
+            </div>
           </TabsContent>
           <TabsContent value="tombolas">
-            <HomepageContentTombolasSection />
+            <div className=" min-h-screen-60 relative">
+              <HomepageContentTombolasSection />
+            </div>
           </TabsContent>
           <TabsContent value="bids">
-            <HomepageContentBidsSection />
+            <div className=" min-h-screen-60 relative">
+              <HomepageContentBidsSection />
+            </div>
           </TabsContent>
         </Tabs>
       </div>

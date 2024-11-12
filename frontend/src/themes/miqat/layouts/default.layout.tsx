@@ -1,9 +1,7 @@
-"use client";
 import * as React from "react";
-import { useState, useEffect } from "react";
-import Header from "../components/header";
-import Footer from "../components/footer";
 import BreadcrumbComponent from "../components/breadcrumb";
+import Footer from "../components/footer";
+import Header from "../components/header";
 
 export type LayoutProps = JouryCMS.Theme.LayoutProps & {};
 

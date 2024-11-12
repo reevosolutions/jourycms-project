@@ -6,22 +6,19 @@
  */
 
 import Container, { Inject, Service } from 'typedi';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
 
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
-import exceptions from '../../../exceptions';
-import { UploadedFileSchemaFields } from '../models/uploaded-file.model';
-import userCan from '../../../utilities/security/user-can';
-import UploadedFilesService from './uploaded-files.service';
 import * as fs from 'fs';
+import mime from 'mime-types';
 import path from 'path';
 import { v4 as uuid } from 'uuid';
-import { formatBytes } from '../../../utilities/strings/index';
-import { md5 } from 'hash-wasm';
-import downloadRemoteFile from '../../../utilities/remote/download-remote-file';
-import { getFileExtensionFromUrl } from '../../../utilities/remote';
 import BaseService from '../../../common/base.service';
-import mime from 'mime-types';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
+import exceptions from '../../../exceptions';
+import { getFileExtensionFromUrl } from '../../../utilities/remote';
+import downloadRemoteFile from '../../../utilities/remote/download-remote-file';
+import userCan from '../../../utilities/security/user-can';
+import UploadedFilesService from './uploaded-files.service';
 
 import EntityAlias = Levelup.CMS.V1.Storage.Entity.UploadedFile;
 import ApiAlias = Levelup.CMS.V1.Storage.Api.UploadedFiles;

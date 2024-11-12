@@ -20,9 +20,9 @@ import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import TranslationItemSanitizers from '../../../utils/sanitizers/translation.item.sanitizers';
-import TranslationItemValidators from '../../../utils/validators/translation.item.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TranslationItemSanitizers from '../sanitizers/translation.item.sanitizers';
+import TranslationItemValidators from '../validators/translation.item.validators';
 import { TranslationItemSchemaFields } from '../models/translation.item.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Translation.Entity.Item;

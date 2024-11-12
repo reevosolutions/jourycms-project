@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const index_1 = __importDefault(require("../features/content/api/index"));
 const index_2 = __importDefault(require("../features/storage/api/index"));
+const index_3 = __importDefault(require("../features/auth/api/index"));
 // import authAppController from '../features/storage/api/index';
 // guaranteed to get dependencies
 exports.default = () => {
@@ -19,6 +20,7 @@ exports.default = () => {
     /**
      * Always inject the export controller.
      */
+    (0, index_3.default)(app);
     (0, index_1.default)(app);
     (0, index_2.default)(app);
     // authAppController(app);

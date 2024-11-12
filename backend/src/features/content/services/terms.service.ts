@@ -21,9 +21,9 @@ import { extractPartialObject } from '../../../utilities/objects';
 import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import TermSanitizers from '../../../utils/sanitizers/term.sanitizers';
-import TermValidators from '../../../utils/validators/term.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TermSanitizers from '../sanitizers/term.sanitizers';
+import TermValidators from '../validators/term.validators';
 import { TermSchemaFields } from '../models/term.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Term;

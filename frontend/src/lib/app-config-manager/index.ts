@@ -86,8 +86,8 @@ export default class AppConfigManager {
           count: -1,
         });
         roles = response.data;
-        await applyOnChunkedArray(roles, 50, async arr => {
-          await this.cache.db?.roles.bulkPut(arr || []);
+        await applyOnChunkedArray(roles, 50, async array => {
+          await this.cache.db?.roles.bulkPut(array || []);
         });
         this.logger.success("roles data loaded from server", roles?.length);
       }
@@ -104,8 +104,8 @@ export default class AppConfigManager {
           count: -1,
         })
         permissions = response.data;
-        await applyOnChunkedArray(permissions, 50, async arr => {
-          await this.cache.db?.permissions.bulkPut(arr || []);
+        await applyOnChunkedArray(permissions, 50, async array => {
+          await this.cache.db?.permissions.bulkPut(array || []);
         });
         this.logger.success(
           "permissions data loaded from server",
@@ -213,5 +213,26 @@ export default class AppConfigManager {
   async getContentData(forceLoadFormServer = false) {
     await this.loadContentData(forceLoadFormServer);
     return this._contentData;
+  }
+
+  async getArticleTypeBySlug(slug: string) {
+    const articleTypes = this._contentData.articleTypes;
+    const type = articleTypes?.find(v => v.slug === slug);
+    if (!type) {
+      const { data: apiType } = await this.sdk.content.articleTypes.getBySlug(slug);
+      this._contentData.articleTypes?.push(apiType);
+      return apiType || null;
+    }
+    return type;
+  }
+  async getArticleTypeById(id: string) {
+    const articleTypes = this._contentData.articleTypes;
+    const type = articleTypes?.find(v => v._id === id);
+    if (!type) {
+      const { data: apiType } = await this.sdk.content.articleTypes.getById(id);
+      this._contentData.articleTypes?.push(apiType);
+      return apiType || null;
+    }
+    return type;
   }
 }

@@ -251,6 +251,12 @@ const config: Config = {
         "notification-content": "calc(100vh - 260px)",
         "notification-footer": "60px",
       },
+      transitionDuration: {
+        '2000': '2000ms',
+        '3000': '3000ms',
+        '4000': '4000ms',
+        '5000': '5000ms',
+      }
     },
   },
   plugins: [

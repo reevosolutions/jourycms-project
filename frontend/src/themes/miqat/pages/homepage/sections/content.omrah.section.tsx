@@ -15,30 +15,36 @@ import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 
 import OmrahPostCard from "@/themes/miqat/components/post-card.omrah";
+import useCMSContent from "@/hooks/use-cms-content";
+import Loader from "@/themes/miqat/components/loader";
 
-export type HomepageContentOmrahSectionProps =
+export type ContentSectionProps =
   // eslint-disable-next-line no-undef
   JouryCMS.Theme.ComponentProps & {};
 
-const HomepageContentOmrahSection: React.FC<
-  HomepageContentOmrahSectionProps
+const ContentSection: React.FC<
+  ContentSectionProps
 > = ({ }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
   const articleType_slug = "trip";
+
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const sdk = useSdk();
   const { t: tLabel } = useTranslation("label");
   const router = useRouter();
+  const { getArticleTypeBySlug } = useCMSContent();
+
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
   const [articleType, setArticleType] =
     // eslint-disable-next-line no-undef
     useState<Levelup.CMS.V1.Content.Entity.ArticleType | null>(null);
+  const [isItemsLoaded, setIsItemsLoaded] = useState(false);
   const [filteredItems, setFilteredItems] = useState<EntityAlias[]>([]);
   const [items, setItems] = useState<EntityAlias[]>([]);
   const [count, setCount] = useState(12);
@@ -68,8 +74,8 @@ const HomepageContentOmrahSection: React.FC<
     enabled: !!articleType_slug,
     queryFn: async () => {
       if (articleType_slug) {
-        const data = await sdk.content.articleTypes.getBySlug(articleType_slug);
-        setArticleType(data?.data || null);
+        const data = await getArticleTypeBySlug(articleType_slug);
+        setArticleType(data || null);
         return data;
       }
       return null;
@@ -77,8 +83,8 @@ const HomepageContentOmrahSection: React.FC<
   });
 
   const { data, error, refetch, isFetching, isFetched } = useQuery({
-    queryKey: ["articleType", articleType_slug, search, page, count, fields],
-    enabled: !!articleType,
+    queryKey: ["article", articleType?._id, search, page, count, fields],
+    enabled: !!articleType?._id,
 
     queryFn: async () => {
       if (articleType) {
@@ -109,21 +115,20 @@ const HomepageContentOmrahSection: React.FC<
   }, [loadExtraData, items]);
 
   useEffect(() => {
-    setItems(data?.data || []);
+    const items = data?.data || [];
+    setItems(items);
+    setFilteredItems(items);
+    setIsItemsLoaded(true);
   }, [data?.data]);
 
-  useEffect(() => {
-    setFilteredItems(items);
-  }, [items]);
 
-  logger.value("filteredItems", filteredItems);
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
     <div className="py-4">
-      {isFetching ? (
-        <div className="text-center">جار التحميل...</div>
+      {isFetching || !isFetched || !isItemsLoaded ? (
+        <Loader />
       ) : error ? (
         <div className="text-center">حدث خطأ</div>
       ) : filteredItems.length === 0 ? (
@@ -139,4 +144,4 @@ const HomepageContentOmrahSection: React.FC<
   );
 };
 
-export default HomepageContentOmrahSection;
+export default ContentSection;

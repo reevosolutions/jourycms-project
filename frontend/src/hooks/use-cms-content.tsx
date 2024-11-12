@@ -22,16 +22,16 @@ const useCMSContent = () => {
   }, [articleTypes]);
 
   const getArticleType = useCallback(
-    (_id: string) => {
-      return articleTypes.find(item => item._id === _id) || null;
+    async (_id: string) => {
+      return await appConfigManager.getArticleTypeById(_id);
     },
-    [articleTypes],
+    [appConfigManager],
   );
   const getArticleTypeBySlug = useCallback(
-    (slug: string) => {
-      return articleTypes.find(item => item.slug === slug) || null;
+    async (slug: string) => {
+      return await appConfigManager.getArticleTypeBySlug(slug);
     },
-    [articleTypes],
+    [appConfigManager],
   );
 
   const getArticleTypeMetaFields = useCallback(

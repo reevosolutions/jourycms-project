@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 /**
  * Always define the ROUTE variable at the beginning of the page
  */
-const ROUTE = publicRoutes.homepage._.tombolas;
+const ROUTE = publicRoutes.homepage._.omrah;
 const ROUTE_PARENTS = getRouteTree(ROUTE, publicRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1

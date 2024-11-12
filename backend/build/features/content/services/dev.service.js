@@ -45,13 +45,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const cheerio = __importStar(require("cheerio"));
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const typedi_1 = require("typedi");
-const objects_1 = require("../../../utilities/objects");
 const base_service_1 = __importDefault(require("../../../common/base.service"));
 const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
-const cheerio = __importStar(require("cheerio"));
-const path_1 = __importDefault(require("path"));
-const fs_1 = __importDefault(require("fs"));
+const objects_1 = require("../../../utilities/objects");
 const download_remote_file_1 = __importDefault(require("../../../utilities/remote/download-remote-file"));
 /**
  * @description

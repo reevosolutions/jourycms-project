@@ -22,9 +22,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import ArticleSanitizers from '../../../utils/sanitizers/article.sanitizers';
-import ArticleValidators from '../../../utils/validators/article.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import ArticleSanitizers from '../sanitizers/article.sanitizers';
+import ArticleValidators from '../validators/article.validators';
 import { ArticleSchemaFields } from '../models/article.model';
 import { slugify } from '../../../utilities/strings/slugify.utilities';
 import { uniq } from 'lodash';
@@ -489,10 +489,11 @@ export default class ArticlesService extends BaseService {
       */
       if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
 
-      const result = {
+      const result: ApiAlias.GetOne.Response = {
         data: mapDocumentToExposed(doc)
       };
-
+      result.edge = await this._buildResponseEdge([result.data])
+      
       /**
        * Log execution result before returning the result
        */
@@ -553,9 +554,10 @@ export default class ArticlesService extends BaseService {
       */
       if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
 
-      const result = {
+      const result: ApiAlias.GetOne.Response = {
         data: mapDocumentToExposed(doc)
       };
+      result.edge = await this._buildResponseEdge([result.data])
 
       /**
        * Log execution result before returning the result

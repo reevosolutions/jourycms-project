@@ -25,7 +25,7 @@ const logging_1 = __importDefault(require("../utilities/logging"));
 const events_config_1 = __importDefault(require("../config/events.config"));
 const config_1 = __importDefault(require("../config"));
 const exceptions_1 = require("../utilities/exceptions");
-const general_mappers_1 = require("../utils/mappers/general.mappers");
+const general_mappers_1 = require("../common/mappers/general.mappers");
 const logger = (0, logging_1.default)("SUBSCRIBER", "Namespace");
 let TranslationNamespaceSubscriber = class TranslationNamespaceSubscriber {
     /**

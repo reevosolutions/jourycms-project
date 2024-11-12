@@ -11,33 +11,33 @@ import { flatten } from "lodash";
  * @returns {string[]}
  */
 export const splitString = (
-  str: string,
+  string_: string,
   use_plus_character: boolean = true,
 ): string[] => {
   return flatten(
     flatten(
-      flatten(str.split(",").map(v => v.split("/"))).map(v => v.split(";")),
+      flatten(string_.split(",").map(v => v.split("/"))).map(v => v.split(";")),
     ).map(v => (use_plus_character ? v.split("+") : v)),
   )
     .map(v => v.trim())
     .filter(v => !!v);
 };
 
-export const stringToBoolean = (str: string): boolean => {
-  if (!str.length) return false;
-  str = str.trim().toLowerCase();
-  if (["1", "true", "yes", "oui", "y"].includes(str)) return true;
+export const stringToBoolean = (string_: string): boolean => {
+  if (string_.length === 0) return false;
+  string_ = string_.trim().toLowerCase();
+  if (["1", "true", "yes", "oui", "y"].includes(string_)) return true;
   return false;
 };
 
-export const addLeadingZeros = (num: number, totalLength: number) => {
-  return String(num).padStart(totalLength, "0");
+export const addLeadingZeros = (number_: number, totalLength: number) => {
+  return String(number_).padStart(totalLength, "0");
 };
 
-export const toPriceAmount = (str: string): number => {
-  if (!str.length) return 0;
+export const toPriceAmount = (string_: string): number => {
+  if (string_.length === 0) return 0;
 
-  const str2 = str
+  const string2 = string_
     .toLowerCase()
     // start excel number format to number
     .replace(",", "#")
@@ -51,22 +51,22 @@ export const toPriceAmount = (str: string): number => {
     .replace(",", "")
     .trim();
   try {
-    console.log("EXCEL_NUMBER", str, str2, Number.parseFloat(str2));
-    if (!str2.length) return 0;
-    return Number.parseFloat(str2);
+    console.log("EXCEL_NUMBER", string_, string2, Number.parseFloat(string2));
+    if (string2.length === 0) return 0;
+    return Number.parseFloat(string2);
   } catch {
     return 0;
   }
 };
 
-export const isNumeric = (val: string) => {
-  return !Number.isNaN(val as unknown as number);
+export const isNumeric = (value: string) => {
+  return !Number.isNaN(value as unknown as number);
 };
 
 export const abbreviateNumber: (n: number) => string = n => {
-  function rnd(num: number, precision: number) {
+  function rnd(number_: number, precision: number) {
     const prec = 10 ** precision;
-    return Math.round(num * prec) / prec;
+    return Math.round(number_ * prec) / prec;
   }
   const abbrev = ["K", "M", "B"]; // abbreviations in steps of 1000x; extensible if need to edit
   let base = Math.floor(Math.log(Math.abs(n)) / Math.log(1000));
@@ -80,8 +80,8 @@ export const abbreviateNumber: (n: number) => string = n => {
 export const createBigram = (word: string) => {
   const input = word.toLowerCase();
   const vector: string[] = [];
-  for (let i = 0; i < input.length; ++i) {
-    vector.push(input.slice(i, i + 2));
+  for (let index = 0; index < input.length; ++index) {
+    vector.push(input.slice(index, index + 2));
   }
   return vector;
 };
@@ -91,9 +91,9 @@ export const checkSimilarity = (a: string, b: string) => {
     const aBigram = createBigram(a);
     const bBigram = createBigram(b);
     let hits = 0;
-    for (let x = 0; x < aBigram.length; ++x) {
-      for (let y = 0; y < bBigram.length; ++y) {
-        if (aBigram[x] === bBigram[y]) {
+    for (const element of aBigram) {
+      for (const element_ of bBigram) {
+        if (element === element_) {
           hits += 1;
         }
       }
@@ -106,16 +106,16 @@ export const checkSimilarity = (a: string, b: string) => {
   return 0;
 };
 
-export const generateStringNgrams = (str: string) => {
+export const generateStringNgrams = (string_: string) => {
   // Remove non-alphanumeric characters
-  if (!str) return [];
-  const sanitizedText = str.toLowerCase().replace(/[^a-zA-Z0-9]/g, "");
+  if (!string_) return [];
+  const sanitizedText = string_.toLowerCase().replace(/[^a-zA-Z0-9]/g, "");
 
   const ngrams: string[] = [];
 
   for (let n = 2; n <= sanitizedText.length; n++) {
-    for (let i = 0; i <= sanitizedText.length - n; i++) {
-      ngrams.push(sanitizedText.slice(i, i + n));
+    for (let index = 0; index <= sanitizedText.length - n; index++) {
+      ngrams.push(sanitizedText.slice(index, index + n));
     }
   }
 
@@ -128,10 +128,10 @@ export const formatBytes = (bytes: number, decimals: number = 2): string => {
   const k = 1024;
   const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const index = Math.floor(Math.log(bytes) / Math.log(k));
 
   return (
-    Number.parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]
+    Number.parseFloat((bytes / Math.pow(k, index)).toFixed(decimals)) + " " + sizes[index]
   );
 };
 
@@ -166,8 +166,8 @@ export const generateSlug = async (title: string): Promise<string> => {
   return dashedTitle;
 };
 
-export const toSnakeCase = (str: string): string => {
-  return str.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
+export const toSnakeCase = (string_: string): string => {
+  return string_.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
 };
 
 export const toKebabCase = (input: string): string => {
@@ -177,9 +177,9 @@ export const toKebabCase = (input: string): string => {
     .toLowerCase(); // Convert to lowercase.
 };
 
-export function capitalizeFirstLetter(str: string): string {
-  if (str.length === 0) return str;
-  return str.charAt(0).toUpperCase() + str.slice(1);
+export function capitalizeFirstLetter(string_: string): string {
+  if (string_.length === 0) return string_;
+  return string_.charAt(0).toUpperCase() + string_.slice(1);
 }
 
 export function kebabToCamel(kebabString: string): string {
@@ -249,12 +249,12 @@ export const formatAmount = (
   separator: string = ",",
   decimals: number = 2,
 ): string => {
-  const str = x.toFixed(decimals).split(".");
-  const part1 = str[0].replace(
+  const string_ = x.toFixed(decimals).split(".");
+  const part1 = string_[0].replace(
     /\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g,
     `$2${separator}$1`,
   );
-  return str.length === 2 ? `${part1}.${str[1]}` : part1;
+  return string_.length === 2 ? `${part1}.${string_[1]}` : part1;
 };
 
 export const formatNotificationSpace = (
@@ -264,7 +264,7 @@ export const formatNotificationSpace = (
     role?: string;
   },
 ): string | null => {
-  if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
+  if (!Object.values(infos).reduce((previous, current) => previous || !!current, false))
     return null;
   return space
     .replace("[USER]", infos.user || "")

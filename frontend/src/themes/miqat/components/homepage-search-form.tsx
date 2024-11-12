@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import Image from "next/image";
-import React, { useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   LuCheck,
   LuChevronsUpDown,
@@ -66,15 +66,11 @@ export const OmrahSearchForm: React.FC = () => {
     () => getWebsiteConfigValue("states", []),
     [getWebsiteConfigValue],
   );
-  const durations = useMemo(
-    () =>
-      (
-        getArticleTypeBySlug("trip")?.custom_meta_fields?.find(
-          field => field.field_key === "trip_duration",
-        ) as Levelup.CMS.V1.Content.CustomFields.MetaField<"select"> | undefined
-      )?.field_options?.choices,
-    [getArticleTypeBySlug],
-  );
+
+  const [durations, setDurations] = useState<Levelup.CMS.V1.Content.CustomFields.MetaField<"select">['field_options']['choices']>([]);
+
+  
+
   const cities = useMemo(
     () => getWebsiteConfigValue("cities", []),
     [getWebsiteConfigValue],
@@ -95,6 +91,26 @@ export const OmrahSearchForm: React.FC = () => {
   const [duration, setDuration] = useState<string | null>(null);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([12, 32]);
+
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   METHODS                                  */
+  /* -------------------------------------------------------------------------- */
+  const loadDurations = useCallback(
+    async () => {
+      const type = await getArticleTypeBySlug("trip");
+      const durations = (type?.custom_meta_fields?.find(
+        field => field.field_key === "trip_duration",
+      ) as Levelup.CMS.V1.Content.CustomFields.MetaField<"select"> | undefined
+      )?.field_options?.choices;
+      setDurations(durations || []);
+    },
+    [getArticleTypeBySlug],
+  );
+
+  useEffect(() => {
+    loadDurations();
+  }, [loadDurations]);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -317,7 +333,7 @@ export const OmrahSearchForm: React.FC = () => {
                     <span className="text-darkblue-500">{"اختر مدة..."}</span>
                   ) : (
                     <span>
-                      {durations?.find(index => index.value === duration)
+                      {(durations)?.find(index => index.value === duration)
                         ?.label || ""}
                     </span>
                   )}

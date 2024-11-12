@@ -12,7 +12,7 @@ import initLogger from '../utilities/logging';
 import events from '../config/events.config';
 import config from '../config';
 import { errorToObject } from '../utilities/exceptions';
-import { mapDocumentToExposed } from '../utils/mappers/general.mappers';
+import { mapDocumentToExposed } from '../common/mappers/general.mappers';
 
 const logger = initLogger("SUBSCRIBER", "Review");
 

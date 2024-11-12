@@ -21,40 +21,29 @@ declare module Levelup {
             /* ----------------------- COMMON LOCATIONS INTERFACES ---------------------- */
             export namespace Locations {
               interface Address {
-                country_id: string;
                 country_code: string;
                 country_name: string;
-                state_id: string;
                 state_code: string;
                 state_name: string;
-                state_zone?: number;
-                city_id: string;
                 city_code: string;
                 city_name: string;
-                city_zone?: number;
                 street_address?: string;
               }
               interface City {
-                _id: string;
                 code: string;
                 name: string;
-                country_id: string;
-                state_id: string;
                 country_code: string;
                 state_code: string;
                 country_name: string;
                 state_name: string;
               }
               interface State {
-                _id: string;
                 code: string;
                 name: string;
-                country_id: string;
                 country_code: string;
                 country_name: string;
               }
               interface Country {
-                _id: string;
                 code: string;
                 name: string;
               }

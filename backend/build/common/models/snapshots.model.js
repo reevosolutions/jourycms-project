@@ -6,7 +6,7 @@
  * @since 07-03-2024 23:23:09
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports._ItemUpdateSchemaFields = exports._ItemTagsSchemaFields = exports._UserSnapshotSchemaFields = exports._FileAttributeSchemaFields = void 0;
+exports._AddressSchemaFields = exports._ItemUpdateSchemaFields = exports._ItemTagsSchemaFields = exports._UserSnapshotSchemaFields = exports._FileAttributeSchemaFields = void 0;
 const mongoose_1 = require("mongoose");
 /* -------------------------------------------------------------------------- */
 /*                                   COMMON                                   */
@@ -57,4 +57,13 @@ exports._ItemUpdateSchemaFields = new mongoose_1.Schema({
         default: []
     }
 }, { _id: false });
+exports._AddressSchemaFields = {
+    country_code: { type: String },
+    country_name: { type: String },
+    state_code: { type: String },
+    state_name: { type: String },
+    city_code: { type: String },
+    city_name: { type: String },
+    street_address: { type: String },
+};
 //# sourceMappingURL=snapshots.model.js.map

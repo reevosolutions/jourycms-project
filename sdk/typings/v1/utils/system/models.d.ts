@@ -38,41 +38,41 @@ declare module Levelup {
 						export type EntityType<E extends AllModels> =
 							// auth
 							E extends "user"
-							? Levelup.V2.Users.Entity.ExposedUser &
+							? Levelup.CMS.V1.Users.Entity.ExposedUser &
 							Record<"password" | "confirm_password", string>
 							: E extends "permission"
-							? Levelup.V2.Auth.Entity.Permission
+							? Levelup.CMS.V1.Auth.Entity.Permission
 							: E extends "permissionGroup"
-							? Levelup.V2.Auth.Entity.PermissionGroup
+							? Levelup.CMS.V1.Auth.Entity.PermissionGroup
 							: E extends "role"
-							? Levelup.V2.Auth.Entity.Role
+							? Levelup.CMS.V1.Auth.Entity.Role
 							: E extends "apiKey"
-							? Levelup.V2.Auth.Entity.ApiKey
+							? Levelup.CMS.V1.Auth.Entity.ApiKey
 							: // cm
 							E extends "article"
-							? Levelup.V2.Cm.Entity.Article
+							? Levelup.CMS.V1.Content.Entity.Article
 							: E extends "articleType"
-							? Levelup.V2.Cm.Entity.ArticleType
+							? Levelup.CMS.V1.Content.Entity.ArticleType
 							: E extends "review"
-							? Levelup.V2.Cm.Entity.Review
+							? Levelup.CMS.V1.Content.Entity.Review
 							: E extends "comment"
-							? Levelup.V2.Cm.Entity.Comment
+							? Levelup.CMS.V1.Content.Entity.Comment
 							: E extends "term"
-							? Levelup.V2.Cm.Entity.Term
+							? Levelup.CMS.V1.Content.Entity.Term
 							: E extends "taxonomy"
-							? Levelup.V2.Cm.Entity.Taxonomy
+							? Levelup.CMS.V1.Content.Entity.Taxonomy
 							: E extends "translationItem"
-							? Levelup.V2.Cm.Translation.Entity.Item
+							? Levelup.CMS.V1.Content.Translation.Entity.Item
 							: E extends "translationProject"
-							? Levelup.V2.Cm.Translation.Entity.Project
+							? Levelup.CMS.V1.Content.Translation.Entity.Project
 							: E extends "translationNamespace"
-							? Levelup.V2.Cm.Translation.Entity.Namespace
+							? Levelup.CMS.V1.Content.Translation.Entity.Namespace
 							: // Storage
 							E extends "uploadedFile"
-							? Levelup.V2.Storage.Entity.UploadedFile
+							? Levelup.CMS.V1.Storage.Entity.UploadedFile
 							: // system
 							E extends "app"
-							? Levelup.V2.System.Entity.App
+							? Levelup.CMS.V1.System.Entity.App
 							: never;
 					}
 				}

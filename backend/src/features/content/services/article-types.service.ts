@@ -20,9 +20,9 @@ import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities
 import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import ArticleTypeSanitizers from '../../../utils/sanitizers/article-type.sanitizers';
-import ArticleTypeValidators from '../../../utils/validators/article-type.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import ArticleTypeSanitizers from '../sanitizers/article-type.sanitizers';
+import ArticleTypeValidators from '../validators/article-type.validators';
 import { ArticleTypeSchemaFields } from '../models/article-type.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.ArticleType;

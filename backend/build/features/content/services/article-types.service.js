@@ -57,9 +57,9 @@ const snapshots_utilities_1 = require("../../../utilities/entities/snapshots.uti
 const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
 const index_1 = require("../../../utilities/requests/index");
 const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
-const general_mappers_1 = require("../../../utils/mappers/general.mappers");
-const article_type_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/article-type.sanitizers"));
-const article_type_validators_1 = __importDefault(require("../../../utils/validators/article-type.validators"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const article_type_sanitizers_1 = __importDefault(require("../sanitizers/article-type.sanitizers"));
+const article_type_validators_1 = __importDefault(require("../validators/article-type.validators"));
 const article_type_model_1 = require("../models/article-type.model");
 /**
  * @description
@@ -210,18 +210,13 @@ let ArticleTypesService = class ArticleTypesService extends base_service_1.defau
             q = filter.q;
             totalQ = filter.totalQ;
         }
-        // -- tracking_id
-        if (article_type_model_1.ArticleTypeSchemaFields['tracking_id']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['tracking_id'], 'tracking_id');
-            q = filter.q;
-            totalQ = filter.totalQ;
-        }
         // -- name
-        if (article_type_model_1.ArticleTypeSchemaFields['name']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
-            q = filter.q;
-            totalQ = filter.totalQ;
-        }
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
+        q = filter.q;
+        totalQ = filter.totalQ;
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['slug'], 'slug');
+        q = filter.q;
+        totalQ = filter.totalQ;
         return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
     }
     /**

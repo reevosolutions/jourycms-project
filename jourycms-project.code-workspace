@@ -11,6 +11,9 @@
     },
     {
       "path": "sdk"
+    },
+    {
+      "path": "../pharmadz-project/phdz_core"
     }
   ],
   "settings": {

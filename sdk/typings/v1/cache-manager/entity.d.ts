@@ -59,13 +59,24 @@ declare module Levelup {
           : // system
           E extends "app"
           ? System.Api.Apps.List.Request
+          
+          : // content
+          E extends "article"
+          ? Content.Api.Articles.List.Request
+          : E extends "articleType"
+          ? Content.Api.ArticleTypes.List.Request
+          : E extends "taxonomy"
+          ? Content.Api.Taxonomies.List.Request
+          : E extends "term"
+          ? Content.Api.Terms.List.Request
+
           : never;
 
 
 
 
         export type TListQueryParams<E extends TEntity> =
-          E extends Levelup.CMS.V1.CacheManager.TLevelupEntity
+          E extends Levelup.CMS.V1.Utils.SystemStructure.Models.AllModels
           ? Levelup.CMS.V1.CacheManager.TLevelupListQueryParams<E>
           : never;
       }

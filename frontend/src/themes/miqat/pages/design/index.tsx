@@ -4,10 +4,11 @@ import DefaultLayout from "../../layouts/default.layout";
 import HomepageHeroSection from "../homepage/sections/hero.section";
 import HomepageContentSection from "../homepage/sections/content.section";
 import HomepageCallToActionSection from "../homepage/sections/account-call-to-action.section";
+import { publicRoutes } from "@/config";
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
-const DesignPage: React.FC<PageProps> = ({}) => {
+const DesignPage: React.FC<PageProps> = ({ }) => {
   // const darkblue = chroma.scale(['#dfebf1', '#273248']).mode("rgb").colors(11).reduce((prev, color, index) => ({ ...prev, [index === 0 ? "50" : index === 10 ? "950" : (index * 100).toString()]: color }), {} as { [key: string]: string });
   const darkblue = chroma
     .scale(["#dfebf1", "#7c8898", "#1c2232"])
@@ -62,7 +63,7 @@ const DesignPage: React.FC<PageProps> = ({}) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <DefaultLayout>
+    <DefaultLayout route={publicRoutes.homepage}>
       <HomepageHeroSection />
       <HomepageContentSection />
       <HomepageCallToActionSection />

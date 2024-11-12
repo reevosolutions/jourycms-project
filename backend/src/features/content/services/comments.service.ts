@@ -22,9 +22,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import CommentSanitizers from '../../../utils/sanitizers/comment.sanitizers';
-import CommentValidators from '../../../utils/validators/comment.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import CommentSanitizers from '../sanitizers/comment.sanitizers';
+import CommentValidators from '../validators/comment.validators';
 import { CommentSchemaFields } from '../models/comment.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Comment;

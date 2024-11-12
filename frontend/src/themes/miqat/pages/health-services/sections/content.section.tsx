@@ -15,6 +15,8 @@ import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 
 import OmrahPostCard from "@/themes/miqat/components/post-card.omrah";
+import useCMSContent from "@/hooks/use-cms-content";
+import Loader from "@/themes/miqat/components/loader";
 
 export type ContentSectionProps =
   // eslint-disable-next-line no-undef
@@ -33,6 +35,8 @@ const ContentSection: React.FC<
   const sdk = useSdk();
   const { t: tLabel } = useTranslation("label");
   const router = useRouter();
+  const {getArticleTypeBySlug} = useCMSContent();
+
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
@@ -69,8 +73,8 @@ const ContentSection: React.FC<
     enabled: !!articleType_slug,
     queryFn: async () => {
       if (articleType_slug) {
-        const data = await sdk.content.articleTypes.getBySlug(articleType_slug);
-        setArticleType(data?.data || null);
+        const data = await getArticleTypeBySlug(articleType_slug);
+        setArticleType(data || null);
         return data;
       }
       return null;
@@ -78,7 +82,7 @@ const ContentSection: React.FC<
   });
 
   const { data, error, refetch, isFetching, isFetched } = useQuery({
-    queryKey: ["articleType", articleType_slug, search, page, count, fields],
+    queryKey: ["article", articleType, search, page, count, fields],
     enabled: !!articleType,
 
     queryFn: async () => {
@@ -110,22 +114,20 @@ const ContentSection: React.FC<
   }, [loadExtraData, items]);
 
   useEffect(() => {
-    setItems(data?.data || []);
-  }, [data?.data]);
-
-  useEffect(() => {
+    const items = data?.data || [];
+    setItems(items);
     setFilteredItems(items);
     setIsItemsLoaded(true);
-  }, [items]);
+  }, [data?.data]);
 
-  logger.value("filteredItems", filteredItems);
+
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
     <div className="py-4">
-      {isFetching || !isItemsLoaded ? (
-        <div className="text-center">جار التحميل...</div>
+      {isFetching || !isFetched || !isItemsLoaded ? (
+        <Loader />
       ) : error ? (
         <div className="text-center">حدث خطأ</div>
       ) : filteredItems.length === 0 ? (

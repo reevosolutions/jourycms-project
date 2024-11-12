@@ -22,9 +22,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import TaxonomySanitizers from '../../../utils/sanitizers/taxonomy.sanitizers';
-import TaxonomyValidators from '../../../utils/validators/taxonomy.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TaxonomySanitizers from '../sanitizers/taxonomy.sanitizers';
+import TaxonomyValidators from '../validators/taxonomy.validators';
 import { TaxonomySchemaFields } from '../models/taxonomy.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Taxonomy;

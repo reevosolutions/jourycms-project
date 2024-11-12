@@ -1,5 +1,7 @@
 import * as React from "react";
 import DefaultLayout from "../../../layouts/default.layout";
+import LoginForm from "@/features/auth/forms/login.form";
+import Link from "next/link";
 
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
@@ -10,8 +12,17 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
   /* -------------------------------------------------------------------------- */
   return (
     <DefaultLayout route={route}>
-      <div className="container mx-auto">
-        login
+      <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
+        <div className="flex flex-col gap-4 sm:-mt-40">
+
+          <div className="mx-auto w-96 max-w-full  shadow-xl  rounded-2xl shadow-darkblue-950/5  ">
+            <LoginForm />
+          </div>
+          <div className="d">
+            <p className="text-xl text-center">ليس لديك حساب؟  <Link href={"/register"} className=" text-beige-500 hocus:text-beige-900">تسجيل</Link>
+            </p>
+          </div>
+        </div>
       </div>
     </DefaultLayout>
   );

@@ -22,9 +22,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import ReviewSanitizers from '../../../utils/sanitizers/review.sanitizers';
-import ReviewValidators from '../../../utils/validators/review.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import ReviewSanitizers from '../sanitizers/review.sanitizers';
+import ReviewValidators from '../validators/review.validators';
 import { ReviewSchemaFields } from '../models/review.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Review;

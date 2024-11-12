@@ -24,7 +24,7 @@ const nextConfig: NextConfig = {
   },
 
   async headers() {
-    return [{
+    return process.env.NODE_ENV === 'production' ? [{
       // This doesn't work for 'Cache-Control' key (works for others though):
       source: '/_next/(.*)',
       headers: [
@@ -40,7 +40,7 @@ const nextConfig: NextConfig = {
         }
       ],
     },
-    ]
+    ] : [];
   },
 };
 

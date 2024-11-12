@@ -16,6 +16,7 @@ import Link from "next/link";
 
 import useCMSContent from "@/hooks/use-cms-content";
 import { formatAmount } from "@/lib/utilities/strings";
+import { animated, useSpring } from "@react-spring/web";
 
 export type OmrahPostCardProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;
@@ -57,10 +58,18 @@ const OmrahPostCard: React.FC<OmrahPostCardProps> = ({ data, edge }) => {
     }
   }, [data, edge]);
 
+  const styles = useSpring({
+    from: { opacity: 0, transform: "translateY(20px)" },
+    to: { opacity: 1, transform: "translateY(0px)" },
+    config: { tension: 180, friction: 12 },
+  });
+
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
+    <animated.div style={styles}>
+
     <div className="relative rounded-xl bg-white pb-20 shadow-lg shadow-slate-200 transition-all hocus:z-10 hocus:-translate-y-2 hocus:scale-105 hocus:shadow-xl hocus:shadow-slate-200">
       <Link href={`/${data.slug}`}>
         <div className="relative h-40 w-full">
@@ -128,6 +137,8 @@ const OmrahPostCard: React.FC<OmrahPostCardProps> = ({ data, edge }) => {
         </div>
       </Link>
     </div>
+    </animated.div>
+
   );
 };
 

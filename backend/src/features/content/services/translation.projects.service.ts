@@ -21,9 +21,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import TranslationProjectSanitizers from '../../../utils/sanitizers/translation.project.sanitizers';
-import TranslationProjectValidators from '../../../utils/validators/translation.project.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TranslationProjectSanitizers from '../sanitizers/translation.project.sanitizers';
+import TranslationProjectValidators from '../validators/translation.project.validators';
 import { TranslationProjectSchemaFields } from '../models/translation.project.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Translation.Entity.Project;

@@ -67,4 +67,16 @@ export const _ItemUpdateSchemaFields = new Schema<Levelup.CMS.V1.Utils.Entity.Ge
     _id: false,
     default: []
   }
-}, {_id: false});
+}, { _id: false });
+
+
+export const _AddressSchemaFields: DeepStrictSchemaDefinition<Levelup.CMS.V1.Utils.Entity.Snapshots.Locations.Address> =
+{
+  country_code: { type: String },
+  country_name: { type: String },
+  state_code: { type: String },
+  state_name: { type: String },
+  city_code: { type: String },
+  city_name: { type: String },
+  street_address: { type: String },
+};

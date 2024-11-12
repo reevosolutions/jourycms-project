@@ -16,6 +16,7 @@ const taxonomy_model_1 = require("../features/content/models/taxonomy.model");
 const translation_item_model_1 = require("../features/content/models/translation.item.model");
 const translation_namespace_model_1 = require("../features/content/models/translation.namespace.model");
 const translation_project_model_1 = require("../features/content/models/translation.project.model");
+const uploaded_file_model_1 = require("../features/storage/models/uploaded-file.model");
 /**
  * Load the service models.
  *
@@ -35,6 +36,7 @@ const getServiceModels = () => {
         translationItemModel: translation_item_model_1.TranslationItem,
         translationNamespaceModel: translation_namespace_model_1.TranslationNamespace,
         translationProjectModel: translation_project_model_1.TranslationProject,
+        uploadedFileModel: uploaded_file_model_1.UploadedFile,
     };
 };
 exports.default = getServiceModels;

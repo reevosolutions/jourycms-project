@@ -12,7 +12,7 @@ import initLogger from '../utilities/logging';
 import events from '../config/events.config';
 import config from '../config';
 import { errorToObject } from '../utilities/exceptions';
-import { mapDocumentToExposed } from '../utils/mappers/general.mappers';
+import { mapDocumentToExposed } from '../common/mappers/general.mappers';
 
 const logger = initLogger("SUBSCRIBER", "Project");
 
@@ -26,29 +26,29 @@ export default class TranslationProjectSubscriber {
    * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.created} payload
    */
   @On(events.content.translation.project.created)
-  public async onTranslationProjectCreated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.created): Promise < void> {
-    
+  public async onTranslationProjectCreated({ data }: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.created): Promise<void> {
+
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
-       */ 
+       */
       const cache = Container.get(CacheManager);
-      
+
 
       /**
        * Map object to exposed
        */
       data = mapDocumentToExposed(data);
 
-      
 
-      if(config.environement === 'development') {
+
+      if (config.environement === 'development') {
         /**
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
         logger.event(events.content.translation.project.created, identifier);
-        
+
       }
       else {
         /**
@@ -81,29 +81,29 @@ export default class TranslationProjectSubscriber {
    * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.updated} payload
    */
   @On(events.content.translation.project.updated)
-  public async onTranslationProjectUpdated({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.updated): Promise < void> {
-    
+  public async onTranslationProjectUpdated({ data }: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.updated): Promise<void> {
+
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
-       */ 
+       */
       const cache = Container.get(CacheManager);
-      
+
 
       /**
        * Map object to exposed
        */
       data = mapDocumentToExposed(data);
 
-      
 
-      if(config.environement === 'development') {
+
+      if (config.environement === 'development') {
         /**
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
         logger.event(events.content.translation.project.updated, identifier);
-        
+
       }
       else {
         /**
@@ -136,29 +136,29 @@ export default class TranslationProjectSubscriber {
    * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.deleted} payload
    */
   @On(events.content.translation.project.deleted)
-  public async onTranslationProjectDeleted({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.deleted): Promise < void> {
-    
+  public async onTranslationProjectDeleted({ data }: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.deleted): Promise<void> {
+
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
-       */ 
+       */
       const cache = Container.get(CacheManager);
-      
+
 
       /**
        * Map object to exposed
        */
       data = mapDocumentToExposed(data);
 
-      
 
-      if(config.environement === 'development') {
+
+      if (config.environement === 'development') {
         /**
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
         logger.event(events.content.translation.project.deleted, identifier);
-        
+
       }
       else {
         /**
@@ -191,29 +191,29 @@ export default class TranslationProjectSubscriber {
    * @param {Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.restored} payload
    */
   @On(events.content.translation.project.restored)
-  public async onTranslationProjectRestored({data}: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.restored): Promise < void> {
-    
+  public async onTranslationProjectRestored({ data }: Levelup.CMS.V1.Events.Payloads.Content.Translation.Project.restored): Promise<void> {
+
     try {
       /**
        * Logic to run in ALL_ENVIRONMENTS
-       */ 
+       */
       const cache = Container.get(CacheManager);
-      
+
 
       /**
        * Map object to exposed
        */
       data = mapDocumentToExposed(data);
 
-      
 
-      if(config.environement === 'development') {
+
+      if (config.environement === 'development') {
         /**
          * Here you can add any logic to run in DEVELOPMENT
          */
         const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
         logger.event(events.content.translation.project.restored, identifier);
-        
+
       }
       else {
         /**

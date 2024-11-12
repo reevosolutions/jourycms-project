@@ -35,9 +35,9 @@ const update_calculator_class_1 = __importDefault(require("../../../utilities/ob
 const index_1 = require("../../../utilities/requests/index");
 const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
 const tracking_id_utilities_1 = require("../../../utilities/system/tracking-id.utilities");
-const general_mappers_1 = require("../../../utils/mappers/general.mappers");
-const translation_namespace_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/translation.namespace.sanitizers"));
-const translation_namespace_validators_1 = __importDefault(require("../../../utils/validators/translation.namespace.validators"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const translation_namespace_sanitizers_1 = __importDefault(require("../sanitizers/translation.namespace.sanitizers"));
+const translation_namespace_validators_1 = __importDefault(require("../validators/translation.namespace.validators"));
 const translation_namespace_model_1 = require("../models/translation.namespace.model");
 /**
  * @description

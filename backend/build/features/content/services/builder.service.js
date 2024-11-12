@@ -104,6 +104,7 @@ let BuilderService = class BuilderService extends base_service_1.default {
                     article.meta_fields.price = faker_1.faker.number.int({ min: 11, max: 50 }) * 10000 + faker_1.faker.number.int({ min: 1, max: 9 }) * 1000;
                     article.meta_fields.duarttion = undefined;
                     article.meta_fields.trip_duration = faker_1.faker.helpers.arrayElement([15, 21, 30, 45]);
+                    article.meta_fields.agency = '672eb5728cb4792976274773';
                     this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
                     await this.articleModel.updateOne({
                         _id: article._id

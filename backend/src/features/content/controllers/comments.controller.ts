@@ -7,14 +7,9 @@
 
 import { NextFunction, Request, Response, Router } from 'express';
 import Container from 'typedi';
-import Joi from 'joi';
-import exceptions from '../../../exceptions';
-import middlewares from '../../../middlewares';
 import initLogger from '../../../utilities/logging';
 import { respond } from '../../../utilities/requests';
-import { errorToObject } from '../../../utilities/exceptions';
 import { getAuthData } from '../../../utilities/requests/get-auth-data';
-import { validateRouteID } from '../../../utils/validators/utils';
 import CommentsService from '../services/comments.service';
 
 /**

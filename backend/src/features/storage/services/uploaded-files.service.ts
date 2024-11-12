@@ -9,7 +9,6 @@ import mongoose from 'mongoose';
 import { defaults, getItemIdsFromOldAndNewData } from '../../../utilities/helpers/utils.helpers';
 import Container, { Inject, Service } from 'typedi';
 
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
 import CacheManager from '../../../managers/cache-manager';
 import config from '../../../config';
 import { EventDispatcher, EventDispatcherInterface } from '../../../decorators/eventDispatcher.decorator';
@@ -32,6 +31,7 @@ import ApiAlias = Levelup.CMS.V1.Storage.Api.UploadedFiles;
 import DocumentAlias = Levelup.CMS.V1.Storage.Model.UploadedFileDocument;
 import EventPayloadsAlias = Levelup.CMS.V1.Events.Payloads.Storage.UploadedFile;
 import { uniq } from 'lodash';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
 type DocumentProperties = Levelup.CMS.V1.Utils.DocumentProperties<EntityAlias>;
 
 /**

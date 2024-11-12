@@ -18,7 +18,9 @@ declare module Levelup {
             export namespace Signup {
               export type Request =
                 Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
-                  name: string;
+                  first_name: string;
+                  family_name: string;
+                  sex: Users.Entity.Sex | null;
                   email: string;
                   password: string;
                 }>;

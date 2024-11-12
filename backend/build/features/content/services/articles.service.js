@@ -59,11 +59,13 @@ const update_calculator_class_1 = __importDefault(require("../../../utilities/ob
 const index_1 = require("../../../utilities/requests/index");
 const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
 const tracking_id_utilities_1 = require("../../../utilities/system/tracking-id.utilities");
-const general_mappers_1 = require("../../../utils/mappers/general.mappers");
-const article_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/article.sanitizers"));
-const article_validators_1 = __importDefault(require("../../../utils/validators/article.validators"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const article_sanitizers_1 = __importDefault(require("../sanitizers/article.sanitizers"));
+const article_validators_1 = __importDefault(require("../validators/article.validators"));
 const article_model_1 = require("../models/article.model");
 const slugify_utilities_1 = require("../../../utilities/strings/slugify.utilities");
+const lodash_1 = require("lodash");
+const mogodb_helpers_1 = require("../../../utilities/helpers/mogodb.helpers");
 /**
  * @description
  */
@@ -175,7 +177,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
     /**
      * @description Apply filters on list queries
      */
-    _applyFilters({ query, q, totalQ, opt, authData }) {
+    async _applyFilters({ query, q, totalQ, opt, authData }) {
         var _a;
         let { search, filters, load_deleted } = query;
         let filter;
@@ -234,16 +236,19 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             totalQ = filter.totalQ;
         }
         // -- slug
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.slug, 'slug');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.slug, 'slug');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- article_type
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.article_type, 'article_type');
-        q = filter.q;
-        totalQ = filter.totalQ;
-        // -- tracking_id
-        if (article_model_1.ArticleSchemaFields['tracking_id']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['tracking_id'], 'tracking_id');
+        if (filters.article_type) {
+            let article_type;
+            if (!(0, mogodb_helpers_1.isObjectIdValid)(filters.article_type)) {
+                const { _id } = await this.articleTypeModel.exists({ slug: filters.article_type });
+                article_type = _id;
+            }
+            else
+                article_type = filters.article_type;
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, article_type, 'article_type');
             q = filter.q;
             totalQ = filter.totalQ;
         }
@@ -283,7 +288,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             /**
              * Apply filters
              */
-            const filter = this._applyFilters({ q, totalQ, query, authData, opt });
+            const filter = await this._applyFilters({ q, totalQ, query, authData, opt });
             q = filter.q;
             totalQ = filter.totalQ;
             const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount : count;
@@ -325,6 +330,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                     pages,
                 }
             };
+            result.edge = await this._buildResponseEdge(result.data);
             /**
              * Log execution result before returning the result
              */
@@ -333,6 +339,52 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
         catch (error) {
             this.logError(this.list, error);
+            throw error;
+        }
+    }
+    async _buildResponseEdge(data) {
+        const scenario = this.initScenario(this.logger, this._buildResponseEdge);
+        try {
+            const types = await this.articleTypeModel.find({
+                is_deleted: false
+            }).lean().exec();
+            const result = {
+                users: {},
+                article_types: {},
+                linked_articles: {},
+            };
+            this.logger.tree('types', types);
+            const linked_articles = {};
+            const articleIds = [];
+            for (const item of data) {
+                const type = types.find(t => { var _a; return t._id.toString() === ((_a = item.article_type) === null || _a === void 0 ? void 0 : _a.toString()); }) || null;
+                this.logger.tree('type', item.article_type, type === null || type === void 0 ? void 0 : type.slug, type === null || type === void 0 ? void 0 : type.custom_meta_fields);
+                if (item.article_type)
+                    result.article_types[item.article_type] = type;
+                if (Object.keys(item.meta_fields || {}).length && type) {
+                    for (const field of type.custom_meta_fields) {
+                        if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
+                            articleIds.push(item.meta_fields[field.field_key]);
+                        }
+                    }
+                }
+            }
+            scenario.set({ articleIds });
+            if (articleIds.length) {
+                const articles = await this.articleModel.find({
+                    _id: { $in: (0, lodash_1.uniq)(articleIds) }
+                }).lean().exec();
+                this.logger.value('linked_articles', articles.length);
+                for (const article of articles) {
+                    linked_articles[article._id] = Object.assign(Object.assign({}, article), { body: undefined, body_unformatted: undefined, body_structured: undefined, attributes: undefined, snapshots: undefined, insights: undefined });
+                }
+            }
+            result.linked_articles = linked_articles;
+            scenario.end();
+            return result;
+        }
+        catch (error) {
+            scenario.error(error);
             throw error;
         }
     }
@@ -375,6 +427,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             const result = {
                 data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
+            result.edge = await this._buildResponseEdge([result.data]);
             /**
              * Log execution result before returning the result
              */
@@ -427,6 +480,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             const result = {
                 data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
+            result.edge = await this._buildResponseEdge([result.data]);
             /**
              * Log execution result before returning the result
              */

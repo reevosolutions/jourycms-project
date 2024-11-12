@@ -73,7 +73,7 @@ declare module Levelup {
             export namespace GetOne {
               export type Request = Utils.Api.Request.Build<{}>;
               export type Response<T extends Entity.Article = Entity.Article> =
-                Utils.Api.Response.BuildSingleItemResponse<T>;
+                Utils.Api.Response.BuildSingleItemResponse<T, 'users' | 'article_types' | 'linked_articles'>;
             }
 
             /**

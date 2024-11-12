@@ -21,9 +21,9 @@ import ObjectUpdatedProperties from '../../../utilities/objects/update-calculato
 import { fixFiltersObject } from '../../../utilities/requests/index';
 import userCan from '../../../utilities/security/user-can';
 import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../utils/mappers/general.mappers';
-import TranslationNamespaceSanitizers from '../../../utils/sanitizers/translation.namespace.sanitizers';
-import TranslationNamespaceValidators from '../../../utils/validators/translation.namespace.validators';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TranslationNamespaceSanitizers from '../sanitizers/translation.namespace.sanitizers';
+import TranslationNamespaceValidators from '../validators/translation.namespace.validators';
 import { TranslationNamespaceSchemaFields } from '../models/translation.namespace.model';
 
 import EntityAlias = Levelup.CMS.V1.Content.Translation.Entity.Namespace;

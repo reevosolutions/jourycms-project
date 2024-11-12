@@ -15,12 +15,12 @@ exports.default = async () => {
         logger.value('uri', config_1.default.currentService.db.uri);
         logger.value('connect to', config_1.default.currentService.db.connectTo);
         const connection = await mongoose_1.default.connect(config_1.default.currentService.db.uri, {
-            /**
-             * @deprecated on 6.^
-             */
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            // useCreateIndex: true,
+        /**
+         * @deprecated on 6.^
+         */
+        // useNewUrlParser: true,
+        // useUnifiedTopology: true,
+        // useCreateIndex: true,
         });
         eventDispatcher.dispatch(events_config_1.default.service.dbConnect, connection.connection);
         return connection.connection.db;

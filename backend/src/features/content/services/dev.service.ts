@@ -6,16 +6,13 @@
  * @since 29-04-2024 10:50:30
  */
 
-import { Inject, Service } from 'typedi';
-import { ObjectUpdatedProperties } from '../../../utilities/objects';
-import BaseService from '../../../common/base.service';
-import Container from 'typedi';
-import events from '../../../config/events.config';
-import { faker } from '@faker-js/faker';
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
 import * as cheerio from 'cheerio';
-import path from 'path';
 import fs from 'fs';
+import path from 'path';
+import { Inject, Service } from 'typedi';
+import BaseService from '../../../common/base.service';
+import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
+import { ObjectUpdatedProperties } from '../../../utilities/objects';
 import downloadRemoteFile from '../../../utilities/remote/download-remote-file';
 /**
  * @description

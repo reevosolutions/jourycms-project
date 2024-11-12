@@ -59,9 +59,9 @@ const update_calculator_class_1 = __importDefault(require("../../../utilities/ob
 const index_1 = require("../../../utilities/requests/index");
 const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
 const tracking_id_utilities_1 = require("../../../utilities/system/tracking-id.utilities");
-const general_mappers_1 = require("../../../utils/mappers/general.mappers");
-const comment_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/comment.sanitizers"));
-const comment_validators_1 = __importDefault(require("../../../utils/validators/comment.validators"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const comment_sanitizers_1 = __importDefault(require("../sanitizers/comment.sanitizers"));
+const comment_validators_1 = __importDefault(require("../validators/comment.validators"));
 const comment_model_1 = require("../models/comment.model");
 /**
  * @description

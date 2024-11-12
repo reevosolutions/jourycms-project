@@ -14,8 +14,6 @@ declare module Levelup {
             phones: string[];
             website: string | null;
             address: Utils.Entity.Snapshots.Locations.Address;
-            has_work_address: boolean;
-            work_address: Utils.Entity.Snapshots.Locations.Address | null;
             social_links?: {
               network: Utils.Common.SocialNetworks;
               url: string;
@@ -45,15 +43,6 @@ declare module Levelup {
           export interface IUserInsights {
             last_updated: Date | null;
             rating: number;
-            parcel_count: number;
-            delivered_parcel_count: number;
-            returned_parcel_count: number;
-            delivered_parcel_percentage: number;
-            returned_parcel_percentage: number;
-            complaint_count: number;
-            resolved_complaint_count: number;
-            resolved_complaint_percentage: number;
-            balance: number;
           }
 
           export interface IUserAttributes {
@@ -63,54 +52,11 @@ declare module Levelup {
             inactive_since?: Date | null;
 
             nid?: string | null;
-            driving_license_id?: string | null;
             started_at?: Date | null;
-
-            multi_office_user?: {
-              is_related_to_offices?: boolean;
-              can_manage_all_offices?: boolean;
-              subscribed_at_office?: Utils.Common.ID | null;
-              managed_offices?: Utils.Common.ID[];
-              last_managed_office?: Utils.Common.ID | null;
-            } | null;
-
-            seller?: {
-              stores: Utils.Common.ID[];
-              last_managed_store?: Utils.Common.ID;
-            } | null;
-
-            deliverer?: {
-              countries?: Utils.Common.LocationAdministrativeCode[];
-              states?: Utils.Common.LocationAdministrativeCode[];
-              cities?: Utils.Common.LocationAdministrativeCode[];
-              is_freelancer?: boolean;
-              default_delivery_fees?: number;
-              delivery_fees?: {
-                city: {
-                  country: Utils.Common.LocationAdministrativeCode;
-                  state: Utils.Common.LocationAdministrativeCode;
-                  city: Utils.Common.LocationAdministrativeCode;
-                };
-                is_default: boolean;
-                fees: number;
-              }[];
-            } | null;
-
-            team?: {
-              has_team: boolean;
-              team?: {
-                leader: string;
-                members: string[];
-              };
-            };
+            related_article?: string | null;
           }
 
           export interface IUserSnapshots {
-            stores?: Utils.Entity.Snapshots.Accounts.Store[];
-            company?: Utils.Entity.Snapshots.Accounts.Company;
-            offices?: Utils.Entity.Snapshots.Logistics.Office[];
-            team_leader?: Utils.Entity.Snapshots.Auth.User;
-            team_members?: Utils.Entity.Snapshots.Auth.User[];
           }
 
           export interface User
@@ -128,7 +74,6 @@ declare module Levelup {
 
             profile: IUserProfile;
             preferences?: IUserPreferences;
-            deliverer_data?: IDelivererData;
             attributes: IUserAttributes;
             snapshots?: IUserSnapshots;
             insights?: IUserInsights;

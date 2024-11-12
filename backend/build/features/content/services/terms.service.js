@@ -58,9 +58,9 @@ const objects_1 = require("../../../utilities/objects");
 const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
 const index_1 = require("../../../utilities/requests/index");
 const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
-const general_mappers_1 = require("../../../utils/mappers/general.mappers");
-const term_sanitizers_1 = __importDefault(require("../../../utils/sanitizers/term.sanitizers"));
-const term_validators_1 = __importDefault(require("../../../utils/validators/term.validators"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const term_sanitizers_1 = __importDefault(require("../sanitizers/term.sanitizers"));
+const term_validators_1 = __importDefault(require("../validators/term.validators"));
 const term_model_1 = require("../models/term.model");
 /**
  * @description

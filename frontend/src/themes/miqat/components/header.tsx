@@ -1,13 +1,13 @@
 "use client";
-import Link from "next/link";
-import * as React from "react";
-import { useState, useEffect } from "react";
-import { cn } from "@/lib/utils";
-import useAuth from "@/hooks/use-auth";
-import { LuBriefcase, LuChevronDown } from "react-icons/lu";
 import { publicRoutes } from "@/config";
-import { usePathname } from "next/navigation";
+import useAuth from "@/hooks/use-auth";
 import initLogger, { LoggerContext } from "@/lib/logging";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import * as React from "react";
+import { LuBriefcase } from "react-icons/lu";
+import HeaderUserControls from "./header.user-controls";
 
 
 const logger = initLogger(LoggerContext.COMPONENT, 'header');
@@ -61,7 +61,7 @@ const Header: React.FC<HeaderProps> = ({ children, route }) => {
   return (
     <header className="jcms-header h-28 bg-gradient-to-r from-darkblue-900 to-darkblue-800">
       <div className="inner container mx-auto flex items-center justify-between text-2xl font-medium">
-        <nav className="d flex items-center">
+        <nav className="items-center hidden lg:flex">
           {menuItems.map((item, index) => (
             <HeaderLink
               key={index}
@@ -72,17 +72,7 @@ const Header: React.FC<HeaderProps> = ({ children, route }) => {
           ))}
         </nav>
 
-        <div className="d flex items-center">
-          <Link
-            href="/login"
-            className="flex h-28 items-center justify-center gap-3 border-b-4 border-transparent text-white duration-200 hocus:text-beige-50"
-          >
-            <span className="d">
-              {isAuthenticated ? "حسابي" : "تسجيل الدخول"}
-            </span>
-            <LuChevronDown className="h-5 w-5" />
-          </Link>
-        </div>
+        <HeaderUserControls />
 
         <nav className="d flex items-center">
           <Link
