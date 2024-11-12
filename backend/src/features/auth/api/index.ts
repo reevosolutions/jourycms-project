@@ -13,7 +13,7 @@ import { respond } from '../../../utilities/requests';
 
 const logger = initLogger(LoggerContext.CONTROLLER, "AuthController");
 
-export const ROOT_PATH = '/content';
+export const ROOT_PATH = '/auth';
 
 // guaranteed to get dependencies
 export default (app: Router): void => {

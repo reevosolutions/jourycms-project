@@ -14,7 +14,7 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
   return (
     <DefaultLayout route={route}>
       <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
-        <div className="flex flex-col gap-4 sm:-mt-40">
+        <div className="flex flex-col gap-4 py-16">
 
           <div className="mx-auto lg:w-[700px] max-w-full w-full  shadow-xl  rounded-2xl shadow-darkblue-950/5  ">
             <RegisterForm />

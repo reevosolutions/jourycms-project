@@ -1,7 +1,9 @@
+/* eslint-disable unicorn/no-useless-undefined */
 import { publicRoutes } from "@/config";
 import { getArticleBySlug, listArticles } from "@/themes/miqat/data";
 import ArticlePage from "@/themes/miqat/pages/article";
 import Image from "next/image";
+import { toast } from "sonner";
 
 const ROUTE = publicRoutes.homepage;
 
@@ -27,8 +29,20 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
-  const data = await getArticleBySlug(article_slug);
-  
+  let data: Levelup.CMS.V1.Content.Api.Articles.GetOne.Response | undefined = undefined;
+  try {
+    data = await getArticleBySlug(article_slug);
+  } catch (error: any) {
+    // do nothing  
+    data = {
+      error: {
+        message: error.message,
+        name: error.name,
+        status: error.status || 500,
+      }
+    }
+  }
+
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */

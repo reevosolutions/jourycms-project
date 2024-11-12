@@ -1,13 +1,10 @@
-"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 27-02-2024 21:22:10
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getUserSnapshot = void 0;
 /* ------------------------- COMMON AUTH INTERFACES ------------------------- */
-const getUserSnapshot = (value, default_value = null) => {
+export const getUserSnapshot = (value, default_value = null) => {
     var _a;
     if (!value)
         return default_value !== null && default_value !== void 0 ? default_value : null;
@@ -22,5 +19,4 @@ const getUserSnapshot = (value, default_value = null) => {
     };
     return result;
 };
-exports.getUserSnapshot = getUserSnapshot;
 //# sourceMappingURL=snapshots.utilities.js.map

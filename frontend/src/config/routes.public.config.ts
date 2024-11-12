@@ -1,3 +1,5 @@
+
+// 
 const routes = {
   
   homepage: {
@@ -47,18 +49,7 @@ const routes = {
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
         _: {},
       },
-      login: {
-        path: "/login" as const,
-        title: "تسجيل الدخول",
-        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
-      },
-      rgister: {
-        path: "/register" as const,
-        title: "التسجيل",
-        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
-      },
+      
       jobs: {
         path: "/jobs" as const,
         title: "وظائف",
@@ -77,6 +68,25 @@ const routes = {
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
         _: {},
       },
+      login: {
+        path: "/login" as const,
+        title: "تسجيل الدخول",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+        _: {},
+      },
+      rgister: {
+        path: "/register" as const,
+        title: "التسجيل",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+        _: {},
+      },
+      myAccount: {
+        path: "/account" as const,
+        title: "حسابي",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+        _: {},
+      }
+
       
     },
   },

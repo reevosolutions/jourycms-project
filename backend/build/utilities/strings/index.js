@@ -1,37 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.formatNotificationSpace = exports.formatAmount = exports.toKebabCase = exports.toSnakeCase = exports.generateSlug = exports.formatBytes = exports.generateStringNgrams = exports.checkSimilarity = exports.createBigram = exports.abbreviateNumber = exports.isNumeric = exports.toPriceAmount = exports.addLeadingZeros = exports.stringToBoolean = exports.splitString = void 0;
-exports.capitalizeFirstLetter = capitalizeFirstLetter;
-exports.kebabToCamel = kebabToCamel;
-exports.camelToKebab = camelToKebab;
-exports.camelToWords = camelToWords;
-exports.pluralize = pluralize;
-exports.singularize = singularize;
-exports.replaceAll = replaceAll;
-exports.buildUserFullName = buildUserFullName;
-exports.generatePinCode = generatePinCode;
-exports.getSubstringUntilFirstWhitespaceAfterNChars = getSubstringUntilFirstWhitespaceAfterNChars;
-exports.generateItemAlphabetCode = generateItemAlphabetCode;
-exports.countCharacterOccurrenceInString = countCharacterOccurrenceInString;
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 24-02-2024 20:47:22
  */
-const lodash_1 = require("lodash");
-const crypto_1 = require("crypto");
+import { flatten } from "lodash";
+import { randomInt } from "crypto";
 /**
  * @description Uses lodash flatten to split a string by , / ; +
  * @param str string to split
  * @returns {string[]}
  */
-const splitString = (str, use_plus_character = true) => {
-    return (0, lodash_1.flatten)((0, lodash_1.flatten)((0, lodash_1.flatten)(str.split(",").map((v) => v.split("/"))).map((v) => v.split(";"))).map((v) => (use_plus_character ? v.split("+") : v)))
+export const splitString = (str, use_plus_character = true) => {
+    return flatten(flatten(flatten(str.split(",").map((v) => v.split("/"))).map((v) => v.split(";"))).map((v) => (use_plus_character ? v.split("+") : v)))
         .map((v) => v.trim())
         .filter((v) => !!v);
 };
-exports.splitString = splitString;
-const stringToBoolean = (str) => {
+export const stringToBoolean = (str) => {
     if (!str.length)
         return false;
     str = str.trim().toLowerCase();
@@ -39,12 +23,10 @@ const stringToBoolean = (str) => {
         return true;
     return false;
 };
-exports.stringToBoolean = stringToBoolean;
-const addLeadingZeros = (num, totalLength) => {
+export const addLeadingZeros = (num, totalLength) => {
     return String(num).padStart(totalLength, "0");
 };
-exports.addLeadingZeros = addLeadingZeros;
-const toPriceAmount = (str) => {
+export const toPriceAmount = (str) => {
     if (!str.length)
         return 0;
     const str2 = str
@@ -69,12 +51,10 @@ const toPriceAmount = (str) => {
         return 0;
     }
 };
-exports.toPriceAmount = toPriceAmount;
-const isNumeric = (val) => {
+export const isNumeric = (val) => {
     return !isNaN(val);
 };
-exports.isNumeric = isNumeric;
-const abbreviateNumber = (n) => {
+export const abbreviateNumber = (n) => {
     function rnd(num, precision) {
         const prec = 10 ** precision;
         return Math.round(num * prec) / prec;
@@ -85,10 +65,9 @@ const abbreviateNumber = (n) => {
     base = abbrev.indexOf(suffix) + 1;
     return suffix ? `${rnd(n / 1000 ** base, 2)} ${suffix}` : "" + n;
 };
-exports.abbreviateNumber = abbreviateNumber;
 // Similarity
 // https://stackoverflow.com/questions/10473745/compare-strings-javascript-return-of-likely
-const createBigram = (word) => {
+export const createBigram = (word) => {
     const input = word.toLowerCase();
     const vector = [];
     for (let i = 0; i < input.length; ++i) {
@@ -96,11 +75,10 @@ const createBigram = (word) => {
     }
     return vector;
 };
-exports.createBigram = createBigram;
-const checkSimilarity = (a, b) => {
+export const checkSimilarity = (a, b) => {
     if (a.length > 0 && b.length > 0) {
-        const aBigram = (0, exports.createBigram)(a);
-        const bBigram = (0, exports.createBigram)(b);
+        const aBigram = createBigram(a);
+        const bBigram = createBigram(b);
         let hits = 0;
         for (let x = 0; x < aBigram.length; ++x) {
             for (let y = 0; y < bBigram.length; ++y) {
@@ -116,8 +94,7 @@ const checkSimilarity = (a, b) => {
     }
     return 0;
 };
-exports.checkSimilarity = checkSimilarity;
-const generateStringNgrams = (str) => {
+export const generateStringNgrams = (str) => {
     // Remove non-alphanumeric characters
     if (!str)
         return [];
@@ -130,8 +107,7 @@ const generateStringNgrams = (str) => {
     }
     return ngrams;
 };
-exports.generateStringNgrams = generateStringNgrams;
-const formatBytes = (bytes, decimals = 2) => {
+export const formatBytes = (bytes, decimals = 2) => {
     if (bytes === 0)
         return "0 Byte";
     const k = 1024;
@@ -139,9 +115,8 @@ const formatBytes = (bytes, decimals = 2) => {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return (parseFloat((bytes / Math.pow(k, i)).toFixed(decimals)) + " " + sizes[i]);
 };
-exports.formatBytes = formatBytes;
-const generateSlug = async (title) => {
-    return (0, exports.toKebabCase)(title);
+export const generateSlug = async (title) => {
+    return toKebabCase(title);
     // Replace Arabic and other non-ASCII characters with ASCII equivalents if possible
     const arabicMap = {
         ش: "sh",
@@ -166,12 +141,10 @@ const generateSlug = async (title) => {
     const dashedTitle = cleanedTitle.replace(/[\s-]+/g, "-");
     return dashedTitle;
 };
-exports.generateSlug = generateSlug;
-const toSnakeCase = (str) => {
+export const toSnakeCase = (str) => {
     return str.replace(/([a-z])([A-Z])/g, "$1_$2").toUpperCase();
 };
-exports.toSnakeCase = toSnakeCase;
-const toKebabCase = (input) => {
+export const toKebabCase = (input) => {
     return (input
         .toLowerCase() // Convert to lowercase
         .replace(/[^\p{L}\p{N}]+/gu, "-") // Replace non-letter and non-digit characters with a dash
@@ -179,22 +152,21 @@ const toKebabCase = (input) => {
         .replace(/^-+|-+$/g, "") // Remove leading or trailing dashes
         .replace(/-{2,}/g, "-")); // Replace multiple dashes with a single dash
 };
-exports.toKebabCase = toKebabCase;
-function capitalizeFirstLetter(str) {
+export function capitalizeFirstLetter(str) {
     if (str.length === 0)
         return str;
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-function kebabToCamel(kebabString) {
+export function kebabToCamel(kebabString) {
     return kebabString.replace(/-([a-z])/g, (_, match) => match.toUpperCase());
 }
-function camelToKebab(camelCaseString) {
+export function camelToKebab(camelCaseString) {
     return camelCaseString.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
-function camelToWords(camelCaseString) {
+export function camelToWords(camelCaseString) {
     return camelCaseString.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
 }
-function pluralize(word) {
+export function pluralize(word) {
     if (word.endsWith("ing")) {
         // Words ending with 's' or 'es', return the word as is
         return word;
@@ -213,7 +185,7 @@ function pluralize(word) {
         return word + "s";
     }
 }
-function singularize(word) {
+export function singularize(word) {
     if (word.endsWith("ies")) {
         // Words ending with 'ies', replace 'ies' with 'y'
         return word.slice(0, -3) + "y";
@@ -227,20 +199,19 @@ function singularize(word) {
         return word;
     }
 }
-function replaceAll(input, search, replace) {
+export function replaceAll(input, search, replace) {
     const regex = new RegExp(search, "g");
     return input.replace(regex, replace);
 }
-function buildUserFullName(names) {
+export function buildUserFullName(names) {
     return `${names.family_name || ""} ${names.first_name || ""}`.trim();
 }
-const formatAmount = (x, separator = ",", decimals = 2) => {
+export const formatAmount = (x, separator = ",", decimals = 2) => {
     const str = x.toFixed(decimals).split(".");
     const part1 = str[0].replace(/\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g, `$2${separator}$1`);
     return str.length === 2 ? `${part1}.${str[1]}` : part1;
 };
-exports.formatAmount = formatAmount;
-const formatNotificationSpace = (space, infos) => {
+export const formatNotificationSpace = (space, infos) => {
     if (!Object.values(infos).reduce((prev, curr) => prev || !!curr, false))
         return null;
     return space
@@ -250,13 +221,12 @@ const formatNotificationSpace = (space, infos) => {
         .replace("[USER]", infos.user || "")
         .replace("[ROLE]", infos.role || "");
 };
-exports.formatNotificationSpace = formatNotificationSpace;
 /**
  * @description Generate a random 4-digit pin code between 1000 and 9999 (inclusive)
  * @returns {string} a random 4-digit pin code
  */
-function generatePinCode() {
-    const pin = (0, crypto_1.randomInt)(1000, 10000);
+export function generatePinCode() {
+    const pin = randomInt(1000, 10000);
     return pin.toString();
 }
 /**
@@ -265,7 +235,7 @@ function generatePinCode() {
  * @param threshold - The threshold number of characters
  * @returns - The extracted substring
  */
-function getSubstringUntilFirstWhitespaceAfterNChars(str, threshold = 100, dots = " ...") {
+export function getSubstringUntilFirstWhitespaceAfterNChars(str, threshold = 100, dots = " ...") {
     // Define the start position and the threshold length
     const startPos = 0;
     // Find the first whitespace position after the threshold
@@ -287,7 +257,7 @@ function getSubstringUntilFirstWhitespaceAfterNChars(str, threshold = 100, dots 
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 23-07-2024 08:43:03
  */
-function generateItemAlphabetCode(usedCodes) {
+export function generateItemAlphabetCode(usedCodes) {
     const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const base = alphabet.length;
     // Converts a number to a base-26 "column name"
@@ -311,7 +281,7 @@ function generateItemAlphabetCode(usedCodes) {
     }
     return code;
 }
-function countCharacterOccurrenceInString(str, character) {
+export function countCharacterOccurrenceInString(str, character) {
     let count = 0;
     for (let i = 0; i < str.length; i++) {
         if (str.charAt(i) === ".") {

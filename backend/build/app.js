@@ -1,32 +1,27 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
 // it's important to extend String Prototype before any implementation
-require("./utilities/extend-prototypes");
-const express_1 = __importDefault(require("express"));
-const os_1 = __importDefault(require("os"));
+import './utilities/extend-prototypes';
+import express from 'express';
+import os from 'os';
 // We need this in order to use @Decorators
-require("reflect-metadata");
-const config_1 = __importDefault(require("./config"));
-const loaders_1 = __importDefault(require("./loaders"));
-const logging_1 = __importDefault(require("./utilities/logging"));
-const logger = (0, logging_1.default)('APPLICATION', 'APP');
-const totalCPUs = os_1.default.cpus().length;
+import 'reflect-metadata';
+import config from './config';
+import loaders from './loaders';
+import initLogger from './utilities/logging';
+const logger = initLogger('APPLICATION', 'APP');
+const totalCPUs = os.cpus().length;
 const MAX_WORKERS = 4;
 async function startServer() {
-    const app = (0, express_1.default)();
-    await (0, loaders_1.default)({ expressApp: app });
+    const app = express();
+    await loaders({ expressApp: app });
     app
-        .listen(config_1.default.currentService.port, () => {
+        .listen(config.currentService.port, () => {
         console.log('');
-        logger.success(`${config_1.default.currentService.name} Service listening on port: ${config_1.default.currentService.port} in env: ${process.env.NODE_ENV}`);
+        logger.success(`${config.currentService.name} Service listening on port: ${config.currentService.port} in env: ${process.env.NODE_ENV}`);
         console.log('');
     })
         .on('error', (err) => {
         console.log('');
-        logger.error(`${config_1.default.currentService.name} System error in env: ${process.env.NODE_ENV}`, err);
+        logger.error(`${config.currentService.name} System error in env: ${process.env.NODE_ENV}`, err);
         console.log('');
         process.exit(1);
     });
@@ -43,13 +38,13 @@ process.on('beforeExit', () => {
  * such as calling process.exit() or uncaught exceptions.
  */
 process.on('exit', () => {
-    logger.error(`${config_1.default.currentService.name} is exiting`, process.argv);
+    logger.error(`${config.currentService.name} is exiting`, process.argv);
 });
 /**
  * 'uncaughtException': Emitted when an uncaught JavaScript exception bubbles all the way back to the event loop.
  */
 process.on('uncaughtException', (error) => {
-    logger.error(`${config_1.default.currentService.name} crashed due to uncaught exception`, error);
+    logger.error(`${config.currentService.name} crashed due to uncaught exception`, error);
     // Optionally, you can exit the process if desired
     process.exit(1);
 });

@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.userCanDeleteObject = void 0;
-const userCanDeleteObject = (entity, doc, authData) => {
+export const userCanDeleteObject = (entity, doc, authData) => {
     var _a;
     if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.service)
         return true;
@@ -10,5 +7,4 @@ const userCanDeleteObject = (entity, doc, authData) => {
      */
     return true;
 };
-exports.userCanDeleteObject = userCanDeleteObject;
 //# sourceMappingURL=user-can-delete.js.map

@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,39 +7,35 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const moment_1 = __importDefault(require("moment"));
-const redis_1 = require("redis");
-const typedi_1 = require("typedi");
-const exceptions_1 = require("../../utilities/exceptions");
-const logging_1 = __importDefault(require("../../utilities/logging"));
-const heavy_computing_cache_manager_1 = __importDefault(require("./managers/heavy-computing.cache-manager"));
-const actions_cache_manager_1 = __importDefault(require("./managers/actions.cache-manager"));
-const tasks_cache_manager_1 = __importDefault(require("./managers/tasks.cache-manager"));
-const fcm_tokens_cache_manager_1 = __importDefault(require("./managers/fcm-tokens.cache-manager"));
-const config_1 = __importDefault(require("../../config"));
-const utils_helpers_1 = require("../../utilities/helpers/utils.helpers");
-const users_cache_manager_1 = __importDefault(require("./entity-managers/auth/users.cache-manager"));
-const roles_cache_manager_1 = __importDefault(require("./entity-managers/auth/roles.cache-manager"));
-const permission_groups_cache_manager_1 = __importDefault(require("./entity-managers/auth/permission-groups.cache-manager"));
-const api_keys_cache_manager_1 = __importDefault(require("./entity-managers/auth/api-keys.cache-manager"));
-const permissions_cache_manager_1 = __importDefault(require("./entity-managers/auth/permissions.cache-manager"));
-const apps_cache_manager_1 = __importDefault(require("./entity-managers/system/apps.cache-manager"));
-const sdk_1 = require("../../utilities/data/sdk");
-const exceptions_2 = __importDefault(require("../../exceptions"));
+import moment from "moment";
+import { createClient } from "redis";
+import { Service } from "typedi";
+import { errorToObject } from "../../utilities/exceptions";
+import initLogger from "../../utilities/logging";
+import HeavyComputingCacheManager from "./managers/heavy-computing.cache-manager";
+import ActionsCacheManager from "./managers/actions.cache-manager";
+import TasksCacheManager from "./managers/tasks.cache-manager";
+import FCMTokensCacheManager from "./managers/fcm-tokens.cache-manager";
+import config from "../../config";
+import { defaults } from "../../utilities/helpers/utils.helpers";
+import UsersCacheManager from "./entity-managers/auth/users.cache-manager";
+import RolesCacheManager from "./entity-managers/auth/roles.cache-manager";
+import PermissionGroupsCacheManager from "./entity-managers/auth/permission-groups.cache-manager";
+import ApiKeysCacheManager from "./entity-managers/auth/api-keys.cache-manager";
+import PermissionsCacheManager from "./entity-managers/auth/permissions.cache-manager";
+import AppsCacheManager from "./entity-managers/system/apps.cache-manager";
+import { initJouryCMSSdk } from "../../utilities/data/sdk";
+import exceptions from "../../exceptions";
 let CacheManager = class CacheManager {
     constructor() {
-        this.logger = (0, logging_1.default)("COMPONENT", `${this.constructor.name}`);
+        this.logger = initLogger("COMPONENT", `${this.constructor.name}`);
         this.getClient();
     }
     async getClient() {
         if (this.client)
             return this.client;
-        this.client = (0, redis_1.createClient)({
-            url: config_1.default.cacheManager.redis.url,
+        this.client = createClient({
+            url: config.cacheManager.redis.url,
         });
         this.client.on("error", (err) => {
             this.logger.error(this.getClient.name, "Redis Client Error", err);
@@ -57,15 +52,15 @@ let CacheManager = class CacheManager {
     }
     generateEntityKey(entity, company) {
         if (this._entityRelatedToCompany(entity) && company)
-            return `${config_1.default.cacheManager.keyPrefix || "LUP_V2:"}${company}:${entity}`;
+            return `${config.cacheManager.keyPrefix || "LUP_V2:"}${company}:${entity}`;
         else
-            return `${config_1.default.cacheManager.keyPrefix || "LUP_V2:"}noCompany:${entity}`;
+            return `${config.cacheManager.keyPrefix || "LUP_V2:"}noCompany:${entity}`;
     }
     generateForeignKey(id, company) {
         if (company)
-            return `${config_1.default.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"}${company}:${id}`;
+            return `${config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"}${company}:${id}`;
         else
-            return `${config_1.default.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"}noCompany:${id}`;
+            return `${config.cacheManager.keyPrefix || "LUP_V2:FOREIGN:"}noCompany:${id}`;
     }
     async getCollectionEntries(key) {
         try {
@@ -104,7 +99,7 @@ let CacheManager = class CacheManager {
             /**
              * Apply defaults on config
              */
-            config = (0, utils_helpers_1.defaults)(config, {
+            config = defaults(config, {
                 expiration: 3600 * 24,
                 company: null,
             });
@@ -144,7 +139,7 @@ let CacheManager = class CacheManager {
      * @param {number} expiration in seconds
      */
     isExpired(last_updated, expiration) {
-        return !(0, moment_1.default)(last_updated).isAfter((0, moment_1.default)().subtract(expiration, "seconds"));
+        return !moment(last_updated).isAfter(moment().subtract(expiration, "seconds"));
     }
     generateLogItemName(method) {
         return `${this.constructor.name}:${method.name}`;
@@ -153,7 +148,7 @@ let CacheManager = class CacheManager {
         try {
             let data;
             let result;
-            const sdk = (0, sdk_1.initJouryCMSSdk)();
+            const sdk = initJouryCMSSdk();
             switch (entity) {
                 // auth
                 case "user":
@@ -173,7 +168,7 @@ let CacheManager = class CacheManager {
                     result = data === null || data === void 0 ? void 0 : data.data;
                     break;
                 default:
-                    throw new exceptions_2.default.InternalServerError(`Data loading not handled for this entity: ${entity}`);
+                    throw new exceptions.InternalServerError(`Data loading not handled for this entity: ${entity}`);
                     break;
             }
             this.logger.value(this.loadObjectByIdFormDB.name, entity, id, !!result);
@@ -187,7 +182,7 @@ let CacheManager = class CacheManager {
                 payload: {
                     entity,
                     id,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             return;
@@ -200,7 +195,7 @@ let CacheManager = class CacheManager {
             query = Object.assign(Object.assign({}, (query || {})), { filters: Object.assign({}, ((query === null || query === void 0 ? void 0 : query.filters) || {})) });
             if (company && this._entityRelatedToCompany(entity))
                 query.filters.company = company;
-            const sdk = (0, sdk_1.initJouryCMSSdk)();
+            const sdk = initJouryCMSSdk();
             switch (entity) {
                 // auth
                 case "user":
@@ -220,7 +215,7 @@ let CacheManager = class CacheManager {
                     result = data === null || data === void 0 ? void 0 : data.data;
                     break;
                 default:
-                    throw new exceptions_2.default.InternalServerError(`Data loading not handled for this entity: ${entity}`);
+                    throw new exceptions.InternalServerError(`Data loading not handled for this entity: ${entity}`);
                     break;
             }
             return result;
@@ -229,14 +224,14 @@ let CacheManager = class CacheManager {
             this.logger.error(this.generateLogItemName(this.loadListFromDB), {
                 entity,
                 query,
-                error: (0, exceptions_1.errorToObject)(error),
+                error: errorToObject(error),
             });
             this.logger.save.error({
                 name: this.generateLogItemName(this.loadListFromDB),
                 payload: {
                     entity,
                     query,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             return;
@@ -252,7 +247,7 @@ let CacheManager = class CacheManager {
             /**
              * Apply defaults on config
              */
-            config = (0, utils_helpers_1.defaults)(config, {
+            config = defaults(config, {
                 customKey: null,
             });
             const customKey = config.customKey ? config.customKey : entity;
@@ -288,7 +283,7 @@ let CacheManager = class CacheManager {
             /**
              * Apply defaults on config
              */
-            config = (0, utils_helpers_1.defaults)(config, {
+            config = defaults(config, {
                 expiration: 3600 * 24,
                 force_load_from_db: true,
                 company: null,
@@ -326,7 +321,7 @@ let CacheManager = class CacheManager {
                 payload: {
                     entity,
                     id,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             return null;
@@ -343,7 +338,7 @@ let CacheManager = class CacheManager {
             /**
              * Apply defaults on config
              */
-            config = (0, utils_helpers_1.defaults)(config, {
+            config = defaults(config, {
                 expiration: 3600 * 24,
                 force_load_from_db: true,
                 company: null,
@@ -361,7 +356,7 @@ let CacheManager = class CacheManager {
                     entity,
                     ids,
                     config,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             return [];
@@ -378,7 +373,7 @@ let CacheManager = class CacheManager {
                 payload: {
                     entity,
                     id,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             throw error;
@@ -394,7 +389,7 @@ let CacheManager = class CacheManager {
                 name: this.generateLogItemName(this.unsetAll),
                 payload: {
                     entity,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 },
             });
             throw error;
@@ -412,7 +407,7 @@ let CacheManager = class CacheManager {
             /**
              * Apply defaults on config
              */
-            config = (0, utils_helpers_1.defaults)(config, {
+            config = defaults(config, {
                 query: {},
                 force_load_from_db: true,
                 filter: () => true,
@@ -469,43 +464,43 @@ let CacheManager = class CacheManager {
     /*                             END COMMON METHODS                             */
     /* -------------------------------------------------------------------------- */
     get actions() {
-        return actions_cache_manager_1.default.getInstance();
+        return ActionsCacheManager.getInstance();
     }
     get fcmTokens() {
-        return fcm_tokens_cache_manager_1.default.getInstance();
+        return FCMTokensCacheManager.getInstance();
     }
     get heavyComputing() {
-        return heavy_computing_cache_manager_1.default.getInstance();
+        return HeavyComputingCacheManager.getInstance();
     }
     get tasks() {
-        return tasks_cache_manager_1.default.getInstance();
+        return TasksCacheManager.getInstance();
     }
     /* -------------------------------------------------------------------------- */
     /*                               ENTITY MANAGERS                              */
     /* -------------------------------------------------------------------------- */
     get apiKeys() {
-        return api_keys_cache_manager_1.default.getInstance();
+        return ApiKeysCacheManager.getInstance();
     }
     get permissions() {
-        return permissions_cache_manager_1.default.getInstance();
+        return PermissionsCacheManager.getInstance();
     }
     get permissionGroups() {
-        return permission_groups_cache_manager_1.default.getInstance();
+        return PermissionGroupsCacheManager.getInstance();
     }
     get roles() {
-        return roles_cache_manager_1.default.getInstance();
+        return RolesCacheManager.getInstance();
     }
     get users() {
-        return users_cache_manager_1.default.getInstance();
+        return UsersCacheManager.getInstance();
     }
     get apps() {
-        return apps_cache_manager_1.default.getInstance();
+        return AppsCacheManager.getInstance();
     }
     async flushAll() {
         const client = await this.getClient();
         const keys = await client.sendCommand(["keys", "*"]);
         keys.forEach((key) => {
-            if (key.startsWith(`${config_1.default.cacheManager.keyPrefix || "LUP_V2_"}`)) {
+            if (key.startsWith(`${config.cacheManager.keyPrefix || "LUP_V2_"}`)) {
                 this.logger.info(this.flushAll.name, key);
                 client.del(key);
             }
@@ -515,8 +510,8 @@ let CacheManager = class CacheManager {
     }
 };
 CacheManager = __decorate([
-    (0, typedi_1.Service)(),
+    Service(),
     __metadata("design:paramtypes", [])
 ], CacheManager);
-exports.default = CacheManager;
+export default CacheManager;
 //# sourceMappingURL=index.js.map

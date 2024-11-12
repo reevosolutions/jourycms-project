@@ -22,6 +22,8 @@ declare module Levelup {
                   address: Utils.Entity.Snapshots.Locations.Address;
                   first_name: string;
                   family_name: string;
+                  phones: string[];
+                  website: string;
                   sex: Users.Entity.Sex | null;
                   email: string;
                   password: string;

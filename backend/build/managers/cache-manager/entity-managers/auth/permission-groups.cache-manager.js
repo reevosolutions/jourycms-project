@@ -1,21 +1,16 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = __importDefault(require("typedi"));
-const __1 = __importDefault(require("../.."));
-const logging_1 = __importDefault(require("../../../../utilities/logging"));
-const utils_helpers_1 = require("../../../../utilities/helpers/utils.helpers");
+import Container from 'typedi';
+import CacheManager from '../..';
+import initLogger from '../../../../utilities/logging';
+import { defaults } from '../../../../utilities/helpers/utils.helpers';
 /**
  * @description Cache manager for PermissionGroups
  */
-class PermissionGroupsCacheManager {
+export default class PermissionGroupsCacheManager {
     constructor() {
         this.EXPIRATION = 3600 * 48;
         this.ENTITY = "permissionGroup";
-        this.cache = typedi_1.default.get(__1.default);
-        this.logger = (0, logging_1.default)("COMPONENT", `${this.constructor.name}`);
+        this.cache = Container.get(CacheManager);
+        this.logger = initLogger("COMPONENT", `${this.constructor.name}`);
     }
     static getInstance() {
         if (!PermissionGroupsCacheManager.instance) {
@@ -25,7 +20,7 @@ class PermissionGroupsCacheManager {
         return PermissionGroupsCacheManager.instance;
     }
     async get(id, config) {
-        return this.cache.get(this.ENTITY, id, (0, utils_helpers_1.defaults)(config, {
+        return this.cache.get(this.ENTITY, id, defaults(config, {
             expiration: this.EXPIRATION,
             force_load_from_db: true,
             company: null,
@@ -54,5 +49,4 @@ class PermissionGroupsCacheManager {
         return this.cache.unsetAll(this.ENTITY, company);
     }
 }
-exports.default = PermissionGroupsCacheManager;
 //# sourceMappingURL=permission-groups.cache-manager.js.map

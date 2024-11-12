@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SUPPORTED_LANGUAGE_OBJECTS = exports.SUPPORTED_LANGUAGES = exports.LOCALIZATION_LANGUAGE_NAMES = exports.LOCALIZATION_LANGUAGE_CODES = exports.LANGUAGE_TO_COUNTRY = exports.LOCALIZATION_LANGUAGES = void 0;
-exports.LOCALIZATION_LANGUAGES = {
+export const LOCALIZATION_LANGUAGES = {
     zh: "Chinese",
     es: "Spanish",
     en: "English",
@@ -72,7 +69,7 @@ exports.LOCALIZATION_LANGUAGES = {
     ve: "Venda",
     nr: "Ndebele",
 };
-exports.LANGUAGE_TO_COUNTRY = {
+export const LANGUAGE_TO_COUNTRY = {
     zh: "CN", // Chinese - China
     es: "ES", // Spanish - Spain (Note: Spanish is widely spoken in many countries in Latin America)
     en: "US", // English - United States (Note: English is an official language in several countries)
@@ -143,12 +140,12 @@ exports.LANGUAGE_TO_COUNTRY = {
     ve: "ZA", // Venda - South Africa
     nr: "ZA", // Ndebele - South Africa
 };
-exports.LOCALIZATION_LANGUAGE_CODES = Object.keys(exports.LOCALIZATION_LANGUAGES);
-exports.LOCALIZATION_LANGUAGE_NAMES = Object.values(exports.LOCALIZATION_LANGUAGES);
-exports.SUPPORTED_LANGUAGES = ["en", "fr", "ar", "it", "es"];
-exports.SUPPORTED_LANGUAGE_OBJECTS = exports.SUPPORTED_LANGUAGES.map((lang) => ({
+export const LOCALIZATION_LANGUAGE_CODES = Object.keys(LOCALIZATION_LANGUAGES);
+export const LOCALIZATION_LANGUAGE_NAMES = Object.values(LOCALIZATION_LANGUAGES);
+export const SUPPORTED_LANGUAGES = ["en", "fr", "ar", "it", "es"];
+export const SUPPORTED_LANGUAGE_OBJECTS = SUPPORTED_LANGUAGES.map((lang) => ({
     language_code: lang,
-    language_name: exports.LOCALIZATION_LANGUAGES[lang],
-    language_country_code: exports.LANGUAGE_TO_COUNTRY[lang],
+    language_name: LOCALIZATION_LANGUAGES[lang],
+    language_country_code: LANGUAGE_TO_COUNTRY[lang],
 }));
 //# sourceMappingURL=localization.constants.js.map

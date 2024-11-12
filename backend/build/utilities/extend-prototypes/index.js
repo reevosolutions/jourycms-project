@@ -1,4 +1,2 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-require("./string.prototype");
+import './string.prototype';
 //# sourceMappingURL=index.js.map

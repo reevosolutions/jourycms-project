@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
-class ItemNotFound extends levelup_exception_exception_1.default {
+import LevelupException from "./levelup-exception.exception";
+class ItemNotFound extends LevelupException {
     constructor(message = "Item Not Found") {
         super(message);
         this.status = 404;
@@ -14,5 +9,5 @@ class ItemNotFound extends levelup_exception_exception_1.default {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-exports.default = ItemNotFound;
+export default ItemNotFound;
 //# sourceMappingURL=item-not-found.exception.js.map

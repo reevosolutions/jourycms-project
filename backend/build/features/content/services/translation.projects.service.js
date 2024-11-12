@@ -1,4 +1,3 @@
-"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
@@ -17,32 +16,28 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = require("typedi");
-const utils_helpers_1 = require("../../../utilities/helpers/utils.helpers");
-const base_service_1 = __importDefault(require("../../../common/base.service"));
-const config_1 = __importDefault(require("../../../config"));
-const events_config_1 = __importDefault(require("../../../config/events.config"));
-const tracking_id_constants_1 = require("../../../constants/tracking_id.constants");
-const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
-const exceptions_1 = __importDefault(require("../../../exceptions"));
-const query_utilities_1 = require("../../../utilities/data/db/query.utilities");
-const snapshots_utilities_1 = require("../../../utilities/entities/snapshots.utilities");
-const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
-const index_1 = require("../../../utilities/requests/index");
-const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
-const tracking_id_utilities_1 = require("../../../utilities/system/tracking-id.utilities");
-const general_mappers_1 = require("../../../common/mappers/general.mappers");
-const translation_project_sanitizers_1 = __importDefault(require("../sanitizers/translation.project.sanitizers"));
-const translation_project_validators_1 = __importDefault(require("../validators/translation.project.validators"));
-const translation_project_model_1 = require("../models/translation.project.model");
+import { Inject, Service } from 'typedi';
+import { defaults } from '../../../utilities/helpers/utils.helpers';
+import BaseService from '../../../common/base.service';
+import config from '../../../config';
+import events from '../../../config/events.config';
+import { ITEM_SHORTCUTS } from '../../../constants/tracking_id.constants';
+import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
+import exceptions from '../../../exceptions';
+import { createBooleanFilter, createDateRangeFilter, createStringFilter } from '../../../utilities/data/db/query.utilities';
+import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities';
+import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
+import { fixFiltersObject } from '../../../utilities/requests/index';
+import userCan from '../../../utilities/security/user-can';
+import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import TranslationProjectSanitizers from '../sanitizers/translation.project.sanitizers';
+import TranslationProjectValidators from '../validators/translation.project.validators';
+import { TranslationProjectSchemaFields } from '../models/translation.project.model';
 /**
  * @description
  */
-let TranslationProjectsService = class TranslationProjectsService extends base_service_1.default {
+let TranslationProjectsService = class TranslationProjectsService extends BaseService {
     constructor(articleTypeModel, articleModel, commentModel, reviewModel, termModel, taxonomyModel, translationItemModel, translationNamespaceModel, translationProjectModel, eventDispatcher) {
         super();
         this.articleTypeModel = articleTypeModel;
@@ -125,7 +120,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
         /**
          * @description fixing filters object
          */
-        filters = (0, index_1.fixFiltersObject)(filters);
+        filters = fixFiltersObject(filters);
         /**
          * @description Inject attributes in the filters
          */
@@ -134,37 +129,37 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
         if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app)
             filters.app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
         // -- attributed:app
-        if (translation_project_model_1.TranslationProjectSchemaFields['app']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['app'], 'app');
+        if (TranslationProjectSchemaFields['app']) {
+            filter = createStringFilter(q, totalQ, filters['app'], 'app');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- attributed:company
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.company, 'company');
+        filter = createStringFilter(q, totalQ, filters.company, 'company');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- attributed:store
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.store, 'attributes.store');
+        filter = createStringFilter(q, totalQ, filters.store, 'attributes.store');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- is_deleted
-        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, 'is_deleted');
+        filter = createBooleanFilter(q, totalQ, filters.is_deleted, 'is_deleted');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, 'created_at');
+        filter = createDateRangeFilter(q, totalQ, filters.created_at, 'created_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- updated_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, 'updated_at');
+        filter = createDateRangeFilter(q, totalQ, filters.updated_at, 'updated_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- _id
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, '_id');
+        filter = createStringFilter(q, totalQ, filters._id, '_id');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- name
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.name, 'name');
+        filter = createStringFilter(q, totalQ, filters.name, 'name');
         q = filter.q;
         totalQ = filter.totalQ;
         return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
@@ -181,7 +176,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Fill options argument with the defaults
              */
-            opt = (0, utils_helpers_1.defaults)(opt, {
+            opt = defaults(opt, {
                 load_deleted: false,
                 dont_lean: false,
             });
@@ -200,7 +195,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             const filter = this._applyFilters({ q, totalQ, query, authData, opt });
             q = filter.q;
             totalQ = filter.totalQ;
-            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount : count;
+            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config.settings.listing.defaultCount : count;
             const { skip, take } = this.getPaginationOptions(limit, page);
             const sortOptions = this.getSortOptions(sort, sort_by);
             if (take)
@@ -214,7 +209,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * @description Add query to execution scenario
              */
-            scenario.request_filter = (0, index_1.fixFiltersObject)(query.filters);
+            scenario.request_filter = fixFiltersObject(query.filters);
             scenario.listing_query = {
                 model: q.model.modelName,
                 query: q.getQuery(),
@@ -233,7 +228,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             scenario.found = items === null || items === void 0 ? void 0 : items.length;
             scenario.total = total;
             const result = {
-                data: items.map(doc => (0, general_mappers_1.mapDocumentToExposed)(doc)),
+                data: items.map(doc => mapDocumentToExposed(doc)),
                 pagination: {
                     total,
                     pages,
@@ -258,7 +253,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Fill options argument with the defaults
              */
-            opt = (0, utils_helpers_1.defaults)(opt, {
+            opt = defaults(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
@@ -275,19 +270,19 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
+                throw new exceptions.ItemNotFoundException('Object deleted');
             /**
             * Check if the user can view the object
             */
-            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -296,7 +291,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
@@ -310,7 +305,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Fill options argument with the defaults
              */
-            opt = (0, utils_helpers_1.defaults)(opt, {
+            opt = defaults(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
@@ -327,19 +322,19 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
+                throw new exceptions.ItemNotFoundException('Object deleted');
             /**
             * Check if the user can view the object
             */
-            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -348,7 +343,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getByName, error);
             throw error;
@@ -367,11 +362,11 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * await sanitize data here
              */
-            data = await translation_project_sanitizers_1.default.sanitizeCreateBody(data, authData);
+            data = await TranslationProjectSanitizers.sanitizeCreateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = translation_project_validators_1.default.validateCreateBody(data);
+            const { error } = TranslationProjectValidators.validateCreateBody(data);
             if (error)
                 throw error;
             let {} = data;
@@ -387,9 +382,9 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
              * Check if the user can create the object
              */
             if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) && ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object on this app');
-            if (!(opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) && !user_can_1.default.createObject(this.ENTITY, data, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object');
+                throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
+            if (!(opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) && !userCan.createObject(this.ENTITY, data, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to create this object');
             /**
              * Create data object
              */
@@ -397,13 +392,13 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Create tracking ID
              */
-            if (translation_project_model_1.TranslationProjectSchemaFields['tracking_id'] && Object.keys(tracking_id_constants_1.ITEM_SHORTCUTS).includes(this.ENTITY)) {
-                docObject['tracking_id'] = await (0, tracking_id_utilities_1.createTrackingId)(this.ENTITY, this.translationProjectModel);
+            if (TranslationProjectSchemaFields['tracking_id'] && Object.keys(ITEM_SHORTCUTS).includes(this.ENTITY)) {
+                docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.translationProjectModel);
             }
             /**
              * Create search meta
              */
-            if (translation_project_model_1.TranslationProjectSchemaFields['search_meta']) {
+            if (TranslationProjectSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, null);
             }
             /**
@@ -411,10 +406,10 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
              */
             const doc = await this.translationProjectModel.create(docObject);
             if (!doc)
-                throw new exceptions_1.default.InternalServerError('Failed to create the object');
-            this.eventDispatcher.dispatch(events_config_1.default.content.translation.project.created, { data: doc });
+                throw new exceptions.InternalServerError('Failed to create the object');
+            this.eventDispatcher.dispatch(events.content.translation.project.created, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -440,11 +435,11 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * await sanitize data here
              */
-            data = await translation_project_sanitizers_1.default.sanitizeUpdateBody(data, authData);
+            data = await TranslationProjectSanitizers.sanitizeUpdateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = translation_project_validators_1.default.validateUpdateBody(data);
+            const { error } = TranslationProjectValidators.validateUpdateBody(data);
             if (error)
                 throw error;
             /**
@@ -456,19 +451,19 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
              */
             const old = await this.translationProjectModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object is deleted');
-            if (!user_can_1.default.updateObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to update this object');
+                throw new exceptions.UnauthorizedException('Object is deleted');
+            if (!userCan.updateObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to update this object');
             /**
              * detect changes
              */
-            const updates = new update_calculator_class_1.default(old.toObject(), data, true);
+            const updates = new ObjectUpdatedProperties(old.toObject(), data, true);
             scenario.updates = updates.asArray;
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'updated',
                 updates: updates.asArray
@@ -480,7 +475,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Create search meta
              */
-            if (translation_project_model_1.TranslationProjectSchemaFields['search_meta']) {
+            if (TranslationProjectSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, old);
             }
             /**
@@ -490,7 +485,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
                     updates: updateObject
                 } }), { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             /**
              * Handle the updated effects on the same service
              */
@@ -498,9 +493,9 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             /**
              * Dispatch the updated event
              */
-            this.eventDispatcher.dispatch(events_config_1.default.content.translation.project.updated, { data: doc });
+            this.eventDispatcher.dispatch(events.content.translation.project.updated, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -528,18 +523,18 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'deleted',
                 updates: []
             };
             const old = await this.translationProjectModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object already deleted');
-            if (!user_can_1.default.deleteObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to delete this object');
+                throw new exceptions.UnauthorizedException('Object already deleted');
+            if (!userCan.deleteObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
             const doc = await this.translationProjectModel.findByIdAndUpdate(id, {
                 is_deleted: true,
                 deleted_at: new Date(),
@@ -547,7 +542,7 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
                     updates: updateObject
                 }
             }, { new: true });
-            this.eventDispatcher.dispatch(events_config_1.default.content.translation.project.deleted, { data: doc });
+            this.eventDispatcher.dispatch(events.content.translation.project.deleted, { data: doc });
             const result = {
                 data: {
                     deleted: true
@@ -576,18 +571,18 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'restored',
                 updates: []
             };
             const old = await this.translationProjectModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (!old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object already exists');
-            if (!user_can_1.default.restoreObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to restore this object');
+                throw new exceptions.UnauthorizedException('Object already exists');
+            if (!userCan.restoreObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
             const doc = await this.translationProjectModel.findByIdAndUpdate(id, {
                 is_deleted: false,
                 deleted_at: null,
@@ -596,8 +591,8 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
                 }
             }, { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
-            this.eventDispatcher.dispatch(events_config_1.default.content.translation.project.restored, { data: doc });
+                throw new exceptions.ItemNotFoundException('Object not found');
+            this.eventDispatcher.dispatch(events.content.translation.project.restored, { data: doc });
             const result = {
                 data: {
                     restored: true
@@ -616,18 +611,18 @@ let TranslationProjectsService = class TranslationProjectsService extends base_s
     }
 };
 TranslationProjectsService = __decorate([
-    (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
-    __param(1, (0, typedi_1.Inject)('articleModel')),
-    __param(2, (0, typedi_1.Inject)('commentModel')),
-    __param(3, (0, typedi_1.Inject)('reviewModel')),
-    __param(4, (0, typedi_1.Inject)('termModel')),
-    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
-    __param(6, (0, typedi_1.Inject)('translationItemModel')),
-    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
-    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
-    __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
+    Service(),
+    __param(0, Inject('articleTypeModel')),
+    __param(1, Inject('articleModel')),
+    __param(2, Inject('commentModel')),
+    __param(3, Inject('reviewModel')),
+    __param(4, Inject('termModel')),
+    __param(5, Inject('taxonomyModel')),
+    __param(6, Inject('translationItemModel')),
+    __param(7, Inject('translationNamespaceModel')),
+    __param(8, Inject('translationProjectModel')),
+    __param(9, EventDispatcher()),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], TranslationProjectsService);
-exports.default = TranslationProjectsService;
+export default TranslationProjectsService;
 //# sourceMappingURL=translation.projects.service.js.map

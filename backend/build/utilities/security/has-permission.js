@@ -1,12 +1,7 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = __importDefault(require("typedi"));
-const cache_manager_1 = __importDefault(require("../../managers/cache-manager"));
-const logging_1 = __importDefault(require("../logging"));
-const logger = (0, logging_1.default)("UTILITY", "HAS_PERMISSIONS");
+import Container from 'typedi';
+import CacheManager from '../../managers/cache-manager';
+import initLogger from '../logging';
+const logger = initLogger("UTILITY", "HAS_PERMISSIONS");
 /**
  *
  * @param {Levelup.CMS.V1.Users.Entity.ExposedUser | null} user
@@ -14,7 +9,7 @@ const logger = (0, logging_1.default)("UTILITY", "HAS_PERMISSIONS");
  * @returns {Promise<boolean>}
  */
 const hasPermission = async (user, permissionName) => {
-    const cacheManager = typedi_1.default.get(cache_manager_1.default);
+    const cacheManager = Container.get(CacheManager);
     if (!user)
         return false;
     if (user.role === "master_admin")
@@ -35,5 +30,5 @@ const hasPermission = async (user, permissionName) => {
     logger.value('hasPermission result', result);
     return result;
 };
-exports.default = hasPermission;
+export default hasPermission;
 //# sourceMappingURL=has-permission.js.map

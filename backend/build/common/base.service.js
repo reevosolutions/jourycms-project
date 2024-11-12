@@ -1,9 +1,3 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ExcecutionScenario = void 0;
 /* eslint-disable @typescript-eslint/ban-types */
 /**
  * @description This is the base service class
@@ -11,27 +5,27 @@ exports.ExcecutionScenario = void 0;
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 05-03-2024 07:06:13
  */
-const joi_1 = __importDefault(require("joi"));
-const exceptions_1 = __importDefault(require("../exceptions"));
-const config_1 = __importDefault(require("../config"));
-const index_1 = require("../utilities/exceptions/index");
-const index_2 = __importDefault(require("../utilities/logging/index"));
-const extract_request_significant_data_1 = require("./../utilities/requests/extract-request-significant-data");
-const mongodb_1 = require("mongodb");
-const treeify_1 = __importDefault(require("treeify"));
-const sdk_1 = require("../utilities/data/sdk");
-const say_1 = __importDefault(require("say"));
-const output_utilities_1 = require("../utilities/logging/output.utilities");
-const timer_utilities_1 = require("../utilities/system/timer.utilities");
-const typedi_1 = __importDefault(require("typedi"));
-const auth_manager_1 = __importDefault(require("../managers/auth-manager"));
-const strings_1 = require("../utilities/strings");
+import Joi from "joi";
+import exceptions from "../exceptions";
+import config from "../config";
+import { errorToObject } from "../utilities/exceptions/index";
+import initLogger from "../utilities/logging/index";
+import { extractRequestSignificantData } from "./../utilities/requests/extract-request-significant-data";
+import { MongoServerError } from "mongodb";
+import treeify from "treeify";
+import { initJouryCMSSdk } from "../utilities/data/sdk";
+import say from "say";
+import { generateProgressBar } from "../utilities/logging/output.utilities";
+import { initTimer } from "../utilities/system/timer.utilities";
+import Container from "typedi";
+import AuthManager from "../managers/auth-manager";
+import { countCharacterOccurrenceInString } from "../utilities/strings";
 /**
  * This is the base service class
  */
-class BaseService {
+export default class BaseService {
     constructor() {
-        this.logger = (0, index_2.default)("SERVICE", this.constructor.name);
+        this.logger = initLogger("SERVICE", this.constructor.name);
     }
     /**
      * This method is used to log errors
@@ -42,8 +36,8 @@ class BaseService {
      * @param {any} scenario
      */
     logError(method, error, authData, related_to, scenario) {
-        if (error instanceof joi_1.default.ValidationError) {
-            error = new exceptions_1.default.ValidationException("Validation Error", error);
+        if (error instanceof Joi.ValidationError) {
+            error = new exceptions.ValidationException("Validation Error", error);
         }
         if (process.env.NODE_ENV !== "production") {
             // console.log('Error in BaseService.logError:',
@@ -51,15 +45,15 @@ class BaseService {
             //   error instanceof exceptions.BadRequestException,
             //   error instanceof exceptions.InternalServerError,
             // );
-            if (error && error instanceof mongodb_1.MongoServerError && error.code === 11000) {
-                if (config_1.default.logging.log_duplicate_errors || method.name !== "create")
+            if (error && error instanceof MongoServerError && error.code === 11000) {
+                if (config.logging.log_duplicate_errors || method.name !== "create")
                     this.logger.error(`DUPLICATE Error in ${this.constructor.name}.${method.name}`, error);
             }
             else {
                 this.logger.error(`Error in ${this.constructor.name}.${method.name}: ${error.message}`, error);
-                scenario && console.log(treeify_1.default.asTree(scenario, true).yellow);
+                scenario && console.log(treeify.asTree(scenario, true).yellow);
                 if (error.message)
-                    say_1.default.stop();
+                    say.stop();
                 // say.speak(
                 //   `Service: ${config.currentService.name}, ${(error as any).message}`,
                 //   "Karen",
@@ -75,8 +69,8 @@ class BaseService {
         this.logger.save.error({
             name: method.name.toSnakeCase(),
             related_to,
-            payload: Object.assign({ error: (0, index_1.errorToObject)(error), scenario }, ((authData === null || authData === void 0 ? void 0 : authData.req)
-                ? (0, extract_request_significant_data_1.extractRequestSignificantData)(authData === null || authData === void 0 ? void 0 : authData.req())
+            payload: Object.assign({ error: errorToObject(error), scenario }, ((authData === null || authData === void 0 ? void 0 : authData.req)
+                ? extractRequestSignificantData(authData === null || authData === void 0 ? void 0 : authData.req())
                 : {})),
         });
         return;
@@ -95,7 +89,7 @@ class BaseService {
                     this.logger.error(`${this.constructor.name}.${method.name}`, `Error scenario:`);
                 else
                     this.logger.success(`${this.constructor.name}.${method.name}`, `Successfull scenario:`);
-                console.log(treeify_1.default.asTree(scenario, true).cyan);
+                console.log(treeify.asTree(scenario, true).cyan);
             }
         }
         catch (error) {
@@ -146,14 +140,14 @@ class BaseService {
     get sdk() {
         if (this._sdk)
             return this._sdk;
-        this._sdk = (0, sdk_1.initJouryCMSSdk)();
+        this._sdk = initJouryCMSSdk();
         return this._sdk;
     }
     flattenUpdateObject(updateObj) {
         function groupNestedProperties(updateObject) {
             const groupedObject = {};
             for (const key in updateObject) {
-                const dotCount = (0, strings_1.countCharacterOccurrenceInString)(key, ".");
+                const dotCount = countCharacterOccurrenceInString(key, ".");
                 // If the property has three dots, we group it under the first part
                 if (dotCount === 3) {
                     const firstPart = key.split(".").slice(0, 3).join(".");
@@ -204,7 +198,7 @@ class BaseService {
         const authData = {
             current: {
                 service: {
-                    name: config_1.default.currentService.name,
+                    name: config.currentService.name,
                     is_external: false,
                 },
             },
@@ -221,7 +215,7 @@ class BaseService {
         var _a, _b, _c, _d, _e;
         if (!authData)
             return undefined;
-        const authManager = typedi_1.default.get(auth_manager_1.default);
+        const authManager = Container.get(AuthManager);
         let token = (_a = authData.current) === null || _a === void 0 ? void 0 : _a.token;
         if (((_b = authData.current) === null || _b === void 0 ? void 0 : _b.user) && !((_c = authData.current) === null || _c === void 0 ? void 0 : _c.token)) {
             token = authManager.generateToken({
@@ -248,8 +242,7 @@ class BaseService {
         return new ExcecutionScenario(this.constructor.name, logger, method.name, args || {}, authData || null);
     }
 }
-exports.default = BaseService;
-class ExcecutionScenario {
+export class ExcecutionScenario {
     constructor(_class, logger, method, args = {}, authData = null) {
         this.execution = {};
         this._class = _class;
@@ -257,7 +250,7 @@ class ExcecutionScenario {
         this.method = method;
         this.args = args;
         this.authData = authData;
-        this.timer = (0, timer_utilities_1.initTimer)();
+        this.timer = initTimer();
     }
     set(key, value) {
         if (typeof key === "object") {
@@ -271,7 +264,7 @@ class ExcecutionScenario {
         return this.execution[key];
     }
     progress(logger, progress, message) {
-        logger.debug((0, output_utilities_1.generateProgressBar)(progress), message || this.method);
+        logger.debug(generateProgressBar(progress), message || this.method);
     }
     /**
      * @description This method is used to log execution results
@@ -282,14 +275,14 @@ class ExcecutionScenario {
      */
     async log(purpose = "success") {
         try {
-            if (config_1.default.environement === "development") {
+            if (config.environement === "development") {
                 if (purpose === "error")
                     this.logger.error(`${this._class}.${this.method}`, `Error scenario:`);
                 else if (purpose === "warn")
                     this.logger.warn(`${this._class}.${this.method}`, `Warning scenario:`);
                 else
                     this.logger.success(`${this._class}.${this.method}`, `Successfull scenario in ${this.timer.timeString}`);
-                console.log(treeify_1.default.asTree({
+                console.log(treeify.asTree({
                     args: this.args,
                     execution: this.execution,
                     execution_time: this.timer.timeString,
@@ -305,7 +298,7 @@ class ExcecutionScenario {
     }
     async step(logger, data) {
         try {
-            if (config_1.default.environement === "development") {
+            if (config.environement === "development") {
                 logger.value(`${this._class}.${this.method}.step at: ${this.timer.timeString}`, data);
             }
         }
@@ -323,25 +316,25 @@ class ExcecutionScenario {
      */
     error(error) {
         var _a, _b;
-        if (error instanceof joi_1.default.ValidationError) {
-            error = new exceptions_1.default.ValidationException("Validation Error", error);
+        if (error instanceof Joi.ValidationError) {
+            error = new exceptions.ValidationException("Validation Error", error);
         }
-        if (config_1.default.environement === "development") {
+        if (config.environement === "development") {
             // console.log('Error in BaseService.logError:',
             //   error instanceof exceptions.LevelupException,
             //   error instanceof exceptions.BadRequestException,
             //   error instanceof exceptions.InternalServerError,
             // );
-            if (error instanceof mongodb_1.MongoServerError && error.code === 11000) {
-                if (config_1.default.logging.log_duplicate_errors || this.method !== "create")
+            if (error instanceof MongoServerError && error.code === 11000) {
+                if (config.logging.log_duplicate_errors || this.method !== "create")
                     this.logger.error(`DUPLICATE Error in ${this._class}.${this.method}`, error);
             }
             else {
                 this.logger.error(`Error in ${this._class}.${this.method}: ${error.message}`, error);
-                console.log(treeify_1.default.asTree({ args: this.args, execution: this.execution }, true)
+                console.log(treeify.asTree({ args: this.args, execution: this.execution }, true)
                     .yellow);
                 if (error.message)
-                    say_1.default.stop();
+                    say.stop();
                 // FIXME: Uncomment this
                 // say.speak(
                 //   `Service: ${config.currentService.name}, ${(error as any).message}`,
@@ -357,12 +350,11 @@ class ExcecutionScenario {
         }
         this.logger.save.error({
             name: this.method.toSnakeCase(),
-            payload: Object.assign({ error: (0, index_1.errorToObject)(error), scenario: this.execution }, (((_a = this.authData) === null || _a === void 0 ? void 0 : _a.req)
-                ? (0, extract_request_significant_data_1.extractRequestSignificantData)((_b = this.authData) === null || _b === void 0 ? void 0 : _b.req())
+            payload: Object.assign({ error: errorToObject(error), scenario: this.execution }, (((_a = this.authData) === null || _a === void 0 ? void 0 : _a.req)
+                ? extractRequestSignificantData((_b = this.authData) === null || _b === void 0 ? void 0 : _b.req())
                 : {})),
         });
         return;
     }
 }
-exports.ExcecutionScenario = ExcecutionScenario;
 //# sourceMappingURL=base.service.js.map

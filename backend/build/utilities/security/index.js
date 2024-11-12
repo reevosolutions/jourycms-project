@@ -1,27 +1,21 @@
-"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 24-02-2024 20:47:22
  */
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.hashString = exports.sanitizeObjectBooleans = exports.sanitizeKeys = void 0;
-exports.fragmentObjectId = fragmentObjectId;
-exports.ressembleObjectId = ressembleObjectId;
-const sanitizeKeys = (obj) => {
+export const sanitizeKeys = (obj) => {
     function sanitizeKey(key) {
         return key.replace(/\W+/g, '_');
     }
     if (Array.isArray(obj)) {
-        return obj.map(value => (0, exports.sanitizeKeys)(value));
+        return obj.map(value => sanitizeKeys(value));
     }
     else if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((acc, key) => (Object.assign(Object.assign({}, acc), { [sanitizeKey(key)]: (0, exports.sanitizeKeys)(obj[key]) })), {});
+        return Object.keys(obj).reduce((acc, key) => (Object.assign(Object.assign({}, acc), { [sanitizeKey(key)]: sanitizeKeys(obj[key]) })), {});
     }
     return obj;
 };
-exports.sanitizeKeys = sanitizeKeys;
-const sanitizeObjectBooleans = (obj) => {
+export const sanitizeObjectBooleans = (obj) => {
     function sanitizeBoolean(value) {
         if (value === 'true')
             return true;
@@ -30,15 +24,14 @@ const sanitizeObjectBooleans = (obj) => {
         return value;
     }
     if (Array.isArray(obj)) {
-        return obj.map(value => (0, exports.sanitizeObjectBooleans)(value));
+        return obj.map(value => sanitizeObjectBooleans(value));
     }
     else if (obj !== null && typeof obj === 'object') {
-        return Object.keys(obj).reduce((acc, key) => (Object.assign(Object.assign({}, acc), { [key]: (0, exports.sanitizeObjectBooleans)(obj[key]) })), {});
+        return Object.keys(obj).reduce((acc, key) => (Object.assign(Object.assign({}, acc), { [key]: sanitizeObjectBooleans(obj[key]) })), {});
     }
     return sanitizeBoolean(obj);
 };
-exports.sanitizeObjectBooleans = sanitizeObjectBooleans;
-function fragmentObjectId(str) {
+export function fragmentObjectId(str) {
     if (str.length !== 24) {
         throw new Error('Input string must have a length of 24.');
     }
@@ -51,16 +44,15 @@ function fragmentObjectId(str) {
     segments.push(str.substring(20));
     return `${segments[4]}-${segments[1]}-${segments[3]}-${segments[2]}-${segments[0]}`;
 }
-function ressembleObjectId(str) {
+export function ressembleObjectId(str) {
     if (str.length !== 28) {
         throw new Error('Input string must have a length of 28.');
     }
     const segments = str.split('-');
     return `${segments[4]}${segments[1]}${segments[3]}${segments[2]}${segments[0]}`;
 }
-const hashString = (str) => {
+export const hashString = (str) => {
     return Array.from(str)
         .reduce((s, c) => Math.imul(31, s) + c.charCodeAt(0) | 0, 0);
 };
-exports.hashString = hashString;
 //# sourceMappingURL=index.js.map

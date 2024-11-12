@@ -1,8 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.mimetypeToFileTypeGroup = void 0;
-exports.getFileTypeGroup = getFileTypeGroup;
-exports.mimetypeToFileTypeGroup = {
+export const mimetypeToFileTypeGroup = {
     'image/jpeg': 'image',
     'image/png': 'image',
     'image/gif': 'image',
@@ -45,9 +41,9 @@ exports.mimetypeToFileTypeGroup = {
     'text/css': 'web',
     'application/javascript': 'web',
 };
-function getFileTypeGroup(mimetype) {
+export function getFileTypeGroup(mimetype) {
     // Get the file type group based on the provided mimetype
-    const fileTypeGroup = exports.mimetypeToFileTypeGroup[mimetype];
+    const fileTypeGroup = mimetypeToFileTypeGroup[mimetype];
     // Return the file type group or null if not found
     return fileTypeGroup || null;
 }

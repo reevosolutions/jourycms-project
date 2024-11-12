@@ -1,31 +1,25 @@
-"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-01 02:15:52
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ROOT_PATH = void 0;
-const express_1 = require("express");
-const typedi_1 = __importDefault(require("typedi"));
-const middlewares_1 = __importDefault(require("../../../middlewares"));
-const logging_1 = __importDefault(require("../../../utilities/logging"));
-const requests_1 = require("../../../utilities/requests");
-const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
-const translation_namespaces_service_1 = __importDefault(require("../services/translation.namespaces.service"));
+import { Router } from 'express';
+import Container from 'typedi';
+import middlewares from '../../../middlewares';
+import initLogger from '../../../utilities/logging';
+import { respond } from '../../../utilities/requests';
+import { getAuthData } from '../../../utilities/requests/get-auth-data';
+import TranslationNamespacesService from '../services/translation.namespaces.service';
 /**
  * @generator Levelup
  * @description This file is used to build the Namespaces controller
  */
-exports.ROOT_PATH = '/translation/namespaces';
-exports.default = (app) => {
-    const logger = (0, logging_1.default)("CONTROLLER", "NamespacesController");
-    const route = (0, express_1.Router)();
-    app.use(exports.ROOT_PATH, middlewares_1.default.AUTH.requireUser, route);
+export const ROOT_PATH = '/translation/namespaces';
+export default (app) => {
+    const logger = initLogger("CONTROLLER", "NamespacesController");
+    const route = Router();
+    app.use(ROOT_PATH, middlewares.AUTH.requireUser, route);
     /**
      * List
      */
@@ -34,11 +28,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -46,7 +40,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -64,11 +58,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -77,7 +71,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -95,11 +89,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -108,7 +102,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -126,11 +120,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -138,7 +132,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result, 201);
+            return respond(res, result, 201);
         }
         catch (error) {
             /**
@@ -156,11 +150,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -169,7 +163,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -187,11 +181,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -200,7 +194,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -218,11 +212,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationNamespacesService = typedi_1.default.get(translation_namespaces_service_1.default);
+            const translationNamespacesService = Container.get(TranslationNamespacesService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -231,7 +225,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**

@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,17 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const argon2_1 = __importDefault(require("argon2"));
-const crypto_1 = require("crypto");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const typedi_1 = require("typedi");
-const config_1 = __importDefault(require("../../config"));
-const exceptions_1 = __importDefault(require("../../exceptions"));
-const date_utilities_1 = require("../../utilities/date/date.utilities");
+import argon2 from "argon2";
+import { randomBytes } from "crypto";
+import jwt from "jsonwebtoken";
+import { Service } from "typedi";
+import config from "../../config";
+import exceptions from "../../exceptions";
+import { transformTimeRangeToDates } from "../../utilities/date/date.utilities";
 /**
  * @classdesc This class should not extend BaseService because it's used in it
  */
@@ -26,30 +21,30 @@ let AuthManager = class AuthManager {
     constructor() { }
     generateToken(payload, space, isRefreshToken) {
         const expiration = isRefreshToken
-            ? config_1.default.security.jwt.refreshTokenExpiration
-            : config_1.default.security.jwt.tokenExpiration;
-        const expirationRange = (0, date_utilities_1.transformTimeRangeToDates)(expiration, new Date(), "future");
+            ? config.security.jwt.refreshTokenExpiration
+            : config.security.jwt.tokenExpiration;
+        const expirationRange = transformTimeRangeToDates(expiration, new Date(), "future");
         if (!expirationRange)
-            throw new exceptions_1.default.InternalServerError("Invalid expiration range");
+            throw new exceptions.InternalServerError("Invalid expiration range");
         const exp = expirationRange.end;
         payload = Object.assign(Object.assign({}, payload), { space });
-        return jsonwebtoken_1.default.sign(Object.assign(Object.assign({}, payload), { exp: exp.getTime() / 1000 }), config_1.default.security.jwt.secret, {
-            algorithm: config_1.default.security.jwt.algorithm,
+        return jwt.sign(Object.assign(Object.assign({}, payload), { exp: exp.getTime() / 1000 }), config.security.jwt.secret, {
+            algorithm: config.security.jwt.algorithm,
         });
     }
     verifyToken(token) {
-        return jsonwebtoken_1.default.verify(token, config_1.default.security.jwt.secret);
+        return jwt.verify(token, config.security.jwt.secret);
     }
     decodeToken(token) {
-        return jsonwebtoken_1.default.decode(token);
+        return jwt.decode(token);
     }
     async verifyPassword(password, hash) {
-        const isValidPassword = await argon2_1.default.verify(hash, password);
+        const isValidPassword = await argon2.verify(hash, password);
         return isValidPassword;
     }
     async hashPassword(password) {
-        const salt = (0, crypto_1.randomBytes)(32);
-        const hashedPassword = await argon2_1.default.hash(password, { salt });
+        const salt = randomBytes(32);
+        const hashedPassword = await argon2.hash(password, { salt });
         return {
             salt: salt.toString("hex"),
             password: hashedPassword,
@@ -57,8 +52,8 @@ let AuthManager = class AuthManager {
     }
 };
 AuthManager = __decorate([
-    (0, typedi_1.Service)(),
+    Service(),
     __metadata("design:paramtypes", [])
 ], AuthManager);
-exports.default = AuthManager;
+export default AuthManager;
 //# sourceMappingURL=index.js.map

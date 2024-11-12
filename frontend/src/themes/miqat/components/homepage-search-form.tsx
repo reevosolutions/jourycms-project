@@ -62,15 +62,11 @@ export const OmrahSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
   /*                                   STATE                                    */
   /* -------------------------------------------------------------------------- */
+  const [durations, setDurations] = useState<Levelup.CMS.V1.Content.CustomFields.MetaField<"select">['field_options']['choices']>([]);
   const states = useMemo(
     () => getWebsiteConfigValue("states", []),
     [getWebsiteConfigValue],
   );
-
-  const [durations, setDurations] = useState<Levelup.CMS.V1.Content.CustomFields.MetaField<"select">['field_options']['choices']>([]);
-
-  
-
   const cities = useMemo(
     () => getWebsiteConfigValue("cities", []),
     [getWebsiteConfigValue],

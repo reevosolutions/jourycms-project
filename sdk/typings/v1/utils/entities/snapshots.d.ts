@@ -49,7 +49,7 @@ declare module Levelup {
               }
             }
 
-            
+
           }
         }
       }

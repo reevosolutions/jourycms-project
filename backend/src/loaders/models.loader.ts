@@ -8,16 +8,10 @@
 
 
 // import the service-specific models
-import { ArticleType } from '../features/content/models/article-type.model';
-import { Article } from '../features/content/models/article.model';
-import { Comment } from '../features/content/models/comment.model';
-import { Review } from '../features/content/models/review.model';
-import { Term } from '../features/content/models/term.model';
-import { Taxonomy } from '../features/content/models/taxonomy.model';
-import { TranslationItem } from '../features/content/models/translation.item.model';
-import { TranslationNamespace } from '../features/content/models/translation.namespace.model';
-import { TranslationProject } from '../features/content/models/translation.project.model';
-import { UploadedFile } from '../features/storage/models/uploaded-file.model';
+import AuthModels from '../features/auth/loaders/models.loader';
+import ContentModels from '../features/content/loaders/models.loader';
+import StorageModels from '../features/storage/loaders/models.loader';
+
 
 /**
  * Load the service models.
@@ -25,21 +19,11 @@ import { UploadedFile } from '../features/storage/models/uploaded-file.model';
  * @returns A dictionary of service models.
  */
 const getServiceModels: () => { [name: string]: any } = () => {
-	return {
-		/**
-		 * The content feature models.
-		 */
-		articleTypeModel: ArticleType,
-		articleModel: Article,
-		commentModel: Comment,
-		reviewModel: Review,
-		termModel: Term,
-		taxonomyModel: Taxonomy,
-		translationItemModel: TranslationItem,
-		translationNamespaceModel: TranslationNamespace,
-		translationProjectModel: TranslationProject,
-		uploadedFileModel: UploadedFile,
 
+	return {
+		...AuthModels(),
+		...ContentModels(),
+		...StorageModels(),
 	}
 }
 

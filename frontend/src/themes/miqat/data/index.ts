@@ -12,8 +12,10 @@ const sdk = initSdk(
 );;
 
 
-export const getArticleBySlug = async (slug: string) => {
-  const data = await sdk.content.articles.getBySlug(slug);
+export const getArticleBySlug = async (slug: string): Promise<Levelup.CMS.V1.Content.Api.Articles.GetOne.Response> => {
+  const data = await sdk.content.articles.getBySlug(slug, {
+    
+  });
   return data || null
 }
 

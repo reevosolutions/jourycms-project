@@ -1,30 +1,24 @@
-"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-01 02:15:52
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ROOT_PATH = void 0;
-const express_1 = require("express");
-const typedi_1 = __importDefault(require("typedi"));
-const logging_1 = __importDefault(require("../../../utilities/logging"));
-const requests_1 = require("../../../utilities/requests");
-const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
-const translation_items_service_1 = __importDefault(require("../services/translation.items.service"));
+import { Router } from 'express';
+import Container from 'typedi';
+import initLogger from '../../../utilities/logging';
+import { respond } from '../../../utilities/requests';
+import { getAuthData } from '../../../utilities/requests/get-auth-data';
+import TranslationItemsService from '../services/translation.items.service';
 /**
  * @generator Levelup
  * @description This file is used to build the Items controller
  */
-exports.ROOT_PATH = '/translation/items';
-exports.default = (app) => {
-    const logger = (0, logging_1.default)("CONTROLLER", "ItemsController");
-    const route = (0, express_1.Router)();
-    app.use(exports.ROOT_PATH, route);
+export const ROOT_PATH = '/translation/items';
+export default (app) => {
+    const logger = initLogger("CONTROLLER", "ItemsController");
+    const route = Router();
+    app.use(ROOT_PATH, route);
     /**
      * List
      */
@@ -33,11 +27,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -45,7 +39,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -63,11 +57,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -76,7 +70,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -94,11 +88,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -106,7 +100,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result, 201);
+            return respond(res, result, 201);
         }
         catch (error) {
             /**
@@ -124,11 +118,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -137,7 +131,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -155,11 +149,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -168,7 +162,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**
@@ -186,11 +180,11 @@ exports.default = (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const AUTH_DATA = await getAuthData(req);
             /**
              * Load the required services and managers
              */
-            const translationItemsService = typedi_1.default.get(translation_items_service_1.default);
+            const translationItemsService = Container.get(TranslationItemsService);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -199,7 +193,7 @@ exports.default = (app) => {
             /**
              * Respond to the client
              */
-            return (0, requests_1.respond)(res, result);
+            return respond(res, result);
         }
         catch (error) {
             /**

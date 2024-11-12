@@ -12,7 +12,8 @@ export const validateRegisterBody = (body: PropType<ApiAlias.Signup.Request, 'da
     password: Joi.string().required().label('Password')
   });
   return schema.validate(body, {
-    abortEarly: false
+    abortEarly: false,
+    allowUnknown: true
   });
 };
 

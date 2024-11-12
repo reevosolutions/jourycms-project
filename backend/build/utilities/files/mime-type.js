@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getMimeType = getMimeType;
-const mime_types_1 = require("mime-types");
+import { lookup } from "mime-types";
 /**
  * @description
  * - Use mime-types if you want a fast, extension-based solution.
@@ -12,9 +9,9 @@ const mime_types_1 = require("mime-types");
  *  - If false, the function will return the mime type based on the file content.
  * @returns
  */
-async function getMimeType(filePath, fromExtension = true) {
+export async function getMimeType(filePath, fromExtension = true) {
     if (fromExtension)
-        return (0, mime_types_1.lookup)(filePath);
+        return lookup(filePath);
     throw new Error("Not implemented");
 }
 //# sourceMappingURL=mime-type.js.map

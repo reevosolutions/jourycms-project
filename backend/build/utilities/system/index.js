@@ -1,27 +1,21 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getServerStatusReport = void 0;
-const axios_1 = __importDefault(require("axios"));
-const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("../../config"));
-const connection_utilities_1 = require("../data/db/connection.utilities");
-const logging_1 = __importDefault(require("../logging"));
-const logger = (0, logging_1.default)('UTILITY', 'system');
-const getServerStatusReport = async () => {
+import axios from 'axios';
+import mongoose from 'mongoose';
+import config from '../../config';
+import { getMongooseUri } from '../data/db/connection.utilities';
+import initLogger from '../logging';
+const logger = initLogger('UTILITY', 'system');
+export const getServerStatusReport = async () => {
     logger.event(`Getting My public IP address`);
     const url = 'https://checkip.amazonaws.com/';
-    const response = await (0, axios_1.default)(url);
+    const response = await axios(url);
     logger.value(`My public IP address is: ${response.data.trim()}`);
     return {
-        service: config_1.default.currentService.name,
+        service: config.currentService.name,
         server: 'UP',
         db: {
-            connect_to: config_1.default.currentService.db.connectTo,
-            status: mongoose_1.default.STATES[mongoose_1.default.connection.readyState],
-            connection_utl: (0, connection_utilities_1.getMongooseUri)(),
+            connect_to: config.currentService.db.connectTo,
+            status: mongoose.STATES[mongoose.connection.readyState],
+            connection_utl: getMongooseUri(),
         },
         ip: response.data.trim(),
         env: {
@@ -33,8 +27,7 @@ const getServerStatusReport = async () => {
             PWD: process.env.PWD,
             RXDB_NAME: process.env.RXDB_NAME
         },
-        config: process.env.NODE_ENV === 'production' ? undefined : config_1.default
+        config: process.env.NODE_ENV === 'production' ? undefined : config
     };
 };
-exports.getServerStatusReport = getServerStatusReport;
 //# sourceMappingURL=index.js.map

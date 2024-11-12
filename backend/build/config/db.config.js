@@ -1,25 +1,18 @@
-"use strict";
 /**
  * @description Database Configuration
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 05-03-2024 05:38:21
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.getDatabaseName = void 0;
-const logging_1 = __importDefault(require("../utilities/logging"));
-const logger = (0, logging_1.default)('APPLICATION', 'DB_CONFIG');
-const getDatabaseName = (service) => {
+import initLogger from "../utilities/logging";
+const logger = initLogger('APPLICATION', 'DB_CONFIG');
+export const getDatabaseName = (service) => {
     // Get the database name prefix from the environment variable
     const DB_NAME_PREFIX = process.env.MONGODB_DB_NAME_PREFIX || '';
     // Generate the database name based on the service name and prefix
     const DB_NAME = `${DB_NAME_PREFIX}${service}`;
     return DB_NAME;
 };
-exports.getDatabaseName = getDatabaseName;
 // Function to get the database configuration
 const getDatabaseConfig = () => {
     // Define the service name based on the environment variable
@@ -33,7 +26,7 @@ const getDatabaseConfig = () => {
     // Get the database name prefix from the environment variable
     const DB_NAME_PREFIX = process.env.MONGODB_DB_NAME_PREFIX || '';
     // Generate the database name based on the service name and prefix
-    const DB_NAME = (0, exports.getDatabaseName)(SERVICE_NAME);
+    const DB_NAME = getDatabaseName(SERVICE_NAME);
     // Initialize the configuration object
     const config = {
         atlasActivated: process.env.MONGODB_ATLAS_ACTIVATED === 'true' || process.env.MONGODB_ATLAS_ACTIVATED === '1',
@@ -87,5 +80,5 @@ const getDatabaseConfig = () => {
     return config;
 };
 // Export the getDatabaseConfig function as the default export
-exports.default = getDatabaseConfig;
+export default getDatabaseConfig;
 //# sourceMappingURL=db.config.js.map

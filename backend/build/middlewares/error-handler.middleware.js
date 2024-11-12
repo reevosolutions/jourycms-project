@@ -1,15 +1,10 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const celebrate_1 = require("celebrate");
-const joi_1 = __importDefault(require("joi"));
-const mongoose_1 = __importDefault(require("mongoose"));
-const exceptions_1 = __importDefault(require("../exceptions"));
-const index_1 = require("../utilities/exceptions/index");
-const logging_1 = __importDefault(require("../utilities/logging"));
-const logger = (0, logging_1.default)('MIDDLEWARE', 'errorHandler');
+import { isCelebrateError } from "celebrate";
+import Joi from 'joi';
+import mongoose from "mongoose";
+import exceptions from "../exceptions";
+import { errorToObject } from '../utilities/exceptions/index';
+import initLogger from "../utilities/logging";
+const logger = initLogger('MIDDLEWARE', 'errorHandler');
 /**
  *
  * @description Middleware to handle errors
@@ -23,7 +18,7 @@ const errorHandler = () => {
         /**
          * Handle 400 thrown by celebrate library
          */
-        if ((0, celebrate_1.isCelebrateError)(err)) {
+        if (isCelebrateError(err)) {
             res.status(400).json({
                 error: {
                     is_celebrate: true,
@@ -43,7 +38,7 @@ const errorHandler = () => {
          * Handle 110000 thrown by mongoose
          */
         if (((_b = err.name) === null || _b === void 0 ? void 0 : _b.includes('Mongo')) && err.code === 11000) {
-            err = new exceptions_1.default.ValueAlreadyExistsException(`Value(s) already exists`, Object.keys(err.keyValue || {}).reduce((acc, val) => {
+            err = new exceptions.ValueAlreadyExistsException(`Value(s) already exists`, Object.keys(err.keyValue || {}).reduce((acc, val) => {
                 acc[val] = {
                     value: err.keyValue[val],
                     message: `Value already exists`,
@@ -55,7 +50,7 @@ const errorHandler = () => {
         /**
          * Handle Mongoose validation error
          */
-        if (err instanceof mongoose_1.default.Error.ValidationError) {
+        if (err instanceof mongoose.Error.ValidationError) {
             const fields = Object.values(err.errors).reduce((acc, val) => {
                 acc[val.path] = {
                     value: val.value,
@@ -63,14 +58,14 @@ const errorHandler = () => {
                 };
                 return acc;
             }, {});
-            err = new exceptions_1.default.ValidationException(err.message, fields);
+            err = new exceptions.ValidationException(err.message, fields);
             err['is_mongoose'] = true;
         }
         /**
          * Handle Joi.ValidationError
          */
-        if (err instanceof joi_1.default.ValidationError) {
-            err = new exceptions_1.default.ValidationException(err.message, err);
+        if (err instanceof Joi.ValidationError) {
+            err = new exceptions.ValidationException(err.message, err);
             err['is_joi'] = true;
         }
         /**
@@ -91,7 +86,7 @@ const errorHandler = () => {
         /**
          * Convert error to object
          */
-        const error = (0, index_1.errorToObject)(err);
+        const error = errorToObject(err);
         /**
          * Remove stack trace in production
          */
@@ -106,5 +101,5 @@ const errorHandler = () => {
         }).end();
     };
 };
-exports.default = errorHandler;
+export default errorHandler;
 //# sourceMappingURL=error-handler.middleware.js.map

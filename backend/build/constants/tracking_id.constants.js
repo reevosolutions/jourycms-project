@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.ITEM_SHORTCUTS = exports.LEVELUP_ITEM_SHORTCUTS = void 0;
-exports.LEVELUP_ITEM_SHORTCUTS = {
+export const LEVELUP_ITEM_SHORTCUTS = {
     // system
     app: "APP",
     // auth
@@ -22,5 +19,5 @@ exports.LEVELUP_ITEM_SHORTCUTS = {
     translationNamespace: "TRN",
     uploadedFile: "FLE"
 };
-exports.ITEM_SHORTCUTS = Object.assign({}, exports.LEVELUP_ITEM_SHORTCUTS);
+export const ITEM_SHORTCUTS = Object.assign({}, LEVELUP_ITEM_SHORTCUTS);
 //# sourceMappingURL=tracking_id.constants.js.map

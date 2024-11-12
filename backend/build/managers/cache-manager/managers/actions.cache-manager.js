@@ -1,18 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = __importDefault(require("typedi"));
-const __1 = __importDefault(require(".."));
-const config_1 = __importDefault(require("../../../config"));
-const logging_1 = __importDefault(require("../../../utilities/logging"));
-class ActionsCacheManager {
+import Container from "typedi";
+import CacheManager from "..";
+import config from "../../../config";
+import initLogger from "../../../utilities/logging";
+export default class ActionsCacheManager {
     constructor() {
         this.CACHE_KEY = "blockedActions";
         this.EXPIRATION = 3600 * 48;
-        this.cache = typedi_1.default.get(__1.default);
-        this.logger = (0, logging_1.default)("COMPONENT", `${this.constructor.name}`);
+        this.cache = Container.get(CacheManager);
+        this.logger = initLogger("COMPONENT", `${this.constructor.name}`);
     }
     static getInstance() {
         if (!ActionsCacheManager.instance) {
@@ -26,12 +21,12 @@ class ActionsCacheManager {
         try {
             const client = await this.cache.getClient();
             await client.hSet(this.cache.generateForeignKey(this.CACHE_KEY), actionId, JSON.stringify({
-                service: options.serviceName || config_1.default.currentService.name,
+                service: options.serviceName || config.currentService.name,
                 actionId,
                 blocked: true,
             }));
             setTimeout(async () => {
-                this.unblock(options.serviceName || config_1.default.currentService.name, actionId);
+                this.unblock(options.serviceName || config.currentService.name, actionId);
             }, options.maxFreezeTime);
         }
         catch (e) {
@@ -115,5 +110,4 @@ class ActionsCacheManager {
         }
     }
 }
-exports.default = ActionsCacheManager;
 //# sourceMappingURL=actions.cache-manager.js.map

@@ -5,8 +5,13 @@ import {
 } from "../../constants/tracking_id.constants";
 import initLogger from "../logging";
 import { Model } from "mongoose";
+// const { customAlphabet } = require('nanoid');
 
 const suffixLength = config.settings.tracking.suffixLength;
+// const alphabet = "123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+// const nanoid = customAlphabet(alphabet, suffixLength);
+// const oneLetterNanoid = customAlphabet("ABCDEFGHIJKLMNOPQRSTUVWXYZ", 1);
+// const otherCharactersNanoid = customAlphabet(alphabet, suffixLength - 1);
 
 
 const logger = initLogger("UTILITY", "TRACKING_ID");
@@ -44,6 +49,7 @@ const createTrackingId: (
 ) => {
 
     const { nanoid, oneLetterNanoid, otherCharactersNanoid } = await getNanoid();
+    
     let idUsed = true;
     let id = "",
       itemsFound;

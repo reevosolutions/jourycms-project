@@ -1,15 +1,10 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
+import dotenv from "dotenv";
 // must be loaded before other config files
-const envFound = dotenv_1.default.config();
-const db_config_1 = __importDefault(require("./db.config"));
-const services_config_1 = require("./services.config");
-const cache_config_1 = __importDefault(require("./cache.config"));
-const date_constants_1 = require("../constants/date.constants");
+const envFound = dotenv.config();
+import getDatabaseConfig from "./db.config";
+import { SERVICES, SERVICE_PORTS } from "./services.config";
+import cacheDuration from "./cache.config";
+import { SECONDS_IN_A_MINUTE } from "../constants/date.constants";
 // Set the NODE_ENV to 'development' by default
 process.env.NODE_ENV = process.env.NODE_ENV || "development";
 if (envFound.error) {
@@ -19,13 +14,13 @@ if (envFound.error) {
 const SERVICE_NAME = (process.env.SERVICE_NAME || "").toLowerCase();
 const SERVICES_API_PREFIX = process.env.SYSTEM_API_PREFIX || "/api/v1";
 const internalGateway = process.env.INTERNAL_GATEWAY_URL ||
-    `http://localhost:${services_config_1.SERVICE_PORTS.DEFAULT}/`;
-const serviceApiUrls = services_config_1.SERVICES.reduce((prev, service) => (Object.assign(Object.assign({}, prev), { [service]: `${internalGateway}${service}${SERVICES_API_PREFIX}` })), {});
-const serviceHosts = services_config_1.SERVICES.reduce((prev, service) => (Object.assign(Object.assign({}, prev), { [service]: process.env[`SERVICE_HOST_${service.toUpperCase()}`] || 'localhost' })), {});
+    `http://localhost:${SERVICE_PORTS.DEFAULT}/`;
+const serviceApiUrls = SERVICES.reduce((prev, service) => (Object.assign(Object.assign({}, prev), { [service]: `${internalGateway}${service}${SERVICES_API_PREFIX}` })), {});
+const serviceHosts = SERVICES.reduce((prev, service) => (Object.assign(Object.assign({}, prev), { [service]: process.env[`SERVICE_HOST_${service.toUpperCase()}`] || 'localhost' })), {});
 /**
  * Configuration object for the backend application.
  */
-exports.default = {
+export default {
     /**
      * Environement
      */
@@ -231,7 +226,7 @@ exports.default = {
          * The URL for logging.
          */
         url: `${process.env.INTERNAL_GATEWAY_URL ||
-            `http://localhost:${services_config_1.SERVICE_PORTS.DEFAULT}/`}activity/api/logs`,
+            `http://localhost:${SERVICE_PORTS.DEFAULT}/`}activity/api/logs`,
     },
     /**
      * Configuration for HTTP.
@@ -320,7 +315,7 @@ exports.default = {
         /**
          * The database for the current service.
          */
-        db: (0, db_config_1.default)(),
+        db: getDatabaseConfig(),
     },
     cacheManager: {
         redis: {
@@ -345,12 +340,12 @@ exports.default = {
         /**
          * @description All values in seconds
          */
-        cacheDuration: cache_config_1.default,
+        cacheDuration,
         getDuration(key) {
-            let result = cache_config_1.default.dev || date_constants_1.SECONDS_IN_A_MINUTE;
+            let result = cacheDuration.dev || SECONDS_IN_A_MINUTE;
             if (process.env.NODE_ENV !== "production")
                 return result;
-            let obj = cache_config_1.default;
+            let obj = cacheDuration;
             for (const k of key.split(".")) {
                 obj = obj[k] && typeof obj[k] === "object" ? obj[k] : obj;
             }

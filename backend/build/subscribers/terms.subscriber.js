@@ -1,4 +1,3 @@
-"use strict";
 /**
  * @description This file is used to create event subscribers.
  * @generator Levelup
@@ -14,19 +13,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const event_dispatch_1 = require("event-dispatch");
-const cache_manager_1 = __importDefault(require("../managers/cache-manager"));
-const typedi_1 = __importDefault(require("typedi"));
-const logging_1 = __importDefault(require("../utilities/logging"));
-const events_config_1 = __importDefault(require("../config/events.config"));
-const config_1 = __importDefault(require("../config"));
-const exceptions_1 = require("../utilities/exceptions");
-const general_mappers_1 = require("../common/mappers/general.mappers");
-const logger = (0, logging_1.default)("SUBSCRIBER", "Tag");
+import { EventSubscriber, On } from 'event-dispatch';
+import CacheManager from '../managers/cache-manager';
+import Container from 'typedi';
+import initLogger from '../utilities/logging';
+import events from '../config/events.config';
+import config from '../config';
+import { errorToObject } from '../utilities/exceptions';
+import { mapDocumentToExposed } from '../common/mappers/general.mappers';
+const logger = initLogger("SUBSCRIBER", "Tag");
 let TagSubscriber = class TagSubscriber {
     /**
      * @method onTagCreated
@@ -38,17 +33,17 @@ let TagSubscriber = class TagSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.term.created, identifier);
+                logger.event(events.content.term.created, identifier);
             }
             else {
                 /**
@@ -57,15 +52,15 @@ let TagSubscriber = class TagSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.term.created}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.term.created}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.term.created,
+                name: events.content.term.created,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -80,17 +75,17 @@ let TagSubscriber = class TagSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.term.updated, identifier);
+                logger.event(events.content.term.updated, identifier);
             }
             else {
                 /**
@@ -99,15 +94,15 @@ let TagSubscriber = class TagSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.term.updated}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.term.updated}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.term.updated,
+                name: events.content.term.updated,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -122,17 +117,17 @@ let TagSubscriber = class TagSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.term.deleted, identifier);
+                logger.event(events.content.term.deleted, identifier);
             }
             else {
                 /**
@@ -141,15 +136,15 @@ let TagSubscriber = class TagSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.term.deleted}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.term.deleted}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.term.deleted,
+                name: events.content.term.deleted,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -164,17 +159,17 @@ let TagSubscriber = class TagSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.term.restored, identifier);
+                logger.event(events.content.term.restored, identifier);
             }
             else {
                 /**
@@ -183,46 +178,46 @@ let TagSubscriber = class TagSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.term.restored}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.term.restored}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.term.restored,
+                name: events.content.term.restored,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
     }
 };
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.term.created),
+    On(events.content.term.created),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TagSubscriber.prototype, "onTagCreated", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.term.updated),
+    On(events.content.term.updated),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TagSubscriber.prototype, "onTagUpdated", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.term.deleted),
+    On(events.content.term.deleted),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TagSubscriber.prototype, "onTagDeleted", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.term.restored),
+    On(events.content.term.restored),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TagSubscriber.prototype, "onTagRestored", null);
 TagSubscriber = __decorate([
-    (0, event_dispatch_1.EventSubscriber)()
+    EventSubscriber()
 ], TagSubscriber);
-exports.default = TagSubscriber;
+export default TagSubscriber;
 //# sourceMappingURL=terms.subscriber.js.map

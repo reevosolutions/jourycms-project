@@ -25,7 +25,7 @@ import { sleep } from '../../../utilities/system/timer.utilities';
 import TranslationItemsService from './translation.items.service';
 import TranslationNamespacesService from './translation.namespaces.service';
 import TranslationProjectsService from './translation.projects.service';
-import crypto = require('crypto');
+import crypto from "crypto";
 
 import EntityAlias = Levelup.CMS.V1.Content.Translation.Entity.Project;
 import ApiAlias = Levelup.CMS.V1.Content.Translation.Api.Tools;

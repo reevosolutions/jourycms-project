@@ -1,6 +1,6 @@
 {
   "name": "jourycms-sdk",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Sdk for Joury CMS",
   "main": "dist/index.js",
   "files": [

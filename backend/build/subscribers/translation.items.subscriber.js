@@ -1,4 +1,3 @@
-"use strict";
 /**
  * @description This file is used to create event subscribers.
  * @generator Levelup
@@ -14,19 +13,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const event_dispatch_1 = require("event-dispatch");
-const cache_manager_1 = __importDefault(require("../managers/cache-manager"));
-const typedi_1 = __importDefault(require("typedi"));
-const logging_1 = __importDefault(require("../utilities/logging"));
-const events_config_1 = __importDefault(require("../config/events.config"));
-const config_1 = __importDefault(require("../config"));
-const exceptions_1 = require("../utilities/exceptions");
-const general_mappers_1 = require("../common/mappers/general.mappers");
-const logger = (0, logging_1.default)("SUBSCRIBER", "Item");
+import { EventSubscriber, On } from 'event-dispatch';
+import CacheManager from '../managers/cache-manager';
+import Container from 'typedi';
+import initLogger from '../utilities/logging';
+import events from '../config/events.config';
+import config from '../config';
+import { errorToObject } from '../utilities/exceptions';
+import { mapDocumentToExposed } from '../common/mappers/general.mappers';
+const logger = initLogger("SUBSCRIBER", "Item");
 let TranslationItemSubscriber = class TranslationItemSubscriber {
     /**
      * @method onTranslationItemCreated
@@ -38,17 +33,17 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.translation.item.created, identifier);
+                logger.event(events.content.translation.item.created, identifier);
             }
             else {
                 /**
@@ -57,15 +52,15 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.translation.item.created}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.translation.item.created}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.translation.item.created,
+                name: events.content.translation.item.created,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -80,17 +75,17 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.translation.item.updated, identifier);
+                logger.event(events.content.translation.item.updated, identifier);
             }
             else {
                 /**
@@ -99,15 +94,15 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.translation.item.updated}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.translation.item.updated}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.translation.item.updated,
+                name: events.content.translation.item.updated,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -122,17 +117,17 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.translation.item.deleted, identifier);
+                logger.event(events.content.translation.item.deleted, identifier);
             }
             else {
                 /**
@@ -141,15 +136,15 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.translation.item.deleted}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.translation.item.deleted}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.translation.item.deleted,
+                name: events.content.translation.item.deleted,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
@@ -164,17 +159,17 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             /**
              * Map object to exposed
              */
-            data = (0, general_mappers_1.mapDocumentToExposed)(data);
-            if (config_1.default.environement === 'development') {
+            data = mapDocumentToExposed(data);
+            if (config.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events_config_1.default.content.translation.item.restored, identifier);
+                logger.event(events.content.translation.item.restored, identifier);
             }
             else {
                 /**
@@ -183,46 +178,46 @@ let TranslationItemSubscriber = class TranslationItemSubscriber {
             }
         }
         catch (error) {
-            if (config_1.default.environement === 'development') {
-                logger.error(`${events_config_1.default.content.translation.item.restored}:ERROR`, error);
+            if (config.environement === 'development') {
+                logger.error(`${events.content.translation.item.restored}:ERROR`, error);
             }
             logger.save.error({
-                name: events_config_1.default.content.translation.item.restored,
+                name: events.content.translation.item.restored,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: (0, exceptions_1.errorToObject)(error),
+                    error: errorToObject(error),
                 }
             });
         }
     }
 };
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.translation.item.created),
+    On(events.content.translation.item.created),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TranslationItemSubscriber.prototype, "onTranslationItemCreated", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.translation.item.updated),
+    On(events.content.translation.item.updated),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TranslationItemSubscriber.prototype, "onTranslationItemUpdated", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.translation.item.deleted),
+    On(events.content.translation.item.deleted),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TranslationItemSubscriber.prototype, "onTranslationItemDeleted", null);
 __decorate([
-    (0, event_dispatch_1.On)(events_config_1.default.content.translation.item.restored),
+    On(events.content.translation.item.restored),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TranslationItemSubscriber.prototype, "onTranslationItemRestored", null);
 TranslationItemSubscriber = __decorate([
-    (0, event_dispatch_1.EventSubscriber)()
+    EventSubscriber()
 ], TranslationItemSubscriber);
-exports.default = TranslationItemSubscriber;
+export default TranslationItemSubscriber;
 //# sourceMappingURL=translation.items.subscriber.js.map

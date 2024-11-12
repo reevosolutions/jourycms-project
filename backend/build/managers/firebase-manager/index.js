@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,17 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const fs_1 = __importDefault(require("fs"));
-const path_1 = __importDefault(require("path"));
-const typedi_1 = require("typedi");
-const exceptions_1 = __importDefault(require("../../exceptions"));
-const base_service_1 = __importDefault(require("../../common/base.service"));
-const admin = require("firebase-admin");
-let FirebaseManager = class FirebaseManager extends base_service_1.default {
+import fs from "fs";
+import path from "path";
+import { Service } from "typedi";
+import exceptions from "../../exceptions";
+import BaseService from "../../common/base.service";
+import admin from "firebase-admin";
+let FirebaseManager = class FirebaseManager extends BaseService {
     constructor() {
         super();
         this.EVENTS = {
@@ -34,9 +29,9 @@ let FirebaseManager = class FirebaseManager extends base_service_1.default {
         try {
             if (this._initialized)
                 return;
-            const serviceAccountFile = path_1.default.join(__dirname, `../../../firebase/serviceAccountKey.json`);
-            if (!fs_1.default.existsSync(serviceAccountFile)) {
-                throw new exceptions_1.default.InternalServerError("Google service account file does not exist at: " + serviceAccountFile);
+            const serviceAccountFile = path.join(__dirname, `../../../firebase/serviceAccountKey.json`);
+            if (!fs.existsSync(serviceAccountFile)) {
+                throw new exceptions.InternalServerError("Google service account file does not exist at: " + serviceAccountFile);
             }
             const serviceAccount = require(serviceAccountFile);
             admin.initializeApp({
@@ -82,8 +77,8 @@ let FirebaseManager = class FirebaseManager extends base_service_1.default {
     }
 };
 FirebaseManager = __decorate([
-    (0, typedi_1.Service)(),
+    Service(),
     __metadata("design:paramtypes", [])
 ], FirebaseManager);
-exports.default = FirebaseManager;
+export default FirebaseManager;
 //# sourceMappingURL=index.js.map

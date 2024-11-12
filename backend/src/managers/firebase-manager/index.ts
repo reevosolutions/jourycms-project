@@ -7,7 +7,7 @@ import { RedisClientType } from "redis";
 import { Service } from "typedi";
 import exceptions from "../../exceptions";
 import BaseService from "../../common/base.service";
-import admin = require("firebase-admin");
+import admin from "firebase-admin";
 
 @Service()
 export default class FirebaseManager extends BaseService {

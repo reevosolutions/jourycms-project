@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
-class UnauthorizedException extends levelup_exception_exception_1.default {
+import LevelupException from "./levelup-exception.exception";
+class UnauthorizedException extends LevelupException {
     constructor(message = 'Unauthorized') {
         super(message);
         this.status = 401;
@@ -14,5 +9,5 @@ class UnauthorizedException extends levelup_exception_exception_1.default {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-exports.default = UnauthorizedException;
+export default UnauthorizedException;
 //# sourceMappingURL=unauthorized-error.exception.js.map

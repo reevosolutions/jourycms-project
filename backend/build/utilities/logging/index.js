@@ -1,22 +1,16 @@
-"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 24-02-2024 20:47:22
  */
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.LoggerContext = exports.LoggerService = void 0;
-const colors_1 = __importDefault(require("colors"));
-const moment_1 = __importDefault(require("moment"));
-const treeify_1 = __importDefault(require("treeify"));
-const timer_utilities_1 = require("../system/timer.utilities");
+import colors from "colors";
+import moment from "moment";
+import treeify from "treeify";
+import { initTimer } from "../system/timer.utilities";
 /**
  * Represents a logger service.
  */
-class LoggerService {
+export class LoggerService {
     /**
      * Returns an instance of the LoggerService.
      * @param context The context of the logger instance.
@@ -73,29 +67,29 @@ class LoggerService {
         const stackLines = stack.split("\n");
         const callerLine = stackLines[3]; // Line 2 usually holds the caller
         const formattedLine = callerLine.replace(/^\s*at\s+/, ""); // Clean up the string
-        const label = `${colors_1.default.grey((0, moment_1.default)().format("HH:mm:ss,SSS"))} ${colors_1.default.bold.gray(`[${this.context}:${this.contextId}]`)} ${type === "DEBUG"
-            ? colors_1.default.bold.cyan(message)
+        const label = `${colors.grey(moment().format("HH:mm:ss,SSS"))} ${colors.bold.gray(`[${this.context}:${this.contextId}]`)} ${type === "DEBUG"
+            ? colors.bold.cyan(message)
             : type === "WARN"
-                ? colors_1.default.bold.yellow(message)
+                ? colors.bold.yellow(message)
                 : type === "ERROR"
-                    ? colors_1.default.bold.red(message)
+                    ? colors.bold.red(message)
                     : type === "SUCCESS"
-                        ? colors_1.default.bold.green(message)
+                        ? colors.bold.green(message)
                         : type === "HTTP"
-                            ? colors_1.default.bold.blue(message)
+                            ? colors.bold.blue(message)
                             : type === "EVENT"
-                                ? colors_1.default.gray(message)
+                                ? colors.gray(message)
                                 : type === "INFO"
-                                    ? colors_1.default.bold.cyan(message)
+                                    ? colors.bold.cyan(message)
                                     : type === "VALUE"
-                                        ? colors_1.default.bold.magenta(message)
-                                        : colors_1.default.bold.gray(message)}`;
+                                        ? colors.bold.magenta(message)
+                                        : colors.bold.gray(message)}`;
         if (this._showLine) {
             console.log(formattedLine.gray);
             this._showLine = false;
         }
         if (this._trace) {
-            console.log(treeify_1.default.asTree(stackLines
+            console.log(treeify.asTree(stackLines
                 .map((l) => l.replace("Error", "Trace"))
                 .filter((l) => !l.includes("utilities/logging/index")), true).gray);
             this._trace = false;
@@ -191,7 +185,7 @@ class LoggerService {
     tree(name, ...args) {
         if (this.doLog("VALUE")) {
             this.log("VALUE", name);
-            console.log(treeify_1.default.asTree(Object.assign({}, args), true).cyan);
+            console.log(treeify.asTree(Object.assign({}, args), true).cyan);
         }
     }
     /**
@@ -209,10 +203,9 @@ class LoggerService {
         return this;
     }
     get timer() {
-        return (0, timer_utilities_1.initTimer)();
+        return initTimer();
     }
 }
-exports.LoggerService = LoggerService;
 LoggerService.muted = {
     APPLICATION: {},
     SUBSCRIBER: {},
@@ -293,7 +286,7 @@ class DBLogger {
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 21-05-2024 02:06:24
  */
-var LoggerContext;
+export var LoggerContext;
 (function (LoggerContext) {
     LoggerContext["APPLICATION"] = "APPLICATION";
     LoggerContext["SUBSCRIBER"] = "SUBSCRIBER";
@@ -315,7 +308,7 @@ var LoggerContext;
     LoggerContext["REDUX"] = "REDUX";
     LoggerContext["FORM"] = "FORM";
     LoggerContext["GUARD"] = "GUARD";
-})(LoggerContext || (exports.LoggerContext = LoggerContext = {}));
+})(LoggerContext || (LoggerContext = {}));
 /**
  * Initializes a logger instance. it will log the initialization of the logger instance automatically.
  * @param context The context of the logger instance.
@@ -328,5 +321,5 @@ const initLogger = (context = "APPLICATION", contextId, config = {}) => {
     logger.event("...Initialized", contextId);
     return logger;
 };
-exports.default = initLogger;
+export default initLogger;
 //# sourceMappingURL=index.js.map

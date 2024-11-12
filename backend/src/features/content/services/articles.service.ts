@@ -63,7 +63,7 @@ export default class ArticlesService extends BaseService {
 
 
   /**
-  * @description Generates the snapshots object for the entity.
+  * @description Generates the snapshots article for the entity.
   */
   public async _generateSnapshotsObject(
     new_data: Partial<EntityAlias>,
@@ -97,7 +97,7 @@ export default class ArticlesService extends BaseService {
    */
   _createSearchMeta(data: Partial<EntityAlias>, old?: Partial<EntityAlias>): string {
     /**
-     * Define the search meta object
+     * Define the search meta article
      */
     const search_meta: { [Key in DocumentProperties]?: string } = {
 
@@ -205,7 +205,7 @@ export default class ArticlesService extends BaseService {
     }
 
     /**
-     * @description fixing filters object
+     * @description fixing filters article
      */
     filters = fixFiltersObject(filters);
 
@@ -303,7 +303,7 @@ export default class ArticlesService extends BaseService {
         dont_lean: false,
       });
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any
@@ -461,7 +461,7 @@ export default class ArticlesService extends BaseService {
       });
 
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any
@@ -477,17 +477,17 @@ export default class ArticlesService extends BaseService {
       const doc = await q.exec();
 
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Article deleted');
 
       /**
-      * Check if the user can view the object
+      * Check if the user can view the article
       */
-      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this article');
 
       const result: ApiAlias.GetOne.Response = {
         data: mapDocumentToExposed(doc)
@@ -526,7 +526,7 @@ export default class ArticlesService extends BaseService {
       });
 
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any
@@ -542,17 +542,17 @@ export default class ArticlesService extends BaseService {
       const doc = await q.exec();
 
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Article deleted');
 
       /**
-      * Check if the user can view the object
+      * Check if the user can view the article
       */
-      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this article');
 
       const result: ApiAlias.GetOne.Response = {
         data: mapDocumentToExposed(doc)
@@ -588,7 +588,7 @@ export default class ArticlesService extends BaseService {
   ): Promise<ApiAlias.Create.Response> {
     try {
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any;
@@ -617,15 +617,15 @@ export default class ArticlesService extends BaseService {
           : undefined;
 
       /**
-       * Check if the user can create the object
+       * Check if the user can create the article
        */
       if (authData?.current?.app?._id && authData?.current?.app?._id !== data.app)
-        throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
+        throw new exceptions.UnauthorizedException('You are not allowed to create this article on this app');
       if (!userCan.createObject(this.ENTITY, data, authData))
-        throw new exceptions.UnauthorizedException('You are not allowed to create this object');
+        throw new exceptions.UnauthorizedException('You are not allowed to create this article');
 
       /**
-       * Create data object
+       * Create data article
        */
       const docObject: Partial<EntityAlias> = {
         ...data,
@@ -652,11 +652,11 @@ export default class ArticlesService extends BaseService {
       docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
 
       /**
-       * Create the object on DB
+       * Create the article on DB
        */
       const doc = await this.articleModel.create(docObject);
 
-      if (!doc) throw new exceptions.InternalServerError('Failed to create the object');
+      if (!doc) throw new exceptions.InternalServerError('Failed to create the article');
 
       this.eventDispatcher.dispatch<EventPayloadsAlias.created>(events.content.article.created, { data: doc });
 
@@ -687,7 +687,7 @@ export default class ArticlesService extends BaseService {
   ): Promise<ApiAlias.Update.Response> {
     try {
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any;
@@ -705,18 +705,18 @@ export default class ArticlesService extends BaseService {
       if (error) throw error;
 
       /**
-       * Extract the required in block variables from the data object
+       * Extract the required in block variables from the data article
        */
       const { } = data;
 
       /**
-       * load old object and check if it exists
+       * load old article and check if it exists
        */
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Object not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Object is deleted');
+      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
+      if (old.is_deleted) throw new exceptions.UnauthorizedException('Article is deleted');
       if (!userCan.updateObject(this.ENTITY, old, authData))
-        throw new exceptions.UnauthorizedException('You are not allowed to update this object');
+        throw new exceptions.UnauthorizedException('You are not allowed to update this article');
 
       /**
        * detect changes
@@ -733,7 +733,7 @@ export default class ArticlesService extends BaseService {
       };
 
       /**
-       * Create data object
+       * Create data article
        */
       const docObject: Partial<EntityAlias> = {
         ...data
@@ -749,7 +749,7 @@ export default class ArticlesService extends BaseService {
       docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
 
       /**
-       * Update the object on DB
+       * Update the article on DB
        */
       const doc = await this.articleModel.findByIdAndUpdate(
         id,
@@ -762,7 +762,7 @@ export default class ArticlesService extends BaseService {
         { new: true }
       );
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
 
       /**
        * Handle the updated effects on the same service
@@ -803,7 +803,7 @@ export default class ArticlesService extends BaseService {
     try {
 
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any
@@ -819,9 +819,9 @@ export default class ArticlesService extends BaseService {
 
 
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Object not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Object already deleted');
-      if (!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
+      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
+      if (old.is_deleted) throw new exceptions.UnauthorizedException('Article already deleted');
+      if (!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this article');
 
       const doc = await this.articleModel.findByIdAndUpdate(id, {
         is_deleted: true,
@@ -861,7 +861,7 @@ export default class ArticlesService extends BaseService {
     try {
 
       /**
-       * Define the execution scenario object
+       * Define the execution scenario article
        */
       const scenario: {
         [Key: string]: any
@@ -877,9 +877,9 @@ export default class ArticlesService extends BaseService {
 
 
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Object not found');
-      if (!old.is_deleted) throw new exceptions.UnauthorizedException('Object already exists');
-      if (!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
+      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
+      if (!old.is_deleted) throw new exceptions.UnauthorizedException('Article already exists');
+      if (!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this article');
 
       const doc = await this.articleModel.findByIdAndUpdate(id, {
         is_deleted: false,
@@ -889,7 +889,7 @@ export default class ArticlesService extends BaseService {
         }
       }, { new: true });
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Object not found');
+      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
 
       this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(events.content.article.restored, { data: doc });
 

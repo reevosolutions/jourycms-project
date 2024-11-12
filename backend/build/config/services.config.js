@@ -1,14 +1,11 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.SERVICE_PORTS = exports.SERVICES = void 0;
-exports.SERVICES = [
+export const SERVICES = [
     'auth',
     'content',
     'storage',
     'system',
     'auth'
 ];
-exports.SERVICE_PORTS = {
+export const SERVICE_PORTS = {
     DEFAULT: 6000,
     system: 6001,
     auth: 6003,

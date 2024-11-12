@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
-class InternalServerError extends levelup_exception_exception_1.default {
+import LevelupException from "./levelup-exception.exception";
+class InternalServerError extends LevelupException {
     constructor(message = "Internal system error") {
         super(message);
         this.status = 500;
@@ -14,5 +9,5 @@ class InternalServerError extends levelup_exception_exception_1.default {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-exports.default = InternalServerError;
+export default InternalServerError;
 //# sourceMappingURL=internal-server-error.exception.js.map

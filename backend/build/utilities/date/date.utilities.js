@@ -1,16 +1,9 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.isDateRangObject = exports.isDateWithinLastNTimeRange = exports.isDateWithinLastNYears = exports.isDateWithinLastNMonths = exports.isDateWithinLastNWeeks = exports.isDateWithinLastNDays = exports.isDateWithinLastNHours = exports.isDateWithinLastNMinutes = exports.isDateWithinLastNSeconds = void 0;
-exports.transformTimeRangeToDates = transformTimeRangeToDates;
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 24-02-2024 20:47:22
 */
-const moment_1 = __importDefault(require("moment"));
+import moment from 'moment';
 /**
  * @since 17-10-2023 12:39:25
  * @description This function takes a time range string (e.g. "5 minutes") and returns a start date and end date for that time range
@@ -26,10 +19,10 @@ const moment_1 = __importDefault(require("moment"));
  * - This function return {false} if the time range string is not in the correct format
  * @param {string} timeRange
 */
-function transformTimeRangeToDates(timeRange, currentDate = new Date(), rangeIn = 'past') {
+export function transformTimeRangeToDates(timeRange, currentDate = new Date(), rangeIn = 'past') {
     if (typeof timeRange !== 'string' || !timeRange)
         return false;
-    const now = (0, moment_1.default)(currentDate); // Get the current date and time
+    const now = moment(currentDate); // Get the current date and time
     let start, end, past, future;
     const match = timeRange.match(/^(\d+)\s?(second|minute|hour|day|week|month|year|s|m|h|d|w|M|y)s?$/i);
     if (match) {
@@ -92,66 +85,57 @@ function transformTimeRangeToDates(timeRange, currentDate = new Date(), rangeIn 
         throw new Error('Invalid time range format');
     }
 }
-const isDateWithinLastNSeconds = (date, seconds) => {
+export const isDateWithinLastNSeconds = (date, seconds) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (seconds * 1000);
 };
-exports.isDateWithinLastNSeconds = isDateWithinLastNSeconds;
-const isDateWithinLastNMinutes = (date, minutes) => {
+export const isDateWithinLastNMinutes = (date, minutes) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (minutes * 60 * 1000);
 };
-exports.isDateWithinLastNMinutes = isDateWithinLastNMinutes;
-const isDateWithinLastNHours = (date, hours) => {
+export const isDateWithinLastNHours = (date, hours) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (hours * 60 * 60 * 1000);
 };
-exports.isDateWithinLastNHours = isDateWithinLastNHours;
-const isDateWithinLastNDays = (date, days) => {
+export const isDateWithinLastNDays = (date, days) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (days * 24 * 60 * 60 * 1000);
 };
-exports.isDateWithinLastNDays = isDateWithinLastNDays;
-const isDateWithinLastNWeeks = (date, weeks) => {
+export const isDateWithinLastNWeeks = (date, weeks) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (weeks * 7 * 24 * 60 * 60 * 1000);
 };
-exports.isDateWithinLastNWeeks = isDateWithinLastNWeeks;
-const isDateWithinLastNMonths = (date, months) => {
+export const isDateWithinLastNMonths = (date, months) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (months * 30 * 24 * 60 * 60 * 1000);
 };
-exports.isDateWithinLastNMonths = isDateWithinLastNMonths;
-const isDateWithinLastNYears = (date, years) => {
+export const isDateWithinLastNYears = (date, years) => {
     const currentTime = new Date();
     const timeDifference = currentTime.getTime() - date.getTime();
     return timeDifference < (years * 365 * 24 * 60 * 60 * 1000);
 };
-exports.isDateWithinLastNYears = isDateWithinLastNYears;
-const isDateWithinLastNTimeRange = (date, timeRange) => {
+export const isDateWithinLastNTimeRange = (date, timeRange) => {
     const timeRangeDates = transformTimeRangeToDates(timeRange);
     if (!timeRangeDates) {
         throw new Error('Invalid time range format');
     }
     return date >= timeRangeDates.start && date <= timeRangeDates.end;
 };
-exports.isDateWithinLastNTimeRange = isDateWithinLastNTimeRange;
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 26 July 2000
  * @since 29-04-2024 23:01:17
  */
-const isDateRangObject = (obj) => {
+export const isDateRangObject = (obj) => {
     if (obj && obj.start && obj.end) {
         return true;
     }
 };
-exports.isDateRangObject = isDateRangObject;
 //# sourceMappingURL=date.utilities.js.map

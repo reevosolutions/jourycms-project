@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/middlewares/auth/index.ts"],"names":[],"mappings":";;;;;AAAA,sGAAiE;AACjE,0FAAqD;AAGrD,kBAAe;IACb;;;;;OAKG;IACH,WAAW,EAAX,kCAAW;IACX;;;;;;;;OAQG;IACH,iBAAiB,EAAjB,wCAAiB;CAElB,CAAA"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/middlewares/auth/index.ts"],"names":[],"mappings":"AAAA,OAAO,iBAAiB,MAAM,kCAAkC,CAAC;AACjE,OAAO,WAAW,MAAM,4BAA4B,CAAC;AAGrD,eAAe;IACb;;;;;OAKG;IACH,WAAW;IACX;;;;;;;;OAQG;IACH,iBAAiB;CAElB,CAAA"}

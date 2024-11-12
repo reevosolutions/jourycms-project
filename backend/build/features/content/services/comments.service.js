@@ -1,38 +1,14 @@
-"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-03 00:17:36
  */
-var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    var desc = Object.getOwnPropertyDescriptor(m, k);
-    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-      desc = { enumerable: true, get: function() { return m[k]; } };
-    }
-    Object.defineProperty(o, k2, desc);
-}) : (function(o, m, k, k2) {
-    if (k2 === undefined) k2 = k;
-    o[k2] = m[k];
-}));
-var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
-    Object.defineProperty(o, "default", { enumerable: true, value: v });
-}) : function(o, v) {
-    o["default"] = v;
-});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __importStar = (this && this.__importStar) || function (mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
-    __setModuleDefault(result, mod);
-    return result;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -40,33 +16,29 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const typedi_1 = __importStar(require("typedi"));
-const utils_helpers_1 = require("../../../utilities/helpers/utils.helpers");
-const base_service_1 = __importDefault(require("../../../common/base.service"));
-const config_1 = __importDefault(require("../../../config"));
-const events_config_1 = __importDefault(require("../../../config/events.config"));
-const tracking_id_constants_1 = require("../../../constants/tracking_id.constants");
-const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
-const exceptions_1 = __importDefault(require("../../../exceptions"));
-const cache_manager_1 = __importDefault(require("../../../managers/cache-manager"));
-const query_utilities_1 = require("../../../utilities/data/db/query.utilities");
-const snapshots_utilities_1 = require("../../../utilities/entities/snapshots.utilities");
-const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
-const index_1 = require("../../../utilities/requests/index");
-const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
-const tracking_id_utilities_1 = require("../../../utilities/system/tracking-id.utilities");
-const general_mappers_1 = require("../../../common/mappers/general.mappers");
-const comment_sanitizers_1 = __importDefault(require("../sanitizers/comment.sanitizers"));
-const comment_validators_1 = __importDefault(require("../validators/comment.validators"));
-const comment_model_1 = require("../models/comment.model");
+import Container, { Inject, Service } from 'typedi';
+import { defaults } from '../../../utilities/helpers/utils.helpers';
+import BaseService from '../../../common/base.service';
+import config from '../../../config';
+import events from '../../../config/events.config';
+import { ITEM_SHORTCUTS } from '../../../constants/tracking_id.constants';
+import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
+import exceptions from '../../../exceptions';
+import CacheManager from '../../../managers/cache-manager';
+import { createBooleanFilter, createDateRangeFilter, createStringFilter } from '../../../utilities/data/db/query.utilities';
+import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities';
+import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
+import { fixFiltersObject } from '../../../utilities/requests/index';
+import userCan from '../../../utilities/security/user-can';
+import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
+import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
+import CommentSanitizers from '../sanitizers/comment.sanitizers';
+import CommentValidators from '../validators/comment.validators';
+import { CommentSchemaFields } from '../models/comment.model';
 /**
  * @description
  */
-let CommentsService = class CommentsService extends base_service_1.default {
+let CommentsService = class CommentsService extends BaseService {
     constructor(articleTypeModel, articleModel, commentModel, reviewModel, termModel, taxonomyModel, translationItemModel, translationNamespaceModel, translationProjectModel, eventDispatcher) {
         super();
         this.articleTypeModel = articleTypeModel;
@@ -86,7 +58,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
     */
     async _generateSnapshotsObject(new_data, old_data, authData) {
         try {
-            const cache = typedi_1.default.get(cache_manager_1.default);
+            const cache = Container.get(CacheManager);
             const result = {
                 created_by: undefined,
                 article: {
@@ -167,7 +139,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
         /**
          * @description fixing filters object
          */
-        filters = (0, index_1.fixFiltersObject)(filters);
+        filters = fixFiltersObject(filters);
         /**
          * @description Inject attributes in the filters
          */
@@ -176,50 +148,50 @@ let CommentsService = class CommentsService extends base_service_1.default {
         if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app)
             (filters).app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
         // -- attributed:app
-        if (comment_model_1.CommentSchemaFields['app']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['app'], 'app');
+        if (CommentSchemaFields['app']) {
+            filter = createStringFilter(q, totalQ, filters['app'], 'app');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- attributed:company
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.company, 'company');
+        filter = createStringFilter(q, totalQ, filters.company, 'company');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- attributed:store
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.store, 'attributes.store');
+        filter = createStringFilter(q, totalQ, filters.store, 'attributes.store');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- is_deleted
-        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, 'is_deleted');
+        filter = createBooleanFilter(q, totalQ, filters.is_deleted, 'is_deleted');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, 'created_at');
+        filter = createDateRangeFilter(q, totalQ, filters.created_at, 'created_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- updated_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, 'updated_at');
+        filter = createDateRangeFilter(q, totalQ, filters.updated_at, 'updated_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- _id
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, '_id');
+        filter = createStringFilter(q, totalQ, filters._id, '_id');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_by
-        if (comment_model_1.CommentSchemaFields['created_by']) {
-            filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters['created_by'], 'created_by');
+        if (CommentSchemaFields['created_by']) {
+            filter = createDateRangeFilter(q, totalQ, filters['created_by'], 'created_by');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- tracking_id
-        if (comment_model_1.CommentSchemaFields['tracking_id']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['tracking_id'], 'tracking_id');
+        if (CommentSchemaFields['tracking_id']) {
+            filter = createStringFilter(q, totalQ, filters['tracking_id'], 'tracking_id');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- name
-        if (comment_model_1.CommentSchemaFields['name']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
+        if (CommentSchemaFields['name']) {
+            filter = createStringFilter(q, totalQ, filters['name'], 'name');
             q = filter.q;
             totalQ = filter.totalQ;
         }
@@ -237,7 +209,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * Fill options argument with the defaults
              */
-            opt = (0, utils_helpers_1.defaults)(opt, {
+            opt = defaults(opt, {
                 load_deleted: false,
                 dont_lean: false,
             });
@@ -256,7 +228,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             const filter = this._applyFilters({ q, totalQ, query, authData, opt });
             q = filter.q;
             totalQ = filter.totalQ;
-            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount : count;
+            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config.settings.listing.defaultCount : count;
             const { skip, take } = this.getPaginationOptions(limit, page);
             const sortOptions = this.getSortOptions(sort, sort_by);
             if (take)
@@ -270,7 +242,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * @description Add query to execution scenario
              */
-            scenario.request_filter = (0, index_1.fixFiltersObject)(query.filters);
+            scenario.request_filter = fixFiltersObject(query.filters);
             scenario.listing_query = {
                 model: q.model.modelName,
                 query: q.getQuery(),
@@ -289,7 +261,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             scenario.found = items === null || items === void 0 ? void 0 : items.length;
             scenario.total = total;
             const result = {
-                data: items.map(doc => (0, general_mappers_1.mapDocumentToExposed)(doc)),
+                data: items.map(doc => mapDocumentToExposed(doc)),
                 pagination: {
                     total,
                     pages,
@@ -314,7 +286,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * Fill options argument with the defaults
              */
-            opt = (0, utils_helpers_1.defaults)(opt, {
+            opt = defaults(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
@@ -331,19 +303,19 @@ let CommentsService = class CommentsService extends base_service_1.default {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
+                throw new exceptions.ItemNotFoundException('Object deleted');
             /**
             * Check if the user can view the object
             */
-            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -352,7 +324,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
@@ -371,11 +343,11 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * await sanitize data here
              */
-            data = await comment_sanitizers_1.default.sanitizeCreateBody(data, authData);
+            data = await CommentSanitizers.sanitizeCreateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = comment_validators_1.default.validateCreateBody(data);
+            const { error } = CommentValidators.validateCreateBody(data);
             if (error)
                 throw error;
             let {} = data;
@@ -391,9 +363,9 @@ let CommentsService = class CommentsService extends base_service_1.default {
              * Check if the user can create the object
              */
             if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) && ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object on this app');
-            if (!user_can_1.default.createObject(this.ENTITY, data, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object');
+                throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
+            if (!userCan.createObject(this.ENTITY, data, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to create this object');
             /**
              * Create data object
              */
@@ -401,13 +373,13 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * Create tracking ID
              */
-            if (comment_model_1.CommentSchemaFields['tracking_id'] && Object.keys(tracking_id_constants_1.ITEM_SHORTCUTS).includes(this.ENTITY)) {
-                docObject['tracking_id'] = await (0, tracking_id_utilities_1.createTrackingId)(this.ENTITY, this.commentModel);
+            if (CommentSchemaFields['tracking_id'] && Object.keys(ITEM_SHORTCUTS).includes(this.ENTITY)) {
+                docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.commentModel);
             }
             /**
              * Create search meta
              */
-            if (comment_model_1.CommentSchemaFields['search_meta']) {
+            if (CommentSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, null);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
@@ -416,10 +388,10 @@ let CommentsService = class CommentsService extends base_service_1.default {
              */
             const doc = await this.commentModel.create(docObject);
             if (!doc)
-                throw new exceptions_1.default.InternalServerError('Failed to create the object');
-            this.eventDispatcher.dispatch(events_config_1.default.content.comment.created, { data: doc });
+                throw new exceptions.InternalServerError('Failed to create the object');
+            this.eventDispatcher.dispatch(events.content.comment.created, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -445,11 +417,11 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * await sanitize data here
              */
-            data = await comment_sanitizers_1.default.sanitizeUpdateBody(data, authData);
+            data = await CommentSanitizers.sanitizeUpdateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = comment_validators_1.default.validateUpdateBody(data);
+            const { error } = CommentValidators.validateUpdateBody(data);
             if (error)
                 throw error;
             /**
@@ -461,19 +433,19 @@ let CommentsService = class CommentsService extends base_service_1.default {
              */
             const old = await this.commentModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object is deleted');
-            if (!user_can_1.default.updateObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to update this object');
+                throw new exceptions.UnauthorizedException('Object is deleted');
+            if (!userCan.updateObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to update this object');
             /**
              * detect changes
              */
-            const updates = new update_calculator_class_1.default(old.toObject(), data, true);
+            const updates = new ObjectUpdatedProperties(old.toObject(), data, true);
             scenario.updates = updates.asArray;
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'updated',
                 updates: updates.asArray
@@ -485,7 +457,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * Create search meta
              */
-            if (comment_model_1.CommentSchemaFields['search_meta']) {
+            if (CommentSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, old);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
@@ -496,7 +468,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
                     updates: updateObject
                 } }), { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             /**
              * Handle the updated effects on the same service
              */
@@ -504,9 +476,9 @@ let CommentsService = class CommentsService extends base_service_1.default {
             /**
              * Dispatch the updated event
              */
-            this.eventDispatcher.dispatch(events_config_1.default.content.comment.updated, { data: doc });
+            this.eventDispatcher.dispatch(events.content.comment.updated, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: mapDocumentToExposed(doc)
             };
             /**
              * Log execution result before returning the result
@@ -534,18 +506,18 @@ let CommentsService = class CommentsService extends base_service_1.default {
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'deleted',
                 updates: []
             };
             const old = await this.commentModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object already deleted');
-            if (!user_can_1.default.deleteObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to delete this object');
+                throw new exceptions.UnauthorizedException('Object already deleted');
+            if (!userCan.deleteObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
             const doc = await this.commentModel.findByIdAndUpdate(id, {
                 is_deleted: true,
                 deleted_at: new Date(),
@@ -553,7 +525,7 @@ let CommentsService = class CommentsService extends base_service_1.default {
                     updates: updateObject
                 }
             }, { new: true });
-            this.eventDispatcher.dispatch(events_config_1.default.content.comment.deleted, { data: doc });
+            this.eventDispatcher.dispatch(events.content.comment.deleted, { data: doc });
             const result = {
                 data: {
                     deleted: true
@@ -582,18 +554,18 @@ let CommentsService = class CommentsService extends base_service_1.default {
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'restored',
                 updates: []
             };
             const old = await this.commentModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+                throw new exceptions.ItemNotFoundException('Object not found');
             if (!old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Object already exists');
-            if (!user_can_1.default.restoreObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to restore this object');
+                throw new exceptions.UnauthorizedException('Object already exists');
+            if (!userCan.restoreObject(this.ENTITY, old, authData))
+                throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
             const doc = await this.commentModel.findByIdAndUpdate(id, {
                 is_deleted: false,
                 deleted_at: null,
@@ -602,8 +574,8 @@ let CommentsService = class CommentsService extends base_service_1.default {
                 }
             }, { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Object not found');
-            this.eventDispatcher.dispatch(events_config_1.default.content.comment.restored, { data: doc });
+                throw new exceptions.ItemNotFoundException('Object not found');
+            this.eventDispatcher.dispatch(events.content.comment.restored, { data: doc });
             const result = {
                 data: {
                     restored: true
@@ -622,18 +594,18 @@ let CommentsService = class CommentsService extends base_service_1.default {
     }
 };
 CommentsService = __decorate([
-    (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
-    __param(1, (0, typedi_1.Inject)('articleModel')),
-    __param(2, (0, typedi_1.Inject)('commentModel')),
-    __param(3, (0, typedi_1.Inject)('reviewModel')),
-    __param(4, (0, typedi_1.Inject)('termModel')),
-    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
-    __param(6, (0, typedi_1.Inject)('translationItemModel')),
-    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
-    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
-    __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
+    Service(),
+    __param(0, Inject('articleTypeModel')),
+    __param(1, Inject('articleModel')),
+    __param(2, Inject('commentModel')),
+    __param(3, Inject('reviewModel')),
+    __param(4, Inject('termModel')),
+    __param(5, Inject('taxonomyModel')),
+    __param(6, Inject('translationItemModel')),
+    __param(7, Inject('translationNamespaceModel')),
+    __param(8, Inject('translationProjectModel')),
+    __param(9, EventDispatcher()),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], CommentsService);
-exports.default = CommentsService;
+export default CommentsService;
 //# sourceMappingURL=comments.service.js.map

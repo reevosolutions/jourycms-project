@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const logging_1 = __importDefault(require("../utilities/logging"));
-const logger = (0, logging_1.default)("MIDDLEWARE", 'secureApiWithAppKeyMiddleware');
+import initLogger from '../utilities/logging';
+const logger = initLogger("MIDDLEWARE", 'secureApiWithAppKeyMiddleware');
 /**
  * @description Secure Api with signature
  * TODO: finish this middleware
@@ -25,5 +20,5 @@ const secureApiWithAppKeyMiddleware = (req, res, next) => {
         return next(error);
     }
 };
-exports.default = secureApiWithAppKeyMiddleware;
+export default secureApiWithAppKeyMiddleware;
 //# sourceMappingURL=secure-api-by-app-key.middleware.js.map

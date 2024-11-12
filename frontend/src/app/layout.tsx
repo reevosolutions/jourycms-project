@@ -16,6 +16,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Arabic } from "next/font/google";
 import localFont from "next/font/local";
 import "../styles/main.scss";
+import { Toaster } from "@/components/ui/sonner"
 
 colors.enable();
 
@@ -201,6 +202,7 @@ export default async function RootLayout({
             </StoreProvider>
           </TranslationsProvider>
         </ReactQueryDevtoolsProvider>
+        <Toaster position="bottom-center" richColors />
       </body>
     </html>
   );
