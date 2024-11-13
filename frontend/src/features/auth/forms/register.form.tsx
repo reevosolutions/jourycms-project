@@ -15,8 +15,6 @@ import { useForm, type Validator } from "@tanstack/react-form";
 import { yupValidator } from "@tanstack/yup-form-adapter";
 import { useMemo, useState } from "react";
 import * as yup from "yup";
-
-
 import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command";
 import { FormMessage } from "@/components/ui/customized.form";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/customized.popover";
@@ -33,6 +31,7 @@ const logger = initLogger(LoggerContext.FORM, 'RegisterForm');
 
 import ApiAlias = Levelup.CMS.V1.Auth.Api.Auth.Signup;
 import { Loader2 } from "lucide-react";
+import { faker } from "@faker-js/faker";
 
 export type RegisterFormProps = {};
 
@@ -71,7 +70,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
         family_name: 'سالمي',
         sex: 'male',
         phones: [],
-        website: 'drsalmi.com',
+        website: '',
         address: {
           country_code: 'dz',
           country_name: 'algeria',
@@ -81,7 +80,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
           city_name: '',
           street_address: '',
         },
-        email: 'dev@mail.com',
+        email: faker.internet.email(),
         password: '123',
         confirm_password: '123',
       },
@@ -423,9 +422,34 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
           )}
         />
 
+        {/* field */}
+        <div className="field mb-6">
+          <Label className="text-2xl text-darkblue-500">{"الموقع الالكتروني"}</Label>
+          <form.Field
+            name="website"
+            validators={{
+            }}
+            children={field => (
+              <>
+
+                <Input
+                  type="url"
+                  placeholder="https://"
+                  className="focus-visible:ring-orange-400"
+                  value={field.state.value}
+                  onChange={(event) => field.handleChange(event.target.value)}
+                />
+                {field.state.meta.errors?.[0] && (
+                  <FormMessage error={field.state.meta.errors?.[0]} />
+                )}
+              </>
+            )}
+          />
+        </div>
+
         <div className="">
 
-          <Separator className=" mt-8 my-6" />
+          <Separator className=" mt-12 my-6" />
         </div>
         {/* field */}
         <div className="field mb-6">
@@ -496,7 +520,6 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
 
             children={field => (
               <>
-
                 <Input
                   type="password"
                   placeholder="تأكيد كلمة السر"
@@ -515,7 +538,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ }) => {
       </div>
 
 
-      <div className="flex justify-center mb-6">
+      <div className="flex justify-center mb-12">
         <form.Subscribe
           selector={(state) => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (

@@ -216,14 +216,20 @@ export default class AppConfigManager {
   }
 
   async getArticleTypeBySlug(slug: string) {
-    const articleTypes = this._contentData.articleTypes;
-    const type = articleTypes?.find(v => v.slug === slug);
-    if (!type) {
-      const { data: apiType } = await this.sdk.content.articleTypes.getBySlug(slug);
-      this._contentData.articleTypes?.push(apiType);
-      return apiType || null;
+    try {
+      
+      const articleTypes = this._contentData.articleTypes;
+      const type = articleTypes?.find(v => v.slug === slug);
+      if (!type) {
+        const { data: apiType } = await this.sdk.content.articleTypes.getBySlug(slug);
+        this._contentData.articleTypes?.push(apiType);
+        return apiType || null;
+      }
+      return type;
+    } catch (error: any) {
+      this.logger.error(`ARTICLE TYPE NOT LOADED ${error.message}`, error, slug)
+      return null;  
     }
-    return type;
   }
   async getArticleTypeById(id: string) {
     const articleTypes = this._contentData.articleTypes;

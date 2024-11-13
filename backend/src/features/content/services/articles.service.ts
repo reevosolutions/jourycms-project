@@ -29,6 +29,7 @@ import { ArticleSchemaFields } from '../models/article.model';
 import { slugify } from '../../../utilities/strings/slugify.utilities';
 import { uniq } from 'lodash';
 import { isObjectIdValid } from '../../../utilities/helpers/mogodb.helpers';
+import UsersService from '../../auth/services/users.service';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -221,14 +222,6 @@ export default class ArticlesService extends BaseService {
       q = filter.q; totalQ = filter.totalQ;
     }
 
-    // -- attributed:company
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.company, 'company');
-    q = filter.q; totalQ = filter.totalQ;
-
-    // -- attributed:store
-    filter = createStringFilter<DocumentProperties>(q, totalQ, (filters as any).store, 'attributes.store' as any);
-    q = filter.q; totalQ = filter.totalQ;
-
     // -- is_deleted
     filter = createBooleanFilter<DocumentProperties>(q, totalQ, filters.is_deleted, 'is_deleted');
     q = filter.q; totalQ = filter.totalQ;
@@ -259,11 +252,28 @@ export default class ArticlesService extends BaseService {
       let article_type;
       if (!isObjectIdValid(filters.article_type as string)) {
         const { _id } = await this.articleTypeModel.exists({ slug: filters.article_type })
-        article_type = _id;
+        article_type = _id?.toString();
       }
-      else article_type = filters.article_type;
+      else article_type = filters.article_type.toString();
       filter = createStringFilter<DocumentProperties>(q, totalQ, article_type, 'article_type' as any);
       q = filter.q; totalQ = filter.totalQ;
+    }
+
+    for (const key of Object.keys(filters)) {
+      if (key.startsWith('meta_fields.')) {
+        if (typeof filters[key] === 'string') {
+          filter = createStringFilter<DocumentProperties>(q, totalQ, filters[key], key as any);
+          q = filter.q; totalQ = filter.totalQ;
+        }
+        if (typeof filters[key] === 'boolean') {
+          filter = createBooleanFilter<DocumentProperties>(q, totalQ, filters[key], key as any);
+          q = filter.q; totalQ = filter.totalQ;
+        }
+
+        /**
+         * TODO: finish this part
+         */
+      }
     }
 
 
@@ -385,6 +395,7 @@ export default class ArticlesService extends BaseService {
   private async _buildResponseEdge(data: EntityAlias[]): Promise<ApiAlias.List.Response['edge']> {
     const scenario = this.initScenario(this.logger, this._buildResponseEdge,);
     try {
+      const usersService = Container.get(UsersService);
       const types = await this.articleTypeModel.find({
         is_deleted: false
       }).lean().exec();
@@ -395,13 +406,13 @@ export default class ArticlesService extends BaseService {
       };
       this.logger.tree('types', types,);
       const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
+      const edge_users: ApiAlias.List.Response['edge']['users'] = {};
       const articleIds: string[] = [];
+      const userIds: string[] = [];
       for (const item of data) {
         const type = types.find(t => t._id.toString() === item.article_type?.toString()) || null;
         this.logger.tree('type', item.article_type, type?.slug, type?.custom_meta_fields);
-
         if (item.article_type) result.article_types[item.article_type] = type;
-
         if (Object.keys(item.meta_fields || {}).length && type) {
           for (const field of type.custom_meta_fields) {
             if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
@@ -409,9 +420,11 @@ export default class ArticlesService extends BaseService {
             }
           }
         }
+
+        if (item.created_by) userIds.push(item.created_by);
       }
 
-      scenario.set({ articleIds });
+      scenario.set({ articleIds, userIds });
 
       if (articleIds.length) {
         const articles = await this.articleModel.find({
@@ -430,8 +443,29 @@ export default class ArticlesService extends BaseService {
           } as any;
         }
       }
+      if (userIds.length) {
+        const { data: users } = await usersService.list({
+          count: userIds.length,
+          filters: {
+            _id: userIds,
+          },
+          fields: ['_id', 'tracking_id', 'role', 'profile']
+        }, {
+          current: {
+            service: {
+              name: 'content',
+              is_external: false
+            }
+          }
+        })
+        this.logger.value('users', users.length);
+        for (const user of users) {
+          edge_users[user._id] = getUserSnapshot(user);
+        }
+      }
 
       result.linked_articles = linked_articles;
+      result.users = edge_users;
 
       scenario.end();
       return result;
@@ -493,7 +527,7 @@ export default class ArticlesService extends BaseService {
         data: mapDocumentToExposed(doc)
       };
       result.edge = await this._buildResponseEdge([result.data])
-      
+
       /**
        * Log execution result before returning the result
        */

@@ -68,24 +68,24 @@ export default async function initTranslations(
         if (false || !key) return;
         const hash = `levelup:${ns}:${key}`;
         if (ITEMS_SENT_BACKEND[hash]) return;
-        axios
-          .post(
-            `${config.sdk.baseURL}/cm/api/v2/translation/tools/missing-key`,
-            {
-              data: {
-                project: "levelup",
-                default_language: "en",
-                languages: lngs,
-                namespace: ns,
-                key,
-              },
-            },
-          )
-          .then(response => {
-            // logger.success("MISSING KEY", response.data);
-            ITEMS_SENT_BACKEND[hash] = true;
-          })
-          .catch(error => { });
+        // axios
+        //   .post(
+        //     `${config.sdk.baseURL}/cm/api/v2/translation/tools/missing-key`,
+        //     {
+        //       data: {
+        //         project: "levelup",
+        //         default_language: "en",
+        //         languages: lngs,
+        //         namespace: ns,
+        //         key,
+        //       },
+        //     },
+        //   )
+        //   .then(response => {
+        //     // logger.success("MISSING KEY", response.data);
+        //     ITEMS_SENT_BACKEND[hash] = true;
+        //   })
+        //   .catch(error => { });
       } catch {
         logger.error("error");
       }

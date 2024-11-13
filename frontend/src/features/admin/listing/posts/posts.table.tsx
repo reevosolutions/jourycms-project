@@ -24,6 +24,7 @@ const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
+import { buildUserFullName } from "@/lib/utilities/strings";
 
 type PostListProps = {
   data: Levelup.CMS.V1.Content.Entity.Article[];
@@ -62,12 +63,12 @@ const PostListTable: React.FC<PostListProps> = ({
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
-  const loadExtraData = useCallback(() => {}, []);
+  const loadExtraData = useCallback(() => { }, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    TABLE                                   */
@@ -96,7 +97,7 @@ const PostListTable: React.FC<PostListProps> = ({
       },
       {
         id: "title",
-        header: () => <span className="d">{tLabel("Title")}</span>,
+        header: () => <span className="d">{tLabel("العنوان")}</span>,
         cell: info => {
           return (
             <div className="flex flex-col gap-1 py-2">
@@ -108,8 +109,20 @@ const PostListTable: React.FC<PostListProps> = ({
         },
       },
       {
+        id: "created_by",
+        header: () => <span className="d">{tLabel("بواسطة")}</span>,
+        cell: info => {
+          const user = info.row.original.created_by ? edge?.users?.[info.row.original.created_by] : null
+          return user ? (
+            <span className="text-sm font-medium text-text-700">
+              {buildUserFullName(user)}
+            </span>
+          ): null;
+        },
+      },
+      {
         id: "created_at",
-        header: () => <span className="d">{tLabel("Created at")}</span>,
+        header: () => <span className="d">{tLabel("تاريخ الإنشاء")}</span>,
         cell: info => {
           return (
             <span className="text-sm font-medium text-text-700">
@@ -149,7 +162,7 @@ const PostListTable: React.FC<PostListProps> = ({
         },
       },
     ],
-    [tLabel],
+    [edge?.users, tLabel],
   );
 
   const table = useReactTable({

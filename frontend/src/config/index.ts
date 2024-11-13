@@ -1,8 +1,8 @@
 import "../lib/utilities/extend-prototypes/string.prototype";
 
+export { default as publicRoutes } from "../themes/miqat/config/routes.public.config";
 export { default as appConfig } from "./app.config";
 export { default as adminRoutes } from "./routes.admin.config";
-export { default as publicRoutes } from "./routes.public.config";
 
 const config = {
   /**

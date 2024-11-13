@@ -7,9 +7,7 @@ declare module Levelup {
             field_key: string;
             field_label: string;
             field_type: CustomFields.CustomFieldType;
-            field_options: {
-              [Key: string]: any;
-            };
+            field_options: CustomFields.MetaField<CustomFields.CustomFieldType, boolean>['field_options'];
           };
 
           export interface IArticleTypeSnapshots {
@@ -22,7 +20,7 @@ declare module Levelup {
 
           export interface ArticleType
             extends Utils.Entity.General.ICreatable,
-              Utils.Entity.General.IHasSearchMeta {
+            Utils.Entity.General.IHasSearchMeta {
             _id: Utils.Common.ID;
             slug: string;
             name: string;

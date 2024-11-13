@@ -9,17 +9,31 @@
 import * as cheerio from 'cheerio';
 import fs from 'fs';
 import path from 'path';
-import { Inject, Service } from 'typedi';
+import Container, { Inject, Service } from 'typedi';
 import BaseService from '../../../common/base.service';
 import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
 import { ObjectUpdatedProperties } from '../../../utilities/objects';
-import downloadRemoteFile from '../../../utilities/remote/download-remote-file';
+import ArticlesService from './articles.service';
+import ArticleTypesService from './article-types.service';
+import { cities } from '../utils/seed/algeria.cities.config';
+import { states } from '../utils/seed/algeria.states.config';
+import { fakerAR as faker } from '@faker-js/faker';
+
+type User = Levelup.CMS.V1.Users.Entity.ExposedUser;
+type Article = Levelup.CMS.V1.Content.Entity.Article;
+
 /**
  * @description
  */
 @Service()
 export default class DevService extends BaseService {
   public constructor(
+    @Inject('articleTypeModel') private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
+    @Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
+    @Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
+    @Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
+    @Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
+    @Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
     @Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
     @Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
     @Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
@@ -29,110 +43,47 @@ export default class DevService extends BaseService {
     super();
   }
 
-  public testUpdateComparison() {
-    const oldObject = {
-      name: 'John',
-      age: 30,
-      location: { city: 'New York', country: 'USA' },
-      preferences: { theme: 'dark' }
-    };
 
-    const newObject = {
-      name: 'John',
-      age: 31,
-      location: { city: 'San Francisco', country: 'USA' },
-      preferences: { theme: 'light' }
-    };
-
-    const updates = new ObjectUpdatedProperties(oldObject, newObject, ['preferences']);
-
-    this.logger.debug('UPDATEs', updates.asObject);
-    this.logger.debug('UPDATEs Array', updates.asArray);
-  }
 
   /**
    * Update :
    * @author dr. Salmi <reevosolutions@gmail.com>
    * @since 16-10-2024 23:40:44
    */
-  public async resetTranslationProjects() {
+  public async fillArticles() {
+    const scenario = this.initScenario(this.logger, this.fillArticles);
     try {
-      this.translationProjectModel.deleteMany({}).exec();
-      this.translationNamespaceModel.deleteMany({}).exec();
-      this.translationItemModel.deleteMany({}).exec();
-    } catch (error) {
-      this.logger.error('resetTranslationProjects:ERROR', error);
-      
-    }
-  }
+      const articlesService = Container.get(ArticlesService);
+      const articleTypesService = Container.get(ArticleTypesService);
 
-  public async parseTemuCategories() {
-    const scenario = this.initScenario(this.logger, this.parseTemuCategories, {});
+      await this.articleTypeModel.deleteOne({ slug: 'trip' });
 
-    try {
-      const filePath = path.join(__dirname, '../../../assets/temu-assets/temu-categories.html');
-      const jsonFilePath = path.join(__dirname, '../../assets/temu/categories.json');
-      const html = fs.readFileSync(filePath, 'utf8');
-      const $ = cheerio.load(html);
-      type Datum = {
-        name: string;
-        slug: string;
-        url: string;
-        subCategories: {
-          name: string;
-          slug: string;
-          url: string;
-          image: string;
-        }[];
-      };
-      const categories: Datum[] = [];
+      const { data: articleTypes } = await articleTypesService.list({
+        count: -1
+      }, {});
 
-      $('.mainContent > div').each((index, element) => {
-        const categoryElement = $(element).find(' > h2 > a');
-        if (!categoryElement.text()) return;
-        const category: Datum = {
-          name: categoryElement.text().trim(),
-          slug: categoryElement.text().trim().toKebabCase(),
-          url: categoryElement.attr('href').trim(),
-          subCategories: []
-        };
 
-        $(element)
-          .find('div.columnLayoutContainer > div > div > div ')
-          .each((index, subCategoryElement) => {
-            const imgElement = $(subCategoryElement).find(' a > img');
-            const subCategory: Datum['subCategories'][number] = {
-              name: $(subCategoryElement).find(' h3').text()?.trim(),
-              slug: $(subCategoryElement).find(' h3').text()?.trim().toKebabCase(),
-              url: $(subCategoryElement).find(' a').attr('href')?.trim(),
-              image: (imgElement.attr('src') ?? imgElement.attr('data-src'))?.trim()
-            };
 
-            category.subCategories.push(subCategory);
-          });
+      scenario.set({ articleTypes: articleTypes.map(i => i.slug) });
 
-        categories.push(category);
-      });
 
-      for (let i = 0; i < categories.length; i++) {
-        for (let j = 0; j < categories[i].subCategories.length; j++) {
-          const subCategory = categories[i].subCategories[j];
-          if (subCategory.image) {
-            const imagePath = path.join(__dirname, '../../assets/temu/categories-images', `${subCategory.slug}.webp`);
-            if (!fs.existsSync(imagePath)) {
-              await downloadRemoteFile(subCategory.image, imagePath);
-            }
+      for(const state of states){
+        const stateCities = cities.filter(item=>item.state_code === state.code);
+        for(const index of new Array(faker.number.int({min: 3, max: 10})).fill(null)){
+          const doctor: Partial<User> = {
+            
           }
         }
       }
 
-      scenario.set({ filePath, categories });
 
-      fs.writeFileSync(jsonFilePath, JSON.stringify(categories, null, 2));
-      //
-      scenario.log();
+      /**
+       * 
+       */
+      scenario.end();
     } catch (error) {
       scenario.error(error);
     }
   }
+
 }

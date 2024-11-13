@@ -23,8 +23,9 @@
 
 # production
 /build
-/**/build
 /backend/build
+/backend/build/*
+/backend/dev
 
 /dist
 /sdk/dist

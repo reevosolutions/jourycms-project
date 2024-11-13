@@ -60,7 +60,7 @@ const Header: React.FC<HeaderProps> = ({ children, route }) => {
   /* -------------------------------------------------------------------------- */
   return (
     <header className="jcms-header h-28 bg-gradient-to-r from-darkblue-900 to-darkblue-800">
-      <div className="inner container mx-auto flex items-center justify-between text-2xl font-medium">
+      <div className="inner container mx-auto gap-6 flex items-center justify-between text-2xl font-medium">
         <nav className="items-center hidden lg:flex">
           {menuItems.map((item, index) => (
             <HeaderLink

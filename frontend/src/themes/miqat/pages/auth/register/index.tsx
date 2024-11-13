@@ -1,17 +1,23 @@
+'use client';
 import * as React from "react";
 import DefaultLayout from "../../../layouts/default.layout";
 import LoginForm from "@/features/auth/forms/login.form";
 import Link from "next/link";
 import RegisterForm from "@/features/auth/forms/register.form";
+import { redirect } from "next/navigation";
+import useAuth from "@/hooks/use-auth";
+import { publicRoutes } from "@/config";
 
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
 const ThemePage: React.FC<PageProps> = ({ route }) => {
+  const { isAuthenticated, currentUser } = useAuth();
+
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return (
+  return isAuthenticated ? redirect(publicRoutes.homepage._.myAccount.path) : (
     <DefaultLayout route={route}>
       <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
         <div className="flex flex-col gap-4 py-16">

@@ -1,12 +1,7 @@
 import * as React from "react";
 import DefaultLayout from "../../layouts/default.layout";
-import { AlertCircle } from "lucide-react"
 
-import {
-  Alert,
-  AlertDescription,
-  AlertTitle,
-} from "@/components/ui/alert";
+import PageNotFound from "../../components/page-not-found";
 
 
 export type PageProps = JouryCMS.Theme.PageProps & {
@@ -36,16 +31,7 @@ const ThemePage: React.FC<PageProps> = ({ route, initialData }) => {
             </article>
           </div>
         ) : initialData?.error ? (
-          <div className="flex flex-col justify-center items-center min-h-screen-60 text-2xl">
-
-            <Alert variant="destructive">
-              <AlertCircle className="h-6 w-6 right-4" />
-              <AlertTitle className=" font-bold text-2xl ps-10">خطـأ</AlertTitle>
-              <AlertDescription className="text-2xl  ps-10">
-                {initialData.error.message}
-              </AlertDescription>
-            </Alert>
-          </div>
+          <PageNotFound />
         ) : null}
       </div>
     </DefaultLayout>

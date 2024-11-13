@@ -1,4 +1,5 @@
 /* eslint-disable no-undef */
+import { useSpring, animated, useSprings, useTransition } from '@react-spring/web'
 import Image from "next/image";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -31,6 +32,8 @@ import useCMSContent from "@/hooks/use-cms-content";
 import { cn } from "@/lib/utils";
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { checkSimilarity } from "@/lib/utilities/strings";
+import Pattern from "./pattern";
+import { ArticleTypeSlug } from '../config';
 
 const logger = initLogger(LoggerContext.COMPONENT, "select.custom-field");
 
@@ -94,7 +97,7 @@ export const OmrahSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
   const loadDurations = useCallback(
     async () => {
-      const type = await getArticleTypeBySlug("trip");
+      const type = await getArticleTypeBySlug(ArticleTypeSlug.OMRAH);
       const durations = (type?.custom_meta_fields?.find(
         field => field.field_key === "trip_duration",
       ) as Levelup.CMS.V1.Content.CustomFields.MetaField<"select"> | undefined
@@ -435,13 +438,53 @@ export const OmrahSearchForm: React.FC = () => {
   );
 };
 
+export const Placeholder = () => {
+  return (
+    <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8 relative">
+      <div className=" flex flex-col justify-center items-center inset-0 absolute">
+        <span className=' opacity-20'>
+          <Pattern width={200} color="#c6a789" />
+        </span>
+      </div>
+    </div>
+  )
+}
+export const AnimatedPlaceholder = animated(Placeholder);
+
 // eslint-disable-next-line no-undef
 export type HomepageSearchFormProps = JouryCMS.Theme.ComponentProps & {};
 
 const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
+  const [springs, api] = useSprings(3,
+    () => ({
+      from: { opacity: 0.5, y: '-6%', },
+      to: { opacity: 1, y: 0 },
+    }));
+  const [tab, setTab] = useState('omrah');
+
+  const omrahTransitions = useTransition(tab === 'omrah', {
+    from: { opacity: 1, transform: 'translateX(0px)' }, // Starting state
+    enter: { opacity: 1, transform: 'translateX(0px)' },   // Ending state on mount
+    leave: { opacity: 0, transform: 'translateX(20px)' },  // Ending state on unmount
+    config: { tension: 200, friction: 20 } // Custom animation configuration
+  });
+  const tombolasTransitions = useTransition(tab === 'tombolas', {
+    from: { opacity: 0.5, transform: 'translateX(-20px)' }, // Starting state
+    enter: { opacity: 1, transform: 'translateX(0px)' },   // Ending state on mount
+    leave: { opacity: 0, transform: 'translateX(20px)' },  // Ending state on unmount
+    config: { tension: 200, friction: 20 } // Custom animation configuration
+  });
+  const bidsTransitions = useTransition(tab === 'bids', {
+    from: { opacity: 0.5, transform: 'translateX(-20px)' }, // Starting state
+    enter: { opacity: 1, transform: 'translateX(0px)' },   // Ending state on mount
+    leave: { opacity: 0, transform: 'translateX(20px)' },  // Ending state on unmount
+    config: { tension: 200, friction: 20 } // Custom animation configuration
+  });
+
+  logger.value('springs', springs);
   return (
     <div className="jcms-hero-section min-h-[600px] w-[500px] rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all">
-      <Tabs defaultValue="omrah" className="w-full">
+      <Tabs defaultValue="omrah" className="w-full" onValueChange={setTab}>
         <TabsList className="h-auto w-full items-center justify-around bg-transparent">
           <TabsTrigger
             className="group relative bg-transparent px-4 py-4 text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:text-3xl data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
@@ -483,20 +526,27 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({ }) => {
             />
           </TabsTrigger>
         </TabsList>
-        <TabsContent value="omrah" dir="rtl">
-          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
-            <OmrahSearchForm />
-          </div>
+        <TabsContent value="omrah" dir="rtl" >
+          {omrahTransitions((style, item) =>
+            item ? (
+              <animated.div style={style} className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
+                <OmrahSearchForm />
+              </animated.div>
+            ) : null)}
         </TabsContent>
-        <TabsContent value="tombolas">
-          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
-            Change your password here.
-          </div>
+        <TabsContent value="tombolas" >
+          {tombolasTransitions((style, item) => item ? (
+            <animated.div style={style} className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
+              <Placeholder />
+            </animated.div>
+          ) : null)}
         </TabsContent>
-        <TabsContent value="bids">
-          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
-            Change your password here.
-          </div>
+        <TabsContent value="bids" >
+          {bidsTransitions((style, item) => item ? (
+            <animated.div style={style} className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
+              <Placeholder />
+            </animated.div>
+          ) : null)}
         </TabsContent>
       </Tabs>
     </div>

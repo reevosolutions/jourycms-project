@@ -31,6 +31,10 @@ const config: Config = {
           css: {},
         },
       },
+      aspectRatio: {
+        '4/3': '4 / 3',
+        '21/9': '21 / 9',
+      },
       colors: {
         darkblue: {
           "50": "#dfebf1",

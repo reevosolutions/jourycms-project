@@ -8,6 +8,7 @@ import config from '../config';
 import { toKebabCase } from '../utilities/strings';
 import Container from 'typedi';
 import ContentBuilderService from '../features/content/services/builder.service';
+import DevService from '../common/services/dev.service';
 
 const logger = initLogger('SUBSCRIBER', 'service');
 
@@ -22,12 +23,15 @@ export default class ServiceSubscriber {
 
       const contentBuilderService = Container.get(ContentBuilderService);
       await contentBuilderService.run();
+      const devService = Container.get(DevService);
 
       if (config.environement === 'development') {
         /**
          * Here you can add any logic to run after the service has started in development
          * e.g. start seeding the database, tests, etc.
          */
+
+        await devService.fillArticles();
 
       } else {
         /**

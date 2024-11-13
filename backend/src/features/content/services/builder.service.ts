@@ -10,6 +10,7 @@ import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
 import CacheManager from '../../../managers/cache-manager';
 import TranslationToolsService from './translation.tools.service';
 import { faker } from '@faker-js/faker';
+import articleTypesSeedData from '../utils/seed/ar.types.seed';
 
 /**
  * @generator Levelup
@@ -54,32 +55,25 @@ export default class BuilderService extends BaseService {
   public async seed() {
     const scenario = this.initScenario(this.logger, this.seed);
     try {
-      const translationToolsService = Container.get(TranslationToolsService);
-      await translationToolsService.translateUsingGoogleAPI();
-      const type = await this.articleTypeModel.findOne({
-        slug: 'trip'
-      });
 
-      if (type) {
-        const articles = await this.articleModel.find({
-          article_type: type._id,
+      for (const type of articleTypesSeedData.types) {
+        const existing = await this.articleTypeModel.findOne({
+          slug: type.slug
         });
-        for (const article of articles) {
-          article.title = 'عمرة رمضان';
-          article.meta_fields.price = faker.number.int({ min: 11, max: 50 }) * 10000 + faker.number.int({ min: 1, max: 9 }) * 1000;
-          article.meta_fields.duarttion = undefined;
-          article.meta_fields.trip_duration = faker.helpers.arrayElement([15, 21, 30, 45]);
-          article.meta_fields.agency = '672eb5728cb4792976274773';
-          this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
-          await this.articleModel.updateOne({
-            _id: article._id
+        if (!existing) {
+          await this.articleTypeModel.create(type);
+        }
+        else {
+          this.logger.info(`Article type ${type.slug} already exists`);
+          await this.articleTypeModel.updateOne({
+            _id: existing._id
           }, {
-            $set: {
-              meta_fields: article.meta_fields,
-            }
+            $set: type
           }).exec();
         }
+
       }
+
     } catch (error) {
       scenario.error(error);
     }
@@ -104,6 +98,41 @@ export default class BuilderService extends BaseService {
   public async upgrade() {
     const scenario = this.initScenario(this.logger, this.upgrade);
     try {
+
+
+
+      const translationToolsService = Container.get(TranslationToolsService);
+      await translationToolsService.translateUsingGoogleAPI();
+      const type = await this.articleTypeModel.findOne({
+        slug: 'trip'
+      });
+      const omrahType = await this.articleTypeModel.findOne({
+        slug: 'omrah'
+      });
+
+      if (type) {
+        const articles = await this.articleModel.find({
+          article_type: type._id,
+        });
+        for (const article of articles) {
+          article.article_type = omrahType?._id;
+          article.title = 'عمرة رمضان';
+          article.meta_fields.price = faker.number.int({ min: 11, max: 50 }) * 10000 + faker.number.int({ min: 1, max: 9 }) * 1000;
+          article.meta_fields.duarttion = undefined;
+          article.meta_fields.trip_duration = faker.helpers.arrayElement([15, 21, 30, 45]);
+          article.meta_fields.agency = '672eb5728cb4792976274773';
+          this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
+          await this.articleModel.updateOne({
+            _id: article._id
+          }, {
+            $set: {
+              meta_fields: article.meta_fields,
+              article_type: article.article_type
+            }
+          }).exec();
+        }
+      }
+
     } catch (error) {
       scenario.error(error);
     }

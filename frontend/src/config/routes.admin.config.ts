@@ -342,6 +342,8 @@ const routes = {
 const __routes: Levelup.CMS.V1.UI.Routes.RouteItems = routes;
 
 const arabicTranslations: { [K: string]: string } = {
+  "Articles": "المقالات",
+  "All Articles": "كل المقالات",
   "Content Types": "أنواع المحتوى",
   "All Content Types": "جميع أنواع المحتوى",
   "Create Content Type": "إنشاء نوع محتوى",

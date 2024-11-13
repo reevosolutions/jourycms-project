@@ -1,12 +1,9 @@
 "use client";
 import Image from "next/image";
 import React from "react";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-
-import HomepageContentBidsSection from "./content.bids.section";
-import HomepageContentOmrahSection from "./content.omrah.section";
-import HomepageContentTombolasSection from "./content.tombolas.section";
+import ContentSection from "@/themes/miqat/components/content.section";
+import { ArticleTypeSlug } from "@/themes/miqat/config";
 
 export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {};
 
@@ -58,17 +55,17 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({ }) => {
           </TabsList>
           <TabsContent value="omrah">
             <div className=" min-h-screen-60 relative">
-              <HomepageContentOmrahSection />
+            <ContentSection articleTypeSlug={ArticleTypeSlug.OMRAH} count={12} showPagination={false} />
             </div>
           </TabsContent>
           <TabsContent value="tombolas">
             <div className=" min-h-screen-60 relative">
-              <HomepageContentTombolasSection />
+            <ContentSection articleTypeSlug={ArticleTypeSlug.TOMBOLA} count={12} showPagination={false} />
             </div>
           </TabsContent>
           <TabsContent value="bids">
             <div className=" min-h-screen-60 relative">
-              <HomepageContentBidsSection />
+            <ContentSection articleTypeSlug={ArticleTypeSlug.BID} count={12} showPagination={false} />
             </div>
           </TabsContent>
         </Tabs>

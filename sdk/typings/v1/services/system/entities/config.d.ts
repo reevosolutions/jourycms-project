@@ -31,6 +31,7 @@ declare module Levelup {
               code: string;
               name: string;
             }[];
+            medical_specialities?: Levelup.CMS.V1.Utils.Common.TLabelValue[];
           }
         }
       }

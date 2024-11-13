@@ -160,7 +160,7 @@ const ImageUploader: FC<Props> = ({
     <section className="text-center">
       <div
         {...getRootProps({ className: "dropzone" })}
-        className="inline-block cursor-pointer"
+        className="inline-block cursor-pointer w-full"
       >
         <input {...getInputProps()} />
         <aside className="mt-2 flex flex-wrap">

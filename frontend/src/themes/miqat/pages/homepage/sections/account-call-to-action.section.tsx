@@ -1,6 +1,7 @@
 "use client";
 import useCMSContent from "@/hooks/use-cms-content";
 import Pattern from "@/themes/miqat/components/pattern";
+import { animated, useScroll } from '@react-spring/web';
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -17,14 +18,20 @@ const HomepageCallToActionSection: React.FC<
   const { getWebsiteConfig, getWebsiteConfigValue } = useCMSContent();
 
   /* -------------------------------------------------------------------------- */
+  /*                                    STATE                                   */
+  /* -------------------------------------------------------------------------- */
+  const containerRef = React.useRef<HTMLDivElement>(null!)
+
+  /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
+  const { scrollYProgress } = useScroll()
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <section className="bg-gray-50/50">
+    <section className="bg-gray-50/50" ref={containerRef} >
       <div className="text-center relative">
 
         <div className="bg-beige-50 py-16 pb-4 relative">
@@ -32,11 +39,19 @@ const HomepageCallToActionSection: React.FC<
             <Pattern width={700} color="#c6a789" />
           </div>
           <div className="absolute z-0 left-0 top-1/2 -translate-y-1/2 opacity-100 overflow-hidden h-[500px] w-[250px]">
-            <Pattern width={500} color="#d5bd97" />
+            <animated.div className="w-[500px] h-[500px]" style={{
+              rotate: scrollYProgress.to(value => `${value * 180}deg`),
+            }}>
+              <Pattern width={500} color="#d5bd97" />
+            </animated.div>
           </div>
           <div className="absolute z-0 right-0 top-1/2 translate-y-0 opacity-30 overflow-hidden h-[1000px] w-[500px]">
             <div className="absolute z-0 left-0 top-0">
-            <Pattern width={1000} color="#c6a789" />
+              <animated.div className="w-[1000px] h-[1000px]" style={{
+                rotate: scrollYProgress.to(value => `${value * 60}deg`),
+              }}>
+                <Pattern width={1000} color="#c6a789" />
+              </animated.div>
             </div>
           </div>
           <div className=" relative z-10">

@@ -113,88 +113,91 @@ const ArticleObjectCustomField: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          role="combobox"
-          aria-expanded={open}
-          className="w-full justify-between"
-        >
-          <div className="value">
-            {selected.length === 0 ? (
-              <span>{"ابحث..."}</span>
-            ) : options.multiple ? (
-              <div className="flex flex-wrap items-center gap-2">
-                {selected.map(item => (
-                  <Badge
-                    key={item}
-                    variant={"secondary"}
-                    className="inline-flex items-center gap-2"
+    <div className="d">
+      {options.multiple && selected.length > 0 ? (
+        <div className="flex flex-wrap items-center gap-2 my-3">
+          {selected.map(item => (
+            <Badge
+              key={item}
+              variant={"secondary"}
+              className="inline-flex items-center gap-2"
+            >
+              <span className="d">
+                {articles[item] || item}
+              </span>
+              <span
+                onClick={event => {
+                  event.preventDefault();
+                  event.stopPropagation();
+                  setSelected(previous => previous.filter(v => v !== item));
+                  onChange(selected.filter(v => v !== item));
+                }}
+                className="h-4 w-4 opacity-20 hover:opacity-100 hocus:opacity-100"
+              >
+                <LuX className="h-4 w-4" />
+              </span>
+            </Badge>
+          ))}
+        </div>
+      ) : null}
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button
+            variant="outline"
+            role="combobox"
+            aria-expanded={open}
+            className="w-full justify-between"
+          >
+            <div className="value">
+              {options.multiple || selected.length === 0 ? (
+                <span>{"ابحث..."}</span>
+              ) : (
+                articles[selected[0]] || selected[0]
+              )}
+            </div>
+            <LuChevronsUpDown className="opacity-50" />
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-80 p-0" align="start">
+          <Command>
+            <CommandInput placeholder="ابحث عن مقال..." />
+            <CommandList>
+              <CommandEmpty>لا توجد خيارات.</CommandEmpty>
+              <CommandGroup>
+                {Object.entries(articles).map(([_id, title]) => (
+                  <CommandItem
+                    key={_id}
+                    value={_id}
+                    onSelect={currentValue => {
+                      let value;
+                      if (options.multiple)
+                        value = selected.includes(_id)
+                          ? selected.filter(value => value !== _id)
+                          : [...selected, _id];
+                      else value = [_id];
+                      setSelected(value);
+                      onChange(options.multiple ? value : value[0] || null);
+                      setOpen(false);
+                    }}
                   >
-                    <span className="d">
-                      {articles[item] || item}
-                    </span>
-                    <span
-                      onClick={event => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        setSelected(previous => previous.filter(v => v !== item));
-                        onChange(selected.filter(v => v !== item));
-                      }}
-                      className="h-4 w-4 opacity-20 hover:opacity-100 hocus:opacity-100"
-                    >
-                      <LuX className="h-4 w-4" />
-                    </span>
-                  </Badge>
+                    {title}
+                    <LuCheck
+                      className={cn(
+                        "ms-auto",
+                        (typeof value === "string" && value === _id) ||
+                          value?.includes(_id)
+                          ? "opacity-100"
+                          : "opacity-0",
+                      )}
+                    />
+                  </CommandItem>
                 ))}
-              </div>
-            ) : (
-              articles[selected[0]] || selected[0]
-            )}
-          </div>
-          <LuChevronsUpDown className="opacity-50" />
-        </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="start">
-        <Command>
-          <CommandInput placeholder="ابحث عن مقال..." />
-          <CommandList>
-            <CommandEmpty>لا توجد خيارات.</CommandEmpty>
-            <CommandGroup>
-              {Object.entries(articles).map(([_id, title]) => (
-                <CommandItem
-                  key={_id}
-                  value={_id}
-                  onSelect={currentValue => {
-                    let value;
-                    if (options.multiple)
-                      value = selected.includes(_id)
-                        ? selected.filter(value => value !== _id)
-                        : [...selected, _id];
-                    else value = [_id];
-                    setSelected(value);
-                    onChange(options.multiple ? value : value[0] || null);
-                    setOpen(false);
-                  }}
-                >
-                  {title}
-                  <LuCheck
-                    className={cn(
-                      "ms-auto",
-                      (typeof value === "string" && value === _id) ||
-                        value?.includes(_id)
-                        ? "opacity-100"
-                        : "opacity-0",
-                    )}
-                  />
-                </CommandItem>
-              ))}
-            </CommandGroup>
-          </CommandList>
-        </Command>
-      </PopoverContent>
-    </Popover>
+              </CommandGroup>
+            </CommandList>
+          </Command>
+        </PopoverContent>
+      </Popover>
+    </div>
   );
 };
 

@@ -11,10 +11,29 @@ declare module Levelup {
 						Partial<{
 						}>;
 
+					type TOperator = 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' | 'in' | 'nin' | 'exists' | 'not_empty';
+					type TConstraint<Operator extends TOperator> =
+						Operator extends 'eq' | 'ne' | 'gt' | 'lt' | 'gte' | 'lte' ? {
+							field: string;
+							operator: Operator;
+							value: any;
+						} :
+						Operator extends 'in' | 'nin' ? {
+							field: string;
+							operator: Operator;
+							value: any[];
+						} :
+						Operator extends 'exists' | 'not_empty' ? {
+							field: string;
+							operator: Operator;
+						} :
+						never;
+
 					type BaseFieldOption<Input, IsMulti extends boolean = false> = {
 						label?: string;
 						required?: boolean;
 						default_value?: IsMulti extends true ? Utils.Common.MultiValue<Input> : Utils.Common.SingleValue<Input>;
+						constraints?: TConstraint<TOperator>[];
 					}
 
 					type CustomFieldType =
@@ -28,6 +47,9 @@ declare module Levelup {
 						| 'number'
 						| 'radiobox'
 						| 'select'
+						| 'algerian_state'
+						| 'algerian_city'
+						| 'ksa_city'
 						| 'text'
 						| 'time';
 
@@ -44,6 +66,9 @@ declare module Levelup {
 						T extends 'number' ? NumberField.Input :
 						T extends 'radiobox' ? RadioboxField.Input :
 						T extends 'select' ? SelectField.Input<IsMulti> :
+						T extends 'algerian_state' ? SelectField.Intput<IsMulti> :
+						T extends 'algerian_city' ? SelectField.Intput<IsMulti> :
+						T extends 'ksa_city' ? SelectField.Intput<IsMulti> :
 						T extends 'text' ? TextField.Input :
 						T extends 'time' ? TimeField.Input :
 						never;
@@ -59,6 +84,9 @@ declare module Levelup {
 						T extends 'number' ? NumberField.Output :
 						T extends 'radiobox' ? RadioboxField.Output :
 						T extends 'select' ? SelectField.Output<IsMulti> :
+						T extends 'algerian_state' ? SelectField.Output<IsMulti> :
+						T extends 'algerian_city' ? SelectField.Output<IsMulti> :
+						T extends 'ksa_city' ? SelectField.Output<IsMulti> :
 						T extends 'text' ? TextField.Output :
 						T extends 'time' ? TimeField.Output :
 						never;
@@ -77,6 +105,9 @@ declare module Levelup {
 						T extends 'number' ? NumberField.Options :
 						T extends 'radiobox' ? RadioboxField.Options :
 						T extends 'select' ? SelectField.Options<IsMulti> :
+						T extends 'algerian_state' ? SelectField.Options<IsMulti> :
+						T extends 'algerian_city' ? SelectField.Options<IsMulti> :
+						T extends 'ksa_city' ? SelectField.Options<IsMulti> :
 						T extends 'text' ? TextField.Options :
 						T extends 'time' ? TimeField.Options :
 						never;
@@ -150,6 +181,9 @@ declare module Levelup {
 							options: MetaField<T, IsMulti>['field_options'];
 							value: MetaFieldInput<T, IsMulti>;
 							onChange: (value: MetaFieldInput<T, IsMulti>) => void | PromiseLike<void>;
+							metaData: {
+								[key: string]: any;
+							};
 						}
 					}
 				}

@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 "use client";
 
 import Underline from "@tiptap/extension-underline";
@@ -37,17 +38,20 @@ const Tiptap: React.FC<Props> = ({
           "px-4 py-3 justify-start border-b border-r min-h-[400px] border-l border-foreground-200 text-foreground items-start w-full font-medium text-[16px] pt-4 rounded-bl-md rounded-br-md outline-none",
       },
     },
+    parseOptions: {
+      preserveWhitespace: 'full',
+    },
     onUpdate: ({ editor }) => {
       onChange({
         content: editor.getHTML(),
-        json: editor.getJSON(),
+        json: {}// editor.getJSON(),
       });
     },
     content: content || "",
   });
 
   useEffect(() => {
-    if (editor) {
+    if (editor && !editor.isFocused) {
       editor.commands.setContent(defaultContent);
     }
   }, [defaultContent, editor]);
@@ -56,7 +60,9 @@ const Tiptap: React.FC<Props> = ({
     <div className="w-full">
       <Toolbar editor={editor} content={content} />
       <div className="prose max-w-none prose-p:mt-0">
-        <EditorContent style={{ whiteSpace: "pre-line" }} editor={editor} />
+        <EditorContent style={{
+          whiteSpace: "pre-line"
+        }} editor={editor} />
       </div>
     </div>
   );

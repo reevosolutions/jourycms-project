@@ -1,4 +1,5 @@
 import { cities } from "./cities.config";
+import { medical_specialities } from "./medical-specialities.config";
 import { states } from "./states.config";
 
 const algerianArabicMonths = {
@@ -54,6 +55,25 @@ const websiteConfig: Levelup.CMS.V1.System.Entity.WebsiteConfig = {
   months: algerianArabicMonths,
   states,
   cities,
+  medical_specialities
 };
 
 export default websiteConfig;
+
+export enum ArticleTypeSlug {
+  OMRAH = "omrah",
+  BLOG = "blog",
+  SHRINE = "shrine",
+  AIRELINES_COMPANY = "airelines-company",
+  HOTEL = "hotel",
+  AIROPORT = "airoport",
+  GIFT = "gift",
+  AGENCY = "agency",
+  DOCTOR = "doctor",
+  ESCORT = "escort",
+  TOMBOLA = "tombola",
+  JOB_OFFER = "job-offer",
+  BID = "bid",
+  TRANSPORTATION_SERVICE = "transportation-service",
+  HEALTH_SERVICE = 'health-service'
+}

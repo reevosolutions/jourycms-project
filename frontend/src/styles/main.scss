@@ -88,3 +88,10 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.ProseMirror * {
+  white-space: pre-wrap !important;
+  word-wrap: break-word !important;
+}
+
+@import "./admin";

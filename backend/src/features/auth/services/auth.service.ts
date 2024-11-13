@@ -29,7 +29,7 @@ export default class AuthService extends BaseService {
   }
   async register(
     { data }: Levelup.CMS.V1.Auth.Api.Auth.Signup.Request,
-    authData: Levelup.CMS.V1.Security.AuthData
+    authData?: Levelup.CMS.V1.Security.AuthData
   ): Promise<Levelup.CMS.V1.Auth.Api.Auth.Signup.Response> {
     try {
       /**
@@ -53,22 +53,32 @@ export default class AuthService extends BaseService {
 
       const { salt, password } = await this.authManager.hashPassword(data.password);
       const tracking_id = await createTrackingId('user', this.userModel as any);
-      const doc = await this.userModel.create({
+      const userObject: Partial<EntityAlias> = {
         profile: {
           first_name: data.first_name,
           family_name: data.family_name,
-          full_name: buildUserFullName(data)
+          full_name: buildUserFullName(data),
+          sex: data.sex,
+          photo: {
+            id: '',
+            url: ''
+          },
+          phones: [],
+          website: data.website,
+          address: data.address,
         },
         attributes: {
         },
         permissions: [],
         email: data.email,
         app: authData?.current?.app?._id || null,
-        role: 'user',
-        role_group: 'users',
+        role: data.account_type || 'user',
         tracking_id,
         salt,
         password
+      }
+      const doc = await this.userModel.create({
+        ...userObject
       } as any);
       this.logger.silly('Generating JWT');
       const payload: Levelup.CMS.V1.Security.JWTUserAuthPayload = {
