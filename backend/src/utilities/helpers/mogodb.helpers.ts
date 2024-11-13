@@ -10,7 +10,8 @@ const logger = initLogger("UTILITY", `MongoDB-helpers`);
 
 export const isObjectIdValid = (id: string) => {
   try {
-    if (ObjectId.isValid(id) && String(new ObjectId(id)) === id) return true;
+    if (!id) return false;
+    if (ObjectId.isValid(id.toString()) && String(new ObjectId(id.toString())) === id) return true;
     return false;
   } catch (error) {
     logger.save.error({

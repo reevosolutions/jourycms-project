@@ -27,6 +27,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import initLogger, { LoggerContext } from "@/lib/logging";
+import { checkSimilarity } from "@/lib/utilities/strings";
 
 const logger = initLogger(LoggerContext.COMPONENT, "select.custom-field");
 
@@ -130,8 +131,9 @@ const SelectCustomField: React.FC<Props> = ({
         <PopoverContent className="w-80 p-0" align="start">
           <Command
             filter={(value, search, keywords) => {
-              // logger.value('search', { value, search, keywords });
-              return 1;
+              const label = options.choices.find(s => s.value === value)?.label;
+              const similarity = checkSimilarity(search, `${value} ${label || ''}`);
+              return similarity;
             }}
           >
             <CommandInput placeholder="ابحث..." />

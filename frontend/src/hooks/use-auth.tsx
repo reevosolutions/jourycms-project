@@ -2,6 +2,7 @@ import {
   logout,
   selectAuthApp,
   selectAuthIsAuthenticated,
+  selectAuthStatus,
   selectAuthUser,
 } from "@features/auth/redux/slice";
 import initLogger from "@lib/logging";
@@ -17,6 +18,7 @@ const useAuth = () => {
 
   const authManager = useMemo(() => AuthenticationManager.getInstance(), []);
 
+  const authStatus = useAppSelector(selectAuthStatus);
   const currentApp = useAppSelector(selectAuthApp);
   const currentUser = useAppSelector(selectAuthUser);
   const permissions = useAppSelector(state => state.authentication.permissions);
@@ -92,6 +94,7 @@ const useAuth = () => {
 
   return {
     authManager,
+    authStatus,
     currentApp,
     currentUser,
     isAuthenticated,

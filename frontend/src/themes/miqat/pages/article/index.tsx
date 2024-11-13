@@ -28,6 +28,7 @@ const ThemePage: React.FC<PageProps> = ({ route, initialData }) => {
             </div>
             <article className="d">
               <div className="d">{articleType?.labels?.singular}</div>
+              <div className="d">{article?._id}</div>
             </article>
           </div>
         ) : initialData?.error ? (

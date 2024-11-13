@@ -11,7 +11,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
+import { LuExternalLink, LuEye, LuPencil, LuTrash2 } from "react-icons/lu";
 
 import { Checkbox } from "@/components/ui/checkbox";
 import { adminRoutes } from "@/config";
@@ -141,7 +141,7 @@ const PostListTable: React.FC<PostListProps> = ({
                 href={setPathParams("/:slug", { slug: info.row.original.slug })}
                 className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
               >
-                <LuEye className="h5 w-5" />
+                <LuExternalLink className="h5 w-5" />
               </Link>
               <Link
                 href={setPathParams(adminRoutes.articles._.edit.path, {

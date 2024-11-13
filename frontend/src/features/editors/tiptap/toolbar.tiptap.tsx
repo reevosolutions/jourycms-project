@@ -131,7 +131,7 @@ const Toolbar = ({ editor }: Props) => {
           }}
           isActive={editor.isActive("undo")}
         >
-          <LuUndo className="h-5 w-5" />
+          <LuUndo className="h-5 w-5 rtl:scale-x-[-1]" />
         </ToolbarButton>
         <ToolbarButton
           onClick={() => {
@@ -139,7 +139,7 @@ const Toolbar = ({ editor }: Props) => {
           }}
           isActive={editor.isActive("redo")}
         >
-          <LuRedo className="h-5 w-5" />
+          <LuRedo className="h-5 w-5 rtl:scale-x-[-1]" />
         </ToolbarButton>
       </div>
     </div>

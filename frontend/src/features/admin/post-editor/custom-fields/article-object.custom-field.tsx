@@ -1,9 +1,8 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LuCheck, LuChevronsUpDown, LuX } from "react-icons/lu";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import {
   Command,
   CommandEmpty,
@@ -13,21 +12,18 @@ import {
   CommandList,
 } from "@/components/ui/command";
 import {
-  FormControl,
-  FormDescription,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/customized.form";
-import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/customized.popover";
-import { Label } from "@/components/ui/label";
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useSdk } from "@/hooks/use-sdk";
+import { checkSimilarity } from "@/lib/utilities/strings";
+
+const logger = initLogger(LoggerContext.COMPONENT, 'ArticleObjectCustomField');
+
 
 type Props = Levelup.CMS.V1.Content.CustomFields.Forms.MetaFieldInputProps<
   'article_object',
@@ -89,6 +85,19 @@ const ArticleObjectCustomField: React.FC<Props> = ({
       return {};
     }
   });
+
+  useEffect(() => {
+    logger.value('data', label, articles[value as string || ''], {
+      search,
+      articles,
+      value,
+      onChange,
+      options,
+      default_value,
+      label,
+    })
+  }, [articles, default_value, label, onChange, options, search, value]);
+
 
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
@@ -159,7 +168,14 @@ const ArticleObjectCustomField: React.FC<Props> = ({
           </Button>
         </PopoverTrigger>
         <PopoverContent className="w-80 p-0" align="start">
-          <Command>
+          <Command
+            filter={(value, search, keywords) => {
+              setSearch(search)
+              const label = articles[value];
+              const similarity = checkSimilarity(search, `${value} ${label || ''}`);
+              return similarity;
+            }}
+          >
             <CommandInput placeholder="ابحث عن مقال..." />
             <CommandList>
               <CommandEmpty>لا توجد خيارات.</CommandEmpty>

@@ -331,7 +331,7 @@ export default class ArticleTypesService extends BaseService {
       /**
        * Log execution result before returning the result
        */
-      this.logExecutionResult(this.list, result, authData, scenario);
+      // this.logExecutionResult(this.list, result, authData, scenario);
 
       return result;
     } catch (error) {

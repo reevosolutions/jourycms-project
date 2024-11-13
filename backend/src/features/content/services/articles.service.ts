@@ -250,11 +250,14 @@ export default class ArticlesService extends BaseService {
     // -- article_type
     if (filters.article_type) {
       let article_type;
-      if (!isObjectIdValid(filters.article_type as string)) {
-        const { _id } = await this.articleTypeModel.exists({ slug: filters.article_type })
-        article_type = _id?.toString();
+      if (!isObjectIdValid(filters.article_type?.toString())) {
+        const exists = await this.articleTypeModel.exists({ slug: filters.article_type });
+        this.logger.value('article_type not id', exists, filters.article_type, filters.article_type?.toString())
+        if (exists) article_type = exists?._id?.toString();
       }
-      else article_type = filters.article_type.toString();
+      else{
+        this.logger.value('article_type is object id', filters.article_type.toString())
+        article_type = filters.article_type.toString();}
       filter = createStringFilter<DocumentProperties>(q, totalQ, article_type, 'article_type' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
@@ -303,6 +306,7 @@ export default class ArticlesService extends BaseService {
         dont_lean: false
       }
   ): Promise<ApiAlias.List.Response> {
+    const scenario = this.initScenario(this.logger, this.list);
     try {
 
       /**
@@ -312,12 +316,7 @@ export default class ArticlesService extends BaseService {
         load_deleted: false,
         dont_lean: false,
       });
-      /**
-       * Define the execution scenario article
-       */
-      const scenario: {
-        [Key: string]: any
-      } = {}
+      
 
       let { count, page, sort, sort_by } = query;
       count = isNaN(count as unknown as number) ? undefined : parseInt(count.toString());
@@ -349,12 +348,12 @@ export default class ArticlesService extends BaseService {
       /**
        * @description Add query to execution scenario
        */
-      scenario.request_filter = fixFiltersObject(query.filters);
-      scenario.listing_query = {
-        model: q.model.modelName,
-        query: q.getQuery(),
+      // scenario.request_filter = fixFiltersObject(query.filters);
+      scenario.set('listing_query', {
+        // model: q.model.modelName,
+        // query: q.getQuery(),
         options: q.getOptions(),
-      };
+      });
 
       /**
        * @description execute the query
@@ -367,10 +366,12 @@ export default class ArticlesService extends BaseService {
       const total = await totalQ.countDocuments();
       const pages = limit === -1 ? 1 : Math.ceil(total / limit);
 
-      scenario.skip = skip;
-      scenario.take = take;
-      scenario.found = items?.length;
-      scenario.total = total;
+      scenario.set({
+        skip,
+        take,
+        found: items?.length,
+        total
+      })
 
       const result: ApiAlias.List.Response = {
         data: items.map(doc => mapDocumentToExposed(doc)),
@@ -381,17 +382,18 @@ export default class ArticlesService extends BaseService {
       }
 
       result.edge = await this._buildResponseEdge(result.data);
+
       /**
        * Log execution result before returning the result
        */
-      this.logExecutionResult(this.list, result, authData, scenario);
 
       return result;
     } catch (error) {
-      this.logError(this.list, error);
+      scenario.error(error);
       throw error;
     }
   }
+
   private async _buildResponseEdge(data: EntityAlias[]): Promise<ApiAlias.List.Response['edge']> {
     const scenario = this.initScenario(this.logger, this._buildResponseEdge,);
     try {
@@ -404,19 +406,18 @@ export default class ArticlesService extends BaseService {
         article_types: {},
         linked_articles: {},
       };
-      this.logger.tree('types', types,);
       const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
       const edge_users: ApiAlias.List.Response['edge']['users'] = {};
-      const articleIds: string[] = [];
+      let articleIds: string[] = [];
       const userIds: string[] = [];
       for (const item of data) {
         const type = types.find(t => t._id.toString() === item.article_type?.toString()) || null;
-        this.logger.tree('type', item.article_type, type?.slug, type?.custom_meta_fields);
         if (item.article_type) result.article_types[item.article_type] = type;
         if (Object.keys(item.meta_fields || {}).length && type) {
           for (const field of type.custom_meta_fields) {
             if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
-              articleIds.push(item.meta_fields[field.field_key]);
+              const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
+              articleIds = articleIds.concat(item.meta_fields[field.field_key]);
             }
           }
         }
@@ -424,7 +425,7 @@ export default class ArticlesService extends BaseService {
         if (item.created_by) userIds.push(item.created_by);
       }
 
-      scenario.set({ articleIds, userIds });
+      // scenario.set({ articleIds, userIds });
 
       if (articleIds.length) {
         const articles = await this.articleModel.find({
@@ -467,7 +468,7 @@ export default class ArticlesService extends BaseService {
       result.linked_articles = linked_articles;
       result.users = edge_users;
 
-      scenario.end();
+      // scenario.end();
       return result;
     } catch (error) {
       scenario.error(error);
@@ -606,10 +607,6 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-
-
-
-
   /**
    * @description Create
    */
@@ -673,7 +670,7 @@ export default class ArticlesService extends BaseService {
        */
       if (ArticleSchemaFields['tracking_id'] && Object.keys(ITEM_SHORTCUTS).includes('Article')) {
         const entity = 'Article' as const;
-        docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.articleModel);
+        docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.articleModel as any);
       }
 
       /**
@@ -709,7 +706,6 @@ export default class ArticlesService extends BaseService {
       throw error;
     }
   }
-
 
   /**
   * @description Update
@@ -944,7 +940,6 @@ export default class ArticlesService extends BaseService {
       throw error;
     }
   }
-
 
 
 }

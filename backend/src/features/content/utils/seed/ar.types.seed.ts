@@ -12,7 +12,7 @@ const custom_meta_fields = {
           label: "مكة المكرة",
         },
         {
-          value: "madina",
+          value: "medina",
           label: "المدينة المنورة",
         },
       ],
@@ -27,10 +27,10 @@ const custom_meta_fields = {
       choices: [
         {
           value: "mekkah",
-          label: "مكة المكرة",
+          label: "مكة المكرمة",
         },
         {
-          value: "madina",
+          value: "medina",
           label: "المدينة المنورة",
         },
       ],
@@ -216,8 +216,8 @@ const custom_meta_fields = {
       multiple: false,
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", false>,
-  madina_hotel: {
-    field_key: "madina_hotel",
+  medina_hotel: {
+    field_key: "medina_hotel",
     field_label: "فندق المدينة",
     field_type: "article_object" as const,
     field_options: {
@@ -263,8 +263,8 @@ const custom_meta_fields = {
       ],
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox">,
-  subsistence_at_madina: {
-    field_key: "subsistence_at_madina",
+  subsistence_at_medina: {
+    field_key: "subsistence_at_medina",
     field_label: "الإعاشة في المدينة",
     field_type: "checkbox" as const,
     field_options: {
@@ -304,15 +304,15 @@ const custom_meta_fields = {
       },
     },
   },
-  shrines_at_madina: {
-    field_key: "shrines_at_madina",
+  shrines_at_medina: {
+    field_key: "shrines_at_medina",
     field_label: "المزارات في المدينة",
     field_type: "article_object" as const,
     field_options: {
       type: "shrine",
       multiple: true,
       filter: {
-        "meta_fields.medina_mekkah": "madina",
+        "meta_fields.medina_mekkah": "medina",
       },
     },
   },
@@ -545,11 +545,11 @@ const _articleTypesSeedData = {
         custom_meta_fields.price,
         custom_meta_fields.ramdhan_trip,
         custom_meta_fields.subsistence_at_mekkah,
-        custom_meta_fields.subsistence_at_madina,
+        custom_meta_fields.subsistence_at_medina,
         custom_meta_fields.shrines_at_mekkah,
-        custom_meta_fields.shrines_at_madina,
+        custom_meta_fields.shrines_at_medina,
         custom_meta_fields.mekkah_hotel,
-        custom_meta_fields.madina_hotel,
+        custom_meta_fields.medina_hotel,
       ],
     },
     {
