@@ -1,30 +1,36 @@
+"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 26 July 2000
  * @since 29-04-2024 05:32:17
  */
-import { Router } from 'express';
-import Container from 'typedi';
-import middlewares from '../../../middlewares';
-import initLogger from '../../../utilities/logging';
-import { respond } from '../../../utilities/requests';
-import { getAuthData } from '../../../utilities/requests/get-auth-data';
-import DevService from '../services/dev.service';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ROOT_PATH = void 0;
+const express_1 = require("express");
+const typedi_1 = __importDefault(require("typedi"));
+const middlewares_1 = __importDefault(require("../../../middlewares"));
+const logging_1 = __importDefault(require("../../../utilities/logging"));
+const requests_1 = require("../../../utilities/requests");
+const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
+const dev_service_1 = __importDefault(require("../services/dev.service"));
 /**
  * @generator Levelup
  * @description This file is used to build the Users controller
  */
-export const ROOT_PATH = '/dev';
-export default (app) => {
-    const logger = initLogger("CONTROLLER", "dev");
-    const route = Router();
-    app.use(ROOT_PATH, middlewares.AUTH.requireUser, route);
+exports.ROOT_PATH = '/dev';
+exports.default = (app) => {
+    const logger = (0, logging_1.default)("CONTROLLER", "dev");
+    const route = (0, express_1.Router)();
+    app.use(exports.ROOT_PATH, middlewares_1.default.AUTH.requireUser, route);
     route.get('/', async (req, res, next) => {
         try {
-            const AUTH_DATA = await getAuthData(req);
-            const devService = Container.get(DevService);
-            return respond(res, {
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
+            const devService = typedi_1.default.get(dev_service_1.default);
+            return (0, requests_1.respond)(res, {
                 status: "success",
             }, 200);
         }

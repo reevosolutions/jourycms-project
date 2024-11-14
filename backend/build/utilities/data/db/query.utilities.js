@@ -1,6 +1,9 @@
-import { ObjectId } from "mongodb";
-export const createStringFilter = (q, totalQ, value, field, omit, operator = "or") => {
-    if (ObjectId.isValid(value)) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.createAggregateDateRangeFilter = exports.createAggregateStringFilter = exports.createDateRangeFilter = exports.createBooleanFilter = exports._createStringFilter = exports.createStringFilter = void 0;
+const mongodb_1 = require("mongodb");
+const createStringFilter = (q, totalQ, value, field, omit, operator = "or") => {
+    if (mongodb_1.ObjectId.isValid(value)) {
         value = value.toString();
     }
     if (value && typeof value === "object" && "0" in value && "1" in value) {
@@ -52,11 +55,12 @@ export const createStringFilter = (q, totalQ, value, field, omit, operator = "or
     }
     return { q, totalQ };
 };
+exports.createStringFilter = createStringFilter;
 /**
  * @deprecated now using multi fileds with AND OR operators
  */
-export const _createStringFilter = (q, totalQ, value, field, omit) => {
-    if (ObjectId.isValid(value)) {
+const _createStringFilter = (q, totalQ, value, field, omit) => {
+    if (mongodb_1.ObjectId.isValid(value)) {
         value = value.toString();
     }
     if (value && typeof value === "object" && "0" in value && "1" in value) {
@@ -84,7 +88,8 @@ export const _createStringFilter = (q, totalQ, value, field, omit) => {
     }
     return { q, totalQ };
 };
-export const createBooleanFilter = (q, totalQ, value, field) => {
+exports._createStringFilter = _createStringFilter;
+const createBooleanFilter = (q, totalQ, value, field) => {
     if (value === "true" || value === "1" || value === 1 || value === true)
         value = true;
     else if (value === "false" || value === "0" || value === 0 || value === false)
@@ -99,7 +104,8 @@ export const createBooleanFilter = (q, totalQ, value, field) => {
     }
     return { q, totalQ };
 };
-export const createDateRangeFilter = (q, totalQ, value, field) => {
+exports.createBooleanFilter = createBooleanFilter;
+const createDateRangeFilter = (q, totalQ, value, field) => {
     if (value) {
         if (typeof value === "object" &&
             value.start) {
@@ -143,7 +149,8 @@ export const createDateRangeFilter = (q, totalQ, value, field) => {
     }
     return { q, totalQ };
 };
-export const createAggregateStringFilter = (match, value, field) => {
+exports.createDateRangeFilter = createDateRangeFilter;
+const createAggregateStringFilter = (match, value, field) => {
     if (!value)
         return match;
     if (typeof value === "object" && "0" in value && "1" in value) {
@@ -155,7 +162,8 @@ export const createAggregateStringFilter = (match, value, field) => {
             value instanceof Array ? { $in: value } : value;
     return match;
 };
-export const createAggregateDateRangeFilter = (match, value, field) => {
+exports.createAggregateStringFilter = createAggregateStringFilter;
+const createAggregateDateRangeFilter = (match, value, field) => {
     if (value) {
         if (typeof value === "object" &&
             value.start) {
@@ -172,4 +180,5 @@ export const createAggregateDateRangeFilter = (match, value, field) => {
     }
     return match;
 };
+exports.createAggregateDateRangeFilter = createAggregateDateRangeFilter;
 //# sourceMappingURL=query.utilities.js.map

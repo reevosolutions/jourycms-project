@@ -1,8 +1,10 @@
+"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 17-03-2024 01:28:03
  */
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Update : -
  * @author dr. Salmi <reevosolutions@gmail.com>
@@ -191,5 +193,5 @@ const events = {
         },
     },
 };
-export default events;
+exports.default = events;
 //# sourceMappingURL=events.config.js.map

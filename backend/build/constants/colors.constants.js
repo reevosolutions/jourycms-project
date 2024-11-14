@@ -1,5 +1,11 @@
-import chroma from 'chroma-js';
-export const RAINBOW_VIVID_COLORS = [
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DELIVERY_RATE_SUCCESS_CATEGORY_COLORS = exports.getSystemColor = exports.generateGreenBluePalette = exports.COLORS_SCALE_58_BLUE_GREEN = exports.COLORS_SCALE_10_VIVID = exports.COLORS_SCALE_58_VIVID = exports.COLORS_SCALE_10_AQUARELLE = exports.COLORS_SCALE_58_AQUARELLE = exports.RAINBOW_AQUARELLE_COLORS = exports.RAINBOW_VIVID_COLORS = void 0;
+const chroma_js_1 = __importDefault(require("chroma-js"));
+exports.RAINBOW_VIVID_COLORS = [
     '#FF3333', // Red
     '#FFA500', // Orange
     '#FFFF00', // Yellow
@@ -7,7 +13,7 @@ export const RAINBOW_VIVID_COLORS = [
     '#0000FF', // Blue
     '#8A2BE2' // Indigo
 ];
-export const RAINBOW_AQUARELLE_COLORS = [
+exports.RAINBOW_AQUARELLE_COLORS = [
     '#E57373', // Red
     '#FFB74D', // Orange
     '#FFF176', // Yellow
@@ -15,18 +21,19 @@ export const RAINBOW_AQUARELLE_COLORS = [
     '#4FC3F7', // Blue
     '#9575CD' // Indigo
 ];
-export const COLORS_SCALE_58_AQUARELLE = chroma.scale(RAINBOW_AQUARELLE_COLORS).mode('lch').colors(58);
-export const COLORS_SCALE_10_AQUARELLE = chroma.scale(RAINBOW_AQUARELLE_COLORS).mode('lch').colors(10);
-export const COLORS_SCALE_58_VIVID = chroma.scale(RAINBOW_VIVID_COLORS).mode('lch').colors(58);
-export const COLORS_SCALE_10_VIVID = chroma.scale(RAINBOW_VIVID_COLORS).mode('lch').colors(10);
+exports.COLORS_SCALE_58_AQUARELLE = chroma_js_1.default.scale(exports.RAINBOW_AQUARELLE_COLORS).mode('lch').colors(58);
+exports.COLORS_SCALE_10_AQUARELLE = chroma_js_1.default.scale(exports.RAINBOW_AQUARELLE_COLORS).mode('lch').colors(10);
+exports.COLORS_SCALE_58_VIVID = chroma_js_1.default.scale(exports.RAINBOW_VIVID_COLORS).mode('lch').colors(58);
+exports.COLORS_SCALE_10_VIVID = chroma_js_1.default.scale(exports.RAINBOW_VIVID_COLORS).mode('lch').colors(10);
 const startColor = '#2bcf91';
 // const endColor = '#2b81cf';
 const endColor = '#2b4dcf';
-export const COLORS_SCALE_58_BLUE_GREEN = chroma.scale([startColor, endColor]).mode('lch').colors(58);
-export const generateGreenBluePalette = (count) => {
-    return chroma.scale([startColor, endColor]).mode('lch').colors(count);
+exports.COLORS_SCALE_58_BLUE_GREEN = chroma_js_1.default.scale([startColor, endColor]).mode('lch').colors(58);
+const generateGreenBluePalette = (count) => {
+    return chroma_js_1.default.scale([startColor, endColor]).mode('lch').colors(count);
 };
-export const getSystemColor = (key) => {
+exports.generateGreenBluePalette = generateGreenBluePalette;
+const getSystemColor = (key) => {
     console.log('getSystemColor.key', key);
     const mappedColors = {
         default: { default: "#A0AEC0" },
@@ -74,7 +81,8 @@ export const getSystemColor = (key) => {
     });
     return color;
 };
-export const DELIVERY_RATE_SUCCESS_CATEGORY_COLORS = {
+exports.getSystemColor = getSystemColor;
+exports.DELIVERY_RATE_SUCCESS_CATEGORY_COLORS = {
     "excellent": "#4CAF50",
     "very_good": "#8BC34A",
     "good": "#CDDC39",

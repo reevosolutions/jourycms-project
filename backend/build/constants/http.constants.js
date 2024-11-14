@@ -1,4 +1,7 @@
-export const HttpStatusCode = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.HttpStatusCode = void 0;
+exports.HttpStatusCode = {
     CONTINUE: 100,
     SWITCHING_PROTOCOLS: 101,
     PROCESSING: 102,

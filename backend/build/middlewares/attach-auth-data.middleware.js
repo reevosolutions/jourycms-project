@@ -1,9 +1,14 @@
-import { Container } from "typedi";
-import CacheManager from "../managers/cache-manager";
-import exceptions from "../exceptions";
-import initLogger from "../utilities/logging";
-import { getTokenFromHeader } from "./handle-jwt.middleware";
-const logger = initLogger("MIDDLEWARE", "attachAuthData");
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = require("typedi");
+const cache_manager_1 = __importDefault(require("../managers/cache-manager"));
+const exceptions_1 = __importDefault(require("../exceptions"));
+const logging_1 = __importDefault(require("../utilities/logging"));
+const handle_jwt_middleware_1 = require("./handle-jwt.middleware");
+const logger = (0, logging_1.default)("MIDDLEWARE", "attachAuthData");
 /**
  * @description Attach user to req.currentUser
  * @param {*} req Express req Object
@@ -15,8 +20,8 @@ const attachAuthData = async (req, res, next) => {
     try {
         if (!req.attached_entities)
             req.attached_entities = {};
-        const cache = Container.get(CacheManager);
-        const token = getTokenFromHeader(req);
+        const cache = typedi_1.Container.get(cache_manager_1.default);
+        const token = (0, handle_jwt_middleware_1.getTokenFromHeader)(req);
         req.current_token = token;
         req.attached_entities.token = token;
         let loadUser = true;
@@ -39,12 +44,12 @@ const attachAuthData = async (req, res, next) => {
             user = await cache.users.get((_e = req.auth) === null || _e === void 0 ? void 0 : _e._id);
             if (user) {
                 if (user.is_deleted || ((_f = user.attributes) === null || _f === void 0 ? void 0 : _f.is_suspended))
-                    throw new exceptions.UnauthorizedException("User deleted or suspended");
+                    throw new exceptions_1.default.UnauthorizedException("User deleted or suspended");
                 req.attached_entities.user = user;
                 logger.success("attachCurrentUser from redis", (_g = req.auth) === null || _g === void 0 ? void 0 : _g._id);
             }
             else {
-                throw new exceptions.UnauthorizedException("User not found");
+                throw new exceptions_1.default.UnauthorizedException("User not found");
             }
         }
         /* -------------------------------------------------------------------------- */
@@ -59,7 +64,7 @@ const attachAuthData = async (req, res, next) => {
             const app = await cache.apps.get(app_id);
             if (app) {
                 if (app.is_deleted || ((_j = app.attributes) === null || _j === void 0 ? void 0 : _j.is_suspended))
-                    throw new exceptions.UnauthorizedException("Company deleted or suspended");
+                    throw new exceptions_1.default.UnauthorizedException("Company deleted or suspended");
                 req.attached_entities.app = app;
             }
         }
@@ -81,5 +86,5 @@ const attachAuthData = async (req, res, next) => {
         return next(error);
     }
 };
-export default attachAuthData;
+exports.default = attachAuthData;
 //# sourceMappingURL=attach-auth-data.middleware.js.map

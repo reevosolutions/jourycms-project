@@ -1,42 +1,44 @@
-import { camelToKebab, capitalizeFirstLetter, kebabToCamel, camelToWords, pluralize, replaceAll, singularize, toSnakeCase, toKebabCase } from "../strings";
-import { isValidPhoneNumber, isValidAlgerianPhoneNumber, transformAlgerianPhoneNumberToStandardFormat, transformPhoneNumberToStandardFormat } from "../strings/phones.utilities";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const strings_1 = require("../strings");
+const phones_utilities_1 = require("../strings/phones.utilities");
 String.prototype.isValidAlgerianPhoneNumber = function () {
-    return isValidAlgerianPhoneNumber(this.trim());
+    return (0, phones_utilities_1.isValidAlgerianPhoneNumber)(this.trim());
 };
 String.prototype.transformAlgerianPhoneNumberToStandardFormat = function () {
-    return transformAlgerianPhoneNumberToStandardFormat(this.trim());
+    return (0, phones_utilities_1.transformAlgerianPhoneNumberToStandardFormat)(this.trim());
 };
 String.prototype.isValidPhoneNumber = function () {
-    return isValidPhoneNumber(this.trim());
+    return (0, phones_utilities_1.isValidPhoneNumber)(this.trim());
 };
 String.prototype.transformPhoneNumberToStandardFormat = function () {
-    return transformPhoneNumberToStandardFormat(this.trim());
+    return (0, phones_utilities_1.transformPhoneNumberToStandardFormat)(this.trim());
 };
 String.prototype.toSnakeCase = function () {
-    return toSnakeCase(this.trim());
+    return (0, strings_1.toSnakeCase)(this.trim());
 };
 String.prototype.toKebabCase = function () {
-    return toKebabCase(this.trim());
+    return (0, strings_1.toKebabCase)(this.trim());
 };
 String.prototype.capitalizeFirstLetter = function () {
-    return capitalizeFirstLetter(this.trim());
+    return (0, strings_1.capitalizeFirstLetter)(this.trim());
 };
 String.prototype.kebabToCamel = function () {
-    return kebabToCamel(this.trim());
+    return (0, strings_1.kebabToCamel)(this.trim());
 };
 String.prototype.camelToKebab = function () {
-    return camelToKebab(this.trim());
+    return (0, strings_1.camelToKebab)(this.trim());
 };
 String.prototype.camelToWords = function () {
-    return camelToWords(this.trim());
+    return (0, strings_1.camelToWords)(this.trim());
 };
 String.prototype.pluralize = function () {
-    return pluralize(this.trim());
+    return (0, strings_1.pluralize)(this.trim());
 };
 String.prototype.singularize = function () {
-    return singularize(this.trim());
+    return (0, strings_1.singularize)(this.trim());
 };
 String.prototype.replaceAll = function (search, replace) {
-    return replaceAll(this, search, replace);
+    return (0, strings_1.replaceAll)(this, search, replace);
 };
 //# sourceMappingURL=string.prototype.js.map

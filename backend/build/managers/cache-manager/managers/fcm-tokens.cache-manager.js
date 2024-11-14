@@ -1,12 +1,17 @@
-import initLogger from '../../../utilities/logging';
-import Container from "typedi";
-import CacheManager from "..";
-export default class FCMTokensCacheManager {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const logging_1 = __importDefault(require("../../../utilities/logging"));
+const typedi_1 = __importDefault(require("typedi"));
+const __1 = __importDefault(require(".."));
+class FCMTokensCacheManager {
     constructor() {
         this.CACHE_KEY = 'fcmTokens';
         this.EXPIRATION = 3600 * 48;
-        this.cache = Container.get(CacheManager);
-        this.logger = initLogger('COMPONENT', `${this.constructor.name}`);
+        this.cache = typedi_1.default.get(__1.default);
+        this.logger = (0, logging_1.default)('COMPONENT', `${this.constructor.name}`);
     }
     static getInstance() {
         if (!FCMTokensCacheManager.instance) {
@@ -104,4 +109,5 @@ export default class FCMTokensCacheManager {
         }
     }
 }
+exports.default = FCMTokensCacheManager;
 //# sourceMappingURL=fcm-tokens.cache-manager.js.map

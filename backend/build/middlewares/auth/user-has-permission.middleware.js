@@ -1,6 +1,11 @@
-import { Container } from 'typedi';
-import exceptions from '../../exceptions';
-import CacheManager from '../../managers/cache-manager/index';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = require("typedi");
+const exceptions_1 = __importDefault(require("../../exceptions"));
+const index_1 = __importDefault(require("../../managers/cache-manager/index"));
 /**
   * Check if user has permission
   *  - If the request is identified as a service request, always pass
@@ -16,7 +21,7 @@ import CacheManager from '../../managers/cache-manager/index';
 const userHasPermission = (permission) => async (req, res, next) => {
     var _a;
     try {
-        const cm = Container.get(CacheManager);
+        const cm = typedi_1.Container.get(index_1.default);
         /**
          * Always pass if another service is authenticated
          */
@@ -26,7 +31,7 @@ const userHasPermission = (permission) => async (req, res, next) => {
          * Handle JWT token expired
          */
         if (req.jwt_expired)
-            throw new exceptions.JWTTokenExpired('JWT token expired');
+            throw new exceptions_1.default.JWTTokenExpired('JWT token expired');
         /**
          * Masters always have all the role groups
          */
@@ -37,7 +42,7 @@ const userHasPermission = (permission) => async (req, res, next) => {
          * The condition logic
          */
         if (!req.attached_entities.user || !req.attached_entities.user.permissions || !req.attached_entities.user.permissions.length)
-            throw new exceptions.UnauthorizedException('You must be logged in to access this resource');
+            throw new exceptions_1.default.UnauthorizedException('You must be logged in to access this resource');
         const permissionObjects = await cm.permissions.list();
         const userPermissionNames = (((_a = req.attached_entities.user) === null || _a === void 0 ? void 0 : _a.permissions) || []).map(p => { var _a; return (_a = permissionObjects.find(po => po._id === p)) === null || _a === void 0 ? void 0 : _a.name; });
         if (typeof permission === 'string' && userPermissionNames.indexOf(permission) > -1) {
@@ -61,11 +66,11 @@ const userHasPermission = (permission) => async (req, res, next) => {
         if (granted) {
             return next();
         }
-        return next(new exceptions.UnauthorizedException(`You don't have permission to access this resource`));
+        return next(new exceptions_1.default.UnauthorizedException(`You don't have permission to access this resource`));
     }
     catch (error) {
         return next(error);
     }
 };
-export default userHasPermission;
+exports.default = userHasPermission;
 //# sourceMappingURL=user-has-permission.middleware.js.map

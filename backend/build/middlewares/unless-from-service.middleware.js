@@ -1,6 +1,11 @@
-import config from '../config';
-import initLogger from '../utilities/logging';
-const logger = initLogger("MIDDLEWARE", 'unlessFromService');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = __importDefault(require("../config"));
+const logging_1 = __importDefault(require("../utilities/logging"));
+const logger = (0, logging_1.default)("MIDDLEWARE", 'unlessFromService');
 /**
  * @description Attach the calling service to req.attached_entities or apply the middleware if no service is found
  * @param {RequestHandler} middleware The middleware to apply if no service is found
@@ -14,21 +19,21 @@ const unlessFromService = (middleware) => {
                 req.attached_entities = {};
             if (!service_secret)
                 return middleware(req, res, next);
-            else if (service_secret === config.security.internalServiceSecret) {
+            else if (service_secret === config_1.default.security.internalServiceSecret) {
                 req.attached_entities.service = {
                     name: service_name,
                     is_external: false,
                 };
                 return next();
             }
-            else if (service_secret === config.security.externalServiceSecret) {
+            else if (service_secret === config_1.default.security.externalServiceSecret) {
                 req.attached_entities.service = {
                     name: service_name,
                     is_external: true,
                 };
                 return next();
             }
-            else if (service_secret === config.security.frontendServiceSecret) {
+            else if (service_secret === config_1.default.security.frontendServiceSecret) {
                 req.attached_entities.service = {
                     name: 'frontend',
                     is_external: true,
@@ -44,5 +49,5 @@ const unlessFromService = (middleware) => {
         }
     };
 };
-export default unlessFromService;
+exports.default = unlessFromService;
 //# sourceMappingURL=unless-from-service.middleware.js.map

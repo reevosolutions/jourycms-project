@@ -1,6 +1,11 @@
-import morgan from 'morgan';
-import config from '../config';
-export default ({ app }) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const morgan_1 = __importDefault(require("morgan"));
+const config_1 = __importDefault(require("../config"));
+exports.default = ({ app }) => {
     // app.use(morgan(
     //   ':method :url :status :res[content-length] - :response-time ms',
     //   {
@@ -14,7 +19,7 @@ export default ({ app }) => {
         const httpRequest = {
             method: req.method,
             path: req.path,
-            service: config.currentService.name.toLowerCase(),
+            service: config_1.default.currentService.name.toLowerCase(),
             query: req.query,
             body: req.body,
             ip: req.ip,
@@ -32,6 +37,6 @@ export default ({ app }) => {
             // console.log(colors.magenta("REQUEST"), httpRequest);
         }
     });
-    app.use(morgan('dev'));
+    app.use((0, morgan_1.default)('dev'));
 };
 //# sourceMappingURL=httpLogger.loader.js.map

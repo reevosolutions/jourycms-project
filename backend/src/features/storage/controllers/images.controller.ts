@@ -28,20 +28,121 @@ export default (app: Router): void => {
       const { data: file } = await filesServiceInstance.getById(req.params.id);
       if (!file) throw new exceptions.ItemNotFoundException('File not found');
       else {
-        res.status(200).sendFile(path.join(__dirname, '../../', file.file_path));
+        res.status(200).sendFile(path.join(__dirname, '../../../../', file.file_path));
       }
     } catch (e) {
       return next(e);
     }
   });
 
+
+
+  route.get('/:id/blurred', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filesServiceInstance = Container.get(UploadedFilesService);
+      const { data: file } = await filesServiceInstance.getById(req.params.id);
+      if (!file) {
+        logger.error('File not found', req.params.id);
+        throw new exceptions.ItemNotFoundException('File not found');
+      }
+      else {
+        const format = 'webp';
+        const filePath = path.join(__dirname, '../../../../', file.file_path);
+        const basename = path.parse(file.file_path).name;
+        const dir = path.parse(file.file_path).dir;
+        const extension = `.${format}`;
+        const output = path.join(__dirname, '../../../../', `${dir}/${basename}-blurred${extension}`);
+
+        logger.value('image', {
+          filePath,
+          basename,
+          dir,
+          extension,
+          output
+        });
+
+        if (!fs.existsSync(filePath)) throw new exceptions.ItemNotFoundException('File not found.');
+        if (true || !fs.existsSync(output)) {
+          logger.warn('Generating resized image');
+          let image = sharp(filePath)
+            .resize({ width: 100 })
+            .blur(15);
+          image = format === 'webp' ? image.webp({ quality: 50 }) : image.jpeg({ quality: 50 });
+          image
+            .toFile(output)
+            .then(() => {
+              res.status(200).sendFile(output);
+            })
+            .catch(e => {
+              throw e;
+            });
+        } else {
+          res.status(200).sendFile(output);
+        }
+      }
+    } catch (error) {
+      logger.error(error.message, error);
+      return next(error);
+    }
+  });
+  route.get('/:id/blurred/:format', async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const filesServiceInstance = Container.get(UploadedFilesService);
+      const { data: file } = await filesServiceInstance.getById(req.params.id);
+      if (!file) {
+        logger.error('File not found', req.params.id);
+        throw new exceptions.ItemNotFoundException('File not found');
+      }
+      else {
+        const format = req.params.format === 'jpg' ? 'jpeg' : 'webp';
+        const filePath = path.join(__dirname, '../../../../', file.file_path);
+        const basename = path.parse(file.file_path).name;
+        const dir = path.parse(file.file_path).dir;
+        const extension = `.${format}`;
+        const output = path.join(__dirname, '../../../../', `${dir}/${basename}-blurred${extension}`);
+
+        logger.value('image', {
+          filePath,
+          basename,
+          dir,
+          extension,
+          output
+        });
+
+        if (!fs.existsSync(filePath)) throw new exceptions.ItemNotFoundException('File not found.');
+        if (true || !fs.existsSync(output)) {
+          logger.warn('Generating resized image');
+          let image = sharp(filePath)
+            .resize({ width: 100 })
+            .blur(15);
+          image = format === 'webp' ? image.webp({ quality: 50 }) : image.jpeg({ quality: 50 });
+          image
+            .toFile(output)
+            .then(() => {
+              res.status(200).sendFile(output);
+            })
+            .catch(e => {
+              throw e;
+            });
+        } else {
+          res.status(200).sendFile(output);
+        }
+      }
+    } catch (error) {
+      logger.error(error.message, error);
+      return next(error);
+    }
+  });
+
+
   route.get('/:id/:width/:height', async (req: Request, res: Response, next: NextFunction) => {
     try {
       const filesServiceInstance = Container.get(UploadedFilesService);
       const { data: file } = await filesServiceInstance.getById(req.params.id);
-      if (!file){
+      if (!file) {
         logger.error('File not found', req.params.id);
-        throw new exceptions.ItemNotFoundException('File not found');}
+        throw new exceptions.ItemNotFoundException('File not found');
+      }
       else {
         const width = parseInt(req.params.width);
         const height = parseInt(req.params.height);
@@ -81,4 +182,6 @@ export default (app: Router): void => {
       return next(e);
     }
   });
+
+
 };

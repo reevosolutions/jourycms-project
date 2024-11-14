@@ -1,7 +1,12 @@
-export function respond(res, data, status = 200) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.respond = respond;
+exports.fixFiltersObject = fixFiltersObject;
+exports.requestHasParam = requestHasParam;
+function respond(res, data, status = 200) {
     res.status(status).json(data);
 }
-export function fixFiltersObject(filters) {
+function fixFiltersObject(filters) {
     if (!filters)
         return {};
     if (typeof filters === "string") {
@@ -14,7 +19,7 @@ export function fixFiltersObject(filters) {
     }
     return filters;
 }
-export function requestHasParam(payload, param) {
+function requestHasParam(payload, param) {
     if (!payload)
         return false;
     return (Object.keys(payload).includes(param) &&

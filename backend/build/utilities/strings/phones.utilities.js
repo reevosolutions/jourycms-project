@@ -1,12 +1,18 @@
+"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 28-02-2024 02:50:04
  */
-export function isValidPhoneNumber(phoneNumber) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isValidPhoneNumber = isValidPhoneNumber;
+exports.isValidAlgerianPhoneNumber = isValidAlgerianPhoneNumber;
+exports.transformAlgerianPhoneNumberToStandardFormat = transformAlgerianPhoneNumberToStandardFormat;
+exports.transformPhoneNumberToStandardFormat = transformPhoneNumberToStandardFormat;
+function isValidPhoneNumber(phoneNumber) {
     return isValidAlgerianPhoneNumber(phoneNumber);
 }
-export function isValidAlgerianPhoneNumber(phoneNumber) {
+function isValidAlgerianPhoneNumber(phoneNumber) {
     if (!phoneNumber)
         return false;
     // Remove whitespace, dashes, and parentheses
@@ -27,7 +33,7 @@ export function isValidAlgerianPhoneNumber(phoneNumber) {
     console.log('testing phone number result', phoneNumber, result);
     return result;
 }
-export function transformAlgerianPhoneNumberToStandardFormat(phoneNumber) {
+function transformAlgerianPhoneNumberToStandardFormat(phoneNumber) {
     if (!phoneNumber)
         return null;
     // Remove whitespace, dashes, and parentheses
@@ -50,7 +56,7 @@ export function transformAlgerianPhoneNumberToStandardFormat(phoneNumber) {
         return null; // Return null for invalid input
     }
 }
-export function transformPhoneNumberToStandardFormat(phoneNumber) {
+function transformPhoneNumberToStandardFormat(phoneNumber) {
     return transformAlgerianPhoneNumberToStandardFormat(phoneNumber);
 }
 //# sourceMappingURL=phones.utilities.js.map

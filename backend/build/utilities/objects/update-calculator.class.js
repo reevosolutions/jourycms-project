@@ -1,10 +1,14 @@
-export class ObjectUpdatedPropertyObject {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ObjectUpdatedPropertyObject = void 0;
+class ObjectUpdatedPropertyObject {
     constructor(old_value, new_value) {
         this.old_value = old_value;
         this.new_value = new_value;
     }
 }
-export default class ObjectUpdatedProperties {
+exports.ObjectUpdatedPropertyObject = ObjectUpdatedPropertyObject;
+class ObjectUpdatedProperties {
     /**
      *
      * @param {object} oldObj
@@ -71,4 +75,5 @@ export default class ObjectUpdatedProperties {
         return this.asArray.findIndex(x => x.field === field) > -1;
     }
 }
+exports.default = ObjectUpdatedProperties;
 //# sourceMappingURL=update-calculator.class.js.map

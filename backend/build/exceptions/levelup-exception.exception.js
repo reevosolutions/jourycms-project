@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
@@ -14,5 +16,5 @@ class LevelupException extends Error {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-export default LevelupException;
+exports.default = LevelupException;
 //# sourceMappingURL=levelup-exception.exception.js.map

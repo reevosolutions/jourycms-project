@@ -1,14 +1,38 @@
+"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-03 00:17:36
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -16,28 +40,32 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import Container, { Inject, Service } from 'typedi';
-import { defaults, getItemIdsFromOldAndNewData } from '../../../utilities/helpers/utils.helpers';
-import BaseService from '../../../common/base.service';
-import config from '../../../config';
-import events from '../../../config/events.config';
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
-import exceptions from '../../../exceptions';
-import CacheManager from '../../../managers/cache-manager';
-import { createBooleanFilter, createDateRangeFilter, createStringFilter } from '../../../utilities/data/db/query.utilities';
-import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities';
-import { extractPartialObject } from '../../../utilities/objects';
-import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
-import { fixFiltersObject } from '../../../utilities/requests/index';
-import userCan from '../../../utilities/security/user-can';
-import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
-import TermSanitizers from '../sanitizers/term.sanitizers';
-import TermValidators from '../validators/term.validators';
-import { TermSchemaFields } from '../models/term.model';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = __importStar(require("typedi"));
+const utils_helpers_1 = require("../../../utilities/helpers/utils.helpers");
+const base_service_1 = __importDefault(require("../../../common/base.service"));
+const config_1 = __importDefault(require("../../../config"));
+const events_config_1 = __importDefault(require("../../../config/events.config"));
+const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
+const exceptions_1 = __importDefault(require("../../../exceptions"));
+const cache_manager_1 = __importDefault(require("../../../managers/cache-manager"));
+const query_utilities_1 = require("../../../utilities/data/db/query.utilities");
+const snapshots_utilities_1 = require("../../../utilities/entities/snapshots.utilities");
+const objects_1 = require("../../../utilities/objects");
+const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
+const index_1 = require("../../../utilities/requests/index");
+const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const term_sanitizers_1 = __importDefault(require("../sanitizers/term.sanitizers"));
+const term_validators_1 = __importDefault(require("../validators/term.validators"));
+const term_model_1 = require("../models/term.model");
 /**
  * @description
  */
-let TermsService = class TermsService extends BaseService {
+let TermsService = class TermsService extends base_service_1.default {
     constructor(articleTypeModel, articleModel, commentModel, reviewModel, termModel, taxonomyModel, translationItemModel, translationNamespaceModel, translationProjectModel, eventDispatcher) {
         super();
         this.articleTypeModel = articleTypeModel;
@@ -57,7 +85,7 @@ let TermsService = class TermsService extends BaseService {
      */
     async _generateSnapshotsObject(new_data, old_data, authData) {
         try {
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             const result = {
                 created_by: undefined,
                 taxonomy: {
@@ -68,10 +96,10 @@ let TermsService = class TermsService extends BaseService {
                     is_multi: false
                 }
             };
-            const taxonomy = await this.taxonomyModel.findById(getItemIdsFromOldAndNewData(new_data.taxonomy, old_data === null || old_data === void 0 ? void 0 : old_data.taxonomy));
+            const taxonomy = await this.taxonomyModel.findById((0, utils_helpers_1.getItemIdsFromOldAndNewData)(new_data.taxonomy, old_data === null || old_data === void 0 ? void 0 : old_data.taxonomy));
             this.logger.debug(this._generateSnapshotsObject.name, new_data.taxonomy, old_data === null || old_data === void 0 ? void 0 : old_data.taxonomy, taxonomy === null || taxonomy === void 0 ? void 0 : taxonomy.name);
             if (taxonomy) {
-                result.taxonomy = extractPartialObject(taxonomy.toObject(), [
+                result.taxonomy = (0, objects_1.extractPartialObject)(taxonomy.toObject(), [
                     '_id',
                     'slug',
                     'name',
@@ -162,7 +190,7 @@ let TermsService = class TermsService extends BaseService {
         /**
          * @description fixing filters object
          */
-        filters = fixFiltersObject(filters);
+        filters = (0, index_1.fixFiltersObject)(filters);
         /**
          * @description Inject attributes in the filters
          */
@@ -171,46 +199,46 @@ let TermsService = class TermsService extends BaseService {
         if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app)
             filters.app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
         // -- attributed:app
-        if (TermSchemaFields['app']) {
-            filter = createStringFilter(q, totalQ, filters['app'], 'app');
+        if (term_model_1.TermSchemaFields['app']) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['app'], 'app');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- attributed:company
-        filter = createStringFilter(q, totalQ, filters.company, 'company');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.company, 'company');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- attributed:store
-        filter = createStringFilter(q, totalQ, filters.store, 'attributes.store');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.store, 'attributes.store');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- is_deleted
-        filter = createBooleanFilter(q, totalQ, filters.is_deleted, 'is_deleted');
+        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, 'is_deleted');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_at
-        filter = createDateRangeFilter(q, totalQ, filters.created_at, 'created_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, 'created_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- updated_at
-        filter = createDateRangeFilter(q, totalQ, filters.updated_at, 'updated_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, 'updated_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- _id
-        filter = createStringFilter(q, totalQ, filters._id, '_id');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, '_id');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_by
-        filter = createDateRangeFilter(q, totalQ, filters['created_by'], 'created_by');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters['created_by'], 'created_by');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- taxonomy
-        filter = createStringFilter(q, totalQ, filters.taxonomy, 'taxonomy');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.taxonomy, 'taxonomy');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- name
-        if (TermSchemaFields['name']) {
-            filter = createStringFilter(q, totalQ, filters['name'], 'name');
+        if (term_model_1.TermSchemaFields['name']) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
             q = filter.q;
             totalQ = filter.totalQ;
         }
@@ -228,7 +256,7 @@ let TermsService = class TermsService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false
             });
@@ -248,7 +276,7 @@ let TermsService = class TermsService extends BaseService {
             q = filter.q;
             totalQ = filter.totalQ;
             const limit = count === undefined || count === null
-                ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config.settings.listing.defaultCount
+                ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount
                 : count;
             const { skip, take } = this.getPaginationOptions(limit, page);
             const sortOptions = this.getSortOptions(sort, sort_by);
@@ -263,7 +291,7 @@ let TermsService = class TermsService extends BaseService {
             /**
              * @description Add query to execution scenario
              */
-            scenario.request_filter = fixFiltersObject(query.filters);
+            scenario.request_filter = (0, index_1.fixFiltersObject)(query.filters);
             scenario.listing_query = {
                 model: q.model.modelName,
                 query: q.getQuery(),
@@ -282,7 +310,7 @@ let TermsService = class TermsService extends BaseService {
             scenario.found = items === null || items === void 0 ? void 0 : items.length;
             scenario.total = total;
             const result = {
-                data: items.map(doc => mapDocumentToExposed(doc)),
+                data: items.map(doc => (0, general_mappers_1.mapDocumentToExposed)(doc)),
                 pagination: {
                     total,
                     pages
@@ -307,7 +335,7 @@ let TermsService = class TermsService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false
@@ -324,19 +352,19 @@ let TermsService = class TermsService extends BaseService {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions.ItemNotFoundException('Object deleted');
+                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
             /**
              * Check if the user can view the object
              */
-            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -345,7 +373,7 @@ let TermsService = class TermsService extends BaseService {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
@@ -359,7 +387,7 @@ let TermsService = class TermsService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false
@@ -376,19 +404,19 @@ let TermsService = class TermsService extends BaseService {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions.ItemNotFoundException('Object deleted');
+                throw new exceptions_1.default.ItemNotFoundException('Object deleted');
             /**
              * Check if the user can view the object
              */
-            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this object');
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -397,7 +425,7 @@ let TermsService = class TermsService extends BaseService {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getByName, error);
             throw error;
@@ -416,11 +444,11 @@ let TermsService = class TermsService extends BaseService {
             /**
              * await sanitize data here
              */
-            data = await TermSanitizers.sanitizeCreateBody(data, authData);
+            data = await term_sanitizers_1.default.sanitizeCreateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = TermValidators.validateCreateBody(data);
+            const { error } = term_validators_1.default.validateCreateBody(data);
             if (error)
                 throw error;
             let {} = data;
@@ -436,9 +464,9 @@ let TermsService = class TermsService extends BaseService {
              * Check if the user can create the object
              */
             if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) && ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
-                throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
-            if (!userCan.createObject(this.ENTITY, data, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to create this object');
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object on this app');
+            if (!user_can_1.default.createObject(this.ENTITY, data, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this object');
             /**
              * Create data object
              */
@@ -456,10 +484,10 @@ let TermsService = class TermsService extends BaseService {
              */
             const doc = await this.termModel.create(docObject);
             if (!doc)
-                throw new exceptions.InternalServerError('Failed to create the object');
-            this.eventDispatcher.dispatch(events.content.term.created, { data: doc });
+                throw new exceptions_1.default.InternalServerError('Failed to create the object');
+            this.eventDispatcher.dispatch(events_config_1.default.content.term.created, { data: doc });
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -485,11 +513,11 @@ let TermsService = class TermsService extends BaseService {
             /**
              * await sanitize data here
              */
-            data = await TermSanitizers.sanitizeUpdateBody(data, authData);
+            data = await term_sanitizers_1.default.sanitizeUpdateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = TermValidators.validateUpdateBody(data);
+            const { error } = term_validators_1.default.validateUpdateBody(data);
             if (error)
                 throw error;
             /**
@@ -501,19 +529,19 @@ let TermsService = class TermsService extends BaseService {
              */
             const old = await this.termModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object is deleted');
-            if (!userCan.updateObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to update this object');
+                throw new exceptions_1.default.UnauthorizedException('Object is deleted');
+            if (!user_can_1.default.updateObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to update this object');
             /**
              * detect changes
              */
-            const updates = new ObjectUpdatedProperties(old.toObject(), data, true);
+            const updates = new update_calculator_class_1.default(old.toObject(), data, true);
             scenario.updates = updates.asArray;
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'updated',
                 updates: updates.asArray
@@ -525,7 +553,7 @@ let TermsService = class TermsService extends BaseService {
             /**
              * Create search meta
              */
-            if (TermSchemaFields['search_meta']) {
+            if (term_model_1.TermSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, old);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
@@ -536,7 +564,7 @@ let TermsService = class TermsService extends BaseService {
                     updates: updateObject
                 } }), { new: true });
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             /**
              * Handle the updated effects on the same service
              */
@@ -544,9 +572,9 @@ let TermsService = class TermsService extends BaseService {
             /**
              * Dispatch the updated event
              */
-            this.eventDispatcher.dispatch(events.content.term.updated, { data: doc });
+            this.eventDispatcher.dispatch(events_config_1.default.content.term.updated, { data: doc });
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -574,18 +602,18 @@ let TermsService = class TermsService extends BaseService {
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'deleted',
                 updates: []
             };
             const old = await this.termModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             if (old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object already deleted');
-            if (!userCan.deleteObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
+                throw new exceptions_1.default.UnauthorizedException('Object already deleted');
+            if (!user_can_1.default.deleteObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to delete this object');
             const doc = await this.termModel.findByIdAndUpdate(id, {
                 is_deleted: true,
                 deleted_at: new Date(),
@@ -593,7 +621,7 @@ let TermsService = class TermsService extends BaseService {
                     updates: updateObject
                 }
             }, { new: true });
-            this.eventDispatcher.dispatch(events.content.term.deleted, { data: doc });
+            this.eventDispatcher.dispatch(events_config_1.default.content.term.deleted, { data: doc });
             const result = {
                 data: {
                     deleted: true
@@ -622,18 +650,18 @@ let TermsService = class TermsService extends BaseService {
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'restored',
                 updates: []
             };
             const old = await this.termModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
             if (!old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object already exists');
-            if (!userCan.restoreObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
+                throw new exceptions_1.default.UnauthorizedException('Object already exists');
+            if (!user_can_1.default.restoreObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to restore this object');
             const doc = await this.termModel.findByIdAndUpdate(id, {
                 is_deleted: false,
                 deleted_at: null,
@@ -642,8 +670,8 @@ let TermsService = class TermsService extends BaseService {
                 }
             }, { new: true });
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
-            this.eventDispatcher.dispatch(events.content.term.restored, { data: doc });
+                throw new exceptions_1.default.ItemNotFoundException('Object not found');
+            this.eventDispatcher.dispatch(events_config_1.default.content.term.restored, { data: doc });
             const result = {
                 data: {
                     restored: true
@@ -662,18 +690,18 @@ let TermsService = class TermsService extends BaseService {
     }
 };
 TermsService = __decorate([
-    Service(),
-    __param(0, Inject('articleTypeModel')),
-    __param(1, Inject('articleModel')),
-    __param(2, Inject('commentModel')),
-    __param(3, Inject('reviewModel')),
-    __param(4, Inject('termModel')),
-    __param(5, Inject('taxonomyModel')),
-    __param(6, Inject('translationItemModel')),
-    __param(7, Inject('translationNamespaceModel')),
-    __param(8, Inject('translationProjectModel')),
-    __param(9, EventDispatcher()),
+    (0, typedi_1.Service)(),
+    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
+    __param(1, (0, typedi_1.Inject)('articleModel')),
+    __param(2, (0, typedi_1.Inject)('commentModel')),
+    __param(3, (0, typedi_1.Inject)('reviewModel')),
+    __param(4, (0, typedi_1.Inject)('termModel')),
+    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
+    __param(6, (0, typedi_1.Inject)('translationItemModel')),
+    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
+    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
+    __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], TermsService);
-export default TermsService;
+exports.default = TermsService;
 //# sourceMappingURL=terms.service.js.map

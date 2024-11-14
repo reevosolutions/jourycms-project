@@ -1,4 +1,7 @@
-export const userCanCreateObject = (entity, doc, authData) => {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.userCanCreateObject = void 0;
+const userCanCreateObject = (entity, doc, authData) => {
     var _a;
     if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.service)
         return true;
@@ -7,4 +10,5 @@ export const userCanCreateObject = (entity, doc, authData) => {
      */
     return true;
 };
+exports.userCanCreateObject = userCanCreateObject;
 //# sourceMappingURL=user-can-create.js.map

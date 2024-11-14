@@ -138,6 +138,7 @@ export default class DevService extends BaseService {
       // await this.fillShrines();
       // await this.fillHotels();
       await this.fillTrips();
+      await this.setAgenciesLogo();
 
       /**
        * 
@@ -638,7 +639,7 @@ export default class DevService extends BaseService {
         count: 200,
         filters: { article_type: this.types[ArticleTypeSlug.AIROPORT]?._id, 'meta_fields.country': 'dz' }
       }, this.internalAuthData);
-      
+
       const { data: airlinesCompanies } = await this.articlesService.list({
         count: 200,
         filters: { article_type: this.types[ArticleTypeSlug.AIRELINES_COMPANY]?._id }
@@ -703,8 +704,8 @@ export default class DevService extends BaseService {
               flight_date: moment(faker.date.future({ years: 1 })).set('month', month - 1),
               entry_point: faker.helpers.arrayElement(medina_mekkah),
               trip_type: faker.helpers.arrayElement(trip_types),
-              subsistence_at_medina: faker.helpers.arrayElements(trip_types, { min: 0, max: subsistence_at_medina.length }),
-              subsistence_at_mekkah: faker.helpers.arrayElements(trip_types, { min: 0, max: subsistence_at_mekkah.length }),
+              subsistence_at_medina: faker.helpers.arrayElements(subsistence_at_medina, { min: 0, max: subsistence_at_medina.length }),
+              subsistence_at_mekkah: faker.helpers.arrayElements(subsistence_at_mekkah, { min: 0, max: subsistence_at_mekkah.length }),
             },
             attributes: undefined,
             snapshots: undefined,
@@ -717,6 +718,18 @@ export default class DevService extends BaseService {
 
       }
     }
+  }
+  async setAgenciesLogo() {
+    await this.articleModel.updateMany({
+      article_type: this.types[ArticleTypeSlug.AGENCY]._id
+    }, {
+      $set: {
+        'meta_fields.logo': {
+          id: "67359090d7e49753b7d64325",
+          url: ''
+        }
+      }
+    })
   }
 }
 

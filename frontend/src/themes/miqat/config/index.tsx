@@ -1,6 +1,6 @@
-import { cities } from "./cities.config";
+import { cities } from "./dz.cities.config";
 import { medical_specialities } from "./medical-specialities.config";
-import { states } from "./states.config";
+import { states } from "./dz.states.config";
 
 const algerianArabicMonths = {
   1: "جانفي", // January

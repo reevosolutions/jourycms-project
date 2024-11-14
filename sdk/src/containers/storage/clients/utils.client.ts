@@ -31,7 +31,15 @@ export default class UtilsClient extends BaseClient {
     if (options?.width) url += `/${options?.width}`;
     if (options?.height) url += `/${options?.height}`;
     if (options?.ratio) url += `/?ratio=${options?.ratio}`;
-    // console.log('STORAGE IMAGE URL', url)
+    return url;
+  }
+
+  public getImageBlurredUrl(
+    id: string,
+    format?: 'jpg' | 'webp'
+  ): string {
+    let url = `${this.container.sdk.config.baseURL}${this.container.prefix}/images/${id}/blurred`;
+    if (format) url += `/${format}`;
     return url;
   }
 

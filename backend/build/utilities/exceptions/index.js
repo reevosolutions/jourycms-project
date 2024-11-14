@@ -1,10 +1,16 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.errorToObject = exports.generateErrorFromHttpException = void 0;
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 24-02-2024 20:47:22
  */
-import axios from "axios";
-import Joi from "joi";
+const axios_1 = __importDefault(require("axios"));
+const joi_1 = __importDefault(require("joi"));
 /**
  * TODO: Implement this function
  * @param error
@@ -12,14 +18,15 @@ import Joi from "joi";
  * @param statusText string
  * @returns Error
  */
-export const generateErrorFromHttpException = (error, status, statusText) => {
+const generateErrorFromHttpException = (error, status, statusText) => {
     return new Error(`Error: ${status} - ${statusText} - ${error.message}`);
 };
-export const errorToObject = (error) => {
+exports.generateErrorFromHttpException = generateErrorFromHttpException;
+const errorToObject = (error) => {
     var _a, _b, _c, _d, _e, _f, _g;
     if (!error)
         return error;
-    if (axios.isAxiosError(error)) {
+    if (axios_1.default.isAxiosError(error)) {
         const status = error.status ? error.status : error.code || 500;
         const code = error.code;
         const message = error.message;
@@ -48,7 +55,7 @@ export const errorToObject = (error) => {
             stack,
         };
     }
-    else if (error instanceof Joi.ValidationError) {
+    else if (error instanceof joi_1.default.ValidationError) {
         return {
             name: error.name,
             message: error.message,
@@ -82,4 +89,5 @@ export const errorToObject = (error) => {
         };
     }
 };
+exports.errorToObject = errorToObject;
 //# sourceMappingURL=index.js.map

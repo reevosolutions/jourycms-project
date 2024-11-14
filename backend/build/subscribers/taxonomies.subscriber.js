@@ -1,3 +1,4 @@
+"use strict";
 /**
  * @description This file is used to create event subscribers.
  * @generator Levelup
@@ -13,15 +14,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { EventSubscriber, On } from 'event-dispatch';
-import CacheManager from '../managers/cache-manager';
-import Container from 'typedi';
-import initLogger from '../utilities/logging';
-import events from '../config/events.config';
-import config from '../config';
-import { errorToObject } from '../utilities/exceptions';
-import { mapDocumentToExposed } from '../common/mappers/general.mappers';
-const logger = initLogger("SUBSCRIBER", "Taxonomy");
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const event_dispatch_1 = require("event-dispatch");
+const cache_manager_1 = __importDefault(require("../managers/cache-manager"));
+const typedi_1 = __importDefault(require("typedi"));
+const logging_1 = __importDefault(require("../utilities/logging"));
+const events_config_1 = __importDefault(require("../config/events.config"));
+const config_1 = __importDefault(require("../config"));
+const exceptions_1 = require("../utilities/exceptions");
+const general_mappers_1 = require("../common/mappers/general.mappers");
+const logger = (0, logging_1.default)("SUBSCRIBER", "Taxonomy");
 let TaxonomySubscriber = class TaxonomySubscriber {
     /**
      * @method onTaxonomyCreated
@@ -33,17 +38,17 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             /**
              * Map object to exposed
              */
-            data = mapDocumentToExposed(data);
-            if (config.environement === 'development') {
+            data = (0, general_mappers_1.mapDocumentToExposed)(data);
+            if (config_1.default.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events.content.taxonomy.created, identifier);
+                logger.event(events_config_1.default.content.taxonomy.created, identifier);
             }
             else {
                 /**
@@ -52,15 +57,15 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             }
         }
         catch (error) {
-            if (config.environement === 'development') {
-                logger.error(`${events.content.taxonomy.created}:ERROR`, error);
+            if (config_1.default.environement === 'development') {
+                logger.error(`${events_config_1.default.content.taxonomy.created}:ERROR`, error);
             }
             logger.save.error({
-                name: events.content.taxonomy.created,
+                name: events_config_1.default.content.taxonomy.created,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: errorToObject(error),
+                    error: (0, exceptions_1.errorToObject)(error),
                 }
             });
         }
@@ -75,17 +80,17 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             /**
              * Map object to exposed
              */
-            data = mapDocumentToExposed(data);
-            if (config.environement === 'development') {
+            data = (0, general_mappers_1.mapDocumentToExposed)(data);
+            if (config_1.default.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events.content.taxonomy.updated, identifier);
+                logger.event(events_config_1.default.content.taxonomy.updated, identifier);
             }
             else {
                 /**
@@ -94,15 +99,15 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             }
         }
         catch (error) {
-            if (config.environement === 'development') {
-                logger.error(`${events.content.taxonomy.updated}:ERROR`, error);
+            if (config_1.default.environement === 'development') {
+                logger.error(`${events_config_1.default.content.taxonomy.updated}:ERROR`, error);
             }
             logger.save.error({
-                name: events.content.taxonomy.updated,
+                name: events_config_1.default.content.taxonomy.updated,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: errorToObject(error),
+                    error: (0, exceptions_1.errorToObject)(error),
                 }
             });
         }
@@ -117,17 +122,17 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             /**
              * Map object to exposed
              */
-            data = mapDocumentToExposed(data);
-            if (config.environement === 'development') {
+            data = (0, general_mappers_1.mapDocumentToExposed)(data);
+            if (config_1.default.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events.content.taxonomy.deleted, identifier);
+                logger.event(events_config_1.default.content.taxonomy.deleted, identifier);
             }
             else {
                 /**
@@ -136,15 +141,15 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             }
         }
         catch (error) {
-            if (config.environement === 'development') {
-                logger.error(`${events.content.taxonomy.deleted}:ERROR`, error);
+            if (config_1.default.environement === 'development') {
+                logger.error(`${events_config_1.default.content.taxonomy.deleted}:ERROR`, error);
             }
             logger.save.error({
-                name: events.content.taxonomy.deleted,
+                name: events_config_1.default.content.taxonomy.deleted,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: errorToObject(error),
+                    error: (0, exceptions_1.errorToObject)(error),
                 }
             });
         }
@@ -159,17 +164,17 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             /**
              * Logic to run in ALL_ENVIRONMENTS
              */
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             /**
              * Map object to exposed
              */
-            data = mapDocumentToExposed(data);
-            if (config.environement === 'development') {
+            data = (0, general_mappers_1.mapDocumentToExposed)(data);
+            if (config_1.default.environement === 'development') {
                 /**
                  * Here you can add any logic to run in DEVELOPMENT
                  */
                 const identifier = data['email'] ? data['email'] : data['name'] ? data['name'] : data['tracking_id'] || data['_id'];
-                logger.event(events.content.taxonomy.restored, identifier);
+                logger.event(events_config_1.default.content.taxonomy.restored, identifier);
             }
             else {
                 /**
@@ -178,46 +183,46 @@ let TaxonomySubscriber = class TaxonomySubscriber {
             }
         }
         catch (error) {
-            if (config.environement === 'development') {
-                logger.error(`${events.content.taxonomy.restored}:ERROR`, error);
+            if (config_1.default.environement === 'development') {
+                logger.error(`${events_config_1.default.content.taxonomy.restored}:ERROR`, error);
             }
             logger.save.error({
-                name: events.content.taxonomy.restored,
+                name: events_config_1.default.content.taxonomy.restored,
                 payload: {
                     related_to: data['tracking_id'] || data['_id'],
                     data,
-                    error: errorToObject(error),
+                    error: (0, exceptions_1.errorToObject)(error),
                 }
             });
         }
     }
 };
 __decorate([
-    On(events.content.taxonomy.created),
+    (0, event_dispatch_1.On)(events_config_1.default.content.taxonomy.created),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaxonomySubscriber.prototype, "onTaxonomyCreated", null);
 __decorate([
-    On(events.content.taxonomy.updated),
+    (0, event_dispatch_1.On)(events_config_1.default.content.taxonomy.updated),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaxonomySubscriber.prototype, "onTaxonomyUpdated", null);
 __decorate([
-    On(events.content.taxonomy.deleted),
+    (0, event_dispatch_1.On)(events_config_1.default.content.taxonomy.deleted),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaxonomySubscriber.prototype, "onTaxonomyDeleted", null);
 __decorate([
-    On(events.content.taxonomy.restored),
+    (0, event_dispatch_1.On)(events_config_1.default.content.taxonomy.restored),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], TaxonomySubscriber.prototype, "onTaxonomyRestored", null);
 TaxonomySubscriber = __decorate([
-    EventSubscriber()
+    (0, event_dispatch_1.EventSubscriber)()
 ], TaxonomySubscriber);
-export default TaxonomySubscriber;
+exports.default = TaxonomySubscriber;
 //# sourceMappingURL=taxonomies.subscriber.js.map

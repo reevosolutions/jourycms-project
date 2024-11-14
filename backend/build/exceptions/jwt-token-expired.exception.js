@@ -1,5 +1,10 @@
-import LevelupException from "./levelup-exception.exception";
-class JWTTokenExpired extends LevelupException {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
+class JWTTokenExpired extends levelup_exception_exception_1.default {
     constructor(message = 'JWT Token expired') {
         super(message);
         this.status = 401;
@@ -9,5 +14,5 @@ class JWTTokenExpired extends LevelupException {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-export default JWTTokenExpired;
+exports.default = JWTTokenExpired;
 //# sourceMappingURL=jwt-token-expired.exception.js.map

@@ -107,6 +107,7 @@ export default async function RootLayout({
     <html lang={locale} dir={locale !== "ar" ? "ltr" : "rtl"}>
       <head>
         <link rel="preload" href="/assets/miqat/images/mosque2.webp" as="image" />
+        <link rel="preload" href="/assets/miqat/images/hajj-placeholder.jpg" as="image" />
 
         <link
           rel="apple-touch-icon"

@@ -11,7 +11,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/customized.popover";
-import { publicRoutes } from "@/config";
+import { adminRoutes, publicRoutes } from "@/config";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { logout } from "@features/auth/redux/slice";
 
@@ -54,16 +54,14 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => 
                     {"حسابي"}
                   </Link>
                 </li>
-                <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href="/account/orders">
-                    {"طلباتي"}
-                  </Link>
-                </li>
-                <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href="/account/wishlist">
-                    {"المفضلة"}
-                  </Link>
-                </li>
+                {currentUser?.role === 'admin' && (
+
+                  <li>
+                    <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href={adminRoutes.articles.path}>
+                      {"إدارة الموقع"}
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href="/account/settings">
                     {"الإعدادات"}

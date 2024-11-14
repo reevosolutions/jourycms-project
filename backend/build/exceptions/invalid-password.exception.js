@@ -1,5 +1,10 @@
-import LevelupException from "./levelup-exception.exception";
-class InvalidPasswordException extends LevelupException {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
+class InvalidPasswordException extends levelup_exception_exception_1.default {
     constructor(message = "Invalid password") {
         super(message);
         this.status = 403;
@@ -9,5 +14,5 @@ class InvalidPasswordException extends LevelupException {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-export default InvalidPasswordException;
+exports.default = InvalidPasswordException;
 //# sourceMappingURL=invalid-password.exception.js.map

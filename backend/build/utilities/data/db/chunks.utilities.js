@@ -1,5 +1,8 @@
-import { defaults } from "../../helpers/utils.helpers";
-import { extractPartialObject } from "../../objects";
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.applyOnDocumentChunks = void 0;
+const utils_helpers_1 = require("../../helpers/utils.helpers");
+const objects_1 = require("../../objects");
 /**
  *
  * @param {number} chunkSize
@@ -13,8 +16,8 @@ import { extractPartialObject } from "../../objects";
  * - default 0
  * @update 2020-12-06 added allowDiskUse(true) to query
  */
-export const applyOnDocumentChunks = async (options) => {
-    const { query, onChunk, onItem, chunkSize, maxItems, totalCount, } = Object.assign(Object.assign({}, extractPartialObject(options, ["query", "onChunk", "onItem"])), defaults(extractPartialObject(options, ["chunkSize", "maxItems", "totalCount"]), {
+const applyOnDocumentChunks = async (options) => {
+    const { query, onChunk, onItem, chunkSize, maxItems, totalCount, } = Object.assign(Object.assign({}, (0, objects_1.extractPartialObject)(options, ["query", "onChunk", "onItem"])), (0, utils_helpers_1.defaults)((0, objects_1.extractPartialObject)(options, ["chunkSize", "maxItems", "totalCount"]), {
         chunkSize: 100,
         maxItems: -1,
         totalCount: 0,
@@ -55,4 +58,5 @@ export const applyOnDocumentChunks = async (options) => {
         }
     }
 };
+exports.applyOnDocumentChunks = applyOnDocumentChunks;
 //# sourceMappingURL=chunks.utilities.js.map

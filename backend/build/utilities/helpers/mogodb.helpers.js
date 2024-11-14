@@ -1,13 +1,23 @@
-import { ObjectId } from "mongodb";
-import { errorToObject } from "../exceptions";
-import initLogger from "../logging";
-import CacheManager from "../../managers/cache-manager";
-import Container from "typedi";
-import { sortBy } from "lodash";
-const logger = initLogger("UTILITY", `MongoDB-helpers`);
-export const isObjectIdValid = (id) => {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.isObjectIdValid = void 0;
+exports.upgradeIndexes = upgradeIndexes;
+exports.ensureIndexes = ensureIndexes;
+const mongodb_1 = require("mongodb");
+const exceptions_1 = require("../exceptions");
+const logging_1 = __importDefault(require("../logging"));
+const cache_manager_1 = __importDefault(require("../../managers/cache-manager"));
+const typedi_1 = __importDefault(require("typedi"));
+const lodash_1 = require("lodash");
+const logger = (0, logging_1.default)("UTILITY", `MongoDB-helpers`);
+const isObjectIdValid = (id) => {
     try {
-        if (ObjectId.isValid(id) && String(new ObjectId(id)) === id)
+        if (!id)
+            return false;
+        if (mongodb_1.ObjectId.isValid(id.toString()) && String(new mongodb_1.ObjectId(id.toString())) === id)
             return true;
         return false;
     }
@@ -16,19 +26,20 @@ export const isObjectIdValid = (id) => {
             name: "isObjectIdValid",
             payload: {
                 related_to: id,
-                error: errorToObject(error),
+                error: (0, exceptions_1.errorToObject)(error),
             },
         });
         return false;
     }
 };
-export async function upgradeIndexes(model) {
+exports.isObjectIdValid = isObjectIdValid;
+async function upgradeIndexes(model) {
     try {
-        const cache = Container.get(CacheManager);
+        const cache = typedi_1.default.get(cache_manager_1.default);
         const collectionKey = cache.generateForeignKey(`dbCollectionsPerformance:${model.modelName}`);
         logger.tree("collectionKey", collectionKey);
         const entries = await cache.getCollectionEntries(collectionKey);
-        const indexes = sortBy(Object.values(entries || {}), (o) => -o.value.count);
+        const indexes = (0, lodash_1.sortBy)(Object.values(entries || {}), (o) => -o.value.count);
         for (const index of indexes) {
             const { data } = index.value;
             const { fields, key } = data;
@@ -50,7 +61,7 @@ export async function upgradeIndexes(model) {
         logger.error(error.message, error);
     }
 }
-export function ensureIndexes(model) {
+function ensureIndexes(model) {
     upgradeIndexes(model).then(() => {
         model
             .createIndexes()

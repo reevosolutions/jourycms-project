@@ -1,4 +1,7 @@
-export const ISO_WEEKDAYS = {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.DAYS = exports.ISO_WEEKDAYS = void 0;
+exports.ISO_WEEKDAYS = {
     sunday: 7,
     monday: 1,
     tuesday: 2,
@@ -7,7 +10,7 @@ export const ISO_WEEKDAYS = {
     friday: 5,
     saturday: 6,
 };
-export const DAYS = {
+exports.DAYS = {
     7: "sunday",
     1: "monday",
     2: "tuesday",

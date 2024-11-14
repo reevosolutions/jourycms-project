@@ -79,7 +79,7 @@ export default function Page({ }) {
         <ul className="flex flex-col gap-4 px-4 py-8 min-h-screen-80">
           {articleTypes.map(item => (
             <li className="d" key={item._id}>
-              <Link href={`/admin/articles/new/${item.slug}`}>
+              <Link href={`/admin/articles/types/${item.slug}`}>
                 <h2 className="text-xl font-bold text-primary-600">{item.labels.plural}</h2>
               </Link>
               <div className="text-base text-slate-600" dangerouslySetInnerHTML={{ __html: item.description }} />

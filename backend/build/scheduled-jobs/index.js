@@ -1,8 +1,36 @@
-import { Container } from "typedi";
-import config from "../config";
-import initLogger, { LoggerContext } from "../utilities/logging";
-import CacheManager from "../managers/cache-manager";
-const logger = initLogger(LoggerContext.LOADER, "JOBS");
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = require("typedi");
+const config_1 = __importDefault(require("../config"));
+const logging_1 = __importStar(require("../utilities/logging"));
+const cache_manager_1 = __importDefault(require("../managers/cache-manager"));
+const logger = (0, logging_1.default)(logging_1.LoggerContext.LOADER, "JOBS");
 /**
  * Cron syntax breakdown:
  *  - ┌───────────── second (optional)
@@ -28,19 +56,19 @@ const jobs = [
     {
         cron: `0 0 0 * * *`,
         callback: async () => {
-            if (config.environement !== "production")
+            if (config_1.default.environement !== "production")
                 return;
             const delay = Math.floor(Math.random() * 1 * 1000);
             const maxFreezeTime = 15 * 60 * 1000;
             const TASK = "taskName";
             logger.event(TASK, { date: new Date(), delay });
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.Container.get(cache_manager_1.default);
             setTimeout(async () => {
-                const isTaskFrozen = await cache.tasks.isFrozen(config.currentService.name, TASK);
+                const isTaskFrozen = await cache.tasks.isFrozen(config_1.default.currentService.name, TASK);
                 logger.value(TASK, { isTaskFrozen });
                 if (!isTaskFrozen) {
                     await cache.tasks.freeze(TASK, {
-                        serviceName: config.currentService.name,
+                        serviceName: config_1.default.currentService.name,
                         maxFreezeTime,
                     });
                     try {
@@ -50,11 +78,11 @@ const jobs = [
                         // Handle error here
                         logger.error(error.message, error);
                     }
-                    await cache.tasks.unfreeze(config.currentService.name, TASK);
+                    await cache.tasks.unfreeze(config_1.default.currentService.name, TASK);
                 }
                 else {
                     setTimeout(async () => {
-                        await cache.tasks.unfreeze(config.currentService.name, TASK);
+                        await cache.tasks.unfreeze(config_1.default.currentService.name, TASK);
                     }, maxFreezeTime);
                 }
             }, delay);
@@ -64,5 +92,5 @@ const jobs = [
 /**
  * Export the jobs array as default
  */
-export default jobs;
+exports.default = jobs;
 //# sourceMappingURL=index.js.map

@@ -1,24 +1,30 @@
+"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-01 02:15:52
  */
-import { Router } from 'express';
-import Container from 'typedi';
-import initLogger from '../../../utilities/logging';
-import { respond } from '../../../utilities/requests';
-import { getAuthData } from '../../../utilities/requests/get-auth-data';
-import ArticlesService from '../services/articles.service';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ROOT_PATH = void 0;
+const express_1 = require("express");
+const typedi_1 = __importDefault(require("typedi"));
+const logging_1 = __importDefault(require("../../../utilities/logging"));
+const requests_1 = require("../../../utilities/requests");
+const get_auth_data_1 = require("../../../utilities/requests/get-auth-data");
+const articles_service_1 = __importDefault(require("../services/articles.service"));
 /**
  * @generator Levelup
  * @description This file is used to build the Articles controller
  */
-export const ROOT_PATH = '/articles';
-export default (app) => {
-    const logger = initLogger("CONTROLLER", "ArticlesController");
-    const route = Router();
-    app.use(ROOT_PATH, route);
+exports.ROOT_PATH = '/articles';
+exports.default = (app) => {
+    const logger = (0, logging_1.default)("CONTROLLER", "ArticlesController");
+    const route = (0, express_1.Router)();
+    app.use(exports.ROOT_PATH, route);
     /**
      * List
      */
@@ -27,11 +33,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -39,7 +45,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result);
+            return (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**
@@ -57,11 +63,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -70,7 +76,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result);
+            return (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**
@@ -88,11 +94,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -101,7 +107,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            respond(res, result);
+            (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**
@@ -119,11 +125,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -131,7 +137,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result, 201);
+            return (0, requests_1.respond)(res, result, 201);
         }
         catch (error) {
             /**
@@ -149,11 +155,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -162,7 +168,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result);
+            return (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**
@@ -180,11 +186,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -193,7 +199,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result);
+            return (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**
@@ -211,11 +217,11 @@ export default (app) => {
             /**
              * Always get the auth data at the beginning of the function
              */
-            const AUTH_DATA = await getAuthData(req);
+            const AUTH_DATA = await (0, get_auth_data_1.getAuthData)(req);
             /**
              * Load the required services and managers
              */
-            const articlesService = Container.get(ArticlesService);
+            const articlesService = typedi_1.default.get(articles_service_1.default);
             /**
              * Call the service method if the validation conditions are fulfilled
              */
@@ -224,7 +230,7 @@ export default (app) => {
             /**
              * Respond to the client
              */
-            return respond(res, result);
+            return (0, requests_1.respond)(res, result);
         }
         catch (error) {
             /**

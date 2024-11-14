@@ -1,9 +1,38 @@
-import { flatten } from "lodash";
-import Container from "typedi";
-import CacheManager from "../../../managers/cache-manager";
-import initLogger, { LoggerContext } from "../../logging";
-const logger = initLogger(LoggerContext.UTILITY, "trackUsedFields");
-export const trackUsedFieldsDBMiddleware = function (
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.trackUsedFieldsDBMiddleware = void 0;
+const lodash_1 = require("lodash");
+const typedi_1 = __importDefault(require("typedi"));
+const cache_manager_1 = __importDefault(require("../../../managers/cache-manager"));
+const logging_1 = __importStar(require("../../logging"));
+const logger = (0, logging_1.default)(logging_1.LoggerContext.UTILITY, "trackUsedFields");
+const trackUsedFieldsDBMiddleware = function (
 // eslint-disable-next-line @typescript-eslint/ban-types
 next) {
     try {
@@ -17,7 +46,7 @@ next) {
         };
         const fields = Object.entries(Object.assign(Object.assign({}, result.filter), result.sort)).reduce((prev, [key, value]) => {
             if (key === "$or") {
-                const keys = flatten(value.map((o) => Object.keys(o))).reduce((prev, curr) => (Object.assign(Object.assign({}, prev), { [curr]: 1 })), {});
+                const keys = (0, lodash_1.flatten)(value.map((o) => Object.keys(o))).reduce((prev, curr) => (Object.assign(Object.assign({}, prev), { [curr]: 1 })), {});
                 return Object.assign(Object.assign({}, prev), keys);
             }
             else {
@@ -32,7 +61,7 @@ next) {
         result.key = key;
         const CACHE_KEY = `dbCollectionsPerformance:${result.model}`;
         const CACHE_ID = key;
-        const cache = Container.get(CacheManager);
+        const cache = typedi_1.default.get(cache_manager_1.default);
         cache
             .getForeign(CACHE_KEY, CACHE_ID)
             .then((value) => {
@@ -55,4 +84,5 @@ next) {
     }
     next();
 };
+exports.trackUsedFieldsDBMiddleware = trackUsedFieldsDBMiddleware;
 //# sourceMappingURL=optimization.utilities.js.map

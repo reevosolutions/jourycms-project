@@ -1,12 +1,15 @@
+"use strict";
 /**
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 28-02-2024 02:39:52
  */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.generateProgressBar = generateProgressBar;
 /**
  * @since 29-10-2023 15:59:51
  */
-export function generateProgressBar(percentage, { barCompleteChar, barIncompleteChar } = {
+function generateProgressBar(percentage, { barCompleteChar, barIncompleteChar } = {
     // barCompleteChar: '\u2588',
     // barIncompleteChar: '\u2591',
     barCompleteChar: '█',

@@ -1,4 +1,9 @@
-import exceptions from '../../exceptions';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const exceptions_1 = __importDefault(require("../../exceptions"));
 /**
  * Attach user to req.currentUser
  * @param {*} req Express req Object
@@ -17,12 +22,12 @@ const requireUser = async (req, res, next) => {
          * Handle JWT token expired
          */
         if (req.jwt_expired)
-            throw new exceptions.JWTTokenExpired('JWT token expired');
+            throw new exceptions_1.default.JWTTokenExpired('JWT token expired');
         /**
          * The condition logic
          */
         if (!((_a = req.attached_entities.user) === null || _a === void 0 ? void 0 : _a._id))
-            throw new exceptions.UnauthorizedException('You must be logged in to access this resource');
+            throw new exceptions_1.default.UnauthorizedException('You must be logged in to access this resource');
         /**
          * Condition fulfilled
          */
@@ -32,5 +37,5 @@ const requireUser = async (req, res, next) => {
         return next(error);
     }
 };
-export default requireUser;
+exports.default = requireUser;
 //# sourceMappingURL=user-required.middleware.js.map

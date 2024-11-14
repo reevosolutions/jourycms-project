@@ -1,13 +1,18 @@
-import config from '../../../config';
-import initLogger from '../../../utilities/logging';
-import Container from "typedi";
-import CacheManager from "..";
-export default class TasksCacheManager {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = __importDefault(require("../../../config"));
+const logging_1 = __importDefault(require("../../../utilities/logging"));
+const typedi_1 = __importDefault(require("typedi"));
+const __1 = __importDefault(require(".."));
+class TasksCacheManager {
     constructor() {
         this.CACHE_KEY = 'frozenTasks';
         this.EXPIRATION = 3600 * 48;
-        this.cache = Container.get(CacheManager);
-        this.logger = initLogger('COMPONENT', `${this.constructor.name}`);
+        this.cache = typedi_1.default.get(__1.default);
+        this.logger = (0, logging_1.default)('COMPONENT', `${this.constructor.name}`);
     }
     static getInstance() {
         if (!TasksCacheManager.instance) {
@@ -21,12 +26,12 @@ export default class TasksCacheManager {
         try {
             const client = await this.cache.getClient();
             await client.hSet(this.cache.generateForeignKey(this.CACHE_KEY), taskId, JSON.stringify({
-                service: options.serviceName || config.currentService.name,
+                service: options.serviceName || config_1.default.currentService.name,
                 taskId,
                 frozen: true
             }));
             setTimeout(async () => {
-                this.unfreeze(options.serviceName || config.currentService.name, taskId);
+                this.unfreeze(options.serviceName || config_1.default.currentService.name, taskId);
             }, options.maxFreezeTime);
         }
         catch (e) {
@@ -90,4 +95,5 @@ export default class TasksCacheManager {
         }
     }
 }
+exports.default = TasksCacheManager;
 //# sourceMappingURL=tasks.cache-manager.js.map

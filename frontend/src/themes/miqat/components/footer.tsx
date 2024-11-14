@@ -36,7 +36,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
       <div className="grid grid-cols-1 lg:grid-cols-3">
         {/* about */}
         <div className="flex items-center justify-center bg-darkblue-900 px-6 py-6 lg:py-16">
-          <div className=" w-80 max-w-full">
+          <div className=" w-80 lg:w-auto max-w-full">
             <h2 className="text-center text-8xl font-bold">
               {getWebsiteConfig()?.name}
             </h2>
@@ -48,7 +48,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
               }}
             />
 
-            <div className="mt-16 flex items-center gap-8 text-white">
+            <div className="mt-16 flex-col lg:flex-row flex items-center gap-4 lg:gap-8 text-white">
               <b className="text-2xl">تجدنا على</b>
               <div className="flex items-center gap-4">
                 {getWebsiteConfig()?.social_links?.map(network =>

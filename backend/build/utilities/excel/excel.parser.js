@@ -1,23 +1,51 @@
+"use strict";
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 var _a;
-import BaseService from "../../common/base.service";
-import exceptions from "../../exceptions";
-import * as XLSX from "xlsx";
-import * as fs from "fs";
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_service_1 = __importDefault(require("../../common/base.service"));
+const exceptions_1 = __importDefault(require("../../exceptions"));
+const XLSX = __importStar(require("xlsx"));
+const fs = __importStar(require("fs"));
 /* load 'stream' for stream support */
-import { Readable } from "stream";
-XLSX.stream.set_readable(Readable);
-class ExcelParser extends BaseService {
+const stream_1 = require("stream");
+XLSX.stream.set_readable(stream_1.Readable);
+class ExcelParser extends base_service_1.default {
     constructor(filePath) {
         super();
         this.parse = async (filePath, mapper, sheet_name) => {
             const scenario = this.initScenario(this.logger, this.parse);
             try {
                 if (!filePath && !this.filePath) {
-                    throw new exceptions.UnprocessableEntityException("No file provided");
+                    throw new exceptions_1.default.UnprocessableEntityException("No file provided");
                 }
                 this.filePath = filePath || this.filePath;
                 if (!fs.existsSync(this.filePath)) {
-                    throw new exceptions.ItemNotFoundException("File not found: " + this.filePath);
+                    throw new exceptions_1.default.ItemNotFoundException("File not found: " + this.filePath);
                 }
                 // const buffer = fs.readFileSync(this.filePath);
                 // const workbook = XLSX.read(buffer, { type: "buffer" });
@@ -25,7 +53,7 @@ class ExcelParser extends BaseService {
                 const sheetNames = workbook.SheetNames;
                 if (sheet_name) {
                     if (!sheetNames.includes(sheet_name))
-                        throw new exceptions.ItemNotFoundException("This excel file dont contain a sheet with this name" +
+                        throw new exceptions_1.default.ItemNotFoundException("This excel file dont contain a sheet with this name" +
                             this.filePath);
                 }
                 sheet_name = sheetNames[0];
@@ -62,5 +90,5 @@ ExcelParser.download = async (data, fileName) => {
     XLSX.utils.book_append_sheet(wb, ws, "Sheet1");
     XLSX.writeFile(wb, fileName);
 };
-export default ExcelParser;
+exports.default = ExcelParser;
 //# sourceMappingURL=excel.parser.js.map

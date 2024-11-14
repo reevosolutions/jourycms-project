@@ -1,5 +1,10 @@
-import LevelupException from "./levelup-exception.exception";
-class BadRequestException extends LevelupException {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const levelup_exception_exception_1 = __importDefault(require("./levelup-exception.exception"));
+class BadRequestException extends levelup_exception_exception_1.default {
     constructor(message = 'Bad Request') {
         super(message);
         this.status = 400;
@@ -9,5 +14,5 @@ class BadRequestException extends LevelupException {
         Error.captureStackTrace(this, this.constructor);
     }
 }
-export default BadRequestException;
+exports.default = BadRequestException;
 //# sourceMappingURL=bad-request.exception.js.map

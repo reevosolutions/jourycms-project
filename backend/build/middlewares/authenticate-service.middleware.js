@@ -1,7 +1,12 @@
-import config from '../config';
-import exceptions from '../exceptions';
-import initLogger from '../utilities/logging';
-const logger = initLogger("MIDDLEWARE", 'authenticateService');
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const config_1 = __importDefault(require("../config"));
+const exceptions_1 = __importDefault(require("../exceptions"));
+const logging_1 = __importDefault(require("../utilities/logging"));
+const logger = (0, logging_1.default)("MIDDLEWARE", 'authenticateService');
 /**
  * @description Attach the calling service to req.attached_entities
  * @param {*} req Express req Object
@@ -19,32 +24,32 @@ const authenticateService = async (req, res, next) => {
         else {
             if (!req.attached_entities)
                 req.attached_entities = {};
-            if (service_secret === config.security.internalServiceSecret)
+            if (service_secret === config_1.default.security.internalServiceSecret)
                 req.attached_entities.service = {
                     name: service_name,
                     is_external: false,
                 };
-            else if (service_secret === config.security.externalServiceSecret)
+            else if (service_secret === config_1.default.security.externalServiceSecret)
                 req.attached_entities.service = {
                     name: service_name,
                     is_external: true,
                 };
-            else if (service_secret === config.security.frontendServiceSecret) {
+            else if (service_secret === config_1.default.security.frontendServiceSecret) {
                 req.attached_entities.service = {
                     name: 'frontend',
                     is_external: true,
                 };
             }
             else {
-                throw new exceptions.UnauthorizedException('Invalid service secret');
+                throw new exceptions_1.default.UnauthorizedException('Invalid service secret');
             }
         }
         return next();
     }
     catch (error) {
         logger.error('Error attaching service to req', error);
-        return next(new exceptions.UnauthorizedException(error.message));
+        return next(new exceptions_1.default.UnauthorizedException(error.message));
     }
 };
-export default authenticateService;
+exports.default = authenticateService;
 //# sourceMappingURL=authenticate-service.middleware.js.map

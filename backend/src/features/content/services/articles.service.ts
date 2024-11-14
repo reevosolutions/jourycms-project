@@ -255,9 +255,10 @@ export default class ArticlesService extends BaseService {
         this.logger.value('article_type not id', exists, filters.article_type, filters.article_type?.toString())
         if (exists) article_type = exists?._id?.toString();
       }
-      else{
+      else {
         this.logger.value('article_type is object id', filters.article_type.toString())
-        article_type = filters.article_type.toString();}
+        article_type = filters.article_type.toString();
+      }
       filter = createStringFilter<DocumentProperties>(q, totalQ, article_type, 'article_type' as any);
       q = filter.q; totalQ = filter.totalQ;
     }
@@ -316,7 +317,7 @@ export default class ArticlesService extends BaseService {
         load_deleted: false,
         dont_lean: false,
       });
-      
+
 
       let { count, page, sort, sort_by } = query;
       count = isNaN(count as unknown as number) ? undefined : parseInt(count.toString());
@@ -398,9 +399,11 @@ export default class ArticlesService extends BaseService {
     const scenario = this.initScenario(this.logger, this._buildResponseEdge,);
     try {
       const usersService = Container.get(UsersService);
-      const types = await this.articleTypeModel.find({
+      const typesArray = await this.articleTypeModel.find({
         is_deleted: false
       }).lean().exec();
+      const types: ApiAlias.List.Response['edge']['article_types'] = typesArray.reduce((prev, curr) => ({ ...prev, [curr._id.toString()]: curr }), {});
+
       const result: ApiAlias.List.Response['edge'] = {
         users: {},
         article_types: {},
@@ -409,19 +412,21 @@ export default class ArticlesService extends BaseService {
       const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
       const edge_users: ApiAlias.List.Response['edge']['users'] = {};
       let articleIds: string[] = [];
+      let typeIds: string[] = [];
       const userIds: string[] = [];
       for (const item of data) {
-        const type = types.find(t => t._id.toString() === item.article_type?.toString()) || null;
-        if (item.article_type) result.article_types[item.article_type] = type;
-        if (Object.keys(item.meta_fields || {}).length && type) {
-          for (const field of type.custom_meta_fields) {
-            if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
-              const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
-              articleIds = articleIds.concat(item.meta_fields[field.field_key]);
+        if (item.article_type) {
+          const type = types[item.article_type?.toString()] || null;
+          typeIds.push(item.article_type)
+          if (Object.keys(item.meta_fields || {}).length && type) {
+            for (const field of type.custom_meta_fields) {
+              if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
+                const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
+                articleIds = articleIds.concat(item.meta_fields[field.field_key]);
+              }
             }
           }
         }
-
         if (item.created_by) userIds.push(item.created_by);
       }
 
@@ -442,6 +447,7 @@ export default class ArticlesService extends BaseService {
             snapshots: undefined,
             insights: undefined,
           } as any;
+          if (article.article_type) typeIds.push(article.article_type);
         }
       }
       if (userIds.length) {
@@ -463,6 +469,10 @@ export default class ArticlesService extends BaseService {
         for (const user of users) {
           edge_users[user._id] = getUserSnapshot(user);
         }
+      }
+      if (typeIds.length) {
+        for (const typeId of uniq(typeIds))
+          if (typeId) result.article_types[typeId] = types[typeId];
       }
 
       result.linked_articles = linked_articles;

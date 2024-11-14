@@ -1,14 +1,38 @@
+"use strict";
 /**
  * @description This file is used as a controller.
  * @generator Levelup
  * @author dr. Salmi <reevosolutions@gmail.com>
  * @since 2024-04-03 00:17:36
  */
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
 };
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
@@ -16,27 +40,31 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import Container, { Inject, Service } from 'typedi';
-import { defaults } from '../../../utilities/helpers/utils.helpers';
-import BaseService from '../../../common/base.service';
-import config from '../../../config';
-import events from '../../../config/events.config';
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
-import exceptions from '../../../exceptions';
-import CacheManager from '../../../managers/cache-manager';
-import { createBooleanFilter, createDateRangeFilter, createStringFilter } from '../../../utilities/data/db/query.utilities';
-import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities';
-import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
-import { fixFiltersObject } from '../../../utilities/requests/index';
-import userCan from '../../../utilities/security/user-can';
-import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
-import ArticleTypeSanitizers from '../sanitizers/article-type.sanitizers';
-import ArticleTypeValidators from '../validators/article-type.validators';
-import { ArticleTypeSchemaFields } from '../models/article-type.model';
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const typedi_1 = __importStar(require("typedi"));
+const utils_helpers_1 = require("../../../utilities/helpers/utils.helpers");
+const base_service_1 = __importDefault(require("../../../common/base.service"));
+const config_1 = __importDefault(require("../../../config"));
+const events_config_1 = __importDefault(require("../../../config/events.config"));
+const eventDispatcher_decorator_1 = require("../../../decorators/eventDispatcher.decorator");
+const exceptions_1 = __importDefault(require("../../../exceptions"));
+const cache_manager_1 = __importDefault(require("../../../managers/cache-manager"));
+const query_utilities_1 = require("../../../utilities/data/db/query.utilities");
+const snapshots_utilities_1 = require("../../../utilities/entities/snapshots.utilities");
+const update_calculator_class_1 = __importDefault(require("../../../utilities/objects/update-calculator.class"));
+const index_1 = require("../../../utilities/requests/index");
+const user_can_1 = __importDefault(require("../../../utilities/security/user-can"));
+const general_mappers_1 = require("../../../common/mappers/general.mappers");
+const article_type_sanitizers_1 = __importDefault(require("../sanitizers/article-type.sanitizers"));
+const article_type_validators_1 = __importDefault(require("../validators/article-type.validators"));
+const article_type_model_1 = require("../models/article-type.model");
 /**
  * @description
  */
-let ArticleTypesService = class ArticleTypesService extends BaseService {
+let ArticleTypesService = class ArticleTypesService extends base_service_1.default {
     constructor(articleTypeModel, articleModel, commentModel, reviewModel, termModel, taxonomyModel, translationItemModel, translationNamespaceModel, translationProjectModel, eventDispatcher) {
         super();
         this.articleTypeModel = articleTypeModel;
@@ -52,11 +80,11 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         this.ENTITY = 'articleType';
     }
     /**
-    * @description Generates the snapshots object for the entity.
+    * @description Generates the snapshots article type for the entity.
     */
     async _generateSnapshotsObject(new_data, old_data, authData) {
         try {
-            const cache = Container.get(CacheManager);
+            const cache = typedi_1.default.get(cache_manager_1.default);
             const result = {
                 created_by: undefined
             };
@@ -78,7 +106,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
      */
     _createSearchMeta(data, old) {
         /**
-         * Define the search meta object
+         * Define the search meta article type
          */
         const search_meta = {
             name: data.name,
@@ -136,9 +164,9 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             totalQ = totalQ.where(({ $text: { $search: search } }));
         }
         /**
-         * @description fixing filters object
+         * @description fixing filters article type
          */
-        filters = fixFiltersObject(filters);
+        filters = (0, index_1.fixFiltersObject)(filters);
         /**
          * @description Inject attributes in the filters
          */
@@ -147,46 +175,46 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app)
             (filters).app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
         // -- attributed:app
-        if (ArticleTypeSchemaFields['app']) {
-            filter = createStringFilter(q, totalQ, filters['app'], 'app');
+        if (article_type_model_1.ArticleTypeSchemaFields['app']) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['app'], 'app');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- attributed:company
-        filter = createStringFilter(q, totalQ, filters.company, 'company');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.company, 'company');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- attributed:store
-        filter = createStringFilter(q, totalQ, filters.store, 'attributes.store');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.store, 'attributes.store');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- is_deleted
-        filter = createBooleanFilter(q, totalQ, filters.is_deleted, 'is_deleted');
+        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, 'is_deleted');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_at
-        filter = createDateRangeFilter(q, totalQ, filters.created_at, 'created_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, 'created_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- updated_at
-        filter = createDateRangeFilter(q, totalQ, filters.updated_at, 'updated_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, 'updated_at');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- _id
-        filter = createStringFilter(q, totalQ, filters._id, '_id');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, '_id');
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_by
-        if (ArticleTypeSchemaFields['created_by']) {
-            filter = createDateRangeFilter(q, totalQ, filters['created_by'], 'created_by');
+        if (article_type_model_1.ArticleTypeSchemaFields['created_by']) {
+            filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters['created_by'], 'created_by');
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- name
-        filter = createStringFilter(q, totalQ, filters['name'], 'name');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
         q = filter.q;
         totalQ = filter.totalQ;
-        filter = createStringFilter(q, totalQ, filters['slug'], 'slug');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['slug'], 'slug');
         q = filter.q;
         totalQ = filter.totalQ;
         return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
@@ -203,12 +231,12 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
             });
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             let { count, page, sort, sort_by } = query;
@@ -222,7 +250,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             const filter = this._applyFilters({ q, totalQ, query, authData, opt });
             q = filter.q;
             totalQ = filter.totalQ;
-            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config.settings.listing.defaultCount : count;
+            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount : count;
             const { skip, take } = this.getPaginationOptions(limit, page);
             const sortOptions = this.getSortOptions(sort, sort_by);
             if (take)
@@ -236,7 +264,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * @description Add query to execution scenario
              */
-            scenario.request_filter = fixFiltersObject(query.filters);
+            scenario.request_filter = (0, index_1.fixFiltersObject)(query.filters);
             scenario.listing_query = {
                 model: q.model.modelName,
                 query: q.getQuery(),
@@ -255,7 +283,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             scenario.found = items === null || items === void 0 ? void 0 : items.length;
             scenario.total = total;
             const result = {
-                data: items.map(doc => mapDocumentToExposed(doc)),
+                data: items.map(doc => (0, general_mappers_1.mapDocumentToExposed)(doc)),
                 pagination: {
                     total,
                     pages,
@@ -264,7 +292,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Log execution result before returning the result
              */
-            this.logExecutionResult(this.list, result, authData, scenario);
+            // this.logExecutionResult(this.list, result, authData, scenario);
             return result;
         }
         catch (error) {
@@ -280,13 +308,13 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
             });
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             const q = this.articleTypeModel.findById(id);
@@ -297,19 +325,19 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions.ItemNotFoundException('Object deleted');
+                throw new exceptions_1.default.ItemNotFoundException('Article type deleted');
             /**
-            * Check if the user can view the object
+            * Check if the user can view the article type
             */
-            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this article type');
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -318,7 +346,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
@@ -332,13 +360,13 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
             });
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             const q = this.articleTypeModel.findOne({ name });
@@ -349,19 +377,19 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions.ItemNotFoundException('Object deleted');
+                throw new exceptions_1.default.ItemNotFoundException('Article type deleted');
             /**
-            * Check if the user can view the object
+            * Check if the user can view the article type
             */
-            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this article type');
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -370,7 +398,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getByName, error);
             throw error;
@@ -384,13 +412,13 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Fill options argument with the defaults
              */
-            opt = defaults(opt, {
+            opt = (0, utils_helpers_1.defaults)(opt, {
                 load_deleted: false,
                 dont_lean: false,
                 ignore_not_found_error: false,
             });
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             const q = this.articleTypeModel.findOne({ slug });
@@ -401,19 +429,19 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions.ItemNotFoundException('Object deleted');
+                throw new exceptions_1.default.ItemNotFoundException('Article type deleted');
             /**
-            * Check if the user can view the object
+            * Check if the user can view the article type
             */
-            if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to view this object');
+            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this article type');
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -422,7 +450,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException)
+            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getByName, error);
             throw error;
@@ -435,17 +463,17 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m;
         try {
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             /**
              * await sanitize data here
              */
-            data = await ArticleTypeSanitizers.sanitizeCreateBody(data, authData);
+            data = await article_type_sanitizers_1.default.sanitizeCreateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = ArticleTypeValidators.validateCreateBody(data);
+            const { error } = article_type_validators_1.default.validateCreateBody(data);
             if (error)
                 throw error;
             let {} = data;
@@ -454,14 +482,14 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
              */
             data.app = ((_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b._id) ? (_d = (_c = authData === null || authData === void 0 ? void 0 : authData.current) === null || _c === void 0 ? void 0 : _c.app) === null || _d === void 0 ? void 0 : _d._id : (opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) || (((_f = (_e = authData.current) === null || _e === void 0 ? void 0 : _e.service) === null || _f === void 0 ? void 0 : _f.name) && !((_h = (_g = authData.current) === null || _g === void 0 ? void 0 : _g.service) === null || _h === void 0 ? void 0 : _h.is_external)) ? data.app : undefined;
             /**
-             * Check if the user can create the object
+             * Check if the user can create the article type
              */
             if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) && ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
-                throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
-            if (!(opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) && !userCan.createObject(this.ENTITY, data, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to create this object');
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this article type on this app');
+            if (!(opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) && !user_can_1.default.createObject(this.ENTITY, data, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this article type');
             /**
-             * Create data object
+             * Create data article type
              */
             const docObject = Object.assign({}, data);
             /**
@@ -470,19 +498,19 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Create search meta
              */
-            if (ArticleTypeSchemaFields['search_meta']) {
+            if (article_type_model_1.ArticleTypeSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, null);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
             /**
-             * Create the object on DB
+             * Create the article type on DB
              */
             const doc = await this.articleTypeModel.create(docObject);
             if (!doc)
-                throw new exceptions.InternalServerError('Failed to create the object');
-            this.eventDispatcher.dispatch(events.content.articleType.created, { data: doc });
+                throw new exceptions_1.default.InternalServerError('Failed to create the article type');
+            this.eventDispatcher.dispatch(events_config_1.default.content.articleType.created, { data: doc });
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -502,64 +530,64 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         var _a, _b;
         try {
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             /**
              * await sanitize data here
              */
-            data = await ArticleTypeSanitizers.sanitizeUpdateBody(data, authData);
+            data = await article_type_sanitizers_1.default.sanitizeUpdateBody(data, authData);
             /**
              * Validate data here
              */
-            const { error } = ArticleTypeValidators.validateUpdateBody(data);
+            const { error } = article_type_validators_1.default.validateUpdateBody(data);
             if (error)
                 throw error;
             /**
-             * Extract the required in block variables from the data object
+             * Extract the required in block variables from the data article type
              */
             const {} = data;
             /**
-             * load old object and check if it exists
+             * load old article type and check if it exists
              */
             const old = await this.articleTypeModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             if (old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object is deleted');
-            if (!userCan.updateObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to update this object');
+                throw new exceptions_1.default.UnauthorizedException('Article type is deleted');
+            if (!user_can_1.default.updateObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to update this article type');
             /**
              * detect changes
              */
-            const updates = new ObjectUpdatedProperties(old.toObject(), data, true);
+            const updates = new update_calculator_class_1.default(old.toObject(), data, true);
             scenario.updates = updates.asArray;
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'updated',
                 updates: updates.asArray
             };
             /**
-             * Create data object
+             * Create data article type
              */
             const docObject = Object.assign({}, data);
             /**
              * Create search meta
              */
-            if (ArticleTypeSchemaFields['search_meta']) {
+            if (article_type_model_1.ArticleTypeSchemaFields['search_meta']) {
                 docObject['search_meta'] = this._createSearchMeta(docObject, old);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
             /**
-             * Update the object on DB
+             * Update the article type on DB
              */
             const doc = await this.articleTypeModel.findByIdAndUpdate(id, Object.assign(Object.assign({}, docObject), { $addToSet: {
                     updates: updateObject
                 } }), { new: true });
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             /**
              * Handle the updated effects on the same service
              */
@@ -567,9 +595,9 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
             /**
              * Dispatch the updated event
              */
-            this.eventDispatcher.dispatch(events.content.articleType.updated, { data: doc });
+            this.eventDispatcher.dispatch(events_config_1.default.content.articleType.updated, { data: doc });
             const result = {
-                data: mapDocumentToExposed(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
             };
             /**
              * Log execution result before returning the result
@@ -592,23 +620,23 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         var _a, _b;
         try {
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'deleted',
                 updates: []
             };
             const old = await this.articleTypeModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             if (old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object already deleted');
-            if (!userCan.deleteObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to delete this object');
+                throw new exceptions_1.default.UnauthorizedException('Article type already deleted');
+            if (!user_can_1.default.deleteObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to delete this article type');
             const doc = await this.articleTypeModel.findByIdAndUpdate(id, {
                 is_deleted: true,
                 deleted_at: new Date(),
@@ -616,7 +644,7 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
                     updates: updateObject
                 }
             }, { new: true });
-            this.eventDispatcher.dispatch(events.content.articleType.deleted, { data: doc });
+            this.eventDispatcher.dispatch(events_config_1.default.content.articleType.deleted, { data: doc });
             const result = {
                 data: {
                     deleted: true
@@ -640,23 +668,23 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
         var _a, _b;
         try {
             /**
-             * Define the execution scenario object
+             * Define the execution scenario article type
              */
             const scenario = {};
             const updateObject = {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
-                updated_by: getUserSnapshot((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
+                updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
                 action: 'restored',
                 updates: []
             };
             const old = await this.articleTypeModel.findById(id);
             if (!old)
-                throw new exceptions.ItemNotFoundException('Object not found');
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
             if (!old.is_deleted)
-                throw new exceptions.UnauthorizedException('Object already exists');
-            if (!userCan.restoreObject(this.ENTITY, old, authData))
-                throw new exceptions.UnauthorizedException('You are not allowed to restore this object');
+                throw new exceptions_1.default.UnauthorizedException('Article type already exists');
+            if (!user_can_1.default.restoreObject(this.ENTITY, old, authData))
+                throw new exceptions_1.default.UnauthorizedException('You are not allowed to restore this article type');
             const doc = await this.articleTypeModel.findByIdAndUpdate(id, {
                 is_deleted: false,
                 deleted_at: null,
@@ -665,8 +693,8 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
                 }
             }, { new: true });
             if (!doc)
-                throw new exceptions.ItemNotFoundException('Object not found');
-            this.eventDispatcher.dispatch(events.content.articleType.restored, { data: doc });
+                throw new exceptions_1.default.ItemNotFoundException('Article type not found');
+            this.eventDispatcher.dispatch(events_config_1.default.content.articleType.restored, { data: doc });
             const result = {
                 data: {
                     restored: true
@@ -685,18 +713,18 @@ let ArticleTypesService = class ArticleTypesService extends BaseService {
     }
 };
 ArticleTypesService = __decorate([
-    Service(),
-    __param(0, Inject('articleTypeModel')),
-    __param(1, Inject('articleModel')),
-    __param(2, Inject('commentModel')),
-    __param(3, Inject('reviewModel')),
-    __param(4, Inject('termModel')),
-    __param(5, Inject('taxonomyModel')),
-    __param(6, Inject('translationItemModel')),
-    __param(7, Inject('translationNamespaceModel')),
-    __param(8, Inject('translationProjectModel')),
-    __param(9, EventDispatcher()),
+    (0, typedi_1.Service)(),
+    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
+    __param(1, (0, typedi_1.Inject)('articleModel')),
+    __param(2, (0, typedi_1.Inject)('commentModel')),
+    __param(3, (0, typedi_1.Inject)('reviewModel')),
+    __param(4, (0, typedi_1.Inject)('termModel')),
+    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
+    __param(6, (0, typedi_1.Inject)('translationItemModel')),
+    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
+    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
+    __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], ArticleTypesService);
-export default ArticleTypesService;
+exports.default = ArticleTypesService;
 //# sourceMappingURL=article-types.service.js.map

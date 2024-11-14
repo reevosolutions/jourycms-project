@@ -1,6 +1,6 @@
 {
   "name": "jourycms-sdk",
-  "version": "1.0.4",
+  "version": "1.0.7",
   "description": "Sdk for Joury CMS",
   "main": "dist/index.js",
   "files": [
@@ -25,8 +25,8 @@
     "lint": "yarn lint:src && yarn lint:typing",
     "lint:fix": "eslint ./src --fix",
     "push": "git add . && git commit -m 'update' && git push",
-    "publish": "npm publish",
-    "pub": "yarn build && yarn push && yarn publish"
+    "publish": "yarn build && npm publish",
+    "pub": "yarn push && yarn publish"
   },
   "dependencies": {
     "axios": "^1.7.7",
