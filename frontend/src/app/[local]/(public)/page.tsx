@@ -1,9 +1,8 @@
 import { publicRoutes } from "@/config";
-import Homepage from "@/themes/miqat/pages/homepage";
-import Image from "next/image";
+import ThemePage_Client from "@/themes/miqat/pages/homepage/page.client";
 
 const ROUTE = publicRoutes.homepage;
 
 export default function Home() {
-  return <Homepage {...{ route: ROUTE }} />;
+  return <ThemePage_Client {...{ route: ROUTE }} />;
 }

@@ -11,50 +11,106 @@ const routes = {
         path: "/omrah" as const,
         title: "عروض العمرة",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/omrah/:page" as const,
+            title: "عروض العمرة",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       tombolas: {
         path: "/tombolas" as const,
         title: "طنبولات",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/tombolas/:page" as const,
+            title: "طنبولات",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       bids: {
         path: "/bids" as const,
         title: "مناقصات",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/bids/:page" as const,
+            title: "مناقصات",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       healthServices: {
         path: "/health-services" as const,
         title: "خدمات صحية",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/health-services/:page" as const,
+            title: "خدمات صحية",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
-      transportation: {
-        path: "/transportation" as const,
+      transportationServices: {
+        path: "/transportation-services" as const,
         title: "خدمات النقل",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/transportation-services/:page" as const,
+            title: "خدمات النقل",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       escorts: {
         path: "/escorts" as const,
         title: "مرافقين",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          pages: {
+            path: "/escorts/:page" as const,
+            title: "مرافقين",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       doctors: {
         path: "/doctors" as const,
         title: "أطباء",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/doctors/:page" as const,
+            title: "أطباء",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       
       jobs: {
         path: "/jobs" as const,
         title: "وظائف",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
-        _: {},
+        _: {
+          paged: {
+            path: "/jobs/:page" as const,
+            title: "وظائف",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem['ac'],
+            _: {},
+          },
+        },
       },
       about: {
         path: "/about" as const,

@@ -1,4 +1,3 @@
-import { adminRoutes } from "@/config";
 
 export function filterRoutes(
   routes: { [key: string]: Levelup.CMS.V1.UI.Routes.RouteItem },
@@ -77,11 +76,11 @@ export const getRouteTree = (
 
 export const setPathParams = (
   path: string,
-  params?: { [K: string]: string | null | undefined },
+  params?: { [K: string]: string | number | null | undefined },
 ) => {
   if (!Object.keys(params || {})) return path;
   return Object.keys(params || {}).reduce(
-    (prev, curr) => prev.replaceAll(`:${curr}`, (params as any)[curr]),
+    (previous, current) => previous.replaceAll(`:${current}`, (params as any)[current]),
     path,
   );
 };

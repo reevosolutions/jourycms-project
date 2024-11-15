@@ -1,22 +1,20 @@
 import "@utilities/extend-prototypes";
 //
+import { Toaster } from "@/components/ui/sonner";
 import { appConfig } from "@/config";
 import NProgressProvider from "@/hooks/context/nprogress.provider";
 import initTranslations from "@/i18n/index";
 import TranslationsProvider from "@/i18n/provider";
 import { i18nNamespaces } from "@config/i18n.config";
 import AuthenticationLoader from "@features/auth/utils/authentication-loader";
-import { ProvideFirestore } from "@hooks/use-firestore";
 import AppConfigLoader from "@lib/app-config-manager/utils/app-config-loader";
 import initLogger, { LoggerContext } from "@lib/logging";
-import { ReactQueryDevtoolsProvider } from "@lib/utils/dev-tools/react-query-dev-tools";
 import { StoreProvider } from "@redux/providers/store-provider";
 import colors from "colors";
 import type { Metadata, Viewport } from "next";
 import { Inter, Noto_Sans_Arabic } from "next/font/google";
 import localFont from "next/font/local";
 import "../styles/main.scss";
-import { Toaster } from "@/components/ui/sonner"
 
 colors.enable();
 
@@ -186,23 +184,18 @@ export default async function RootLayout({
       <body
         className={`${inter.className} ${noto.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
       >
-        <ReactQueryDevtoolsProvider>
-          <TranslationsProvider
-            namespaces={i18nNamespaces}
-            locale={locale}
-            resources={resources}
-          >
-            <StoreProvider>
-              {/* <ThemeLoader /> */}
-              <ProvideFirestore>
-                <AuthenticationLoader />
-                <AppConfigLoader />
-
-                <NProgressProvider>{children}</NProgressProvider>
-              </ProvideFirestore>
-            </StoreProvider>
-          </TranslationsProvider>
-        </ReactQueryDevtoolsProvider>
+        <TranslationsProvider
+          namespaces={i18nNamespaces}
+          locale={locale}
+          resources={resources}
+        >
+          <StoreProvider>
+            {/* <ThemeLoader /> */}
+            <AuthenticationLoader />
+            <AppConfigLoader />
+            <NProgressProvider>{children}</NProgressProvider>
+          </StoreProvider>
+        </TranslationsProvider>
         <Toaster position="bottom-center" richColors />
       </body>
     </html>

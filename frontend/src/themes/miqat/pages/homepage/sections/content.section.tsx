@@ -2,7 +2,7 @@
 import Image from "next/image";
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import ContentSection from "@/themes/miqat/components/content.section";
+import ContentSection from "@/themes/miqat/components/content.section.client";
 import { ArticleTypeSlug } from "@/themes/miqat/config";
 
 export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {};

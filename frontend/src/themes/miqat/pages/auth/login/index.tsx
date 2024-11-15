@@ -1,11 +1,12 @@
 'use client';
+import { publicRoutes } from "@/config";
 import LoginForm from "@/features/auth/forms/login.form";
+import useAuth from "@/hooks/use-auth";
+import { ReactQueryDevtoolsProvider } from "@/lib/utils/dev-tools/react-query-dev-tools";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import * as React from "react";
 import DefaultLayout from "../../../layouts/default.layout";
-import { redirect } from "next/navigation";
-import useAuth from "@/hooks/use-auth";
-import { publicRoutes } from "@/config";
 
 import ApiAlias = Levelup.CMS.V1.Auth.Api.Auth.Signin;
 export type PageProps = JouryCMS.Theme.PageProps & {};
@@ -17,6 +18,8 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return isAuthenticated ? redirect(publicRoutes.homepage._.myAccount.path) : (
+    <ReactQueryDevtoolsProvider>
+
     <DefaultLayout route={route}>
       <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
         <div className="flex flex-col gap-4 sm:-mt-40">
@@ -31,6 +34,7 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
         </div>
       </div>
     </DefaultLayout>
+    </ReactQueryDevtoolsProvider>
   );
 };
 

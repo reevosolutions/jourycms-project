@@ -9,6 +9,7 @@
 
 // import the service-specific models
 import { User } from '../models/user.model';
+import { Role } from '../models/role.model';
 
 /**
  * Load the service models.
@@ -21,6 +22,7 @@ const getServiceModels: () => { [name: string]: any } = () => {
 		 * The content feature models.
 		 */
 		userModel: User,
+		roleModel: Role,
 	}
 }
 

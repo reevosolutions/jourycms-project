@@ -1,29 +1,26 @@
-import { useMemo } from 'react';
 
 export const DOTS = '...';
 
 const range = (start: number, end: number) => {
   let length = end - start + 1;
   /*
-  	Create an array of certain length and set the elements within it from
+    Create an array of certain length and set the elements within it from
     start value to end value.
   */
   return Array.from({ length }, (_, index) => index + start);
 };
-
-type UsePagination = (params: {
+ 
+export const buildPaginationRange: (params: {
   totalCount: number;
   pageSize: number;
   siblingCount: number;
   currentPage: number;
-}) => (string | number)[] | undefined;
-export const usePagination: UsePagination = ({
+}) => (string | number)[] | undefined = ({
   totalCount,
   pageSize,
   siblingCount = 1,
   currentPage,
 }) => {
-  const paginationRange = useMemo(() => {
     const totalPageCount = Math.ceil(totalCount / pageSize);
 
     // Pages count is determined as siblingCount + firstPage + lastPage + currentPage + 2*DOTS
@@ -74,7 +71,22 @@ export const usePagination: UsePagination = ({
       let middleRange = range(leftSiblingIndex, rightSiblingIndex);
       return [firstPageIndex, DOTS, ...middleRange, DOTS, lastPageIndex];
     }
-  }, [totalCount, pageSize, siblingCount, currentPage]);
+  };
 
-  return paginationRange;
+type UsePagination = (params: {
+  totalCount: number;
+  pageSize: number;
+  siblingCount: number;
+  currentPage: number;
+}) => (string | number)[] | undefined;
+export const usePagination: UsePagination = ({
+  totalCount,
+  pageSize,
+  siblingCount = 1,
+  currentPage,
+}) => {
+
+  return buildPaginationRange({
+    totalCount, pageSize, siblingCount, currentPage
+  });
 };

@@ -1,9 +1,7 @@
 /* eslint-disable unicorn/no-useless-undefined */
 import { publicRoutes } from "@/config";
 import { getArticleBySlug, listArticles } from "@/themes/miqat/data";
-import ArticlePage from "@/themes/miqat/pages/article/omrah.index";
-import Image from "next/image";
-import { toast } from "sonner";
+import ArticlePage from "@/themes/miqat/pages/article/article.omrah";
 
 const ROUTE = publicRoutes.homepage;
 

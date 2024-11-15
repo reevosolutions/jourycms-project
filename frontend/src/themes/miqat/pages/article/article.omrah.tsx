@@ -118,8 +118,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                 <div className="sticky top-6 grid sm:grid-cols-2 xl:grid-cols-1 gap-6 text-2xl">
                   {/* field */}
                   <div className=" flex flex-row items-top gap-4">
-                    <GiDuration className="w-8 h-8 text-slate-400" />
-                    <div className="grid grid-cols-1 gap-0 -mt-1">
+                    <GiDuration className="w-8 h-8 text-beige-50" />
+                    <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                       <span className="text-xl text-slate-500">{"مدة الرحلة"}</span>
                       <span className="d">{
                         getMetaFieldValueLabel(
@@ -130,35 +130,35 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                       </span>
                     </div>
                   </div>
-                  
+
                   {/* field */}
                   <div className=" flex flex-row items-top gap-4">
-                    <IoMoonOutline className="w-8 h-8 text-slate-400" />
-                    <div className="grid grid-cols-1 gap-0 -mt-1">
+                    <IoMoonOutline className="w-8 h-8 text-beige-50" />
+                    <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                       <span className="text-xl text-slate-500">{"رحلة رمضان"}</span>
                       <span className={cn("d", article.meta_fields.ramdhan_trip && ("text-green-600 font-bold"))}>{article.meta_fields.ramdhan_trip ? 'نعم' : 'لا'}</span>
                     </div>
                   </div>
                   {/* field */}
                   <div className=" flex flex-row items-top gap-4">
-                    <LuCircleDollarSign className="w-8 h-8 text-slate-400" />
-                    <div className="grid grid-cols-1 gap-0 -mt-1">
+                    <LuCircleDollarSign className="w-8 h-8 text-beige-50" />
+                    <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                       <span className="text-xl text-slate-500">{"السعر"}</span>
                       <span className="d">{formatAmount(article.meta_fields.price, ',', 0)} DA</span>
                     </div>
                   </div>
                   {/* field */}
                   <div className=" flex flex-row items-top gap-4">
-                    <LuCalendarDays className="w-8 h-8 text-slate-400" />
-                    <div className="grid grid-cols-1 gap-0 -mt-1">
+                    <LuCalendarDays className="w-8 h-8 text-beige-50" />
+                    <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                       <span className="text-xl text-slate-500">{"تاريخ الرحلة"}</span>
                       <span className="d">{format(article.meta_fields.flight_date, 'dd / MM / YYY')}</span>
                     </div>
                   </div>
                   {/* time */}
                   <div className=" flex flex-row items-top gap-4">
-                    <LuAlarmClock className="w-8 h-8 text-slate-400" />
-                    <div className="grid grid-cols-1 gap-0 -mt-1">
+                    <LuAlarmClock className="w-8 h-8 text-beige-50" />
+                    <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                       <span className="text-xl text-slate-500">{"توقيت الرحلة"}</span>
                       <span className="d">{article.meta_fields.flight_time}</span>
                     </div>
@@ -166,8 +166,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {airelines_company && (
                     <div className=" flex flex-row items-top gap-4">
-                      <PiAirplaneTilt className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <PiAirplaneTilt className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"شركة الطيران"}</span>
                         <span className="d">{airelines_company.title}</span>
                       </div>
@@ -176,8 +176,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {article.meta_fields.trip_type && (
                     <div className=" flex flex-row items-top gap-4">
-                      <BsSuitcase className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <BsSuitcase className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"نوع الرحلة"}</span>
                         <span className="d">{
                           getMetaFieldValueLabel(
@@ -192,8 +192,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {article.meta_fields.flight_number && (
                     <div className=" flex flex-row items-top gap-4">
-                      <HiOutlineTicket className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <HiOutlineTicket className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"رقم الرحلة"}</span>
                         <span className="d">{article.meta_fields.flight_number}</span>
                       </div>
@@ -202,8 +202,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {departure_airoport && (
                     <div className=" flex flex-row items-top gap-4">
-                      <TbPlaneDeparture className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <TbPlaneDeparture className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"مطار الاقلاع"}</span>
                         <span className="d">{departure_airoport.title}</span>
                       </div>
@@ -212,8 +212,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {arrival_airoport && (
                     <div className=" flex flex-row items-top gap-4">
-                      <TbPlaneArrival className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <TbPlaneArrival className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"مطار الوصول"}</span>
                         <span className="d">{arrival_airoport.title}</span>
                       </div>
@@ -222,8 +222,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {article.meta_fields.entry_point && (
                     <div className=" flex flex-row items-top gap-4">
-                      <PiTrolleySuitcase className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <PiTrolleySuitcase className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"مدينة الدخول"}</span>
                         <span className="d">{
                           getMetaFieldValueLabel(
@@ -239,9 +239,9 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {shrines_at_mekkah.length > 0 && (
                     <div className=" flex flex-row items-top gap-4">
                       <span className="px-1 inline-block">
-                        <BsMoonStars className="w-6 h-6 text-slate-400" />
+                        <BsMoonStars className="w-6 h-6 text-beige-50" />
                       </span>
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"المزارات في مكة"}</span>
                         <ul className="flex flex-col list-disc list-inside border-slate-300">{
                           shrines_at_mekkah.map(a => (
@@ -255,9 +255,9 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {shrines_at_medina.length > 0 && (
                     <div className=" flex flex-row items-top gap-4">
                       <span className="px-1 inline-block">
-                        <BsMoonStars className="w-6 h-6 text-slate-400" />
+                        <BsMoonStars className="w-6 h-6 text-beige-50" />
                       </span>
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"المزارات في المدينة المنورة"}</span>
                         <ul className="flex flex-col list-disc list-inside border-slate-300">{
                           shrines_at_medina.map(a => (
@@ -270,8 +270,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {mekkah_hotel && (
                     <div className=" flex flex-row items-top gap-4">
-                      <MdOutlineLocalHotel className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <MdOutlineLocalHotel className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"الفندق في مكة المكرمة"}</span>
                         <span className="">{mekkah_hotel.title}</span>
                       </div>
@@ -280,8 +280,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {article.meta_fields.subsistence_at_mekkah?.length > 0 && (
                     <div className=" flex flex-row items-top gap-4">
-                      <IoFastFoodOutline className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <IoFastFoodOutline className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"الإعاشة في مكة المكرمة"}</span>
                         <ul className="flex flex-col list-disc list-inside border-slate-300">{
                           article.meta_fields.subsistence_at_mekkah.map((field: string) => (
@@ -298,8 +298,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {medina_hotel && (
                     <div className=" flex flex-row items-top gap-4">
-                      <MdOutlineLocalHotel className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <MdOutlineLocalHotel className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"الفندق في المدينة المنورة"}</span>
                         <span className="">{medina_hotel.title}</span>
                       </div>
@@ -308,8 +308,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                   {/* field */}
                   {article.meta_fields.subsistence_at_medina?.length > 0 && (
                     <div className=" flex flex-row items-top gap-4">
-                      <IoFastFoodOutline className="w-8 h-8 text-slate-400" />
-                      <div className="grid grid-cols-1 gap-0 -mt-1">
+                      <IoFastFoodOutline className="w-8 h-8 text-beige-50" />
+                      <div className="flex flex-col gap-0 -mt-1 justify-start items-start">
                         <span className="text-xl text-slate-500">{"الإعاشة في المدينة المنورة"}</span>
                         <ul className="flex flex-col list-disc list-inside border-slate-300">{
                           article.meta_fields.subsistence_at_medina.map((field: string) => (

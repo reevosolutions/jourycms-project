@@ -7,6 +7,7 @@
 
 import { Router } from 'express';
 import authController from '../controllers/auth.controller';
+import rolesController from '../controllers/roles.controller';
 import usersController from '../controllers/users.controller';
 import initLogger, { LoggerContext } from '../../../utilities/logging';
 import { respond } from '../../../utilities/requests';
@@ -35,6 +36,7 @@ export default (app: Router): void => {
 	});
 
 	authController(route);
+	rolesController(route);
 	usersController(route);
 };
 

@@ -39,7 +39,7 @@ const menuItems = [
   publicRoutes.homepage._.omrah,
   publicRoutes.homepage._.tombolas,
   publicRoutes.homepage._.healthServices,
-  publicRoutes.homepage._.transportation,
+  publicRoutes.homepage._.transportationServices,
 ];
 
 export type HeaderProps = JouryCMS.Theme.ComponentProps & {

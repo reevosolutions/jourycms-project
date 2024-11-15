@@ -12,10 +12,13 @@ export const serverSdk = initSdk(
 );;
 
 
+export const getArticleTypeBySlug = async (slug: string): Promise<Levelup.CMS.V1.Content.Api.ArticleTypes.GetOne.Response> => {
+  const data = await serverSdk.content.articleTypes.getBySlug(slug);
+  return data || null
+}
+
 export const getArticleBySlug = async (slug: string): Promise<Levelup.CMS.V1.Content.Api.Articles.GetOne.Response> => {
-  const data = await serverSdk.content.articles.getBySlug(slug, {
-    
-  });
+  const data = await serverSdk.content.articles.getBySlug(slug, {});
   return data || null
 }
 

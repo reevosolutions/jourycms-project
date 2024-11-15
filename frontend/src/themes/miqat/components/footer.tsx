@@ -1,4 +1,5 @@
 "use client";
+import { publicRoutes } from "@/config";
 import Icons from "@/features/admin/ui/icons";
 import useCMSContent from "@/hooks/use-cms-content";
 import { multiLinesToHTML } from "@/lib/utilities/strings/html.utilities";
@@ -99,10 +100,10 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
                 </li>
                 <li className="">
                   <Link
-                    href="/"
+                    href={publicRoutes.homepage._.omrah.path}
                     className="text-white transition-all duration-200 hocus:text-beige-50"
                   >
-                    العروض
+                    {publicRoutes.homepage._.omrah.title}
                   </Link>
                 </li>
                 <li className="">

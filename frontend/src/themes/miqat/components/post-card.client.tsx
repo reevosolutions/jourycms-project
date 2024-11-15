@@ -19,13 +19,13 @@ import { formatAmount } from "@/lib/utilities/strings";
 import { animated, useSpring } from "@react-spring/web";
 import { ArticleTypeSlug } from "../config";
 
-export type PostCardProps = JouryCMS.Theme.ComponentProps & {
+export type PostCard_ClientProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;
   edge?: Partial<ApiAlias.List.Response["edge"]>;
   articleTypeSlug: `${ArticleTypeSlug}`;
 };
 
-const PostCard: React.FC<PostCardProps> = ({ data, edge, articleTypeSlug }) => {
+const PostCard_Client: React.FC<PostCard_ClientProps> = ({ data, edge, articleTypeSlug }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -152,4 +152,4 @@ const PostCard: React.FC<PostCardProps> = ({ data, edge, articleTypeSlug }) => {
   );
 };
 
-export default PostCard;
+export default PostCard_Client;

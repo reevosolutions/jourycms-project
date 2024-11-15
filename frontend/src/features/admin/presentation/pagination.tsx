@@ -1,5 +1,5 @@
 import clsx from "clsx";
-import { DOTS, usePagination } from "@hooks/use-pagination";
+import { buildPaginationRange, DOTS } from "@hooks/use-pagination";
 import { last } from "lodash";
 import React from "react";
 import Icons from "@/features/admin/ui/icons";
@@ -12,7 +12,7 @@ const CustomPagination: React.FC<{
   pageSize: number;
   className?: string;
 }> = ({ onPageChange, totalCount, siblingCount = 1, currentPage, pageSize, className }) => {
-  const paginationRange = usePagination({
+  const paginationRange = buildPaginationRange({
     currentPage,
     totalCount: totalCount || 0,
     siblingCount,

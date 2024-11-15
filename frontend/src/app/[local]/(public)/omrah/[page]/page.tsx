@@ -7,10 +7,10 @@ import ThemePage_Server from "@/themes/miqat/pages/omarah/page.server";
 
 
 const ROUTE = publicRoutes.homepage._.omrah;
-const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.OMRAH;
 
 const logger = initLogger(LoggerContext.PAGE, ROUTE.path);
 
+const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.OMRAH;
 const COUNT = 12;
 
 export const revalidate = 60;

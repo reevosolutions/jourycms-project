@@ -100,10 +100,10 @@ export default class AppConfigManager {
         this.logger.info(
           "permissions data not found in cache, fetching from server",
         );
-        const response = await this.sdk.auth.permissions.list({
-          count: -1,
-        })
-        permissions = response.data;
+        // const response = await this.sdk.auth.permissions.list({
+        //   count: -1,
+        // })
+        permissions = [];
         await applyOnChunkedArray(permissions, 50, async array => {
           await this.cache.db?.permissions.bulkPut(array || []);
         });

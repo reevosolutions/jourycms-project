@@ -72,10 +72,8 @@ export default function Page({ }) {
         <h1 className="up-page-title mb-4 text-xl font-bold flex items-center justify-between">
           {ROUTE.title}
           <div className="flex items-center gap-4">
-
           </div>
         </h1>
-
         <ul className="flex flex-col gap-4 px-4 py-8 min-h-screen-80">
           {articleTypes.map(item => (
             <li className="d" key={item._id}>
@@ -86,7 +84,6 @@ export default function Page({ }) {
             </li>
           ))}
         </ul>
-
       </section>
     </AdminLayout.PageLayout>
   );

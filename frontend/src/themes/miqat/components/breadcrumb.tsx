@@ -18,7 +18,7 @@ const BreadcrumbComponent: React.FC<BreadcrumbComponentProps> = ({ route }) => {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink href="/">
-            <LuHome className="w-4 h-4" />
+            <LuHome  aria-label="الرئيسية" className="w-4 h-4" />
           </BreadcrumbLink>
         </BreadcrumbItem>
         <BreadcrumbSeparator>

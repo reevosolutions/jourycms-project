@@ -355,12 +355,14 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     async _buildResponseEdge(data) {
+        var _a;
         const scenario = this.initScenario(this.logger, this._buildResponseEdge);
         try {
             const usersService = typedi_1.default.get(users_service_1.default);
-            const types = await this.articleTypeModel.find({
+            const typesArray = await this.articleTypeModel.find({
                 is_deleted: false
             }).lean().exec();
+            const types = typesArray.reduce((prev, curr) => (Object.assign(Object.assign({}, prev), { [curr._id.toString()]: curr })), {});
             const result = {
                 users: {},
                 article_types: {},
@@ -369,16 +371,18 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             const linked_articles = {};
             const edge_users = {};
             let articleIds = [];
+            let typeIds = [];
             const userIds = [];
             for (const item of data) {
-                const type = types.find(t => { var _a; return t._id.toString() === ((_a = item.article_type) === null || _a === void 0 ? void 0 : _a.toString()); }) || null;
-                if (item.article_type)
-                    result.article_types[item.article_type] = type;
-                if (Object.keys(item.meta_fields || {}).length && type) {
-                    for (const field of type.custom_meta_fields) {
-                        if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
-                            const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
-                            articleIds = articleIds.concat(item.meta_fields[field.field_key]);
+                if (item.article_type) {
+                    const type = types[(_a = item.article_type) === null || _a === void 0 ? void 0 : _a.toString()] || null;
+                    typeIds.push(item.article_type);
+                    if (Object.keys(item.meta_fields || {}).length && type) {
+                        for (const field of type.custom_meta_fields) {
+                            if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
+                                const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
+                                articleIds = articleIds.concat(item.meta_fields[field.field_key]);
+                            }
                         }
                     }
                 }
@@ -393,6 +397,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 this.logger.value('linked_articles', articles.length);
                 for (const article of articles) {
                     linked_articles[article._id] = Object.assign(Object.assign({}, article), { body: undefined, body_unformatted: undefined, body_structured: undefined, attributes: undefined, snapshots: undefined, insights: undefined });
+                    if (article.article_type)
+                        typeIds.push(article.article_type);
                 }
             }
             if (userIds.length) {
@@ -414,6 +420,11 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 for (const user of users) {
                     edge_users[user._id] = (0, snapshots_utilities_1.getUserSnapshot)(user);
                 }
+            }
+            if (typeIds.length) {
+                for (const typeId of (0, lodash_1.uniq)(typeIds))
+                    if (typeId)
+                        result.article_types[typeId] = types[typeId];
             }
             result.linked_articles = linked_articles;
             result.users = edge_users;

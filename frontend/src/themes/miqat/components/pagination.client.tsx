@@ -1,10 +1,10 @@
 import clsx from "clsx";
-import { DOTS, usePagination } from "@hooks/use-pagination";
+import { buildPaginationRange, DOTS } from "@hooks/use-pagination";
 import { last } from "lodash";
 import React from "react";
 import Icons from "@/features/admin/ui/icons";
 
-const CustomPagination: React.FC<{
+const CustomPagination_Client: React.FC<{
   onPageChange: (page: number) => void;
   totalCount?: number;
   siblingCount?: number;
@@ -12,7 +12,7 @@ const CustomPagination: React.FC<{
   pageSize: number;
   className?: string;
 }> = ({ onPageChange, totalCount, siblingCount = 1, currentPage, pageSize, className }) => {
-  const paginationRange = usePagination({
+  const paginationRange = buildPaginationRange({
     currentPage,
     totalCount: totalCount || 0,
     siblingCount,
@@ -75,7 +75,7 @@ const CustomPagination: React.FC<{
               " cursor-pointer bg-white/40 text-beige-500 transition-colors duration-500 hover:bg-beige-50 hover:text-beige-700   ":
                 pageNumber !== currentPage,
             })}
-            onClick={() => onPageChange(pageNumber as number)}
+            onClick={() => onPage(pageNumber as number)}
           >
             {pageNumber}
           </li>
@@ -116,4 +116,4 @@ const CustomPagination: React.FC<{
   );
 };
 
-export default CustomPagination;
+export default CustomPagination_Client;

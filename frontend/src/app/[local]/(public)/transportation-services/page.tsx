@@ -6,8 +6,8 @@ import { getArticleTypeBySlug, listArticles } from "@/themes/miqat/data";
 import ThemePage_Server from "@/themes/miqat/pages/omarah/page.server";
 
 
-const ROUTE = publicRoutes.homepage._.omrah;
-const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.OMRAH;
+const ROUTE = publicRoutes.homepage._.transportationServices;
+const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.TRANSPORTATION_SERVICE;
 
 const logger = initLogger(LoggerContext.PAGE, ROUTE.path);
 
