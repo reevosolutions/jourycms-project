@@ -86,10 +86,10 @@ export const trackUsedFieldsDBMiddleware = function <
           };
         }
         value.count++;
-        logger.event(
-          `${result.model} used index: ${key.cyan} for times: `,
-          value.count
-        );
+        // logger.event(
+        //   `${result.model} used index: ${key.cyan} for times: `,
+        //   value.count
+        // );
         cache.setForeign(CACHE_KEY, CACHE_ID, value, {});
       })
       .catch((error) => {

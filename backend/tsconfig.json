@@ -7,9 +7,8 @@
       "DOM"
     ],
     "typeRoots": [
-      // "./node_modules/@types",
       "./src/typings",
-      "../sdk/typings",
+      "./node_modules/jourycms-sdk/typings"
     ],
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
@@ -29,7 +28,7 @@
   },
   "include": [
     "./src/**/*",
-    "../sdk/typings",
+    "node_modules/jourycms-sdk/typings"
   ],
   "exclude": [
     "node_modules",

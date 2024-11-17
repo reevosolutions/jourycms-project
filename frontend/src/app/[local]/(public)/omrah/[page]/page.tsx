@@ -14,17 +14,7 @@ const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.OMRAH;
 const COUNT = 12;
 
 export const revalidate = 60;
-export const dynamicParams = true;
 
-export async function generateStaticParams() {
-  const data = await listArticles({
-    count: 100,
-    fields: ['slug'],
-  })
-  return (data?.data || []).map((post) => ({
-    article_slug: String(post.slug),
-  }))
-}
 
 export type PageProps = {
   params: Promise<{ page: string | number }>

@@ -1,5 +1,6 @@
-'use client';
+"use client";
 import AdminOnlyGuard from "@/guards/admin-only.guard";
+import {ReactQueryDevtoolsProvider} from "@/lib/utils/dev-tools/react-query-dev-tools";
 
 export default function Layout({
   children,
@@ -7,6 +8,8 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <AdminOnlyGuard>{children}</AdminOnlyGuard>
+    <ReactQueryDevtoolsProvider>
+      <AdminOnlyGuard>{children}</AdminOnlyGuard>
+    </ReactQueryDevtoolsProvider>
   );
 }

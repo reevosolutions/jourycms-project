@@ -5,31 +5,35 @@
  * @since 2024-04-03 00:17:36
  */
 
-import mongoose from 'mongoose';
-import Container, { Inject, Service } from 'typedi';
-import { defaults } from '../../../utilities/helpers/utils.helpers';
+import mongoose from "mongoose";
+import Container, { Inject, Service } from "typedi";
+import { defaults } from "../../../utilities/helpers/utils.helpers";
 
-import BaseService from '../../../common/base.service';
-import config from '../../../config';
-import events from '../../../config/events.config';
-import { ITEM_SHORTCUTS } from '../../../constants/tracking_id.constants';
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
-import exceptions from '../../../exceptions';
-import CacheManager from '../../../managers/cache-manager';
-import { createBooleanFilter, createDateRangeFilter, createStringFilter } from '../../../utilities/data/db/query.utilities';
-import { getUserSnapshot } from '../../../utilities/entities/snapshots.utilities';
-import ObjectUpdatedProperties from '../../../utilities/objects/update-calculator.class';
-import { fixFiltersObject } from '../../../utilities/requests/index';
-import userCan from '../../../utilities/security/user-can';
-import { createTrackingId } from '../../../utilities/system/tracking-id.utilities';
-import { mapDocumentToExposed } from '../../../common/mappers/general.mappers';
-import ArticleSanitizers from '../sanitizers/article.sanitizers';
-import ArticleValidators from '../validators/article.validators';
-import { ArticleSchemaFields } from '../models/article.model';
-import { slugify } from '../../../utilities/strings/slugify.utilities';
-import { uniq } from 'lodash';
-import { isObjectIdValid } from '../../../utilities/helpers/mogodb.helpers';
-import UsersService from '../../auth/services/users.service';
+import BaseService from "../../../common/base.service";
+import config from "../../../config";
+import events from "../../../config/events.config";
+import { ITEM_SHORTCUTS } from "../../../constants/tracking_id.constants";
+import { EventDispatcher } from "../../../decorators/eventDispatcher.decorator";
+import exceptions from "../../../exceptions";
+import CacheManager from "../../../managers/cache-manager";
+import {
+  createBooleanFilter,
+  createDateRangeFilter,
+  createStringFilter,
+} from "../../../utilities/data/db/query.utilities";
+import { getUserSnapshot } from "../../../utilities/entities/snapshots.utilities";
+import ObjectUpdatedProperties from "../../../utilities/objects/update-calculator.class";
+import { fixFiltersObject } from "../../../utilities/requests/index";
+import userCan from "../../../utilities/security/user-can";
+import { createTrackingId } from "../../../utilities/system/tracking-id.utilities";
+import { mapDocumentToExposed } from "../../../common/mappers/general.mappers";
+import ArticleSanitizers from "../sanitizers/article.sanitizers";
+import ArticleValidators from "../validators/article.validators";
+import { ArticleSchemaFields } from "../models/article.model";
+import { slugify } from "../../../utilities/strings/slugify.utilities";
+import { uniq } from "lodash";
+import { isObjectIdValid } from "../../../utilities/helpers/mogodb.helpers";
+import UsersService from "../../auth/services/users.service";
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
@@ -37,44 +41,48 @@ import DocumentAlias = Levelup.CMS.V1.Content.Model.ArticleDocument;
 import EventPayloadsAlias = Levelup.CMS.V1.Events.Payloads.Content.Article;
 type DocumentProperties = Levelup.CMS.V1.Utils.DocumentProperties<EntityAlias>;
 
-
 /**
- * @description 
+ * @description
  */
 @Service()
 export default class ArticlesService extends BaseService {
-
-  protected ENTITY = 'article' as const;
+  protected ENTITY = "article" as const;
 
   constructor(
-    @Inject('articleTypeModel') private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
-    @Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
-    @Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
-    @Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
-    @Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
-    @Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
-    @Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
-    @Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
-    @Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
-    @EventDispatcher() private eventDispatcher: EventDispatcher,
+    @Inject("articleTypeModel")
+    private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
+    @Inject("articleModel")
+    private articleModel: Levelup.CMS.V1.Content.Model.Article,
+    @Inject("commentModel")
+    private commentModel: Levelup.CMS.V1.Content.Model.Comment,
+    @Inject("reviewModel")
+    private reviewModel: Levelup.CMS.V1.Content.Model.Review,
+    @Inject("termModel") private termModel: Levelup.CMS.V1.Content.Model.Term,
+    @Inject("taxonomyModel")
+    private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
+    @Inject("translationItemModel")
+    private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
+    @Inject("translationNamespaceModel")
+    private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
+    @Inject("translationProjectModel")
+    private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
+    @EventDispatcher() private eventDispatcher: EventDispatcher
   ) {
     super();
   }
 
-
-
   /**
-  * @description Generates the snapshots article for the entity.
-  */
+   * @description Generates the snapshots article for the entity.
+   */
   public async _generateSnapshotsObject(
     new_data: Partial<EntityAlias>,
     old_data: Partial<EntityAlias> | null,
-    authData: Levelup.CMS.V1.Security.AuthData,
-  ): Promise<EntityAlias['snapshots']> {
+    authData: Levelup.CMS.V1.Security.AuthData
+  ): Promise<EntityAlias["snapshots"]> {
     try {
       const cache = Container.get(CacheManager);
-      const result: Levelup.CMS.V1.Utils.Complete<EntityAlias['snapshots']> = {
-        created_by: undefined
+      const result: Levelup.CMS.V1.Utils.Complete<EntityAlias["snapshots"]> = {
+        created_by: undefined,
       };
 
       /**
@@ -87,21 +95,20 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-
-
-
   /**
    * @description Create search meta
    * @param {Partial<EntityAlias>} data
    * @param {Partial<EntityAlias>} old used on update
    * @returns {string}
    */
-  _createSearchMeta(data: Partial<EntityAlias>, old?: Partial<EntityAlias>): string {
+  _createSearchMeta(
+    data: Partial<EntityAlias>,
+    old?: Partial<EntityAlias>
+  ): string {
     /**
      * Define the search meta article
      */
     const search_meta: { [Key in DocumentProperties]?: string } = {
-
       /**
        * TODO: Add more fields to the search meta
        */
@@ -110,25 +117,33 @@ export default class ArticlesService extends BaseService {
 
     /**
      * Add old values if not provided in the new data
-    */
+     */
     if (old) {
-
       /**
        * TODO: Add more fields to the search meta
        */
       // ...
     }
 
-    this.logExecutionResult(this._createSearchMeta, { data, old }, null, { search_meta });
+    this.logExecutionResult(this._createSearchMeta, { data, old }, null, {
+      search_meta,
+    });
 
     /**
      * Return the search meta
      */
-    return Object.values(search_meta).filter(s => !!s).join(' ').replaceAll('  ', ' ').trim();
+    return Object.values(search_meta)
+      .filter((s) => !!s)
+      .join(" ")
+      .replaceAll("  ", " ")
+      .trim();
   }
 
   async _generateSlug(title: string, slug?: string | null): Promise<string> {
-    const scenario = this.initScenario(this.logger, this._generateSlug, { title, slug });
+    const scenario = this.initScenario(this.logger, this._generateSlug, {
+      title,
+      slug,
+    });
     try {
       let value = slug || slugify(title);
       let retries = 0;
@@ -138,13 +153,13 @@ export default class ArticlesService extends BaseService {
         exists = !!res;
         if (exists) {
           retries++;
-          value = slugify(title) + '-' + retries;
+          value = slugify(title) + "-" + retries;
         }
       }
       scenario.set({
         slug: value,
-        retries
-      })
+        retries,
+      });
       scenario.end();
       return value;
     } catch (error) {
@@ -153,26 +168,30 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-
   /**
    * @description Apply filters based on the auth data
    */
-  _applyAuthDataBasedFilters({ query, q, totalQ, opt, authData }: {
-    q: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    query: ApiAlias.List.Request,
-    authData: Levelup.CMS.V1.Security.AuthData,
-    opt: { load_deleted?: boolean; dont_lean?: boolean; }
+  _applyAuthDataBasedFilters({
+    query,
+    q,
+    totalQ,
+    opt,
+    authData,
+  }: {
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    query: ApiAlias.List.Request;
+    authData: Levelup.CMS.V1.Security.AuthData;
+    opt: { load_deleted?: boolean; dont_lean?: boolean };
   }): {
-    q: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
   } {
     try {
       /**
        * TODO: Apply filters based on the auth data
        */
       return { q, totalQ };
-
     } catch (error) {
       throw error;
     }
@@ -181,15 +200,21 @@ export default class ArticlesService extends BaseService {
   /**
    * @description Apply filters on list queries
    */
-  async _applyFilters({ query, q, totalQ, opt, authData }: {
-    q: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    query: ApiAlias.List.Request,
-    authData: Levelup.CMS.V1.Security.AuthData,
-    opt: { load_deleted?: boolean; dont_lean?: boolean; }
+  async _applyFilters({
+    query,
+    q,
+    totalQ,
+    opt,
+    authData,
+  }: {
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    query: ApiAlias.List.Request;
+    authData: Levelup.CMS.V1.Security.AuthData;
+    opt: { load_deleted?: boolean; dont_lean?: boolean };
   }): Promise<{
-    q: mongoose.QueryWithFuzzySearch<EntityAlias>,
-    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>,
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
   }> {
     let { search, filters, load_deleted } = query;
     let filter: {
@@ -201,8 +226,8 @@ export default class ArticlesService extends BaseService {
      * @description Handle search
      */
     if (search) {
-      q = q.where(({ $text: { $search: search } }));
-      totalQ = totalQ.where(({ $text: { $search: search } }));
+      q = q.where({ $text: { $search: search } });
+      totalQ = totalQ.where({ $text: { $search: search } });
     }
 
     /**
@@ -213,65 +238,135 @@ export default class ArticlesService extends BaseService {
     /**
      * @description Inject attributes in the filters
      */
-    if (!load_deleted && !opt.load_deleted && !('is_deleted' in filters)) filters.is_deleted = false;
-    if (authData?.current?.app) (filters).app = authData?.current.app._id;
+    if (!load_deleted && !opt.load_deleted && !("is_deleted" in filters))
+      filters.is_deleted = false;
+    if (authData?.current?.app) filters.app = authData?.current.app._id;
 
     // -- attributed:app
-    if (ArticleSchemaFields['app']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['app'], 'app' as any);
-      q = filter.q; totalQ = filter.totalQ;
+    if (ArticleSchemaFields["app"]) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        filters["app"],
+        "app" as any
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
     }
 
     // -- is_deleted
-    filter = createBooleanFilter<DocumentProperties>(q, totalQ, filters.is_deleted, 'is_deleted');
-    q = filter.q; totalQ = filter.totalQ;
+    filter = createBooleanFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.is_deleted,
+      "is_deleted"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
 
     // -- created_at
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.created_at, 'created_at');
-    q = filter.q; totalQ = filter.totalQ;
+    filter = createDateRangeFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.created_at,
+      "created_at"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
 
     // -- updated_at
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.updated_at, 'updated_at');
-    q = filter.q; totalQ = filter.totalQ;
+    filter = createDateRangeFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.updated_at,
+      "updated_at"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
 
     // -- _id
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters._id, '_id');
-    q = filter.q; totalQ = filter.totalQ;
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters._id,
+      "_id"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
 
     // -- created_by
-    if (ArticleSchemaFields['created_by']) {
-      filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters['created_by'], 'created_by' as any);
-      q = filter.q; totalQ = filter.totalQ;
+    if (ArticleSchemaFields["created_by"]) {
+      filter = createDateRangeFilter<DocumentProperties>(
+        q,
+        totalQ,
+        filters["created_by"],
+        "created_by" as any
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
     }
     // -- slug
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.slug, 'slug' as any);
-    q = filter.q; totalQ = filter.totalQ;
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.slug,
+      "slug" as any
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
 
     // -- article_type
     if (filters.article_type) {
       let article_type;
       if (!isObjectIdValid(filters.article_type?.toString())) {
-        const exists = await this.articleTypeModel.exists({ slug: filters.article_type });
-        this.logger.value('article_type not id', exists, filters.article_type, filters.article_type?.toString())
+        const exists = await this.articleTypeModel.exists({
+          slug: filters.article_type,
+        });
+        this.logger.value(
+          "article_type not id",
+          exists,
+          filters.article_type,
+          filters.article_type?.toString()
+        );
         if (exists) article_type = exists?._id?.toString();
-      }
-      else {
-        this.logger.value('article_type is object id', filters.article_type.toString())
+      } else {
+        this.logger.value(
+          "article_type is object id",
+          filters.article_type.toString()
+        );
         article_type = filters.article_type.toString();
       }
-      filter = createStringFilter<DocumentProperties>(q, totalQ, article_type, 'article_type' as any);
-      q = filter.q; totalQ = filter.totalQ;
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        article_type,
+        "article_type" as any
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
     }
 
     for (const key of Object.keys(filters)) {
-      if (key.startsWith('meta_fields.')) {
-        if (typeof filters[key] === 'string') {
-          filter = createStringFilter<DocumentProperties>(q, totalQ, filters[key], key as any);
-          q = filter.q; totalQ = filter.totalQ;
+      if (key.startsWith("meta_fields.")) {
+        if (typeof filters[key] === "string") {
+          filter = createStringFilter<DocumentProperties>(
+            q,
+            totalQ,
+            filters[key],
+            key as any
+          );
+          q = filter.q;
+          totalQ = filter.totalQ;
         }
-        if (typeof filters[key] === 'boolean') {
-          filter = createBooleanFilter<DocumentProperties>(q, totalQ, filters[key], key as any);
-          q = filter.q; totalQ = filter.totalQ;
+        if (typeof filters[key] === "boolean") {
+          filter = createBooleanFilter<DocumentProperties>(
+            q,
+            totalQ,
+            filters[key],
+            key as any
+          );
+          q = filter.q;
+          totalQ = filter.totalQ;
         }
 
         /**
@@ -280,36 +375,312 @@ export default class ArticlesService extends BaseService {
       }
     }
 
-
-
     // -- name
-    if (ArticleSchemaFields['name']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['name'], 'name' as any);
-      q = filter.q; totalQ = filter.totalQ;
+    if (ArticleSchemaFields["name"]) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        filters["name"],
+        "name" as any
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
     }
 
     return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
+  }
 
+  async _applyCustomFilters({
+    query,
+    q,
+    totalQ,
+  }: {
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    query: ApiAlias.List.Request & {
+      customFilter: { [k: string]: any };
+    };
+  }): Promise<{
+    q: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
+  }> {
+    let { search, load_deleted } = query;
+    let filter: {
+      q: typeof q;
+      totalQ: typeof totalQ;
+    };
+
+    type CustomFilterParams = {
+      /**
+       * @param article type
+       */
+      t: string;
+      /**
+       * @param state
+       */
+      w?: string;
+      /**
+       * @param city
+       */
+      c?: string;
+      /**
+       * @param month
+       */
+      m?: string;
+      /**
+       * @param durations
+       */
+      d?: string;
+      /**
+       * @param services
+       */
+      s?: string | string[];
+      /**
+       * @param budget min
+       */
+      pn?: number;
+      /**
+       * @param budget max
+       */
+      px?: number;
+      /**
+       * @param experience min
+       */
+      xn?: number;
+      /**
+       * @param experience max
+       */
+      xx?: number;
+      /**
+       * @param sex
+       */
+      x?: "male" | "female" | "m" | "f";
+      /**
+       * @param speciaality
+       */
+      sp?: string | string[];
+      /**
+       * @param agency
+       */
+      a?: string;
+      /**
+       * @param search text
+       */
+      q?: string;
+      /**
+       * @param page
+       */
+      p?: string;
+    };
+
+    let customFilters: CustomFilterParams = query.customFilter as any;
+
+    /**
+     * @description Handle search
+     */
+    if (customFilters.q) {
+      q = q.where({ $text: { $search: customFilters.q } });
+      totalQ = totalQ.where({ $text: { $search: customFilters.q } });
+    }
+
+    /**
+     * @description fixing filters article
+     */
+    customFilters = fixFiltersObject(customFilters);
+
+    // -- article_type
+    if (customFilters.t) {
+      let article_type;
+      if (!isObjectIdValid(customFilters.t?.toString())) {
+        const exists = await this.articleTypeModel.exists({
+          slug: customFilters.t,
+        });
+        this.logger.value(
+          "article_type not id",
+          exists,
+          customFilters.t,
+          customFilters.t?.toString()
+        );
+        if (exists) article_type = exists?._id?.toString();
+      } else {
+        this.logger.value(
+          "article_type is object id",
+          customFilters.t.toString()
+        );
+        article_type = customFilters.t.toString();
+      }
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        article_type,
+        "article_type" as any
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    // state
+    if (customFilters.w) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.w,
+        "meta_fields.state"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+    // city
+    if (customFilters.c) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.c,
+        ["meta_fields.city", "meta_fields.ksa_city"],
+        false,
+        "or"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    // agency
+    if (customFilters.a) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.a,
+        "meta_fields.agency"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+    // duration
+    if (customFilters.d) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.d,
+        "meta_fields.duration"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    // spaciatilty
+    if (customFilters.sp) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        typeof customFilters.sp === "string"
+          ? customFilters.sp.split(",").map((s) => s.trim())
+          : customFilters.sp,
+        "meta_fields.spaciality"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+    // services
+    if (customFilters.s) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        typeof customFilters.s === "string"
+          ? customFilters.s.split(",").map((s) => s.trim())
+          : customFilters.s,
+        "meta_fields.services"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+    // month
+    if (customFilters.m) {
+      q = q.where({
+        $expr: {
+          $and: [
+            {
+              $eq: [
+                { $month: "$meta_fields.flight_date" },
+                Number.parseInt(customFilters.m),
+              ],
+            },
+            {
+              $gte: [
+                { $year: "$meta_fields.flight_date" },
+                new Date().getFullYear(),
+              ],
+            },
+          ],
+        },
+      });
+      totalQ = totalQ.where({
+        $expr: {
+          $and: [
+            {
+              $eq: [
+                { $month: "$meta_fields.flight_date" },
+                Number.parseInt(customFilters.m),
+              ],
+            },
+            {
+              $gte: [
+                { $year: "$meta_fields.flight_date" },
+                new Date().getFullYear(),
+              ],
+            },
+          ],
+        },
+      });
+    }
+    // price
+    if (customFilters.pn || customFilters.px) {
+      const [pn, px] = [
+        Number.parseFloat(`${customFilters.pn}` || "0"),
+        Number.parseFloat(`${customFilters.px}` || "10000000"),
+      ].sort((a, b) => a - b);
+      q = q.where({
+        "meta_fields.price": { $gte: pn, $lte: px },
+      });
+      totalQ = totalQ.where({
+        "meta_fields.price": { $gte: pn, $lte: px },
+      });
+    }
+    // experience
+    if (customFilters.xn || customFilters.xx) {
+      const [xn, xx] = [
+        Number.parseFloat(`${customFilters.xn}` || "0"),
+        Number.parseFloat(`${customFilters.xx}` || "10000000"),
+      ].sort((a, b) => a - b);
+      q = q.where({
+        "meta_fields.experience": { $gte: xn, $lte: xx },
+      });
+      totalQ = totalQ.where({
+        "meta_fields.experience": { $gte: xn, $lte: xx },
+      });
+    }
+
+    return { q, totalQ };
   }
 
   /**
    * @description List
    */
   public async list(
-    query: ApiAlias.List.Request,
+    query: ApiAlias.List.Request & {
+      customFilter: { [k: string]: any };
+    },
     authData: Levelup.CMS.V1.Security.AuthData,
     opt: {
       load_deleted?: boolean;
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-        load_deleted: false,
-        dont_lean: false
-      }
+      load_deleted: false,
+      dont_lean: false,
+    }
   ): Promise<ApiAlias.List.Response> {
     const scenario = this.initScenario(this.logger, this.list);
     try {
-
       /**
        * Fill options argument with the defaults
        */
@@ -318,25 +689,45 @@ export default class ArticlesService extends BaseService {
         dont_lean: false,
       });
 
-
       let { count, page, sort, sort_by } = query;
-      count = isNaN(count as unknown as number) ? undefined : parseInt(count.toString());
+      count = isNaN(count as unknown as number)
+        ? undefined
+        : parseInt(count.toString());
       page = isNaN(page as unknown as number) ? 1 : parseInt(page.toString());
 
-
-      let q: mongoose.QueryWithFuzzySearch<EntityAlias> = this.articleModel.find();
-      let totalQ: mongoose.QueryWithFuzzySearch<EntityAlias> = this.articleModel.where();
-
+      let q: mongoose.QueryWithFuzzySearch<EntityAlias> =
+        this.articleModel.find();
+      let totalQ: mongoose.QueryWithFuzzySearch<EntityAlias> =
+        this.articleModel.where();
 
       /**
        * Apply filters
        */
-      const filter = await this._applyFilters({ q, totalQ, query, authData, opt });
+      const filter = await this._applyFilters({
+        q,
+        totalQ,
+        query,
+        authData,
+        opt,
+      });
       q = filter.q;
       totalQ = filter.totalQ;
 
+      if (query.customFilter) {
+        const filter = await this._applyCustomFilters({
+          q,
+          totalQ,
+          query,
+        });
+        q = filter.q;
+        totalQ = filter.totalQ;
+      }
 
-      const limit = (count === undefined || count === null) ? authData?.current?.app?.settings?.listing?.default_count || config.settings.listing.defaultCount : count;
+      const limit =
+        count === undefined || count === null
+          ? authData?.current?.app?.settings?.listing?.default_count ||
+            config.settings.listing.defaultCount
+          : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
       const sortOptions = this.getSortOptions(sort, sort_by);
       if (take) q = q.limit(take);
@@ -345,14 +736,13 @@ export default class ArticlesService extends BaseService {
       q = this.getSelectFields(q, query.fields);
       if (!opt.dont_lean) q = q.lean() as any;
 
-
       /**
        * @description Add query to execution scenario
        */
-      // scenario.request_filter = fixFiltersObject(query.filters);
-      scenario.set('listing_query', {
-        // model: q.model.modelName,
-        // query: q.getQuery(),
+      scenario.set('request_filter', fixFiltersObject(query));
+      scenario.set("listing_query", {
+        model: q.model.modelName,
+        query: q.getQuery(),
         options: q.getOptions(),
       });
 
@@ -363,7 +753,6 @@ export default class ArticlesService extends BaseService {
         .allowDiskUse(true) // Enable disk usage for large sorting operations
         .exec();
 
-
       const total = await totalQ.countDocuments();
       const pages = limit === -1 ? 1 : Math.ceil(total / limit);
 
@@ -371,22 +760,23 @@ export default class ArticlesService extends BaseService {
         skip,
         take,
         found: items?.length,
-        total
-      })
+        total,
+      });
 
       const result: ApiAlias.List.Response = {
-        data: items.map(doc => mapDocumentToExposed(doc)),
+        data: items.map((doc) => mapDocumentToExposed(doc)),
         pagination: {
           total,
           pages,
-        }
-      }
+        },
+      };
 
       result.edge = await this._buildResponseEdge(result.data);
 
       /**
        * Log execution result before returning the result
        */
+      scenario.end();
 
       return result;
     } catch (error) {
@@ -395,34 +785,51 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-  private async _buildResponseEdge(data: EntityAlias[]): Promise<ApiAlias.List.Response['edge']> {
-    const scenario = this.initScenario(this.logger, this._buildResponseEdge,);
+  private async _buildResponseEdge(
+    data: EntityAlias[]
+  ): Promise<ApiAlias.List.Response["edge"]> {
+    const scenario = this.initScenario(this.logger, this._buildResponseEdge);
     try {
       const usersService = Container.get(UsersService);
-      const typesArray = await this.articleTypeModel.find({
-        is_deleted: false
-      }).lean().exec();
-      const types: ApiAlias.List.Response['edge']['article_types'] = typesArray.reduce((prev, curr) => ({ ...prev, [curr._id.toString()]: curr }), {});
+      const typesArray = await this.articleTypeModel
+        .find({
+          is_deleted: false,
+        })
+        .lean()
+        .exec();
+      const types: ApiAlias.List.Response["edge"]["article_types"] =
+        typesArray.reduce(
+          (prev, curr) => ({ ...prev, [curr._id.toString()]: curr }),
+          {}
+        );
 
-      const result: ApiAlias.List.Response['edge'] = {
+      const result: ApiAlias.List.Response["edge"] = {
         users: {},
         article_types: {},
         linked_articles: {},
       };
-      const linked_articles: ApiAlias.List.Response['edge']['linked_articles'] = {};
-      const edge_users: ApiAlias.List.Response['edge']['users'] = {};
+      const linked_articles: ApiAlias.List.Response["edge"]["linked_articles"] =
+        {};
+      const edge_users: ApiAlias.List.Response["edge"]["users"] = {};
       let articleIds: string[] = [];
       let typeIds: string[] = [];
       const userIds: string[] = [];
       for (const item of data) {
         if (item.article_type) {
           const type = types[item.article_type?.toString()] || null;
-          typeIds.push(item.article_type)
+          typeIds.push(item.article_type);
           if (Object.keys(item.meta_fields || {}).length && type) {
             for (const field of type.custom_meta_fields) {
-              if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
-                const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
-                articleIds = articleIds.concat(item.meta_fields[field.field_key]);
+              if (
+                field.field_type === "article_object" &&
+                item.meta_fields[field.field_key]
+              ) {
+                const ids = Array.isArray(item.meta_fields[field.field_key])
+                  ? item.meta_fields[field.field_key]
+                  : [item.meta_fields[field.field_key]];
+                articleIds = articleIds.concat(
+                  item.meta_fields[field.field_key]
+                );
               }
             }
           }
@@ -433,10 +840,13 @@ export default class ArticlesService extends BaseService {
       // scenario.set({ articleIds, userIds });
 
       if (articleIds.length) {
-        const articles = await this.articleModel.find({
-          _id: { $in: uniq(articleIds) }
-        }).lean().exec();
-        this.logger.value('linked_articles', articles.length);
+        const articles = await this.articleModel
+          .find({
+            _id: { $in: uniq(articleIds) },
+          })
+          .lean()
+          .exec();
+        this.logger.value("linked_articles", articles.length);
         for (const article of articles) {
           linked_articles[article._id] = {
             ...article,
@@ -451,21 +861,24 @@ export default class ArticlesService extends BaseService {
         }
       }
       if (userIds.length) {
-        const { data: users } = await usersService.list({
-          count: userIds.length,
-          filters: {
-            _id: userIds,
+        const { data: users } = await usersService.list(
+          {
+            count: userIds.length,
+            filters: {
+              _id: userIds,
+            },
+            fields: ["_id", "tracking_id", "role", "profile"],
           },
-          fields: ['_id', 'tracking_id', 'role', 'profile']
-        }, {
-          current: {
-            service: {
-              name: 'content',
-              is_external: false
-            }
+          {
+            current: {
+              service: {
+                name: "content",
+                is_external: false,
+              },
+            },
           }
-        })
-        this.logger.value('users', users.length);
+        );
+        this.logger.value("users", users.length);
         for (const user of users) {
           edge_users[user._id] = getUserSnapshot(user);
         }
@@ -486,14 +899,23 @@ export default class ArticlesService extends BaseService {
     }
   }
 
-
   /**
-  * @description GetOne
-  */
+   * @description GetOne
+   */
   public async getById(
     id: string,
     authData: Levelup.CMS.V1.Security.AuthData,
-    opt: { load_deleted?: boolean; dont_lean?: boolean; ignore_not_found_error?: boolean, bypass_authorization?: boolean } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+    opt: {
+      load_deleted?: boolean;
+      dont_lean?: boolean;
+      ignore_not_found_error?: boolean;
+      bypass_authorization?: boolean;
+    } = {
+      load_deleted: false,
+      dont_lean: false,
+      ignore_not_found_error: false,
+      bypass_authorization: false,
+    }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -509,8 +931,8 @@ export default class ArticlesService extends BaseService {
        * Define the execution scenario article
        */
       const scenario: {
-        [Key: string]: any
-      } = {}
+        [Key: string]: any;
+      } = {};
 
       const q = this.articleModel.findById(id);
       /**
@@ -518,26 +940,31 @@ export default class ArticlesService extends BaseService {
        */
       if (!opt.dont_lean) q.lean();
 
-
       const doc = await q.exec();
 
-
-      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("Article not found");
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Article deleted');
+      if (doc.is_deleted && !opt.load_deleted)
+        throw new exceptions.ItemNotFoundException("Article deleted");
 
       /**
-      * Check if the user can view the article
-      */
-      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this article');
+       * Check if the user can view the article
+       */
+      if (
+        !opt.bypass_authorization &&
+        !userCan.viewObject(this.ENTITY, doc, authData)
+      )
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to view this article"
+        );
 
       const result: ApiAlias.GetOne.Response = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
-      result.edge = await this._buildResponseEdge([result.data])
+      result.edge = await this._buildResponseEdge([result.data]);
 
       /**
        * Log execution result before returning the result
@@ -546,19 +973,33 @@ export default class ArticlesService extends BaseService {
 
       return result;
     } catch (error) {
-      if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException) return { data: undefined };
+      if (
+        opt.ignore_not_found_error &&
+        error instanceof exceptions.ItemNotFoundException
+      )
+        return { data: undefined };
       this.logError(this.getById, error);
       throw error;
     }
   }
 
   /**
-  * @description getBySlug
-  */
+   * @description getBySlug
+   */
   public async getBySlug(
     slug: string,
     authData: Levelup.CMS.V1.Security.AuthData,
-    opt: { load_deleted?: boolean; dont_lean?: boolean; ignore_not_found_error?: boolean, bypass_authorization?: boolean } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+    opt: {
+      load_deleted?: boolean;
+      dont_lean?: boolean;
+      ignore_not_found_error?: boolean;
+      bypass_authorization?: boolean;
+    } = {
+      load_deleted: false,
+      dont_lean: false,
+      ignore_not_found_error: false,
+      bypass_authorization: false,
+    }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -574,8 +1015,8 @@ export default class ArticlesService extends BaseService {
        * Define the execution scenario article
        */
       const scenario: {
-        [Key: string]: any
-      } = {}
+        [Key: string]: any;
+      } = {};
 
       const q = this.articleModel.findOne({ slug });
       /**
@@ -583,26 +1024,31 @@ export default class ArticlesService extends BaseService {
        */
       if (!opt.dont_lean) q.lean();
 
-
       const doc = await q.exec();
 
-
-      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("Article not found");
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Article deleted');
+      if (doc.is_deleted && !opt.load_deleted)
+        throw new exceptions.ItemNotFoundException("Article deleted");
 
       /**
-      * Check if the user can view the article
-      */
-      if (!opt.bypass_authorization && !userCan.viewObject(this.ENTITY, doc, authData)) throw new exceptions.UnauthorizedException('You are not allowed to view this article');
+       * Check if the user can view the article
+       */
+      if (
+        !opt.bypass_authorization &&
+        !userCan.viewObject(this.ENTITY, doc, authData)
+      )
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to view this article"
+        );
 
       const result: ApiAlias.GetOne.Response = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
-      result.edge = await this._buildResponseEdge([result.data])
+      result.edge = await this._buildResponseEdge([result.data]);
 
       /**
        * Log execution result before returning the result
@@ -611,7 +1057,11 @@ export default class ArticlesService extends BaseService {
 
       return result;
     } catch (error) {
-      if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException) return { data: undefined };
+      if (
+        opt.ignore_not_found_error &&
+        error instanceof exceptions.ItemNotFoundException
+      )
+        return { data: undefined };
       this.logError(this.getById, error);
       throw error;
     }
@@ -624,7 +1074,7 @@ export default class ArticlesService extends BaseService {
     { data }: ApiAlias.Create.Request,
     authData: Levelup.CMS.V1.Security.AuthData,
     opt?: {
-      bypass_authorization?: boolean
+      bypass_authorization?: boolean;
     }
   ): Promise<ApiAlias.Create.Response> {
     try {
@@ -646,24 +1096,33 @@ export default class ArticlesService extends BaseService {
       const { error } = ArticleValidators.validateCreateBody(data);
       if (error) throw error;
 
-      let { } = data;
+      let {} = data;
 
       /**
        * Auto-fill system data
        */
       data.app = authData?.current?.app?._id
         ? authData?.current?.app?._id
-        : opt?.bypass_authorization || (authData.current?.service?.name && !authData.current?.service?.is_external)
+        : opt?.bypass_authorization ||
+            (authData.current?.service?.name &&
+              !authData.current?.service?.is_external)
           ? data.app
           : undefined;
 
       /**
        * Check if the user can create the article
        */
-      if (authData?.current?.app?._id && authData?.current?.app?._id !== data.app)
-        throw new exceptions.UnauthorizedException('You are not allowed to create this article on this app');
+      if (
+        authData?.current?.app?._id &&
+        authData?.current?.app?._id !== data.app
+      )
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to create this article on this app"
+        );
       if (!userCan.createObject(this.ENTITY, data, authData))
-        throw new exceptions.UnauthorizedException('You are not allowed to create this article');
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to create this article"
+        );
 
       /**
        * Create data article
@@ -673,36 +1132,50 @@ export default class ArticlesService extends BaseService {
         slug: await this._generateSlug(data.title, data.slug),
       };
 
-
-
       /**
        * Create tracking ID
        */
-      if (ArticleSchemaFields['tracking_id'] && Object.keys(ITEM_SHORTCUTS).includes('Article')) {
-        const entity = 'Article' as const;
-        docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.articleModel as any);
+      if (
+        ArticleSchemaFields["tracking_id"] &&
+        Object.keys(ITEM_SHORTCUTS).includes("Article")
+      ) {
+        const entity = "Article" as const;
+        docObject["tracking_id"] = await createTrackingId(
+          this.ENTITY,
+          this.articleModel as any
+        );
       }
 
       /**
        * Create search meta
        */
-      if (ArticleSchemaFields['search_meta']) {
-        docObject['search_meta'] = this._createSearchMeta(docObject, null);
+      if (ArticleSchemaFields["search_meta"]) {
+        docObject["search_meta"] = this._createSearchMeta(docObject, null);
       }
 
-      docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
+      docObject.snapshots = await this._generateSnapshotsObject(
+        docObject,
+        null,
+        authData
+      );
 
       /**
        * Create the article on DB
        */
       const doc = await this.articleModel.create(docObject);
 
-      if (!doc) throw new exceptions.InternalServerError('Failed to create the article');
+      if (!doc)
+        throw new exceptions.InternalServerError(
+          "Failed to create the article"
+        );
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.created>(events.content.article.created, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.created>(
+        events.content.article.created,
+        { data: doc }
+      );
 
       const result = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
 
       /**
@@ -718,8 +1191,8 @@ export default class ArticlesService extends BaseService {
   }
 
   /**
-  * @description Update
-  */
+   * @description Update
+   */
   public async update(
     id: string,
     { data }: ApiAlias.Update.Request,
@@ -747,16 +1220,19 @@ export default class ArticlesService extends BaseService {
       /**
        * Extract the required in block variables from the data article
        */
-      const { } = data;
+      const {} = data;
 
       /**
        * load old article and check if it exists
        */
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Article is deleted');
+      if (!old) throw new exceptions.ItemNotFoundException("Article not found");
+      if (old.is_deleted)
+        throw new exceptions.UnauthorizedException("Article is deleted");
       if (!userCan.updateObject(this.ENTITY, old, authData))
-        throw new exceptions.UnauthorizedException('You are not allowed to update this article');
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to update this article"
+        );
 
       /**
        * detect changes
@@ -768,25 +1244,29 @@ export default class ArticlesService extends BaseService {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'updated',
-        updates: updates.asArray
+        action: "updated",
+        updates: updates.asArray,
       };
 
       /**
        * Create data article
        */
       const docObject: Partial<EntityAlias> = {
-        ...data
+        ...data,
       };
 
       /**
        * Create search meta
        */
-      if (ArticleSchemaFields['search_meta']) {
-        docObject['search_meta'] = this._createSearchMeta(docObject, old);
+      if (ArticleSchemaFields["search_meta"]) {
+        docObject["search_meta"] = this._createSearchMeta(docObject, old);
       }
 
-      docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
+      docObject.snapshots = await this._generateSnapshotsObject(
+        docObject,
+        old,
+        authData
+      );
 
       /**
        * Update the article on DB
@@ -796,13 +1276,13 @@ export default class ArticlesService extends BaseService {
         {
           ...docObject,
           $addToSet: {
-            updates: updateObject
-          }
+            updates: updateObject,
+          },
         },
         { new: true }
       );
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("Article not found");
 
       /**
        * Handle the updated effects on the same service
@@ -812,10 +1292,13 @@ export default class ArticlesService extends BaseService {
       /**
        * Dispatch the updated event
        */
-      this.eventDispatcher.dispatch<EventPayloadsAlias.updated>(events.content.article.updated, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.updated>(
+        events.content.article.updated,
+        { data: doc }
+      );
 
       const result = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
 
       /**
@@ -834,49 +1317,58 @@ export default class ArticlesService extends BaseService {
   }
 
   /**
-  * @description Delete
-  */
+   * @description Delete
+   */
   public async delete(
     id: string,
     authData: Levelup.CMS.V1.Security.AuthData
   ): Promise<ApiAlias.Delete.Response> {
     try {
-
       /**
        * Define the execution scenario article
        */
       const scenario: {
-        [Key: string]: any
-      } = {}
+        [Key: string]: any;
+      } = {};
 
       const updateObject: Levelup.CMS.V1.Utils.Entity.General.IItemUpdate = {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'deleted',
-        updates: []
-      }
-
+        action: "deleted",
+        updates: [],
+      };
 
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Article already deleted');
-      if (!userCan.deleteObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to delete this article');
+      if (!old) throw new exceptions.ItemNotFoundException("Article not found");
+      if (old.is_deleted)
+        throw new exceptions.UnauthorizedException("Article already deleted");
+      if (!userCan.deleteObject(this.ENTITY, old, authData))
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to delete this article"
+        );
 
-      const doc = await this.articleModel.findByIdAndUpdate(id, {
-        is_deleted: true,
-        deleted_at: new Date(),
-        $addToSet: {
-          updates: updateObject
-        }
-      }, { new: true });
+      const doc = await this.articleModel.findByIdAndUpdate(
+        id,
+        {
+          is_deleted: true,
+          deleted_at: new Date(),
+          $addToSet: {
+            updates: updateObject,
+          },
+        },
+        { new: true }
+      );
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(events.content.article.deleted, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(
+        events.content.article.deleted,
+        { data: doc }
+      );
 
       const result = {
         data: {
-          deleted: true
-        }
+          deleted: true,
+        },
       };
 
       /**
@@ -892,51 +1384,60 @@ export default class ArticlesService extends BaseService {
   }
 
   /**
-  * @description Restore
-  */
+   * @description Restore
+   */
   public async restore(
     id: string,
     authData: Levelup.CMS.V1.Security.AuthData
   ): Promise<ApiAlias.Delete.Response> {
     try {
-
       /**
        * Define the execution scenario article
        */
       const scenario: {
-        [Key: string]: any
-      } = {}
+        [Key: string]: any;
+      } = {};
 
       const updateObject: Levelup.CMS.V1.Utils.Entity.General.IItemUpdate = {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'restored',
-        updates: []
-      }
-
+        action: "restored",
+        updates: [],
+      };
 
       const old = await this.articleModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('Article not found');
-      if (!old.is_deleted) throw new exceptions.UnauthorizedException('Article already exists');
-      if (!userCan.restoreObject(this.ENTITY, old, authData)) throw new exceptions.UnauthorizedException('You are not allowed to restore this article');
+      if (!old) throw new exceptions.ItemNotFoundException("Article not found");
+      if (!old.is_deleted)
+        throw new exceptions.UnauthorizedException("Article already exists");
+      if (!userCan.restoreObject(this.ENTITY, old, authData))
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to restore this article"
+        );
 
-      const doc = await this.articleModel.findByIdAndUpdate(id, {
-        is_deleted: false,
-        deleted_at: null,
-        $addToSet: {
-          updates: updateObject
-        }
-      }, { new: true });
+      const doc = await this.articleModel.findByIdAndUpdate(
+        id,
+        {
+          is_deleted: false,
+          deleted_at: null,
+          $addToSet: {
+            updates: updateObject,
+          },
+        },
+        { new: true }
+      );
 
-      if (!doc) throw new exceptions.ItemNotFoundException('Article not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("Article not found");
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(events.content.article.restored, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(
+        events.content.article.restored,
+        { data: doc }
+      );
 
       const result = {
         data: {
-          restored: true
-        }
+          restored: true,
+        },
       };
 
       /**
@@ -950,11 +1451,4 @@ export default class ArticlesService extends BaseService {
       throw error;
     }
   }
-
-
 }
-
-
-
-
-
