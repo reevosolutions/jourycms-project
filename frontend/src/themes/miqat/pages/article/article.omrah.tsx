@@ -48,6 +48,8 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
+  
+  
   return (
     <DefaultLayout route={route}>
       <div className="container mx-auto">
