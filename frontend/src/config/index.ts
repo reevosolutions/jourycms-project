@@ -1,3 +1,4 @@
+/* eslint-disable no-constant-condition */
 import "../lib/utilities/extend-prototypes/string.prototype";
 
 export { default as publicRoutes } from "../themes/miqat/config/routes.public.config";
@@ -19,7 +20,7 @@ const config = {
    */
   sdk: {
     baseURL:
-      process.env.NODE_ENV === "development"
+      false && process.env.NODE_ENV === "development"
         ? process.env.NEXT_PUBLIC_API_BASE_URL_DEV || "http://localhost:5500"
         : process.env.NEXT_PUBLIC_API_BASE_URL_PROD ||
           "https://miqat-api.assil.dev",
