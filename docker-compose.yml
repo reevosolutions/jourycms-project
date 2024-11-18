@@ -36,7 +36,7 @@ services:
       - mongodb
       - redis
     volumes:
-      - ./uploads:/root/apps/volumes/uploads
+      - /root/apps/volumes/uploads:./uploads
     restart: unless-stopped
 
   #FRONTEND
@@ -61,7 +61,7 @@ services:
       - "80:80"  # Exposing HAProxy's HTTP port to the host
       - "443:443"  # Optionally, you can expose HTTPS as well
     volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg  # The HAProxy config file
+      - /usr/local/etc/haproxy/haproxy.cfg:./haproxy.cfg  # The HAProxy config file
     depends_on:
       - frontend
       - backend
