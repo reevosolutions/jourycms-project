@@ -1,6 +1,7 @@
 import { EventDispatcher } from "event-dispatch";
-import { Express } from 'express';
+import config from "../config";
 import events from '../config/events.config';
+import { Express } from 'express';
 import initLogger from '../utilities/logging';
 import dependencyInjectorLoader from './dependency-injector.loader';
 import './event-subscribers.loader';
@@ -49,6 +50,14 @@ export default async ({ expressApp }: { expressApp: Express }): Promise<void> =>
   // Load the Express application
   await expressLoader({ app: expressApp });
   logger.info('✌️ Express loaded');
+
+
+  // log config
+  logger.tree("CONFIG", {
+    isDev: config.isDev,
+    cache: config.cacheManager,
+    currentService: config.currentService,
+  });
 
   // Create an event dispatcher and dispatch a serviceLoadSucceeded event
   const eventDispatcher = new EventDispatcher();
