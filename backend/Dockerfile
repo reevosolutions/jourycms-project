@@ -19,6 +19,9 @@ RUN npm install --legacy-peer-deps
 # Copy the rest of the application code
 COPY . .
 
+# Build the Next.js app
+RUN npm run build
+
 # Expose the backend port
 EXPOSE 3032
 
