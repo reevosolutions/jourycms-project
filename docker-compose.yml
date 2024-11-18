@@ -58,18 +58,18 @@ services:
     restart: unless-stopped
 
   # HAProxy
-  haproxy:
-    image: haproxy:alpine
-    container_name: cms_haproxy
-    ports:
-      - "80:8080"  # Exposing HAProxy's HTTP port to the host
-      - "443:443"  # Optionally, you can expose HTTPS as well
-    volumes:
-      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg  # The HAProxy config file
-    depends_on:
-      - frontend
-      - backend
-    restart: unless-stopped
+  # haproxy:
+  #   image: haproxy:alpine
+  #   container_name: cms_haproxy
+  #   ports:
+  #     - "80:8080"  # Exposing HAProxy's HTTP port to the host
+  #     - "443:443"  # Optionally, you can expose HTTPS as well
+  #   volumes:
+  #     - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg  # The HAProxy config file
+  #   depends_on:
+  #     - frontend
+  #     - backend
+  #   restart: unless-stopped
 volumes:
   mongodb_data:
   redis_data:
