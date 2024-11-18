@@ -43,7 +43,8 @@ export default class CacheManager {
     await this.client.connect();
 
     this.logger.success(
-      this.getClient.name,
+      config.cacheManager.redis.url || "redis://localhost:6379",
+      this.client.configGet,
       "Redis client connected successfully"
     );
 
