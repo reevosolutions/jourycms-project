@@ -1,6 +1,7 @@
 version: '3.8'
 
 services:
+  # DB
   mongodb:
     image: mongo
     container_name: cms_mongodb
@@ -8,7 +9,19 @@ services:
       - '27017:27017'
     volumes:
       - mongodb_data:/data/db
+    restart: unless-stopped
 
+  # CACHE
+  redis:
+    image: redis:alpine
+    container_name: cms_redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - redis_data:/data
+    restart: unless-stopped
+
+  # BACKEND
   backend:
     container_name: cms_backend
     build:
@@ -16,14 +29,17 @@ services:
     ports:
       - '3032:3032'
     environment:
+      - PORT=3032
       - DB_URI=${DB_URI}
-      - CACHE_MANAGER_REDIS_URL=${CACHE_MANAGER_REDIS_URL}
+      - CACHE_MANAGER_REDIS_URL=redis://cms_redis:6379
     depends_on:
       - mongodb
+      - redis
     volumes:
-      - ./sdk:/usr/src/app/sdk
-      - ./typings:/usr/src/app/typings
+      - ./uploads:/root/apps/volumes/uploads
+    restart: unless-stopped
 
+  #FRONTEND
   frontend:
     container_name: cms_frontend
     build:
@@ -32,12 +48,12 @@ services:
       - '3000:3000'
     environment:
       - SDK_BASE_URL=${SDK_BASE_URL}
+      - NEXT_PUBLIC_API_BASE_URL_PROD=${SDK_BASE_URL}
     depends_on:
       - backend
-    volumes:
-      - ./sdk:/usr/src/app/sdk
-      - ./typings:/usr/src/app/typings
+    restart: unless-stopped
 
-  
 volumes:
   mongodb_data:
+  redis_data:
+  uploads_data:
