@@ -13,6 +13,22 @@ const nextConfig: NextConfig = {
         hostname: "miqat.com",
       },
       {
+        protocol: "https",
+        hostname: "miqat.assil.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "assil.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "miqat-api.assil.dev",
+      },
+      {
+        protocol: "https",
+        hostname: "*.assil.dev",
+      },
+      {
         protocol: "http",
         hostname: "miqat.com",
       },
