@@ -33,6 +33,7 @@ services:
     environment:
       - PORT=3032
       - DB_URI=${DB_URI}
+      - MONGODB_LOCAL_URI=${DB_URI}
       - CACHE_MANAGER_REDIS_URL=redis://cms_redis:6379
     depends_on:
       - mongodb
