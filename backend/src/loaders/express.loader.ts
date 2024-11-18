@@ -33,7 +33,14 @@ export default ({ app }: { app: express.Application }): void => {
   // The magic package that prevents frontend developers going nuts
   // Alternate description:
   // Enable Cross Origin Resource Sharing to all origins by default
-  app.use(cors());
+  app.use(
+    cors({
+      origin: "*", // This allows any origin to make requests
+      methods: "GET,POST,PUT,DELETE,PATCH,OPTIONS", // Allow all methods (you can add more if needed)
+      allowedHeaders: "*", // Allow all custom headers
+      credentials: true, // Allow cookies to be sent (optional)
+    })
+  );
 
   // Some sauce that always add since 2014
   // "Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it."
