@@ -69,3 +69,5 @@ export default async function Page({ params }: PageProps) {
   //   <div className="d">{article_slug}</div>
   // </div>;
 }
+
+
