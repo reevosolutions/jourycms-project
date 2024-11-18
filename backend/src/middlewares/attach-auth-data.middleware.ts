@@ -4,6 +4,7 @@ import CacheManager from "../managers/cache-manager";
 import exceptions from "../exceptions";
 import initLogger from "../utilities/logging";
 import { getTokenFromHeader } from "./handle-jwt.middleware";
+import UsersService from "../features/auth/services/users.service";
 
 const logger = initLogger("MIDDLEWARE", "attachAuthData");
 
@@ -22,6 +23,7 @@ const attachAuthData = async (
     if (!req.attached_entities) req.attached_entities = {};
 
     const cache = Container.get(CacheManager);
+    const usersService = Container.get(UsersService);
 
     const token = getTokenFromHeader(req);
     req.current_token = token;
@@ -55,13 +57,19 @@ const attachAuthData = async (
         req.attached_entities.user = user;
         logger.success("attachCurrentUser from redis", req.auth?._id);
       } else {
-        throw new exceptions.UnauthorizedException("User not found");
+        try {
+          const { data } = await usersService.getById(
+            req.auth?._id,
+            usersService.internalAuthData
+          );
+          if (data) user = data;
+        } catch (error) {
+          throw new exceptions.UnauthorizedException("Could not load user");
+        }
       }
 
-     
+      if (!user) throw new exceptions.UnauthorizedException("User not found");
     }
-
-   
 
     /* -------------------------------------------------------------------------- */
     /*                                     APP                                    */
@@ -106,7 +114,6 @@ const attachAuthData = async (
           req.attached_entities.app.name
         )
       : logger.warn("x no app");
-    
 
     return next();
   } catch (error) {

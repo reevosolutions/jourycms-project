@@ -246,7 +246,7 @@ export default class DevService extends BaseService {
       }
     }
   }
-  
+
   async fillEscorts() {
     for (const state of faker.helpers.arrayElements(states, 58)) {
       const stateCities = cities.filter(

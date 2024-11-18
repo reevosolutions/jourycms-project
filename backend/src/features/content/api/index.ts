@@ -18,6 +18,8 @@ import translationProjectsController from '../controllers/translation.projects.c
 import translationToolsController from '../controllers/translation.tools.controller';
 import initLogger, { LoggerContext } from '../../../utilities/logging';
 import { respond } from '../../../utilities/requests';
+import DevService from '../../../common/services/dev.service';
+import Container from 'typedi';
 
 const logger = initLogger(LoggerContext.CONTROLLER, "ContentController");
 
@@ -40,6 +42,11 @@ export default (app: Router): void => {
 
 	route.get('/', (req, res, next) => {
 		return respond(res, { message: 'Content API' });
+	});
+	
+	route.post('/seed', (req, res, next) => {
+		const devService = Container.get(DevService);
+		devService.fillArticles();
 	});
 
 	articleTypesController(route);

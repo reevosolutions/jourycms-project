@@ -243,7 +243,7 @@ export default class CacheManager {
       if (!result)
         this.logger.trace.warn(
           this.loadObjectByIdFormDB.name,
-          entity,
+          `${config.cacheManager.redis.url}/${entity}`,
           id,
           "NOT FOUND"
         );
