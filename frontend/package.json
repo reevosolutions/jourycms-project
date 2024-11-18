@@ -174,7 +174,7 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-unicorn": "^56.0.0",
-    "happy-dom": "^15.8.0",
+    "happy-dom": "^15.11.6",
     "husky": "^8.0.0",
     "postcss": "^8",
     "precss": "^4.0.0",
