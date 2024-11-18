@@ -400,7 +400,7 @@ export default {
       /**
        * The URL for the Redis cache manager.
        */
-      url: process.env.CACHE_MANAGER_REDIS_URL || "redis://localhost:6379",
+      url: process.env.CACHE_MANAGER_REDIS_URL || "redis://cms_redis:6379",
       /**
        * The port for the Redis cache manager.
        */
