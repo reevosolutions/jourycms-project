@@ -60,15 +60,17 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   const states: {
     code: string;
     name: string;
-  }[] = useMemo(
+  }[] | undefined = useMemo(
     () => getWebsiteConfigValue("states", []),
     [getWebsiteConfigValue],
   );
-  const cities: {
-    state_code: string;
-    code: string;
-    name: string;
-  }[] = useMemo(
+  const cities:
+    | {
+        state_code: string;
+        code: string;
+        name: string;
+      }[]
+    | undefined = useMemo(
     () => getWebsiteConfigValue("cities", []),
     [getWebsiteConfigValue],
   );
