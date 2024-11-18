@@ -146,16 +146,16 @@ export default class DevService extends BaseService {
 
       scenario.set({ articleTypes: articleTypes.map((i) => i.slug) });
 
-      // await this.reset();
-      // await this.fillDoctors();
-      // await this.fillEscorts();
-      // await this.fillAgencies();
-      // await this.fillAiroports();
-      // await this.fillAirlines();
-      // await this.fillShrines();
-      // await this.fillHotels();
-      // await this.fillTrips();
-      // await this.setAgenciesLogo();
+      await this.reset();
+      await this.fillDoctors();
+      await this.fillEscorts();
+      await this.fillAgencies();
+      await this.fillAiroports();
+      await this.fillAirlines();
+      await this.fillShrines();
+      await this.fillHotels();
+      await this.fillTrips();
+      await this.setAgenciesLogo();
 
       /**
        *
@@ -246,6 +246,7 @@ export default class DevService extends BaseService {
       }
     }
   }
+  
   async fillEscorts() {
     for (const state of faker.helpers.arrayElements(states, 58)) {
       const stateCities = cities.filter(
@@ -319,6 +320,7 @@ export default class DevService extends BaseService {
       }
     }
   }
+
   async fillAgencies() {
     for (const state of faker.helpers.arrayElements(states, 58)) {
       const stateCities = cities.filter(
@@ -885,18 +887,22 @@ export default class DevService extends BaseService {
     }
   }
   async setAgenciesLogo() {
-    await this.articleModel.updateMany(
-      {
-        article_type: this.types[ArticleTypeSlug.AGENCY]._id,
-      },
-      {
-        $set: {
-          "meta_fields.logo": {
-            id: "67359090d7e49753b7d64325",
-            url: "",
-          },
-        },
-      }
+    const { data } = await this.sdk.storage.loadRemoteFile(
+      "https://miqat-api.assil.dev/dev/assets/png-transparent-travel-redefine-llp-hotel-travel-agent-airline-ticket-travel-agent-logo-vehicle-accommodation.png"
     );
+    if (data?._id)
+      await this.articleModel.updateMany(
+        {
+          article_type: this.types[ArticleTypeSlug.AGENCY]._id,
+        },
+        {
+          $set: {
+            "meta_fields.logo": {
+              id: data._id,
+              url: "",
+            },
+          },
+        }
+      );
   }
 }
