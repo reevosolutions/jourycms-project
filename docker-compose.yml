@@ -42,18 +42,18 @@ services:
     restart: unless-stopped
 
   #FRONTEND
-  frontend:
-    container_name: cms_frontend
-    build:
-      context: ./frontend
-    ports:
-      - '3000:3000'
-    environment:
-      - SDK_BASE_URL=${SDK_BASE_URL}
-      - NEXT_PUBLIC_API_BASE_URL_PROD=${SDK_BASE_URL}
-    depends_on:
-      - backend
-    restart: unless-stopped
+  # frontend:
+  #   container_name: cms_frontend
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - '3000:3000'
+  #   environment:
+  #     - SDK_BASE_URL=${SDK_BASE_URL}
+  #     - NEXT_PUBLIC_API_BASE_URL_PROD=${SDK_BASE_URL}
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
 
   # HAProxy
   haproxy:
