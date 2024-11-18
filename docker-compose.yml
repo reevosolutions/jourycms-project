@@ -8,7 +8,7 @@ services:
     ports:
       - '27017:27017'
     volumes:
-      - mongodb_data:/data/db
+      - /root/apps/volumes/data/db:/data/db  # Bind mount host directory to container directory
     restart: unless-stopped
 
   # CACHE
@@ -18,7 +18,7 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - redis_data:/data
+      - /root/apps/volumes/data/redis:/data  # Bind mount host directory to container directory
     restart: unless-stopped
 
   # BACKEND
