@@ -1,5 +1,10 @@
 {
-  "name": "App",
+  "name": "ميقات",
+  "theme_color": "#FFFFFF",
+  "background_color": "#FFFFFF",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
   "icons": [
     {
       "src": "/icons/android-icon-36x36.png",
