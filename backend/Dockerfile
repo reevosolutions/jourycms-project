@@ -19,12 +19,14 @@ RUN apk add --no-cache tzdata
 # Set the timezone to Africa/Algiers
 RUN cp /usr/share/zoneinfo/Africa/Algiers /etc/localtime && echo "Africa/Algiers" > /etc/timezone
 
+# Install TypeScript globally (optional, if you want `tsc` to be available globally)
+RUN npm install -g typescript
+
 # Set the working directory
 WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json
 COPY package*.json ./
-
 
 
 # Install dependencies
