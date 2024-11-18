@@ -398,7 +398,7 @@ export default class ArticlesService extends BaseService {
     q: mongoose.QueryWithFuzzySearch<EntityAlias>;
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
     query: ApiAlias.List.Request & {
-      customFilter: { [k: string]: any };
+      customFilter?: { [k: string]: any };
     };
   }): Promise<{
     q: mongoose.QueryWithFuzzySearch<EntityAlias>;
@@ -667,7 +667,7 @@ export default class ArticlesService extends BaseService {
    */
   public async list(
     query: ApiAlias.List.Request & {
-      customFilter: { [k: string]: any };
+      customFilter?: { [k: string]: any };
     },
     authData: Levelup.CMS.V1.Security.AuthData,
     opt: {

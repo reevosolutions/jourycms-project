@@ -6348,10 +6348,10 @@ jiti@^1.21.0, jiti@^1.21.6:
   resolved "https://registry.npmjs.org/jiti/-/jiti-1.21.6.tgz"
   integrity sha512-2yTgeWTWzMWkHu6Jp9NKgePDaYHbntiwvYuuJLbbN9vl7DC9DvXKOB2BC3ZZ92D3cvV/aflH0osDfwpHepQ53w==
 
-jourycms-sdk@^1.1.5:
-  version "1.1.5"
-  resolved "https://registry.npmjs.org/jourycms-sdk/-/jourycms-sdk-1.1.5.tgz"
-  integrity sha512-CfZunAa5gL3KykLG2Um6CwhI6LSVzZEzt0kMkzurQ8oSNRMp35BsWIKvRSLE0nMacCRlFbF1YNZ9i1Oj95O3Dg==
+jourycms-sdk@^1.1.8:
+  version "1.1.8"
+  resolved "https://registry.npmjs.org/jourycms-sdk/-/jourycms-sdk-1.1.8.tgz"
+  integrity sha512-WhPVPQiXlEcOn3j0ztt7JrFXgXBvtjnB06DwzvQiT92E3bX8U3QkFhGtkT62QqFGrLZWEX6oLubHuQVVMI5tog==
   dependencies:
     axios "^1.7.7"
     colors "^1.4.0"

@@ -83,16 +83,16 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         this.translationNamespaceModel = translationNamespaceModel;
         this.translationProjectModel = translationProjectModel;
         this.eventDispatcher = eventDispatcher;
-        this.ENTITY = 'article';
+        this.ENTITY = "article";
     }
     /**
-    * @description Generates the snapshots article for the entity.
-    */
+     * @description Generates the snapshots article for the entity.
+     */
     async _generateSnapshotsObject(new_data, old_data, authData) {
         try {
             const cache = typedi_1.default.get(cache_manager_1.default);
             const result = {
-                created_by: undefined
+                created_by: undefined,
             };
             /**
              * Return the result
@@ -122,21 +122,30 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         };
         /**
          * Add old values if not provided in the new data
-        */
+         */
         if (old) {
             /**
              * TODO: Add more fields to the search meta
              */
             // ...
         }
-        this.logExecutionResult(this._createSearchMeta, { data, old }, null, { search_meta });
+        this.logExecutionResult(this._createSearchMeta, { data, old }, null, {
+            search_meta,
+        });
         /**
          * Return the search meta
          */
-        return Object.values(search_meta).filter(s => !!s).join(' ').replaceAll('  ', ' ').trim();
+        return Object.values(search_meta)
+            .filter((s) => !!s)
+            .join(" ")
+            .replaceAll("  ", " ")
+            .trim();
     }
     async _generateSlug(title, slug) {
-        const scenario = this.initScenario(this.logger, this._generateSlug, { title, slug });
+        const scenario = this.initScenario(this.logger, this._generateSlug, {
+            title,
+            slug,
+        });
         try {
             let value = slug || (0, slugify_utilities_1.slugify)(title);
             let retries = 0;
@@ -146,12 +155,12 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 exists = !!res;
                 if (exists) {
                     retries++;
-                    value = (0, slugify_utilities_1.slugify)(title) + '-' + retries;
+                    value = (0, slugify_utilities_1.slugify)(title) + "-" + retries;
                 }
             }
             scenario.set({
                 slug: value,
-                retries
+                retries,
             });
             scenario.end();
             return value;
@@ -164,7 +173,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
     /**
      * @description Apply filters based on the auth data
      */
-    _applyAuthDataBasedFilters({ query, q, totalQ, opt, authData }) {
+    _applyAuthDataBasedFilters({ query, q, totalQ, opt, authData, }) {
         try {
             /**
              * TODO: Apply filters based on the auth data
@@ -178,7 +187,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
     /**
      * @description Apply filters on list queries
      */
-    async _applyFilters({ query, q, totalQ, opt, authData }) {
+    async _applyFilters({ query, q, totalQ, opt, authData, }) {
         var _a, _b, _c, _d;
         let { search, filters, load_deleted } = query;
         let filter;
@@ -186,8 +195,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
          * @description Handle search
          */
         if (search) {
-            q = q.where(({ $text: { $search: search } }));
-            totalQ = totalQ.where(({ $text: { $search: search } }));
+            q = q.where({ $text: { $search: search } });
+            totalQ = totalQ.where({ $text: { $search: search } });
         }
         /**
          * @description fixing filters article
@@ -196,67 +205,69 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         /**
          * @description Inject attributes in the filters
          */
-        if (!load_deleted && !opt.load_deleted && !('is_deleted' in filters))
+        if (!load_deleted && !opt.load_deleted && !("is_deleted" in filters))
             filters.is_deleted = false;
         if ((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app)
-            (filters).app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
+            filters.app = authData === null || authData === void 0 ? void 0 : authData.current.app._id;
         // -- attributed:app
-        if (article_model_1.ArticleSchemaFields['app']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['app'], 'app');
+        if (article_model_1.ArticleSchemaFields["app"]) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters["app"], "app");
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- is_deleted
-        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, 'is_deleted');
+        filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters.is_deleted, "is_deleted");
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, 'created_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.created_at, "created_at");
         q = filter.q;
         totalQ = filter.totalQ;
         // -- updated_at
-        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, 'updated_at');
+        filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters.updated_at, "updated_at");
         q = filter.q;
         totalQ = filter.totalQ;
         // -- _id
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, '_id');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters._id, "_id");
         q = filter.q;
         totalQ = filter.totalQ;
         // -- created_by
-        if (article_model_1.ArticleSchemaFields['created_by']) {
-            filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters['created_by'], 'created_by');
+        if (article_model_1.ArticleSchemaFields["created_by"]) {
+            filter = (0, query_utilities_1.createDateRangeFilter)(q, totalQ, filters["created_by"], "created_by");
             q = filter.q;
             totalQ = filter.totalQ;
         }
         // -- slug
-        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.slug, 'slug');
+        filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters.slug, "slug");
         q = filter.q;
         totalQ = filter.totalQ;
         // -- article_type
         if (filters.article_type) {
             let article_type;
             if (!(0, mogodb_helpers_1.isObjectIdValid)((_b = filters.article_type) === null || _b === void 0 ? void 0 : _b.toString())) {
-                const exists = await this.articleTypeModel.exists({ slug: filters.article_type });
-                this.logger.value('article_type not id', exists, filters.article_type, (_c = filters.article_type) === null || _c === void 0 ? void 0 : _c.toString());
+                const exists = await this.articleTypeModel.exists({
+                    slug: filters.article_type,
+                });
+                this.logger.value("article_type not id", exists, filters.article_type, (_c = filters.article_type) === null || _c === void 0 ? void 0 : _c.toString());
                 if (exists)
                     article_type = (_d = exists === null || exists === void 0 ? void 0 : exists._id) === null || _d === void 0 ? void 0 : _d.toString();
             }
             else {
-                this.logger.value('article_type is object id', filters.article_type.toString());
+                this.logger.value("article_type is object id", filters.article_type.toString());
                 article_type = filters.article_type.toString();
             }
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, article_type, 'article_type');
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, article_type, "article_type");
             q = filter.q;
             totalQ = filter.totalQ;
         }
         for (const key of Object.keys(filters)) {
-            if (key.startsWith('meta_fields.')) {
-                if (typeof filters[key] === 'string') {
+            if (key.startsWith("meta_fields.")) {
+                if (typeof filters[key] === "string") {
                     filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters[key], key);
                     q = filter.q;
                     totalQ = filter.totalQ;
                 }
-                if (typeof filters[key] === 'boolean') {
+                if (typeof filters[key] === "boolean") {
                     filter = (0, query_utilities_1.createBooleanFilter)(q, totalQ, filters[key], key);
                     q = filter.q;
                     totalQ = filter.totalQ;
@@ -267,19 +278,161 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             }
         }
         // -- name
-        if (article_model_1.ArticleSchemaFields['name']) {
-            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters['name'], 'name');
+        if (article_model_1.ArticleSchemaFields["name"]) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, filters["name"], "name");
             q = filter.q;
             totalQ = filter.totalQ;
         }
         return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
+    }
+    async _applyCustomFilters({ query, q, totalQ, }) {
+        var _a, _b, _c;
+        let { search, load_deleted } = query;
+        let filter;
+        let customFilters = query.customFilter;
+        /**
+         * @description Handle search
+         */
+        if (customFilters.q) {
+            q = q.where({ $text: { $search: customFilters.q } });
+            totalQ = totalQ.where({ $text: { $search: customFilters.q } });
+        }
+        /**
+         * @description fixing filters article
+         */
+        customFilters = (0, index_1.fixFiltersObject)(customFilters);
+        // -- article_type
+        if (customFilters.t) {
+            let article_type;
+            if (!(0, mogodb_helpers_1.isObjectIdValid)((_a = customFilters.t) === null || _a === void 0 ? void 0 : _a.toString())) {
+                const exists = await this.articleTypeModel.exists({
+                    slug: customFilters.t,
+                });
+                this.logger.value("article_type not id", exists, customFilters.t, (_b = customFilters.t) === null || _b === void 0 ? void 0 : _b.toString());
+                if (exists)
+                    article_type = (_c = exists === null || exists === void 0 ? void 0 : exists._id) === null || _c === void 0 ? void 0 : _c.toString();
+            }
+            else {
+                this.logger.value("article_type is object id", customFilters.t.toString());
+                article_type = customFilters.t.toString();
+            }
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, article_type, "article_type");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // state
+        if (customFilters.w) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, customFilters.w, "meta_fields.state");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // city
+        if (customFilters.c) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, customFilters.c, ["meta_fields.city", "meta_fields.ksa_city"], false, "or");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // agency
+        if (customFilters.a) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, customFilters.a, "meta_fields.agency");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // duration
+        if (customFilters.d) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, customFilters.d, "meta_fields.duration");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // spaciatilty
+        if (customFilters.sp) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, typeof customFilters.sp === "string"
+                ? customFilters.sp.split(",").map((s) => s.trim())
+                : customFilters.sp, "meta_fields.spaciality");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // services
+        if (customFilters.s) {
+            filter = (0, query_utilities_1.createStringFilter)(q, totalQ, typeof customFilters.s === "string"
+                ? customFilters.s.split(",").map((s) => s.trim())
+                : customFilters.s, "meta_fields.services");
+            q = filter.q;
+            totalQ = filter.totalQ;
+        }
+        // month
+        if (customFilters.m) {
+            q = q.where({
+                $expr: {
+                    $and: [
+                        {
+                            $eq: [
+                                { $month: "$meta_fields.flight_date" },
+                                Number.parseInt(customFilters.m),
+                            ],
+                        },
+                        {
+                            $gte: [
+                                { $year: "$meta_fields.flight_date" },
+                                new Date().getFullYear(),
+                            ],
+                        },
+                    ],
+                },
+            });
+            totalQ = totalQ.where({
+                $expr: {
+                    $and: [
+                        {
+                            $eq: [
+                                { $month: "$meta_fields.flight_date" },
+                                Number.parseInt(customFilters.m),
+                            ],
+                        },
+                        {
+                            $gte: [
+                                { $year: "$meta_fields.flight_date" },
+                                new Date().getFullYear(),
+                            ],
+                        },
+                    ],
+                },
+            });
+        }
+        // price
+        if (customFilters.pn || customFilters.px) {
+            const [pn, px] = [
+                Number.parseFloat(`${customFilters.pn}` || "0"),
+                Number.parseFloat(`${customFilters.px}` || "10000000"),
+            ].sort((a, b) => a - b);
+            q = q.where({
+                "meta_fields.price": { $gte: pn, $lte: px },
+            });
+            totalQ = totalQ.where({
+                "meta_fields.price": { $gte: pn, $lte: px },
+            });
+        }
+        // experience
+        if (customFilters.xn || customFilters.xx) {
+            const [xn, xx] = [
+                Number.parseFloat(`${customFilters.xn}` || "0"),
+                Number.parseFloat(`${customFilters.xx}` || "10000000"),
+            ].sort((a, b) => a - b);
+            q = q.where({
+                "meta_fields.experience": { $gte: xn, $lte: xx },
+            });
+            totalQ = totalQ.where({
+                "meta_fields.experience": { $gte: xn, $lte: xx },
+            });
+        }
+        return { q, totalQ };
     }
     /**
      * @description List
      */
     async list(query, authData, opt = {
         load_deleted: false,
-        dont_lean: false
+        dont_lean: false,
     }) {
         var _a, _b, _c, _d;
         const scenario = this.initScenario(this.logger, this.list);
@@ -292,17 +445,37 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 dont_lean: false,
             });
             let { count, page, sort, sort_by } = query;
-            count = isNaN(count) ? undefined : parseInt(count.toString());
+            count = isNaN(count)
+                ? undefined
+                : parseInt(count.toString());
             page = isNaN(page) ? 1 : parseInt(page.toString());
             let q = this.articleModel.find();
             let totalQ = this.articleModel.where();
             /**
              * Apply filters
              */
-            const filter = await this._applyFilters({ q, totalQ, query, authData, opt });
+            const filter = await this._applyFilters({
+                q,
+                totalQ,
+                query,
+                authData,
+                opt,
+            });
             q = filter.q;
             totalQ = filter.totalQ;
-            const limit = (count === undefined || count === null) ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) || config_1.default.settings.listing.defaultCount : count;
+            if (query.customFilter) {
+                const filter = await this._applyCustomFilters({
+                    q,
+                    totalQ,
+                    query,
+                });
+                q = filter.q;
+                totalQ = filter.totalQ;
+            }
+            const limit = count === undefined || count === null
+                ? ((_d = (_c = (_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b.settings) === null || _c === void 0 ? void 0 : _c.listing) === null || _d === void 0 ? void 0 : _d.default_count) ||
+                    config_1.default.settings.listing.defaultCount
+                : count;
             const { skip, take } = this.getPaginationOptions(limit, page);
             const sortOptions = this.getSortOptions(sort, sort_by);
             if (take)
@@ -316,10 +489,10 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             /**
              * @description Add query to execution scenario
              */
-            // scenario.request_filter = fixFiltersObject(query.filters);
-            scenario.set('listing_query', {
-                // model: q.model.modelName,
-                // query: q.getQuery(),
+            scenario.set('request_filter', (0, index_1.fixFiltersObject)(query));
+            scenario.set("listing_query", {
+                model: q.model.modelName,
+                query: q.getQuery(),
                 options: q.getOptions(),
             });
             /**
@@ -334,19 +507,20 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 skip,
                 take,
                 found: items === null || items === void 0 ? void 0 : items.length,
-                total
+                total,
             });
             const result = {
-                data: items.map(doc => (0, general_mappers_1.mapDocumentToExposed)(doc)),
+                data: items.map((doc) => (0, general_mappers_1.mapDocumentToExposed)(doc)),
                 pagination: {
                     total,
                     pages,
-                }
+                },
             };
             result.edge = await this._buildResponseEdge(result.data);
             /**
              * Log execution result before returning the result
              */
+            scenario.end();
             return result;
         }
         catch (error) {
@@ -359,9 +533,12 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         const scenario = this.initScenario(this.logger, this._buildResponseEdge);
         try {
             const usersService = typedi_1.default.get(users_service_1.default);
-            const typesArray = await this.articleTypeModel.find({
-                is_deleted: false
-            }).lean().exec();
+            const typesArray = await this.articleTypeModel
+                .find({
+                is_deleted: false,
+            })
+                .lean()
+                .exec();
             const types = typesArray.reduce((prev, curr) => (Object.assign(Object.assign({}, prev), { [curr._id.toString()]: curr })), {});
             const result = {
                 users: {},
@@ -379,8 +556,11 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                     typeIds.push(item.article_type);
                     if (Object.keys(item.meta_fields || {}).length && type) {
                         for (const field of type.custom_meta_fields) {
-                            if (field.field_type === 'article_object' && item.meta_fields[field.field_key]) {
-                                const ids = Array.isArray(item.meta_fields[field.field_key]) ? item.meta_fields[field.field_key] : [item.meta_fields[field.field_key]];
+                            if (field.field_type === "article_object" &&
+                                item.meta_fields[field.field_key]) {
+                                const ids = Array.isArray(item.meta_fields[field.field_key])
+                                    ? item.meta_fields[field.field_key]
+                                    : [item.meta_fields[field.field_key]];
                                 articleIds = articleIds.concat(item.meta_fields[field.field_key]);
                             }
                         }
@@ -391,10 +571,13 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             }
             // scenario.set({ articleIds, userIds });
             if (articleIds.length) {
-                const articles = await this.articleModel.find({
-                    _id: { $in: (0, lodash_1.uniq)(articleIds) }
-                }).lean().exec();
-                this.logger.value('linked_articles', articles.length);
+                const articles = await this.articleModel
+                    .find({
+                    _id: { $in: (0, lodash_1.uniq)(articleIds) },
+                })
+                    .lean()
+                    .exec();
+                this.logger.value("linked_articles", articles.length);
                 for (const article of articles) {
                     linked_articles[article._id] = Object.assign(Object.assign({}, article), { body: undefined, body_unformatted: undefined, body_structured: undefined, attributes: undefined, snapshots: undefined, insights: undefined });
                     if (article.article_type)
@@ -407,16 +590,16 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                     filters: {
                         _id: userIds,
                     },
-                    fields: ['_id', 'tracking_id', 'role', 'profile']
+                    fields: ["_id", "tracking_id", "role", "profile"],
                 }, {
                     current: {
                         service: {
-                            name: 'content',
-                            is_external: false
-                        }
-                    }
+                            name: "content",
+                            is_external: false,
+                        },
+                    },
                 });
-                this.logger.value('users', users.length);
+                this.logger.value("users", users.length);
                 for (const user of users) {
                     edge_users[user._id] = (0, snapshots_utilities_1.getUserSnapshot)(user);
                 }
@@ -437,9 +620,14 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     /**
-    * @description GetOne
-    */
-    async getById(id, authData, opt = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }) {
+     * @description GetOne
+     */
+    async getById(id, authData, opt = {
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+    }) {
         try {
             /**
              * Fill options argument with the defaults
@@ -461,19 +649,20 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions_1.default.ItemNotFoundException('Article deleted');
+                throw new exceptions_1.default.ItemNotFoundException("Article deleted");
             /**
-            * Check if the user can view the article
-            */
-            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this article');
+             * Check if the user can view the article
+             */
+            if (!opt.bypass_authorization &&
+                !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to view this article");
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc),
             };
             result.edge = await this._buildResponseEdge([result.data]);
             /**
@@ -483,16 +672,22 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+            if (opt.ignore_not_found_error &&
+                error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
         }
     }
     /**
-    * @description getBySlug
-    */
-    async getBySlug(slug, authData, opt = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }) {
+     * @description getBySlug
+     */
+    async getBySlug(slug, authData, opt = {
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+    }) {
         try {
             /**
              * Fill options argument with the defaults
@@ -514,19 +709,20 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 q.lean();
             const doc = await q.exec();
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             /**
              * Check if the document is deleted and the user does not want to load deleted documents
              */
             if (doc.is_deleted && !opt.load_deleted)
-                throw new exceptions_1.default.ItemNotFoundException('Article deleted');
+                throw new exceptions_1.default.ItemNotFoundException("Article deleted");
             /**
-            * Check if the user can view the article
-            */
-            if (!opt.bypass_authorization && !user_can_1.default.viewObject(this.ENTITY, doc, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to view this article');
+             * Check if the user can view the article
+             */
+            if (!opt.bypass_authorization &&
+                !user_can_1.default.viewObject(this.ENTITY, doc, authData))
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to view this article");
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc),
             };
             result.edge = await this._buildResponseEdge([result.data]);
             /**
@@ -536,7 +732,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             return result;
         }
         catch (error) {
-            if (opt.ignore_not_found_error && error instanceof exceptions_1.default.ItemNotFoundException)
+            if (opt.ignore_not_found_error &&
+                error instanceof exceptions_1.default.ItemNotFoundException)
                 return { data: undefined };
             this.logError(this.getById, error);
             throw error;
@@ -568,16 +765,19 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
              */
             data.app = ((_b = (_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.app) === null || _b === void 0 ? void 0 : _b._id)
                 ? (_d = (_c = authData === null || authData === void 0 ? void 0 : authData.current) === null || _c === void 0 ? void 0 : _c.app) === null || _d === void 0 ? void 0 : _d._id
-                : (opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) || (((_f = (_e = authData.current) === null || _e === void 0 ? void 0 : _e.service) === null || _f === void 0 ? void 0 : _f.name) && !((_h = (_g = authData.current) === null || _g === void 0 ? void 0 : _g.service) === null || _h === void 0 ? void 0 : _h.is_external))
+                : (opt === null || opt === void 0 ? void 0 : opt.bypass_authorization) ||
+                    (((_f = (_e = authData.current) === null || _e === void 0 ? void 0 : _e.service) === null || _f === void 0 ? void 0 : _f.name) &&
+                        !((_h = (_g = authData.current) === null || _g === void 0 ? void 0 : _g.service) === null || _h === void 0 ? void 0 : _h.is_external))
                     ? data.app
                     : undefined;
             /**
              * Check if the user can create the article
              */
-            if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) && ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this article on this app');
+            if (((_k = (_j = authData === null || authData === void 0 ? void 0 : authData.current) === null || _j === void 0 ? void 0 : _j.app) === null || _k === void 0 ? void 0 : _k._id) &&
+                ((_m = (_l = authData === null || authData === void 0 ? void 0 : authData.current) === null || _l === void 0 ? void 0 : _l.app) === null || _m === void 0 ? void 0 : _m._id) !== data.app)
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to create this article on this app");
             if (!user_can_1.default.createObject(this.ENTITY, data, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to create this article');
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to create this article");
             /**
              * Create data article
              */
@@ -585,15 +785,16 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             /**
              * Create tracking ID
              */
-            if (article_model_1.ArticleSchemaFields['tracking_id'] && Object.keys(tracking_id_constants_1.ITEM_SHORTCUTS).includes('Article')) {
-                const entity = 'Article';
-                docObject['tracking_id'] = await (0, tracking_id_utilities_1.createTrackingId)(this.ENTITY, this.articleModel);
+            if (article_model_1.ArticleSchemaFields["tracking_id"] &&
+                Object.keys(tracking_id_constants_1.ITEM_SHORTCUTS).includes("Article")) {
+                const entity = "Article";
+                docObject["tracking_id"] = await (0, tracking_id_utilities_1.createTrackingId)(this.ENTITY, this.articleModel);
             }
             /**
              * Create search meta
              */
-            if (article_model_1.ArticleSchemaFields['search_meta']) {
-                docObject['search_meta'] = this._createSearchMeta(docObject, null);
+            if (article_model_1.ArticleSchemaFields["search_meta"]) {
+                docObject["search_meta"] = this._createSearchMeta(docObject, null);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
             /**
@@ -601,10 +802,10 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
              */
             const doc = await this.articleModel.create(docObject);
             if (!doc)
-                throw new exceptions_1.default.InternalServerError('Failed to create the article');
+                throw new exceptions_1.default.InternalServerError("Failed to create the article");
             this.eventDispatcher.dispatch(events_config_1.default.content.article.created, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc),
             };
             /**
              * Log execution result before returning the result
@@ -618,8 +819,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     /**
-    * @description Update
-    */
+     * @description Update
+     */
     async update(id, { data }, authData) {
         var _a, _b;
         try {
@@ -646,11 +847,11 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
              */
             const old = await this.articleModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Article is deleted');
+                throw new exceptions_1.default.UnauthorizedException("Article is deleted");
             if (!user_can_1.default.updateObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to update this article');
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to update this article");
             /**
              * detect changes
              */
@@ -660,8 +861,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
                 updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
-                action: 'updated',
-                updates: updates.asArray
+                action: "updated",
+                updates: updates.asArray,
             };
             /**
              * Create data article
@@ -670,18 +871,18 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
             /**
              * Create search meta
              */
-            if (article_model_1.ArticleSchemaFields['search_meta']) {
-                docObject['search_meta'] = this._createSearchMeta(docObject, old);
+            if (article_model_1.ArticleSchemaFields["search_meta"]) {
+                docObject["search_meta"] = this._createSearchMeta(docObject, old);
             }
             docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
             /**
              * Update the article on DB
              */
             const doc = await this.articleModel.findByIdAndUpdate(id, Object.assign(Object.assign({}, docObject), { $addToSet: {
-                    updates: updateObject
+                    updates: updateObject,
                 } }), { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             /**
              * Handle the updated effects on the same service
              */
@@ -691,7 +892,7 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
              */
             this.eventDispatcher.dispatch(events_config_1.default.content.article.updated, { data: doc });
             const result = {
-                data: (0, general_mappers_1.mapDocumentToExposed)(doc)
+                data: (0, general_mappers_1.mapDocumentToExposed)(doc),
             };
             /**
              * Log execution result before returning the result
@@ -708,8 +909,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     /**
-    * @description Delete
-    */
+     * @description Delete
+     */
     async delete(id, authData) {
         var _a, _b;
         try {
@@ -721,28 +922,28 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
                 updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
-                action: 'deleted',
-                updates: []
+                action: "deleted",
+                updates: [],
             };
             const old = await this.articleModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             if (old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Article already deleted');
+                throw new exceptions_1.default.UnauthorizedException("Article already deleted");
             if (!user_can_1.default.deleteObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to delete this article');
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to delete this article");
             const doc = await this.articleModel.findByIdAndUpdate(id, {
                 is_deleted: true,
                 deleted_at: new Date(),
                 $addToSet: {
-                    updates: updateObject
-                }
+                    updates: updateObject,
+                },
             }, { new: true });
             this.eventDispatcher.dispatch(events_config_1.default.content.article.deleted, { data: doc });
             const result = {
                 data: {
-                    deleted: true
-                }
+                    deleted: true,
+                },
             };
             /**
              * Log execution result before returning the result
@@ -756,8 +957,8 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
         }
     }
     /**
-    * @description Restore
-    */
+     * @description Restore
+     */
     async restore(id, authData) {
         var _a, _b;
         try {
@@ -769,30 +970,30 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
                 updated_by_system: !((_a = authData === null || authData === void 0 ? void 0 : authData.current) === null || _a === void 0 ? void 0 : _a.user),
                 updated_by: (0, snapshots_utilities_1.getUserSnapshot)((_b = authData === null || authData === void 0 ? void 0 : authData.current) === null || _b === void 0 ? void 0 : _b.user),
                 date: new Date(),
-                action: 'restored',
-                updates: []
+                action: "restored",
+                updates: [],
             };
             const old = await this.articleModel.findById(id);
             if (!old)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             if (!old.is_deleted)
-                throw new exceptions_1.default.UnauthorizedException('Article already exists');
+                throw new exceptions_1.default.UnauthorizedException("Article already exists");
             if (!user_can_1.default.restoreObject(this.ENTITY, old, authData))
-                throw new exceptions_1.default.UnauthorizedException('You are not allowed to restore this article');
+                throw new exceptions_1.default.UnauthorizedException("You are not allowed to restore this article");
             const doc = await this.articleModel.findByIdAndUpdate(id, {
                 is_deleted: false,
                 deleted_at: null,
                 $addToSet: {
-                    updates: updateObject
-                }
+                    updates: updateObject,
+                },
             }, { new: true });
             if (!doc)
-                throw new exceptions_1.default.ItemNotFoundException('Article not found');
+                throw new exceptions_1.default.ItemNotFoundException("Article not found");
             this.eventDispatcher.dispatch(events_config_1.default.content.article.restored, { data: doc });
             const result = {
                 data: {
-                    restored: true
-                }
+                    restored: true,
+                },
             };
             /**
              * Log execution result before returning the result
@@ -808,15 +1009,15 @@ let ArticlesService = class ArticlesService extends base_service_1.default {
 };
 ArticlesService = __decorate([
     (0, typedi_1.Service)(),
-    __param(0, (0, typedi_1.Inject)('articleTypeModel')),
-    __param(1, (0, typedi_1.Inject)('articleModel')),
-    __param(2, (0, typedi_1.Inject)('commentModel')),
-    __param(3, (0, typedi_1.Inject)('reviewModel')),
-    __param(4, (0, typedi_1.Inject)('termModel')),
-    __param(5, (0, typedi_1.Inject)('taxonomyModel')),
-    __param(6, (0, typedi_1.Inject)('translationItemModel')),
-    __param(7, (0, typedi_1.Inject)('translationNamespaceModel')),
-    __param(8, (0, typedi_1.Inject)('translationProjectModel')),
+    __param(0, (0, typedi_1.Inject)("articleTypeModel")),
+    __param(1, (0, typedi_1.Inject)("articleModel")),
+    __param(2, (0, typedi_1.Inject)("commentModel")),
+    __param(3, (0, typedi_1.Inject)("reviewModel")),
+    __param(4, (0, typedi_1.Inject)("termModel")),
+    __param(5, (0, typedi_1.Inject)("taxonomyModel")),
+    __param(6, (0, typedi_1.Inject)("translationItemModel")),
+    __param(7, (0, typedi_1.Inject)("translationNamespaceModel")),
+    __param(8, (0, typedi_1.Inject)("translationProjectModel")),
     __param(9, (0, eventDispatcher_decorator_1.EventDispatcher)()),
     __metadata("design:paramtypes", [Object, Object, Object, Object, Object, Object, Object, Object, Object, Object])
 ], ArticlesService);

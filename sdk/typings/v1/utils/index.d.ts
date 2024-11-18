@@ -8,3 +8,4 @@ export * from "./entities/index.d.ts";
 export * from "./dev/index.d.ts";
 export * from "./common/index.d.ts";
 export * from "./api/index.d.ts";
+export * from "./system/index.d.ts";

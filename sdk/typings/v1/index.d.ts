@@ -1,3 +1,4 @@
+export * from "./cache-manager/index.d.ts";
 export * from "./events/index.d.ts";
 export * from "./lib/index.d.ts";
 export * from "./modules/index.d.ts";
