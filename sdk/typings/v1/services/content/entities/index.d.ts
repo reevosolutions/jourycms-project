@@ -9,3 +9,4 @@ export * from "./review.d.ts";
 export * from "./comment.d.ts";
 export * from "./article.d.ts";
 export * from "./article-type.d.ts";
+export * from "./custom-fieds/index.d.ts";
