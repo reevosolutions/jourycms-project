@@ -17,6 +17,7 @@
 
 # next.js
 /design
+/data-backup
 /frontend/.next/
 /**/.next/
 /out/
