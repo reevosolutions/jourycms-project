@@ -10,7 +10,8 @@ const config = {
    */
   cacheManager: {
     dbName: process.env.NEXT_PUBLIC_CACHE_DB_NAME || "jourycms",
-    dbVersion: Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DB_Version || "1") || 1,
+    dbVersion:
+      Number.parseInt(process.env.NEXT_PUBLIC_CACHE_DB_Version || "1") || 1,
   },
 
   /**
@@ -20,7 +21,8 @@ const config = {
     baseURL:
       process.env.NODE_ENV === "development"
         ? process.env.NEXT_PUBLIC_API_BASE_URL_DEV || "http://localhost:5500"
-        : process.env.NEXT_PUBLIC_API_BASE_URL_PROD || "http://localhost:5500",
+        : process.env.NEXT_PUBLIC_API_BASE_URL_PROD ||
+          "https://miqat-api.assil.dev",
     appId: process.env.NEXT_PUBLIC_API_APP_ID || "",
     appSecret: process.env.NEXT_PUBLIC_API_APP_SECRET || "",
     debug: [true, 1, "1", "true"].includes(

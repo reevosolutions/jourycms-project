@@ -52,6 +52,7 @@ services:
     environment:
       - SDK_BASE_URL=${SDK_BASE_URL}
       - NEXT_PUBLIC_API_BASE_URL_PROD=${SDK_BASE_URL}
+      - NEXT_PUBLIC_API_BASE_URL_DEV=${SDK_BASE_URL}
     depends_on:
       - backend
     restart: unless-stopped
