@@ -71,23 +71,27 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({ data, edge, articleTy
   /* -------------------------------------------------------------------------- */
   return (
     <animated.div style={styles}>
-
       <div className="relative rounded-xl bg-white pb-20 shadow-lg shadow-slate-200 transition-all hocus:z-10 hocus:-translate-y-2 hocus:scale-105 hocus:shadow-xl hocus:shadow-slate-200">
         <Link href={`/${data.slug}`}>
           <div className="relative h-40 w-full">
             <Image
               priority
-              placeholder='blur'
+              placeholder="blur"
               blurDataURL={
                 data.featured_image?.id
-                  ? sdk.storage.utils.getImageBlurredUrl(data.featured_image?.id)
+                  ? sdk.storage.utils.getImageBlurredUrl(
+                      data.featured_image?.id,
+                    )
                   : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAHCAIAAABRDCAKAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA+UlEQVR4nAHuABH/ANXp8tfs99bu+s3q+8Lo+rbd7q3X6afc9J3Z847Q8HnF6gD1+//y+//p9v3m9//p///F09eqtLnP+P+44vOp2/OWz+4Aj5OYytDS8PX64+vxwszSgoKCfnp4scHJzPH+td3zp9HqADxAPFNWVZ2bloOEgIB4c4NyaHhsXYV+d6eho7K4vZudpAA6Kxg7LyFANy1URjtiUUdsVkpJOixrUUNqRTJuTDl6X0sAAAESBRMiGy1AKDhLQUZVPztIIBYcRz9DdmplkHpnf3RkADZLWDE9Q0ZSWkRQXlVgbG9zeIqFfaWejoqGeFlWTWNdVBZSgKQv2x7tAAAAAElFTkSuQmCC"
               }
               className="h-full w-full rounded-b-none rounded-t-xl object-cover"
               src={
                 data.featured_image?.id
-                  ? sdk.storage.utils.getImageUrl(data.featured_image?.id, { width: 600, height: 300 })
-                  : "/assets/miqat/images/hajj-placeholder.jpg"
+                  ? sdk.storage.utils.getImageUrl(data.featured_image?.id, {
+                      width: 600,
+                      height: 300,
+                    })
+                  : "/assets/miqat/images/hajj-placeholder.webp"
               }
               alt={data.title}
               width={600}
@@ -102,7 +106,7 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({ data, edge, articleTy
               </h3>
               <div
                 className="text-sm text-gray-500"
-                dangerouslySetInnerHTML={{ __html: data.body_unformatted }}
+                dangerouslySetInnerHTML={{__html: data.body_unformatted}}
               />
             </div>
 
@@ -148,7 +152,6 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({ data, edge, articleTy
         </Link>
       </div>
     </animated.div>
-
   );
 };
 
