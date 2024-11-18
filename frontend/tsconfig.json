@@ -4,7 +4,9 @@
     "lib": [
       "dom",
       "dom.iterable",
-      "esnext"
+      "esnext",
+      // Add this! Doing so adds WebWorker and ServiceWorker types to the global.
+      "webworker"
     ],
     "allowJs": true,
     "skipLibCheck": true,
@@ -61,8 +63,12 @@
       "./node_modules/@types",
       "./node_modules/jourycms-sdk/typings",
       "./typings"
-    ]
+    ],
   },
+  "types": [
+    "@serwist/next/typings",
+    "jourycms-sdk/typings",
+  ],
   "include": [
     "next-env.d.ts",
     "**/*.ts",
