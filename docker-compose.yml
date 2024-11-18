@@ -61,7 +61,7 @@ services:
     image: haproxy:alpine
     container_name: cms_haproxy
     ports:
-      - "80:80"  # Exposing HAProxy's HTTP port to the host
+      - "80:8080"  # Exposing HAProxy's HTTP port to the host
       - "443:443"  # Optionally, you can expose HTTPS as well
     volumes:
       - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg  # The HAProxy config file
