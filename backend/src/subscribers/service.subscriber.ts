@@ -31,7 +31,7 @@ export default class ServiceSubscriber {
          * e.g. start seeding the database, tests, etc.
          */
 
-        await devService.fillArticles();
+        // await devService.seed();
 
       } else {
         /**
