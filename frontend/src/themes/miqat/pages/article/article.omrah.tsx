@@ -52,12 +52,12 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
   
   return (
     <DefaultLayout route={route}>
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-8">
         {article ? (
           <div className="article-page mb-16">
             <div className="mb-4"></div>
             <div className="mb-4">
-              <h1 className="mb-6 mt-8 text-center text-5xl text-gray-800 md:text-5xl">
+              <h1 className="mb-6 mt-8 text-center text-4xl text-gray-800 md:text-5xl">
                 {article.title}
               </h1>
             </div>
@@ -396,7 +396,7 @@ const ArticlePage: React.FC<PageProps> = ({ route, initialData }) => {
                 </div>
               </aside>
               <div
-                className="prose mx-auto mb-6 text-3xl text-darkblue-700"
+                className="prose mx-auto mb-6 text-2xl md:text-3xl text-darkblue-700"
                 dangerouslySetInnerHTML={{__html: article.body}}
               />
             </div>

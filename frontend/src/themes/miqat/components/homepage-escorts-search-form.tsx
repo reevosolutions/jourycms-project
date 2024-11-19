@@ -57,7 +57,7 @@ export const EscortsSearchForm: React.FC = () => {
       {/* field */}
       <div className="field mb-8">
         <Label className="text-2xl text-darkblue-500">{"جنس المرافق"}</Label>
-        <div className="mt-3 grid grid-cols-3 gap-8">
+        <div className="mt-3 grid grid-cols-3 gap-4 sm:gap-8">
           <button
             className={cn(
               "flex aspect-square items-center justify-center rounded-4xl border-2 bg-slate-100 transition-all",
@@ -411,7 +411,7 @@ const HomepageEscortsSearchForm: React.FC<
   HomepageEscortsSearchFormProps
 > = ({ }) => {
   return (
-    <div className="jcms-hero-section min-h-[600px] w-[500px] rounded-4xl bg-darkblue-950 shadow-lg shadow-darkblue-900/10 transition-all">
+    <div className="jcms-hero-section min-h-[600px] w-full lg:w-[500px] rounded-4xl bg-darkblue-950 shadow-lg shadow-darkblue-900/10 transition-all">
       <Tabs defaultValue="escorts" className="w-full">
         <TabsList
           className="h-auto w-full items-center justify-center gap-20 bg-transparent"

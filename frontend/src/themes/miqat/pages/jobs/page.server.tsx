@@ -25,7 +25,7 @@ const ThemePage_Server: React.FC<PageProps> = ({ route, showPagination = true,
   /* -------------------------------------------------------------------------- */
   return (
     <DefaultLayout route={route}>
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-8">
         <ContentSection_Server
           {...{
             showPagination,

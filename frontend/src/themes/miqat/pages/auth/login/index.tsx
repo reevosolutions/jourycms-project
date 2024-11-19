@@ -24,7 +24,7 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
       <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
         <div className="flex flex-col gap-4 sm:-mt-40">
 
-          <div className="mx-auto w-96 max-w-full  shadow-xl  rounded-2xl shadow-darkblue-950/5  ">
+          <div className="mx-auto w-80 sm:w-96 max-w-full  sm:shadow-xl  rounded-2xl sm:shadow-darkblue-950/5  ">
             <LoginForm />
           </div>
           <div className="d">

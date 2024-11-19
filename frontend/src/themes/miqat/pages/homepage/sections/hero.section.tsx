@@ -29,30 +29,29 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
         <div className="d"></div>
 
         <ParallaxBanner
-          layers={[
-            { image: "/assets/miqat/images/mosque2.webp", speed: -40 }
-          ]}
+          layers={[{image: "/assets/miqat/images/mosque2.webp", speed: -40}]}
           className="aspect-[3/1] min-h-[600px]"
           style={{
-            backgroundImage: "url(data:image/webp;base64,UklGRtAAAABXRUJQVlA4IMQAAADQBACdASoUAAsAPm0skUWkIqGYBABABsSgCdMoR4HhJ/09WByq2W2RCveyjqwAAAD+/TP4+UP/9qT9/Hp/rfi//IHM31eYEcsIXlq/xIKzuIai+OZ8HEt3178oPnFFiA/xhhk+dUwvmaCvPQmqRP51FnEcfJKb6A9bmM6OUXC0hOEY1S4EYIeolA6ucbG9nZlJQRncnCHloMHbZ/piPja//CY3coRYVfYyCuj5dn7V/m838rkEQAtPciL8ki8A6F+0sAAA)",
+            backgroundImage:
+              "url(data:image/webp;base64,UklGRtAAAABXRUJQVlA4IMQAAADQBACdASoUAAsAPm0skUWkIqGYBABABsSgCdMoR4HhJ/09WByq2W2RCveyjqwAAAD+/TP4+UP/9qT9/Hp/rfi//IHM31eYEcsIXlq/xIKzuIai+OZ8HEt3178oPnFFiA/xhhk+dUwvmaCvPQmqRP51FnEcfJKb6A9bmM6OUXC0hOEY1S4EYIeolA6ucbG9nZlJQRncnCHloMHbZ/piPja//CY3coRYVfYyCuj5dn7V/m838rkEQAtPciL8ki8A6F+0sAAA)",
             backgroundSize: "cover",
             backgroundRepeat: "no-repeat",
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 flex items-center justify-center">
-          </div>
+          <div className="absolute inset-0 flex items-center justify-center"></div>
         </ParallaxBanner>
+
         <div className="bg-beige-50 py-12 pb-16 text-beige-900">
-          <div className="container flex items-center justify-between gap-12">
-            <div className="d">
+          <div className="container flex flex-col-reverse items-center justify-between gap-12 pt-4 lg:flex-row lg:pt-0">
+            <div className="text-center lg:text-start">
               <h2 className="mb-2 text-5xl font-bold text-beige-800">
                 عن {getWebsiteConfig().name}
               </h2>
               <p className="text-2xl">
                 نحن أول منصة جزائرية، تجمع كل عروض العمرة
               </p>
-              <div className="flex items-center gap-10 pt-6 text-darkblue-950">
+              <div className="flex items-center flex-col md:flex-row gap-4 md:gap-10 pt-6 text-darkblue-950">
                 <b className="text-3xl">تجدنا على</b>
                 <div className="flex items-center gap-4">
                   {getWebsiteConfig()?.social_links?.map(network =>
@@ -86,7 +85,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
               </div>
             </div>
             <div className="relative">
-              <div className="absolute bottom-0 end-0">
+              <div className="end-1/2 -mt-[560px] lg:absolute lg:bottom-full lg:end-0 lg:-mt-0">
                 <HomepageSearchForm />
               </div>
             </div>

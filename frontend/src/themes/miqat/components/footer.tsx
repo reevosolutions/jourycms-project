@@ -146,7 +146,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
                 <div className="">
                   <a
                     href={`mailto:${getWebsiteConfig()?.contact_email}`}
-                    className="t"
+                    className=" hocus:text-beige-50"
                   >
                     {getWebsiteConfig()?.contact_email}
                   </a>
@@ -157,7 +157,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
                 <div className="">
                   <a
                     href={`tel:${getWebsiteConfig()?.contact_phones?.[0]}`}
-                    className="t"
+                    className=" hocus:text-beige-50"
                   >
                     {getWebsiteConfig()?.contact_phones?.[0]}
                   </a>

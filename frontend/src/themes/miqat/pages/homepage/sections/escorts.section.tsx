@@ -27,17 +27,17 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
     <section className="bg-gray-50/50">
       <aside className="container mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div className="pt-16">
-          <h2 className="mt-0 pb-6 text-7xl font-bold text-darkblue-800">
+          <h2 className="mt-0 pb-6 text-4xl font-bold text-darkblue-800 sm:text-5xl md:text-7xl">
             تحتاج إلى مساعدين أكفاء؟
           </h2>
-          <p className="mt-0 pb-8 text-4xl text-darkblue-600">
+          <p className="mt-0 pb-8 text-3xl text-darkblue-600 sm:text-4xl">
             اعثر على مرافقين و أطباء محترفين و متخصصين يرافقون زبائنك و يوفرون
             عليهم الكثير من الوقت والجهد.
           </p>
 
-          <aside className="h-80"></aside>
+          <aside className="hidden lg:block lg:h-96 xl:h-80"></aside>
         </div>
-        <div className="flex justify-center gap-8">
+        <div className="hidden items-end justify-center gap-8 lg:flex">
           <Image
             src="/assets/miqat/svg/doctor.svg"
             width={600}
@@ -65,13 +65,13 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
         <div className="container relative z-10 mx-auto py-28 pb-36">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div className="d">
-              <aside className="relative mb-8 h-40">
-                <div className="absolute bottom-0 left-0 right-0">
+              <aside className="relative mb-8 lg:h-40">
+                <div className="lg:absolute lg:bottom-0 lg:left-0 lg:right-0">
                   <HomepageEscortsSearchForm />
                 </div>
               </aside>
               <div className="flex items-center gap-10">
-                <span className="flex h-24 w-24 flex-col items-center justify-center rounded-full bg-white shadow-lg shadow-darkblue-100">
+                <span className="flex h-24 w-24 flex-shrink-0 flex-col items-center justify-center rounded-full bg-white shadow-lg shadow-darkblue-100">
                   <Icons.Social.Youtube className="h-16 w-16 text-red-500" />
                 </span>
                 <div className="flex flex-col gap-0">
@@ -84,11 +84,11 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
                 </div>
               </div>
             </div>
-            <div className="d">
-              <h2 className="mt-0 pb-6 text-7xl font-bold text-darkblue-800">
+            <div className="text-center lg:text-start">
+              <h2 className="mt-0 pb-6 text-center text-5xl font-bold text-darkblue-800 md:text-6xl lg:text-start lg:text-7xl">
                 خدمات طبية متميزة
               </h2>
-              <p className="mt-0 pb-8 text-4xl text-darkblue-600">
+              <p className="mt-0 pb-8 text-3xl text-darkblue-600 md:text-4xl">
                 توفر طواقم طبية متكاملة لمرافقتكم طول الوقت، أدوات طبية حديثة،
                 تدريب واسع في التعامل مع كبار السن.
               </p>

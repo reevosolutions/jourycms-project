@@ -148,7 +148,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               <Label className="text-2xl text-darkblue-500">
                 {"نوع الحساب"}
               </Label>
-              <div className="mt-3 grid min-w-80 grid-cols-3 gap-8">
+              <div className="mt-3 grid min-w-80 grid-cols-3 sm:gap-8 gap-2">
                 <button
                   className={cn(
                     "flex aspect-square flex-col items-center justify-center rounded-4xl border-2 bg-slate-100 p-4 transition-all",
@@ -327,7 +327,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[436px] p-0 font-hammah text-2xl"
+                    className="w-[320px] sm:w-[436px] p-0 font-hammah text-2xl"
                     align="start"
                   >
                     <Command
@@ -418,7 +418,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[436px] p-0 font-hammah text-2xl"
+                    className="w-[320px] sm:w-[436px] p-0 font-hammah text-2xl"
                     align="start"
                   >
                     <Command

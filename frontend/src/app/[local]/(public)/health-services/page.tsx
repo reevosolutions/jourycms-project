@@ -3,7 +3,7 @@ import { publicRoutes } from "@/config";
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { ArticleTypeSlug } from "@/themes/miqat/config";
 import { getArticleTypeBySlug, listArticles } from "@/themes/miqat/data";
-import ThemePage_Server from "@/themes/miqat/pages/omarah/page.server";
+import ThemePage_Server from "@/themes/miqat/pages/omrah/page.server";
 
 
 const ROUTE = publicRoutes.homepage._.healthServices;

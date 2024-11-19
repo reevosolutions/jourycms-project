@@ -22,7 +22,7 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
   /* -------------------------------------------------------------------------- */
   return !currentUser ? redirect(publicRoutes.homepage._.login.path) : (
     <DefaultLayout route={route}>
-      <div className="container mx-auto">
+      <div className="container mx-auto px-4 md:px-8">
         {currentUser ? (
           <div className="d">
             <p className=" text-xl ">

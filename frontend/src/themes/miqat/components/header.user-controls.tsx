@@ -33,42 +33,45 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => 
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-
-
-    <div className="d flex items-center ms-auto">
+    <div className="d ms-auto flex items-center">
       {currentUser ? (
         <Popover>
-          <PopoverTrigger
-            className="flex h-28 items-center justify-center gap-3 border-b-4 border-transparent text-white duration-200 hocus:text-beige-50"
-          >
-            <span className="d">
-              {"حسابي"}
-            </span>
+          <PopoverTrigger className="flex h-16 items-center justify-center gap-3 border-b-4 border-transparent text-white duration-200 hocus:text-beige-50 lg:h-28">
+            <span className="d">{"حسابي"}</span>
             <LuChevronDown className="h-5 w-5" />
           </PopoverTrigger>
-          <PopoverContent className=" -translate-y-4">
+          <PopoverContent className="-translate-y-4">
             <div className="px-4 font-hammah text-2xl">
               <ul>
                 <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href={publicRoutes.homepage._.myAccount.path}>
+                  <Link
+                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                    href={publicRoutes.homepage._.myAccount.path}
+                  >
                     {"حسابي"}
                   </Link>
                 </li>
-                {currentUser?.role === 'admin' && (
-
+                {currentUser?.role === "admin" && (
                   <li>
-                    <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href={adminRoutes.articles.path}>
+                    <Link
+                      className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                      href={adminRoutes.articles.path}
+                    >
                       {"إدارة الموقع"}
                     </Link>
                   </li>
                 )}
                 <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href="/account/settings">
+                  <Link
+                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                    href="/account/settings"
+                  >
                     {"الإعدادات"}
                   </Link>
                 </li>
                 <li>
-                  <button className=" text-darkblue-800 active:text-darkblue-800 hover:text-beige-600 transition-all py-1 block"
+                  <button
+                    className="block py-1 text-darkblue-800 transition-all hover:text-beige-600 active:text-darkblue-800"
                     onClick={() => {
                       dispatch(logout());
                     }}
@@ -82,38 +85,35 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => 
         </Popover>
       ) : (
         <Popover>
-          <PopoverTrigger
-            className="flex h-28 items-center justify-center gap-3 border-b-4 border-transparent text-white duration-200 hocus:text-beige-50"
-          >
-            <span className="d">
-              {"تسجيل الدخول"}
-            </span>
+          <PopoverTrigger className="flex h-16 items-center justify-center gap-3 border-b-4 border-transparent text-white duration-200 hocus:text-beige-50 lg:h-28">
+            <span className="d">{"تسجيل الدخول"}</span>
             <LuChevronDown className="h-5 w-5" />
           </PopoverTrigger>
-          <PopoverContent className=" -translate-y-4">
+          <PopoverContent className="-translate-y-4">
             <div className="px-4 font-hammah text-2xl">
               <ul>
                 <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href={publicRoutes.homepage._.login.path}>
+                  <Link
+                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                    href={publicRoutes.homepage._.login.path}
+                  >
                     {"تسجيل الدخول"}
                   </Link>
                 </li>
                 <li>
-                  <Link className=" text-darkblue-800 hocus:text-beige-600 transition-all py-1 block" href={publicRoutes.homepage._.rgister.path}>
+                  <Link
+                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                    href={publicRoutes.homepage._.rgister.path}
+                  >
                     {"إنشاء حساب"}
                   </Link>
                 </li>
-
               </ul>
             </div>
           </PopoverContent>
         </Popover>
-
       )}
-
     </div>
-
-
   );
 };
 

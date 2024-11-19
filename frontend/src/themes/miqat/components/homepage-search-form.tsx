@@ -412,7 +412,7 @@ export const OmrahSearchForm: React.FC = () => {
           <LuHelpCircle className="h-4 w-4" />
           <span className="dd">ماذا تفضل أن يكون متوفرا في العرض؟</span>
         </p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {services.map(item => (
             <FormLabel
               key={item.value}
@@ -513,7 +513,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
 
   logger.value("springs", springs);
   return (
-    <div className="jcms-hero-section min-h-[600px] w-[500px] rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all">
+    <div className="jcms-hero-section min-h-[600px] sm:w-[500px] w-full rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all">
       <Tabs defaultValue="omrah" className="w-full" onValueChange={setTab}>
         <TabsList className="h-auto w-full items-center justify-around bg-transparent">
           <TabsTrigger

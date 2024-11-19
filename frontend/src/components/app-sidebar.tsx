@@ -1,66 +1,207 @@
-import * as React from "react";
-import { Plus } from "lucide-react";
+import * as React from "react"
+import { ChevronRight } from "lucide-react"
 
-import { Calendars } from "@/components/calendars";
-import { DatePicker } from "@/components/date-picker";
-import { NavUser } from "@/components/nav-user";
+import { SearchForm } from "@/components/search-form"
+import { VersionSwitcher } from "@/components/version-switcher"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
-  SidebarSeparator,
-} from "@/components/ui/customized.sidebar";
+} from "@/components/ui/customized.sidebar"
 
 // This is sample data.
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
-  calendars: [
+  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
+  navMain: [
     {
-      name: "My Calendars",
-      items: ["Personal", "Work", "Family"],
+      title: "Getting Started",
+      url: "#",
+      items: [
+        {
+          title: "Installation",
+          url: "#",
+        },
+        {
+          title: "Project Structure",
+          url: "#",
+        },
+      ],
     },
     {
-      name: "Favorites",
-      items: ["Holidays", "Birthdays"],
+      title: "Building Your Application",
+      url: "#",
+      items: [
+        {
+          title: "Routing",
+          url: "#",
+        },
+        {
+          title: "Data Fetching",
+          url: "#",
+          isActive: true,
+        },
+        {
+          title: "Rendering",
+          url: "#",
+        },
+        {
+          title: "Caching",
+          url: "#",
+        },
+        {
+          title: "Styling",
+          url: "#",
+        },
+        {
+          title: "Optimizing",
+          url: "#",
+        },
+        {
+          title: "Configuring",
+          url: "#",
+        },
+        {
+          title: "Testing",
+          url: "#",
+        },
+        {
+          title: "Authentication",
+          url: "#",
+        },
+        {
+          title: "Deploying",
+          url: "#",
+        },
+        {
+          title: "Upgrading",
+          url: "#",
+        },
+        {
+          title: "Examples",
+          url: "#",
+        },
+      ],
     },
     {
-      name: "Other",
-      items: ["Travel", "Reminders", "Deadlines"],
+      title: "API Reference",
+      url: "#",
+      items: [
+        {
+          title: "Components",
+          url: "#",
+        },
+        {
+          title: "File Conventions",
+          url: "#",
+        },
+        {
+          title: "Functions",
+          url: "#",
+        },
+        {
+          title: "next.config.js Options",
+          url: "#",
+        },
+        {
+          title: "CLI",
+          url: "#",
+        },
+        {
+          title: "Edge Runtime",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Architecture",
+      url: "#",
+      items: [
+        {
+          title: "Accessibility",
+          url: "#",
+        },
+        {
+          title: "Fast Refresh",
+          url: "#",
+        },
+        {
+          title: "Next.js Compiler",
+          url: "#",
+        },
+        {
+          title: "Supported Browsers",
+          url: "#",
+        },
+        {
+          title: "Turbopack",
+          url: "#",
+        },
+      ],
+    },
+    {
+      title: "Community",
+      url: "#",
+      items: [
+        {
+          title: "Contribution Guide",
+          url: "#",
+        },
+      ],
     },
   ],
-};
+}
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
-      <SidebarHeader className="h-16 border-b border-sidebar-border">
-        <NavUser user={data.user} />
+      <SidebarHeader>
+        <VersionSwitcher
+          versions={data.versions}
+          defaultVersion={data.versions[0]}
+        />
+        <SearchForm />
       </SidebarHeader>
-      <SidebarContent>
-        <DatePicker />
-        <SidebarSeparator className="mx-0" />
-        <Calendars calendars={data.calendars} />
+      <SidebarContent className="gap-0">
+        {/* We create a collapsible SidebarGroup for each parent. */}
+        {data.navMain.map((item) => (
+          <Collapsible
+            key={item.title}
+            title={item.title}
+            defaultOpen
+            className="group/collapsible"
+          >
+            <SidebarGroup>
+              <SidebarGroupLabel
+                asChild
+                className="group/label text-sm text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+              >
+                <CollapsibleTrigger>
+                  {item.title}{""}
+                  <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                </CollapsibleTrigger>
+              </SidebarGroupLabel>
+              <CollapsibleContent>
+                <SidebarGroupContent>
+                  
+                </SidebarGroupContent>
+              </CollapsibleContent>
+            </SidebarGroup>
+          </Collapsible>
+        ))}
       </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <Plus />
-              <span>New Calendar</span>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  );
+  )
 }

@@ -14,7 +14,7 @@ const ThemePage_Client: React.FC<PageProps> = ({ route }) => {
   return (
     <ReactQueryDevtoolsProvider>
       <DefaultLayout route={route}>
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 md:px-8">
           <ContentSection articleTypeSlug={ArticleTypeSlug.TOMBOLA} count={12} showPagination />
         </div>
       </DefaultLayout>

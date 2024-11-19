@@ -17,18 +17,26 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return isAuthenticated ? redirect(publicRoutes.homepage._.myAccount.path) : (
+  return isAuthenticated ? (
+    redirect(publicRoutes.homepage._.myAccount.path)
+  ) : (
     <ReactQueryDevtoolsProvider>
-
       <DefaultLayout route={route}>
-        <div className=" min-h-screen-80 p-4  relative flex flex-col justify-center items-center">
+        <div className="relative flex min-h-screen-80 flex-col items-center justify-center p-4">
           <div className="flex flex-col gap-4 py-16">
-
-            <div className="mx-auto lg:w-[700px] max-w-full w-full  shadow-xl  rounded-2xl shadow-darkblue-950/5  ">
+            <div className="mx-auto w-full max-w-full rounded-2xl md:shadow-xl md:shadow-darkblue-950/5 lg:w-[700px]">
               <RegisterForm />
             </div>
             <div className="d">
-              <p className="text-xl text-center">لديك حساب؟  <Link href={"/login"} className=" text-beige-500 hocus:text-beige-900">تسجيل الدخول</Link></p>
+              <p className="text-center text-xl">
+                لديك حساب؟{" "}
+                <Link
+                  href={"/login"}
+                  className="text-beige-500 hocus:text-beige-900"
+                >
+                  تسجيل الدخول
+                </Link>
+              </p>
             </div>
           </div>
         </div>

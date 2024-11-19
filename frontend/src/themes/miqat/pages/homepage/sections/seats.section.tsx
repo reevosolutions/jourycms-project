@@ -26,13 +26,13 @@ const HomepageSeatsSection: React.FC<HomepageSeatsSectionProps> = ({}) => {
       <div className="container mx-auto py-28">
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           <div className="pt-16">
-            <h2 className="mt-0 pb-8 text-7xl font-bold text-darkblue-800">
+            <h2 className="mt-0 pb-8 text-5xl font-bold text-darkblue-800 sm:text-6xl md:text-7xl">
               بيع أو شراء مقاعد في الطائرة
             </h2>
-            <h3 className="mt-0 pb-8 text-5xl text-darkblue-800">
+            <h3 className="mt-0 pb-8 text-4xl text-darkblue-800 sm:text-5xl">
               عندك مقاعد إضافية أو لديك نقص في الأماكن؟
             </h3>
-            <p className="mt-0 pb-8 text-4xl text-darkblue-600">
+            <p className="mt-0 pb-8 text-3xl text-darkblue-600 sm:text-4xl">
               نقدم لك خدمة فريدة لبيع أو استبدال أو حتى منح مقاعد الطائرة
               الفائضة لأشخاص آخرين هم في أشد الحاجة لها.
             </p>
@@ -40,19 +40,19 @@ const HomepageSeatsSection: React.FC<HomepageSeatsSectionProps> = ({}) => {
             <div className="grid grid-cols-2 gap-6">
               <Link
                 href="/seat-requests/order"
-                className="flex items-center justify-center gap-4 rounded-lg bg-red2-800 px-4 py-4 text-center text-3xl font-bold text-white transition-all hocus:bg-red2-950"
+                className="flex items-center justify-center gap-4 rounded-lg bg-red2-800 px-4 py-3 text-center text-xl sm:text-2xl font-bold text-white transition-all hocus:bg-red2-950 sm:py-4 md:text-3xl"
               >
                 قدم طلبا الآن
               </Link>
               <Link
                 href="/seat-requests"
-                className="flex items-center justify-center gap-4 rounded-lg border-2 border-darkblue-500 px-4 py-4 text-center text-3xl font-bold text-darkblue-800 transition-all hocus:bg-slate-50"
+                className="flex items-center justify-center gap-4 rounded-lg border-2 border-darkblue-500 px-4 py-3 text-center text-xl sm:text-2xl font-bold text-darkblue-800 transition-all hocus:bg-slate-50 sm:py-4 md:text-3xl"
               >
-                قدم طلبا الآن
+                معرفة المزيد
               </Link>
             </div>
           </div>
-          <div className="flex justify-center gap-8">
+          <div className="flex items-center justify-center gap-8">
             <Image
               src="/assets/miqat/svg/fly.svg"
               width={600}
@@ -62,15 +62,15 @@ const HomepageSeatsSection: React.FC<HomepageSeatsSectionProps> = ({}) => {
             />
           </div>
         </div>
-        <div className="flex items-center gap-10">
+        <div className="flex items-center gap-10 md:py-12 xl:py-0">
           <span className="box-shadow-lg flex h-24 w-24 flex-col items-center justify-center rounded-full shadow-slate-200">
             <Icons.Social.Youtube className="h-16 w-16 text-red-500" />
           </span>
           <div className="flex flex-col gap-0">
-            <span className="text-5xl font-bold text-slate-500">
+            <span className="text-3xl font-bold text-slate-500 md:text-5xl">
               شاهد الفيديو
             </span>
-            <span className="text-4xl text-slate-500">
+            <span className="text-2xl text-slate-500 md:text-4xl">
               يشرح العملية بشكل دقيق كما يوضح كيفية تقديم الطلب
             </span>
           </div>
