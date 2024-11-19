@@ -21,12 +21,12 @@ const routes = {
       },
       tombolas: {
         path: "/tombolas" as const,
-        title: "طنبولات",
+        title: "طمبولات",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
         _: {
           paged: {
             path: "/tombolas/:page" as const,
-            title: "طنبولات",
+            title: "طمبولات",
             ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
             _: {},
           },

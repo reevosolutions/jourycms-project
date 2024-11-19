@@ -41,7 +41,7 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
             <CustomTabTrigger
               tab="tombolas"
               image="/assets/miqat/icons/tickets-ticket-svgrepo-com.svg"
-              label="طنبولات"
+              label="طمبولات"
             />
             <CustomTabTrigger
               tab="bids"

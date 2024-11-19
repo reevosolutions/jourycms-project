@@ -57,7 +57,7 @@ export const EscortsSearchForm: React.FC = () => {
       {/* field */}
       <div className="field mb-8">
         <Label className="text-2xl text-darkblue-500">{"جنس المرافق"}</Label>
-        <div className="mt-3 grid grid-cols-3 gap-4 sm:gap-8">
+        <div className="mt-3 grid grid-cols-3 gap-3 sm:gap-8">
           <button
             className={cn(
               "flex aspect-square items-center justify-center rounded-4xl border-2 bg-slate-100 transition-all",
@@ -247,7 +247,7 @@ export const DoctorsSearchForm: React.FC = () => {
       {/* field */}
       <div className="field mb-8">
         <Label className="text-2xl text-darkblue-500">{"جنس الطبيب"}</Label>
-        <div className="mt-3 grid grid-cols-3 gap-8">
+        <div className="mt-3 grid grid-cols-3 gap-3 sm:gap-8">
           <button
             className={cn(
               "flex aspect-square items-center justify-center rounded-4xl border-2 bg-slate-100 transition-all",
@@ -322,7 +322,8 @@ export const DoctorsSearchForm: React.FC = () => {
                   <span className="text-darkblue-500">{"اختر التخصص..."}</span>
                 ) : (
                   <span>
-                    {specialities?.find(item => item.value === speciality)?.label || ""}
+                    {specialities?.find(item => item.value === speciality)
+                      ?.label || ""}
                   </span>
                 )}
               </div>
@@ -330,13 +331,16 @@ export const DoctorsSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
               filter={(value, search, keywords) => {
                 const name = specialities?.find(s => s.value === value)?.label;
-                const similarity = checkSimilarity(search, `${value} ${name}` || '');
+                const similarity = checkSimilarity(
+                  search,
+                  `${value} ${name}` || "",
+                );
                 return similarity;
               }}
             >
@@ -360,7 +364,9 @@ export const DoctorsSearchForm: React.FC = () => {
                       <LuCheck
                         className={cn(
                           "ms-auto",
-                          item.value === speciality ? "opacity-100" : "opacity-0",
+                          item.value === speciality
+                            ? "opacity-100"
+                            : "opacity-0",
                         )}
                       />
                     </CommandItem>
@@ -414,7 +420,7 @@ const HomepageEscortsSearchForm: React.FC<
     <div className="jcms-hero-section min-h-[600px] w-full lg:w-[500px] rounded-4xl bg-darkblue-950 shadow-lg shadow-darkblue-900/10 transition-all">
       <Tabs defaultValue="escorts" className="w-full">
         <TabsList
-          className="h-auto w-full items-center justify-center gap-20 bg-transparent"
+          className="h-auto w-full items-center justify-center gap-12 md:gap-20 bg-transparent"
           dir="rtl"
         >
           <TabsTrigger
@@ -445,12 +451,12 @@ const HomepageEscortsSearchForm: React.FC<
           </TabsTrigger>
         </TabsList>
         <TabsContent value="escorts" dir="rtl">
-          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
+          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-4 md:px-8">
             <EscortsSearchForm />
           </div>
         </TabsContent>
         <TabsContent value="doctors">
-          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-8">
+          <div className="min-h-[560px] rounded-4xl bg-white p-4 px-4 md:px-8">
             <DoctorsSearchForm />
           </div>
         </TabsContent>
