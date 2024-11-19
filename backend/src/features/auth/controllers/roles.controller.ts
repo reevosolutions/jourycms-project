@@ -35,7 +35,6 @@ export default (app: Router): void => {
 
   app.use(
     ROOT_PATH,
-    middlewares.AUTH.requireUser,
     route
   );
 
@@ -168,10 +167,11 @@ export default (app: Router): void => {
   /**
    * Create
    */
-  route.post('/',
+  route.post(
+    "/",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -186,34 +186,35 @@ export default (app: Router): void => {
          * Call the service method if the validation conditions are fulfilled
          */
 
-        const result = await rolesService.create(req.body as ApiAlias.Create.Request, AUTH_DATA);
+        const result = await rolesService.create(
+          req.body as ApiAlias.Create.Request,
+          AUTH_DATA
+        );
 
         /**
          * Respond to the client
          */
         return respond<ApiAlias.Create.Response>(res, result, 201);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
 
   /**
    * Update
    */
-  route.put('/:id',
-    
+  route.put(
+    "/:id",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -229,33 +230,35 @@ export default (app: Router): void => {
          */
         const { id } = req.params;
 
-        const result = await rolesService.update(id, req.body as ApiAlias.Update.Request, AUTH_DATA);
+        const result = await rolesService.update(
+          id,
+          req.body as ApiAlias.Update.Request,
+          AUTH_DATA
+        );
 
         /**
          * Respond to the client
          */
         return respond<ApiAlias.Update.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
   /**
    * Delete
    */
-  route.delete('/:id',
-    
+  route.delete(
+    "/:id",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -277,27 +280,25 @@ export default (app: Router): void => {
          * Respond to the client
          */
         return respond<ApiAlias.Delete.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
   /**
    * Restore
    */
-  route.delete('/:id/restore',
-    
+  route.delete(
+    "/:id/restore",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -319,18 +320,16 @@ export default (app: Router): void => {
          * Respond to the client
          */
         return respond<ApiAlias.Delete.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
 
   /**
@@ -345,11 +344,11 @@ export default (app: Router): void => {
    *
    */
 
-  route.put('/merge/:source_id/:destination_id',
-    
+  route.put(
+    "/merge/:source_id/:destination_id",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -365,24 +364,26 @@ export default (app: Router): void => {
          */
         const { source_id, destination_id } = req.params;
 
-        const result = await rolesService.mergeRoles(source_id, destination_id, AUTH_DATA);
+        const result = await rolesService.mergeRoles(
+          source_id,
+          destination_id,
+          AUTH_DATA
+        );
 
         /**
          * Respond to the client
          */
         return respond<ApiAlias.MergeRoles.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
   /**
    * -------------------------------------------------------------------------- 
@@ -395,11 +396,11 @@ export default (app: Router): void => {
    * @returns {Levelup.CMS.V1.Auth.Api.Roles.ChangePermissions.Response}
    *
    */
-  route.put('/:id/change-permissions',
-    
+  route.put(
+    "/:id/change-permissions",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -415,29 +416,30 @@ export default (app: Router): void => {
          */
         const { id } = req.params;
 
-        const result = await rolesService.changePermissions({
-          data: {
-            ...req.body.data || {},
-            role_id: id,
-          }
-        }, AUTH_DATA);
+        const result = await rolesService.changePermissions(
+          {
+            data: {
+              ...(req.body.data || {}),
+              role_id: id,
+            },
+          },
+          AUTH_DATA
+        );
 
         /**
          * Respond to the client
          */
         return respond<ApiAlias.ChangePermissions.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
   /**
    * -------------------------------------------------------------------------- 
@@ -450,11 +452,11 @@ export default (app: Router): void => {
    * @returns {Levelup.CMS.V1.Auth.Api.Users.ListRolePermissions.Response}
    *
    */
-  route.get('/:id/permissions',
-    
+  route.get(
+    "/:id/permissions",
+    middlewares.AUTH.requireUser,
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -476,18 +478,16 @@ export default (app: Router): void => {
          * Respond to the client
          */
         return respond<ApiAlias.ListRolePermissions.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
 
 }

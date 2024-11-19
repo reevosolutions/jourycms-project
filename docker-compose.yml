@@ -39,6 +39,7 @@ services:
       - mongodb
       - redis
     volumes:
+      - ./backend/src:/usr/src/app/src
       - /root/apps/volumes/uploads:/usr/src/app/uploads
     restart: unless-stopped
 
@@ -56,6 +57,8 @@ services:
       - NEXT_PUBLIC_API_BASE_URL_DEV=${SDK_BASE_URL}
     depends_on:
       - backend
+    volumes:
+      - ./frontend/src:/usr/src/app/src
     restart: unless-stopped
 
   
