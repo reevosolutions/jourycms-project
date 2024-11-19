@@ -140,7 +140,7 @@ export const EscortsSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[360px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
             align="start"
           >
             <Command
@@ -330,7 +330,7 @@ export const DoctorsSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[360px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
             align="start"
           >
             <Command
