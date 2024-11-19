@@ -65,7 +65,7 @@ const ThemeSidebar: React.FC<Props> = () => {
         <SheetContent side="end">
           <SheetHeader>
             {currentUser ? (
-              <div className="flex items-center gap-3 px-4 py-6 pt-8">
+              <div className="flex items-center gap-3 px-4 pt-8">
                 <LuUserCircle className="h-6 w-6" />
                 <span className="text">
                   {buildUserFullName(currentUser.profile)}
@@ -74,7 +74,7 @@ const ThemeSidebar: React.FC<Props> = () => {
             ) : null}
           </SheetHeader>
 
-          <div className="px-4 font-hammah text-2xl">
+          <div className="px-4 font-hammah text-2xl pt-8">
             <ul>
               {menuItems.map(route => (
                 <li key={route.path}>
