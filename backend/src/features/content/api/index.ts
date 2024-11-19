@@ -46,7 +46,7 @@ export default (app: Router): void => {
 	
 	route.post('/seed', (req, res, next) => {
 		const devService = Container.get(DevService);
-		devService.fillArticles();
+		devService.seed();
 	});
 
 	articleTypesController(route);

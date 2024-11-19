@@ -97,7 +97,7 @@ export default class DevService extends BaseService {
    * @author dr. Salmi <reevosolutions@gmail.com>
    * @since 16-10-2024 23:40:44
    */
-  public async fillArticles() {
+  public async seed() {
     this.loremHtml = `
     <p>و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟ 
 علي الجانب الآخر نشجب ونستنكر هؤلاء الرجال المفتونون بنشوة اللحظة الهائمون في رغباتهم فلا يدركون ما يعقبها من الألم والأسي المحتم، واللوم كذلك يشمل هؤلاء الذين أخفقوا في واجباتهم نتيجة لضعف إرادتهم فيتساوي مع هؤلاء الذين يتجنبون وينأون عن تحمل الكدح والألم . من المفترض أن نفرق بين هذه الحالات بكل سهولة ومرونة. في ذاك الوقت عندما تكون قدرتنا علي الاختيار غير مقيدة بشرط وعندما لا نجد ما يمنعنا أن نفعل الأفضل فها نحن نرحب بالسرور والسعادة ونتجنب كل ما يبعث إلينا الألم. في بعض الأحيان ونظراً للالتزامات التي يفرضها علينا الواجب والعمل سنتنازل غالباً ونرفض الشعور بالسرور ونقبل ما يجلبه إلينا الأسى. الإنسان الحكيم عليه أن يمسك زمام الأمور ويختار إما أن يرفض مصادر السعادة من أجل ما هو أكثر أهمية أو يتحمل الألم من أجل ألا يتحمل ما هو أسوأ. </p>
@@ -120,7 +120,7 @@ export default class DevService extends BaseService {
    <li>فلا أحد يرفض أو يكره أو يتجنب الش.</li>
 </ol>
 `;
-    const scenario = this.initScenario(this.logger, this.fillArticles);
+    const scenario = this.initScenario(this.logger, this.seed);
     try {
       this.usersService = Container.get(UsersService);
       this.authService = Container.get(AuthService);
@@ -147,6 +147,7 @@ export default class DevService extends BaseService {
       scenario.set({ articleTypes: articleTypes.map((i) => i.slug) });
 
       await this.reset();
+      await this.createFirstAdmin();
       await this.fillDoctors();
       await this.fillEscorts();
       await this.fillAgencies();
@@ -171,6 +172,41 @@ export default class DevService extends BaseService {
       role: { $ne: "admin" },
     });
     await this.articleModel.deleteMany({});
+  }
+
+  async createFirstAdmin() {
+    try {
+      const admins = await this.userModel.findOne({ role: "admin" });
+      if (!admins) {
+        const userObject: Levelup.CMS.V1.Users.Api.Users.Create.Request["data"] =
+          {
+            email: "admin@miqat.com",
+            password: "123",
+            role: "admin",
+            profile: {
+              first_name: "Admin",
+              family_name: "Admin",
+              sex: "male",
+              photo: {
+                id: "",
+                url: "",
+              },
+              phones: [],
+              website: "",
+              address: undefined,
+            },
+            attributes: {
+              is_suspended: false,
+              is_approved: true,
+            },
+          };
+
+        await this.usersService.create(
+          { data: userObject },
+          this.usersService.internalAuthData
+        );
+      }
+    } catch (error) {}
   }
 
   async fillDoctors() {
