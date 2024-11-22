@@ -57,6 +57,7 @@ export default async ({ expressApp }: { expressApp: Express }): Promise<void> =>
     isDev: config.isDev,
     cache: config.cacheManager,
     currentService: config.currentService,
+    env: process.env
   });
 
   // Create an event dispatcher and dispatch a serviceLoadSucceeded event
