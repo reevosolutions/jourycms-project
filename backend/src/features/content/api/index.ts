@@ -49,7 +49,7 @@ export default (app: Router): void => {
 			
 			const devService = Container.get(DevService);
 			devService.seed();
-			res.json({status: OK});
+			res.json({status: "OK"});
 		} catch (error) {
 			next(error);
 		}
