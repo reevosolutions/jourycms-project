@@ -45,8 +45,14 @@ export default (app: Router): void => {
 	});
 	
 	route.post('/seed', (req, res, next) => {
-		const devService = Container.get(DevService);
-		devService.seed();
+		try {
+			
+			const devService = Container.get(DevService);
+			devService.seed();
+			res.json({status: OK});
+		} catch (error) {
+			next(error);
+		}
 	});
 
 	articleTypesController(route);

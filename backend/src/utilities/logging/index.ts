@@ -22,27 +22,27 @@ export class LoggerService {
       [contextId: string]: boolean;
     };
   } = {
-      APPLICATION: {},
-      SUBSCRIBER: {},
-      BROKER: {},
-      MIDDLEWARE: {},
-      MAPPER: {},
-      VALIDATOR: {},
-      SANITIZER: {},
-      UTILITY: {},
-      SEED: {},
-      COMPONENT: {},
-      SERVICE: {},
-      CONTROLLER: {},
-      LOADER: {},
-      MODEL: {},
-      HOOK: {},
-      PAGE: {},
-      MODAL: {},
-      FORM: {},
-      REDUX: {},
-      GUARD: {},
-    };
+    APPLICATION: {},
+    SUBSCRIBER: {},
+    BROKER: {},
+    MIDDLEWARE: {},
+    MAPPER: {},
+    VALIDATOR: {},
+    SANITIZER: {},
+    UTILITY: {},
+    SEED: {},
+    COMPONENT: {},
+    SERVICE: {},
+    CONTROLLER: {},
+    LOADER: {},
+    MODEL: {},
+    HOOK: {},
+    PAGE: {},
+    MODAL: {},
+    FORM: {},
+    REDUX: {},
+    GUARD: {},
+  };
   private _showLine: boolean = false;
   private _trace: boolean;
 
@@ -144,7 +144,8 @@ export class LoggerService {
 
     const label = `${colors.grey(
       moment().format("HH:mm:ss,SSS")
-    )} ${colors.bold.gray(`[${this.context}:${this.contextId}]`)} ${type === "DEBUG"
+    )} ${colors.bold.gray(`[${this.context}:${this.contextId}]`)} ${
+      type === "DEBUG"
         ? colors.bold.cyan(message)
         : type === "WARN"
           ? colors.bold.yellow(message)
@@ -161,7 +162,7 @@ export class LoggerService {
                     : type === "VALUE"
                       ? colors.bold.magenta(message)
                       : colors.bold.gray(message)
-      }`;
+    }`;
     if (this._showLine) {
       console.log(formattedLine.gray);
       this._showLine = false;
@@ -335,7 +336,7 @@ export type ILogItem = {
 class DBLogger {
   private static instance: DBLogger;
 
-  private constructor() { }
+  private constructor() {}
 
   /**
    * Gets the DBLogger instance.
@@ -347,7 +348,8 @@ class DBLogger {
   }
 
   private log(args: ILogItem & { type: LogItemType }) {
-    console.log('DB Logger not handled'.red)
+    console.log("DB Logger not handled".red);
+    console.log(treeify.asTree({ ...args }, true).yellow);
   }
 
   /**
