@@ -36,7 +36,7 @@ services:
       - MONGODB_LOCAL_URI=${DB_URI}
       - CACHE_MANAGER_REDIS_URL=${CACHE_MANAGER_REDIS_URL}
     depends_on:
-      - mongodb
+      # - mongodb
       - redis
     volumes:
       - ./backend/src:/usr/src/app/src
