@@ -2,16 +2,16 @@ version: '3.8'
 
 services:
   # DB
-  mongodb:
-    image: mongo
-    container_name: cms_mongodb
-    ports:
-      - '27017:27017'
-    environment:
-      - TZ=Africa/Algiers  # Set the timezone
-    volumes:
-      - /root/apps/volumes/data/db:/data/db  # Bind mount host directory to container directory
-    restart: unless-stopped
+  # mongodb:
+  #   image: mongo
+  #   container_name: cms_mongodb
+  #   ports:
+  #     - '27017:27017'
+  #   environment:
+  #     - TZ=Africa/Algiers  # Set the timezone
+  #   volumes:
+  #     - /root/apps/volumes/data/db:/data/db  # Bind mount host directory to container directory
+  #   restart: unless-stopped
 
   # CACHE
   redis:
