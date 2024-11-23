@@ -25,8 +25,8 @@
     "lint": "yarn lint:src && yarn lint:typing",
     "lint:fix": "eslint ./src --fix",
     "push": "git add . && git commit -m 'update' && git push",
-    "publish": "npm build && npm publish",
-    "pub": "yarn push && yarn publish"
+    "publish": "npm publish",
+    "pub": "npm run build && yarn push && yarn publish"
   },
   "dependencies": {
     "axios": "^1.7.7",
