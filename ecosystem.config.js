@@ -1,22 +1,18 @@
+var root = "/root/apps/jourycms-project/";
+
 module.exports = {
   apps: [
     {
       name: "backend",
       // script: "./backend/src/app.js", // Adjust this to the entry point of your backend
-      script: "npm",
-      args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
-
+      script: "build/app.js",
+      cwd: root + "backend", // Set the context folder for the backend app
       instances: 2, // Use all available CPU cores
-      cwd: "./backend", // Set the context folder for the backend app
-      env_file: "./.env", // This will automatically load the environment variables from the .env file
       env: {
         NODE_ENV: "production",
         PORT: 3032,
-        // DB_URI: process.env.DB_URI,
-        // MONGODB_LOCAL_URI: process.env.DB_URI,
-        // CACHE_MANAGER_REDIS_URL: process.env.CACHE_MANAGER_REDIS_URL,
       },
-      watch: ["./backend/build"], // Watch for file changes in backend
+      watch: [root + "backend/build"], // Watch for file changes in backend
       ignore_watch: ["node_modules", "uploads"], // Ignore uploads folder to prevent unnecessary restarts
       max_memory_restart: "2G", // Restart the app if it exceeds 1GB of memory usage
       error_file: "./logs/backend-error.log",
@@ -27,18 +23,14 @@ module.exports = {
     },
     {
       name: "frontend",
+      cwd: root + "frontend", // Set the context folder for the backend app
       script: "npm",
       args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
       instances: 1, // Frontend is usually single instance
-      cwd: "./frontend", // Set the context folder for the backend app
-      env_file: "./.env", // This will automatically load the environment variables from the .env file
       env: {
         NODE_ENV: "production",
-        // SDK_BASE_URL: process.env.SDK_BASE_URL,
-        // NEXT_PUBLIC_API_BASE_URL_PROD: process.env.SDK_BASE_URL,
-        // NEXT_PUBLIC_API_BASE_URL_DEV: process.env.SDK_BASE_URL,
       },
-      watch: ["./frontend/src"], // Watch for file changes in frontend
+      watch: [root + "frontend/src"], // Watch for file changes in frontend
       ignore_watch: ["node_modules"], // Ignore node_modules folder
       max_memory_restart: "1G",
       error_file: "./logs/frontend-error.log",
