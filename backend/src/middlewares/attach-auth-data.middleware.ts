@@ -73,6 +73,7 @@ const attachAuthData = async (
       if (!user) throw new exceptions.UnauthorizedException("User not found");
     }
 
+    
     /* -------------------------------------------------------------------------- */
     /*                                     APP                                    */
     /* -------------------------------------------------------------------------- */
