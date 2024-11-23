@@ -1,8 +1,11 @@
 module.exports = {
   apps: [
     {
-      name: "cms_backend",
-      script: "./backend/src/app.js", // Adjust this to the entry point of your backend
+      name: "backend",
+      // script: "./backend/src/app.js", // Adjust this to the entry point of your backend
+      script: "npm",
+      args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
+
       instances: 2, // Use all available CPU cores
       env: {
         NODE_ENV: "production",
@@ -11,7 +14,7 @@ module.exports = {
         // MONGODB_LOCAL_URI: process.env.DB_URI,
         // CACHE_MANAGER_REDIS_URL: process.env.CACHE_MANAGER_REDIS_URL,
       },
-      watch: ["./backend/src", "./backend/build"], // Watch for file changes in backend
+      watch: ["./backend/build"], // Watch for file changes in backend
       ignore_watch: ["node_modules", "uploads"], // Ignore uploads folder to prevent unnecessary restarts
       max_memory_restart: "2G", // Restart the app if it exceeds 1GB of memory usage
       error_file: "./logs/backend-error.log",
@@ -21,7 +24,7 @@ module.exports = {
       restart_delay: 5000, // Delay before restarting if the app crashes
     },
     {
-      name: "cms_frontend",
+      name: "frontend",
       script: "npm",
       args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
       instances: 1, // Frontend is usually single instance
