@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../src/utilities/numbers/index.ts"],"names":[],"mappings":";;;AAAO,MAAM,mBAAmB,GAAG,CACjC,GAAW,EACX,WAAmB,CAAC,EACZ,EAAE;IACV,OAAO,IAAI,CAAC,KAAK,CAAC,GAAG,GAAG,IAAI,CAAC,GAAG,CAAC,EAAE,EAAE,QAAQ,CAAC,CAAC,GAAG,IAAI,CAAC,GAAG,CAAC,EAAE,EAAE,QAAQ,CAAC,CAAC;AAC3E,CAAC,CAAC;AALW,QAAA,mBAAmB,uBAK9B"}
