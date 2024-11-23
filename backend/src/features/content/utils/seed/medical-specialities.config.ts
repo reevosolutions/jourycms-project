@@ -1,0 +1,32 @@
+export const medical_specialities = [
+  { "value": "general_medicine", "label": "الطب العام" },
+  { "value": "cardiology", "label": "أمراض القلب" },
+  { "value": "neurology", "label": "طب الأعصاب" },
+  { "value": "pediatrics", "label": "طب الأطفال" },
+  { "value": "dermatology", "label": "الأمراض الجلدية" },
+  { "value": "orthopedics", "label": "جراحة العظام" },
+  { "value": "ophthalmology", "label": "طب العيون" },
+  { "value": "dentistry", "label": "طب الأسنان" },
+  { "value": "gynecology", "label": "طب النساء" },
+  { "value": "psychiatry", "label": "الطب النفسي" },
+  { "value": "endocrinology", "label": "علم الغدد الصماء" },
+  { "value": "gastroenterology", "label": "أمراض الجهاز الهضمي" },
+  { "value": "pulmonology", "label": "طب الرئة" },
+  { "value": "oncology", "label": "طب الأورام" },
+  { "value": "urology", "label": "طب المسالك البولية" },
+  { "value": "nephrology", "label": "أمراض الكلى" },
+  { "value": "rheumatology", "label": "طب الروماتيزم" },
+  { "value": "hematology", "label": "علم أمراض الدم" },
+  { "value": "immunology", "label": "علم المناعة" },
+  { "value": "infectious_diseases", "label": "الأمراض المعدية" },
+  { "value": "radiology", "label": "الأشعة" },
+  { "value": "pathology", "label": "علم الأمراض" },
+  { "value": "surgery", "label": "الجراحة" },
+  { "value": "plastic_surgery", "label": "جراحة التجميل" },
+  { "value": "otolaryngology", "label": "أمراض الأنف والأذن والحنجرة" },
+  { "value": "nutrition", "label": "التغذية" },
+  { "value": "anesthesiology", "label": "التخدير" },
+  { "value": "family_medicine", "label": "طب العائلة" }
+]
+
+export default medical_specialities;

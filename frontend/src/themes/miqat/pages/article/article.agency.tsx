@@ -18,7 +18,6 @@ import {IoFastFoodOutline, IoMoonOutline} from "react-icons/io5";
 import {cn} from "@/lib/utils";
 import {MdOutlineLocalHotel} from "react-icons/md";
 import initLogger, {LoggerContext} from "@/lib/logging";
-import { ArticleTypeSlug } from "../../config";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -30,7 +29,7 @@ export type PageProps = JouryCMS.Theme.PageProps & {
   articleType?: Levelup.CMS.V1.Content.Entity.ArticleType | null;
 };
 
-const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
+const AgencyArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   const article = initialData?.data;
   const articleType = article?.article_type
     ? initialData?.edge?.article_types?.[article.article_type]
@@ -180,7 +179,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                     </div>
                   </div>
                   {/* field */}
-                  {hasMetaField(article, 'price') && (
+                  {hasMetaField(article, "price") && (
                     <div className="items-top flex flex-row gap-4">
                       <LuCircleDollarSign className="h-8 w-8 text-beige-50" />
                       <div className="-mt-1 flex flex-col items-start justify-start gap-0">
@@ -194,7 +193,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                     </div>
                   )}
                   {/* field */}
-
+                  
                   <div className="items-top flex flex-row gap-4">
                     <LuCalendarDays className="h-8 w-8 text-beige-50" />
                     <div className="-mt-1 flex flex-col items-start justify-start gap-0">
@@ -435,4 +434,4 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   );
 };
 
-export default OmrahArticlePage;
+export default AgencyArticlePage;

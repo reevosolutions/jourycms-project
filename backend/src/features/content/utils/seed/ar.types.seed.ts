@@ -1,5 +1,6 @@
-const custom_meta_fields = {
+import medical_specialities from "./medical-specialities.config";
 
+const custom_meta_fields = {
   // trips
   entry_point: {
     field_key: "entry_point",
@@ -104,22 +105,22 @@ const custom_meta_fields = {
     field_options: {
       choices: [
         {
-          "value": "economy",
-          "label": "اقتصادي"
+          value: "economy",
+          label: "اقتصادي",
         },
         {
-          "value": "premium_economy",
-          "label": "اقتصادي مميز"
+          value: "premium_economy",
+          label: "اقتصادي مميز",
         },
         {
-          "value": "business",
-          "label": "رجال الأعمال"
+          value: "business",
+          label: "رجال الأعمال",
         },
         {
-          "value": "first_class",
-          "label": "الدرجة الأولى"
-        }
-      ]
+          value: "first_class",
+          label: "الدرجة الأولى",
+        },
+      ],
     },
   },
   trip_duration: {
@@ -428,56 +429,53 @@ const custom_meta_fields = {
     field_label: "الولاية",
     field_type: "algerian_state" as const,
     field_options: {
-      choices: [
-      ],
+      choices: [],
       multiple: false,
       constraints: [
         {
-          field: 'country',
-          operator: 'eq',
-          value: 'dz',
-        }
-      ]
+          field: "country",
+          operator: "eq",
+          value: "dz",
+        },
+      ],
     },
-  } as Levelup.CMS.V1.Content.CustomFields.MetaField<'algerian_state', false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"algerian_state", false>,
   algerian_city: {
     field_key: "city",
     field_label: "المدينة",
     field_type: "algerian_city" as const,
     field_options: {
-      choices: [
-      ],
+      choices: [],
       multiple: false,
       constraints: [
         {
-          field: 'country',
-          operator: 'eq',
-          value: 'dz',
+          field: "country",
+          operator: "eq",
+          value: "dz",
         },
         {
-          field: 'state',
-          operator: 'not_empty',
-        }
-      ]
+          field: "state",
+          operator: "not_empty",
+        },
+      ],
     },
-  } as Levelup.CMS.V1.Content.CustomFields.MetaField<'algerian_city', false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"algerian_city", false>,
   ksa_city: {
     field_key: "ksa_city",
     field_label: "المدينة",
     field_type: "ksa_city" as const,
     field_options: {
-      choices: [
-      ],
+      choices: [],
       multiple: false,
       constraints: [
         {
-          field: 'country',
-          operator: 'eq',
-          value: 'ksa',
+          field: "country",
+          operator: "eq",
+          value: "ksa",
         },
-      ]
+      ],
     },
-  } as Levelup.CMS.V1.Content.CustomFields.MetaField<'ksa_city', false>,
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"ksa_city", false>,
 
   // agencies
   logo: {
@@ -494,6 +492,43 @@ const custom_meta_fields = {
     field_type: "image" as const,
     field_options: {
       multiple: true,
+    },
+  },
+
+  // members
+  avatar: {
+    field_key: "avatar",
+    field_label: "صورة البروفايل",
+    field_type: "image" as const,
+    field_options: {
+      multiple: false,
+    },
+  },
+  medical_speciality: {
+    field_key: "medical_speciality",
+    field_label: "التخصص",
+    field_type: "select" as const,
+    field_options: {
+      choices: medical_specialities,
+      multiple: false,
+    },
+  },
+  sex: {
+    field_key: "sex",
+    field_label: "الجنس",
+    field_type: "select" as const,
+    field_options: {
+      choices: [
+        {
+          value: "male",
+          label: "ذكر"
+        },
+        {
+          value: "female",
+          label: "أنثى"
+        },
+      ],
+      multiple: false,
     },
   },
 };
@@ -526,7 +561,7 @@ const _articleTypesSeedData = {
         list: "كل عروض العمرة",
         create: "أضف عرض عمرة",
         edit: "تحرير عرض عمرة",
-        delete: "إزالة عرض عمرة"
+        delete: "إزالة عرض عمرة",
       },
       description: "وصف عرض العمرة",
       description_unformatted: "وصف عرض العمرة",
@@ -614,7 +649,6 @@ const _articleTypesSeedData = {
         custom_meta_fields.distance_to_haram,
         custom_meta_fields.transportation_to_haram,
         custom_meta_fields.hotel_services,
-
       ],
     },
     {
@@ -636,7 +670,6 @@ const _articleTypesSeedData = {
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
-
       ],
     },
     {
@@ -693,13 +726,15 @@ const _articleTypesSeedData = {
       description_unformatted: "وصف طبيب",
       description_structured: {},
       custom_meta_fields: [
+        custom_meta_fields.avatar,
+        custom_meta_fields.sex,
+        custom_meta_fields.medical_speciality,
+        custom_meta_fields.experience_years,
         custom_meta_fields.country,
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
-        custom_meta_fields.experience_years,
       ],
-
     },
     {
       slug: "escort",
@@ -716,11 +751,13 @@ const _articleTypesSeedData = {
       description_unformatted: "وصف مرافق",
       description_structured: {},
       custom_meta_fields: [
+        custom_meta_fields.avatar,
+        custom_meta_fields.sex,
+        custom_meta_fields.experience_years,
         custom_meta_fields.country,
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
-        custom_meta_fields.experience_years,
       ],
     },
     {
@@ -732,7 +769,7 @@ const _articleTypesSeedData = {
         list: "كل الطومبولات",
         create: "أضف طومبولا",
         edit: "تحرير الطومبولا",
-        delete: "إزالة الطومبولا"
+        delete: "إزالة الطومبولا",
       },
       description: "وصف الطومبولا",
       description_unformatted: "وصف الطومبولا",
@@ -740,8 +777,8 @@ const _articleTypesSeedData = {
       custom_meta_fields: [
         custom_meta_fields.agency,
         custom_meta_fields.start_date,
-        custom_meta_fields.end_date
-      ]
+        custom_meta_fields.end_date,
+      ],
     },
     {
       slug: "job-offer",
@@ -752,7 +789,7 @@ const _articleTypesSeedData = {
         list: "كل عروض العمل",
         create: "أضف عرض عمل",
         edit: "تحرير عرض العمل",
-        delete: "إزالة عرض العمل"
+        delete: "إزالة عرض العمل",
       },
       description: "وصف عرض العمل",
       description_unformatted: "وصف عرض العمل",
@@ -760,7 +797,7 @@ const _articleTypesSeedData = {
       custom_meta_fields: [
         custom_meta_fields.agency,
         custom_meta_fields.experience_years,
-      ]
+      ],
     },
     {
       slug: "bid",
@@ -771,7 +808,7 @@ const _articleTypesSeedData = {
         list: "كل المناقصات",
         create: "أضف مناقصة",
         edit: "تحرير المناقصة",
-        delete: "إزالة المناقصة"
+        delete: "إزالة المناقصة",
       },
       description: "وصف المناقصة",
       description_unformatted: "وصف المناقصة",
@@ -794,7 +831,7 @@ const _articleTypesSeedData = {
         list: "كل الخدمات الصحية",
         create: "أضف خدمة صحية",
         edit: "تحرير الخدمة الصحية",
-        delete: "إزالة الخدمة الصحية"
+        delete: "إزالة الخدمة الصحية",
       },
       description: "وصف الخدمة الصحية",
       description_unformatted: "وصف الخدمة الصحية",
@@ -804,7 +841,7 @@ const _articleTypesSeedData = {
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
-      ]
+      ],
     },
     {
       slug: "transportation-service",
@@ -815,7 +852,7 @@ const _articleTypesSeedData = {
         list: "كل خدمات النقل",
         create: "أضف خدمة نقل",
         edit: "تحرير خدمة النقل",
-        delete: "إزالة خدمة النقل"
+        delete: "إزالة خدمة النقل",
       },
       description: "وصف خدمة النقل",
       description_unformatted: "وصف خدمة النقل",
@@ -825,8 +862,8 @@ const _articleTypesSeedData = {
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
-      ]
-    }
+      ],
+    },
   ],
 };
 
@@ -838,6 +875,6 @@ const articleTypesSeedData: {
       "custom_meta_fields"
     >[number];
   };
-} = _articleTypesSeedData
+} = _articleTypesSeedData;
 const articleTypes = _articleTypesSeedData.types;
 export default articleTypesSeedData;

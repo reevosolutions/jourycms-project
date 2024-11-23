@@ -32,7 +32,7 @@ module.exports = {
       },
       watch: [root + "frontend/src"], // Watch for file changes in frontend
       ignore_watch: ["node_modules"], // Ignore node_modules folder
-      max_memory_restart: "1G",
+      max_memory_restart: "2G",
       error_file: "./logs/frontend-error.log",
       out_file: "./logs/frontend-output.log",
       merge_logs: true,
