@@ -1,437 +1,56 @@
-version: "3.8"
-
-x-environment: &default-environment
-  INTERNAL_GATEWAY_URL: ${INTERNAL_GATEWAY_URL}
-  SDK_BASE_URL: ${SDK_BASE_URL}
-  NPM_AUTH_TOKEN: ${NPM_AUTH_TOKEN}
-  CACHE_MANAGER_REDIS_URL: ${CACHE_MANAGER_REDIS_URL}
-  MONGODB_LOCAL_URI: ${MONGODB_LOCAL_URI}
-  DEV_AMQPLIB_HOST: ${DEV_AMQPLIB_HOST}
-  AMQPLIB_HOST: ${AMQPLIB_HOST}
-  SERVICE_HOST_ACCOUNTS: ${SERVICE_HOST_ACCOUNTS}
-  SERVICE_HOST_ACTIVITY: ${SERVICE_HOST_ACTIVITY}
-  SERVICE_HOST_AUTH: ${SERVICE_HOST_AUTH}
-  SERVICE_HOST_CUSTOMERS: ${SERVICE_HOST_CUSTOMERS}
-  SERVICE_HOST_CARTS: ${SERVICE_HOST_CARTS}
-  SERVICE_HOST_EVENTBUS: ${SERVICE_HOST_EVENTBUS}
-  SERVICE_HOST_CM: ${SERVICE_HOST_CM}
-  SERVICE_HOST_GATEWAY: ${SERVICE_HOST_GATEWAY}
-  SERVICE_HOST_INTEGRATIONS: ${SERVICE_HOST_INTEGRATIONS}
-  SERVICE_HOST_INVENTORY: ${SERVICE_HOST_INVENTORY}
-  SERVICE_HOST_LOCATIONS: ${SERVICE_HOST_LOCATIONS}
-  SERVICE_HOST_LOGISTICS: ${SERVICE_HOST_LOGISTICS}
-  SERVICE_HOST_LOYALTY: ${SERVICE_HOST_LOYALTY}
-  SERVICE_HOST_NOTIFICATIONS: ${SERVICE_HOST_NOTIFICATIONS}
-  SERVICE_HOST_OFFERS: ${SERVICE_HOST_OFFERS}
-  SERVICE_HOST_ORDERS: ${SERVICE_HOST_ORDERS}
-  SERVICE_HOST_PAYMENT: ${SERVICE_HOST_PAYMENT}
-  SERVICE_HOST_PRODUCTS: ${SERVICE_HOST_PRODUCTS}
-  SERVICE_HOST_PROMOTIONS: ${SERVICE_HOST_PROMOTIONS}
-  SERVICE_HOST_REPORTS: ${SERVICE_HOST_REPORTS}
-  SERVICE_HOST_SHIPPING: ${SERVICE_HOST_SHIPPING}
-  SERVICE_HOST_STORAGE: ${SERVICE_HOST_STORAGE}
-  SERVICE_HOST_SUPPORT: ${SERVICE_HOST_SUPPORT}
-  SERVICE_HOST_SYSTEM: ${SERVICE_HOST_SYSTEM}
+version: '3.8'
 
 services:
-  gateway:
-    container_name: gateway
-    build:
-      context: ../lup-gateway
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5100:5100"
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-gateway:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  accounts:
-    container_name: accounts
-    build:
-      context: ../lup-accounts
-      dockerfile: ${DOCKERFILE:-Dockerfile} # Use Dockerfile.dev in dev, Dockerfile in prod
-    ports:
-      - "5001:5001"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-accounts:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
   
-  auth:
-    container_name: auth
+  # BACKEND
+  backend:
+    container_name: cms_backend
     build:
-      context: ../lup-auth
-      dockerfile: ${DOCKERFILE:-Dockerfile}
+      context: ./backend
     ports:
-      - "5003:5003"
-    restart: always
-    depends_on:
-      - gateway
+      - '3032:3032'
     environment:
-      <<: *default-environment
+      - PORT=3032
+      - DB_URI=${DB_URI}
+      - MONGODB_LOCAL_URI=${DB_URI}
+      - CACHE_MANAGER_REDIS_URL=${CACHE_MANAGER_REDIS_URL}
+    depends_on:
+      - mongodb
+      - redis
     volumes:
-      - ../lup-auth:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
+      - ./backend/src:/usr/src/app/src
+      - /root/apps/volumes/uploads:/usr/src/app/uploads
+    restart: unless-stopped
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+    networks:
+      - cms_network
 
-  customers:
-    container_name: customers
+  # FRONTEND
+  frontend:
+    container_name: cms_frontend
     build:
-      context: ../lup-customers
-      dockerfile: ${DOCKERFILE:-Dockerfile}
+      context: ./frontend
     ports:
-      - "5004:5004"
-    restart: always
-    depends_on:
-      - auth
-      - system
+      - '3000:3000'
     environment:
-      <<: *default-environment
+      - NODE_ENV=production  # Set NODE_ENV to 'production'
+      - SDK_BASE_URL=${SDK_BASE_URL}
+      - NEXT_PUBLIC_API_BASE_URL_PROD=${SDK_BASE_URL}
+      - NEXT_PUBLIC_API_BASE_URL_DEV=${SDK_BASE_URL}
+    depends_on:
+      - backend
     volumes:
-      - ../lup-customers:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
+      - ./frontend/src:/usr/src/app/src
+    restart: unless-stopped
+    networks:
+      - cms_network
+  
+# volumes:
+#   mongodb_data:
+#   redis_data:
+#   uploads_data:
 
-  carts:
-    container_name: carts
-    build:
-      context: ../lup-carts
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5005:5005"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-carts:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  eventbus:
-    container_name: eventbus
-    build:
-      context: ../lup-eventbus
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5006:5006"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-eventbus:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  cm:
-    container_name: cm
-    build:
-      context: ../lup-cm
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5007:5007"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-cm:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  integrations:
-    container_name: integrations
-    build:
-      context: ../lup-integrations
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5009:5009"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-integrations:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  inventory:
-    container_name: inventory
-    build:
-      context: ../lup-inventory
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5010:5010"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-inventory:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  locations:
-    container_name: locations
-    build:
-      context: ../lup-locations
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5011:5011"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-locations:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  logistics:
-    container_name: logistics
-    build:
-      context: ../lup-logistics
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5012:5012"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-logistics:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  loyalty:
-    container_name: loyalty
-    build:
-      context: ../lup-loyalty
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5013:5013"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-loyalty:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  notifications:
-    container_name: notifications
-    build:
-      context: ../lup-notifications
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5014:5014"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-notifications:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  offers:
-    container_name: offers
-    build:
-      context: ../lup-offers
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5015:5015"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-offers:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  orders:
-    container_name: orders
-    build:
-      context: ../lup-orders
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5016:5016"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-orders:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  payment:
-    container_name: payment
-    build:
-      context: ../lup-payment
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5017:5017"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-payment:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  products:
-    container_name: products
-    build:
-      context: ../lup-products
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5018:5018"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-products:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  promotions:
-    container_name: promotions
-    build:
-      context: ../lup-promotions
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5019:5019"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-promotions:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-  reports:
-    container_name: reports
-    build:
-      context: ../lup-reports
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5020:5020"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-reports:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  shipping:
-    container_name: shipping
-    build:
-      context: ../lup-shipping
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5021:5021"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-shipping:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  storage:
-    container_name: storage
-    build:
-      context: ../lup-storage
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5022:5022"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-storage:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  support:
-    container_name: support
-    build:
-      context: ../lup-support
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5023:5023"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-support:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  system:
-    container_name: system
-    build:
-      context: ../lup-system
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5101:5101"
-    restart: always
-    depends_on:
-      - auth
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-system:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
-
-  activity:
-    container_name: activity
-    build:
-      context: ../lup-activity
-      dockerfile: ${DOCKERFILE:-Dockerfile}
-    ports:
-      - "5002:5002"
-    restart: always
-    depends_on:
-      - auth
-      - system
-    environment:
-      <<: *default-environment
-    volumes:
-      - ../lup-activity:/usr/src/app # Only mount if DOCKER_ENV is set
-      - ../lup-common/volumes/uploads:/usr/src/app/uploads
+networks:
+  cms_network:
+    driver: bridge
