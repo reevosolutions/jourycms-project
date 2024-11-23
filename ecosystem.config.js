@@ -7,7 +7,8 @@ module.exports = {
       args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
 
       instances: 2, // Use all available CPU cores
-      env_file: "./backend/.env", // This will automatically load the environment variables from the .env file
+      cwd: "./backend", // Set the context folder for the backend app
+      env_file: "./.env", // This will automatically load the environment variables from the .env file
       env: {
         NODE_ENV: "production",
         PORT: 3032,
@@ -29,7 +30,8 @@ module.exports = {
       script: "npm",
       args: "run start", // Use your frontend start command here (e.g., "next start" for Next.js)
       instances: 1, // Frontend is usually single instance
-      env_file: "./frontend/.env", // This will automatically load the environment variables from the .env file
+      cwd: "./frontend", // Set the context folder for the backend app
+      env_file: "./.env", // This will automatically load the environment variables from the .env file
       env: {
         NODE_ENV: "production",
         // SDK_BASE_URL: process.env.SDK_BASE_URL,
