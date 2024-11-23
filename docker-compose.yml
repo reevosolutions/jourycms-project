@@ -10,9 +10,10 @@ services:
     environment:
       - TZ=Africa/Algiers  # Set the timezone
     volumes:
-      - /root/apps/volumes/data/db:/data/db  # Bind mount host directory to container directory
+      - /root/apps/volumes/mongodb/data/db:/data/db  # Bind mount host directory to container directory
     restart: unless-stopped
-
+    networks:
+      - cms_network
   # CACHE
   redis:
     image: redis:alpine
@@ -20,8 +21,10 @@ services:
     ports:
       - '6379:6379'
     volumes:
-      - /root/apps/volumes/data/redis:/data  # Bind mount host directory to container directory
+      - /root/apps/volumes/redis:/data  # Bind mount host directory to container directory
     restart: unless-stopped
+    networks:
+      - cms_network
 
   # BACKEND
   backend:
@@ -44,6 +47,8 @@ services:
     restart: unless-stopped
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
+    networks:
+      - cms_network
 
   # FRONTEND
   frontend:
@@ -62,10 +67,14 @@ services:
     volumes:
       - ./frontend/src:/usr/src/app/src
     restart: unless-stopped
-
+    networks:
+      - cms_network
   
-volumes:
-  mongodb_data:
-  redis_data:
-  uploads_data:
+# volumes:
+#   mongodb_data:
+#   redis_data:
+#   uploads_data:
 
+networks:
+  cms_network:
+    driver: bridge
