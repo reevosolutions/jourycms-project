@@ -216,6 +216,9 @@ export default class DevService extends BaseService {
           this.usersService.internalAuthData
         );
       }
+      else {
+        this.logger.success("Admin found", admins.email);
+      }
     } catch (error) {}
   }
 
