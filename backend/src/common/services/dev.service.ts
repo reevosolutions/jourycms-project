@@ -22,7 +22,7 @@ import UsersService from "../../features/auth/services/users.service";
 import AuthService from "../../features/auth/services/auth.service";
 import { addLeadingZeros, buildUserFullName } from "../../utilities/strings";
 import moment from "moment";
-import articleTypesSeedData from '../../features/content/utils/seed/ar.types.seed';
+import articleTypesSeedData from "../../features/content/utils/seed/ar.types.seed";
 
 type User = Levelup.CMS.V1.Users.Entity.ExposedUser;
 type RegisterPayload = DeepRequired<
@@ -157,15 +157,15 @@ export default class DevService extends BaseService {
       await this.reset();
       await this.createFirstAdmin();
       await this.seedArticleTypes();
-      await this.fillDoctors();
-      await this.fillEscorts();
-      await this.fillAgencies();
-      await this.fillAiroports();
-      await this.fillAirlines();
-      await this.fillShrines();
-      await this.fillHotels();
-      await this.fillTrips();
-      await this.setAgenciesLogo();
+      // await this.fillDoctors();
+      // await this.fillEscorts();
+      // await this.fillAgencies();
+      // await this.fillAiroports();
+      // await this.fillAirlines();
+      // await this.fillShrines();
+      // await this.fillHotels();
+      // await this.fillTrips();
+      // await this.setAgenciesLogo();
 
       /**
        *
