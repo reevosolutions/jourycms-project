@@ -40,7 +40,7 @@ export default class BuilderService extends BaseService {
   public async run() {
     const scenario = this.initScenario(this.logger, this.seed);
     try {
-      
+      this.seed();
     } catch (error) {
       scenario.error(error);
     }
