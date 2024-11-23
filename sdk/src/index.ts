@@ -150,6 +150,8 @@ export default class JouryCMSSdk implements SDK.ISdk {
     return new Error(error);
   }
 
+
+  
   isApiResponseError(error: any): error is ApiResponseError {
     return error instanceof ApiResponseError;
   }
