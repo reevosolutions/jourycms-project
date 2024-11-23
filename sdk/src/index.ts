@@ -137,6 +137,7 @@ export default class JouryCMSSdk implements SDK.ISdk {
   }
 
   handleError(error: any): SDK.IError {
+    console.log(error.message?.red, error);
     if (this.isApiResponseError(error)) return error;
     if (isAxiosError(error)) {
       return new ApiResponseError({
