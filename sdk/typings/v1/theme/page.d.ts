@@ -8,7 +8,8 @@ declare module JouryCMS {
         path?: string;
         onClick?: ()=>void | PromiseLike<void>;
         title: string;
-        icons?: Levelup.CMS.V1.UI.IconType
+        icon?: Levelup.CMS.V1.UI.IconType;
+        ac?: ()=>boolean;
       }[]
     }
   }
