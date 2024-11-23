@@ -43,11 +43,12 @@ const attachAuthData = async (
       else loadUser = false;
     }
 
+
     if (loadUser) {
       /* -------------------------------------------------------------------------- */
       /*                                    USER                                    */
       /* -------------------------------------------------------------------------- */
-
+      logger.value("JWT Auth Object", req.auth);
       user = await cache.users.get(req.auth?._id);
       if (user) {
         if (user.is_deleted || user.attributes?.is_suspended)
@@ -55,7 +56,7 @@ const attachAuthData = async (
             "User deleted or suspended"
           );
         req.attached_entities.user = user;
-        logger.success("attachCurrentUser from redis", req.auth?._id);
+        logger.success("Attached CurrentUser from redis", req.auth?._id);
       } else {
         try {
           const { data } = await usersService.getById(
@@ -64,7 +65,8 @@ const attachAuthData = async (
           );
           if (data) user = data;
         } catch (error) {
-          throw new exceptions.UnauthorizedException("Could not load user");
+          logger.error(error.message, error);
+          throw new exceptions.UnauthorizedException("Could not load user from db");
         }
       }
 

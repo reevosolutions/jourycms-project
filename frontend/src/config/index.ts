@@ -20,7 +20,7 @@ const config = {
    */
   sdk: {
     baseURL:
-      false && process.env.NODE_ENV === "development"
+      process.env.NODE_ENV === "development"
         ? process.env.NEXT_PUBLIC_API_BASE_URL_DEV || "http://localhost:5500"
         : process.env.NEXT_PUBLIC_API_BASE_URL_PROD ||
           "https://miqat-api.assil.dev",
