@@ -57,6 +57,7 @@ const UserList: React.FC<UserListProps> = ({
     "profile",
     "tracking_id",
     "role",
+    "email",
     "attributes",
     "created_at",
     "updated_at",

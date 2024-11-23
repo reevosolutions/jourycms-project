@@ -1,15 +1,18 @@
 /* eslint-disable no-undef */
 "use client";
 import AppConfigManager from "@lib/app-config-manager";
-import initLogger, { LoggerContext } from "@lib/logging";
-import { useAppSelector } from "@redux/hooks";
-import { useCallback, useEffect, useMemo } from "react";
+import initLogger, {LoggerContext} from "@lib/logging";
+import {useAppSelector} from "@redux/hooks";
+import {useCallback, useEffect, useMemo} from "react";
 
-import websiteConfig from "@/themes/miqat/config";
+import websiteConfig, {ArticleTypeSlug} from "@/themes/miqat/config";
+import {useSdk} from "./use-sdk";
 
 const logger = initLogger(LoggerContext.HOOK, "useCMSContent");
 
 const useCMSContent = () => {
+  const sdk = useSdk();
+
   const appConfigManager = useMemo(() => AppConfigManager.getInstance(), []);
 
   const articleTypes = useAppSelector(state => state.content.articleTypes);
@@ -28,7 +31,7 @@ const useCMSContent = () => {
     [appConfigManager],
   );
   const getArticleTypeBySlug = useCallback(
-    async (slug: string) => {
+    async (slug: `${ArticleTypeSlug}`) => {
       return await appConfigManager.getArticleTypeBySlug(slug);
     },
     [appConfigManager],
@@ -73,7 +76,7 @@ const useCMSContent = () => {
           (
             field as Levelup.CMS.V1.Content.CustomFields.MetaField<"select">
           ).field_options?.choices?.find(
-            item => item.value.toString() === value.toString(),
+            item => item?.value?.toString() === value?.toString(),
           )?.label || value
         );
       }
@@ -100,6 +103,20 @@ const useCMSContent = () => {
     [getWebsiteConfig],
   );
 
+  const getUserAgency = useCallback(
+    async (userID: string) => {
+      const {data} = await sdk.content.articles.list({
+        count: 1,
+        filters: {
+          article_type: 'agency',
+          created_by: userID,
+        },
+      });
+      if (data?.length) return data[0];
+    },
+    [sdk.content.articles],
+  );
+
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
@@ -118,6 +135,7 @@ const useCMSContent = () => {
     getMetaFieldValueLabel,
     getWebsiteConfigValue,
     getWebsiteConfig,
+    getUserAgency,
   };
 };
 

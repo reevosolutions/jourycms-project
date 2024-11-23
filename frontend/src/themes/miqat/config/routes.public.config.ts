@@ -147,7 +147,14 @@ const routes = {
         path: "/account" as const,
         title: "حسابي",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
-        _: {},
+        _: {
+          newOffer: {
+            path: "/account/new-offer" as const,
+            title: "عرض جديد",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+        },
       },
     },
   },

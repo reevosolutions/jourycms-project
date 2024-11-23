@@ -9,7 +9,7 @@ export type PageProps = JouryCMS.Theme.ComponentProps & {
   children: React.ReactNode;
 };
 
-const AdminOnlyGuard: React.FC<PageProps> = ({children}) => {
+const AgencyOnlyGuard: React.FC<PageProps> = ({children}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -23,11 +23,11 @@ const AdminOnlyGuard: React.FC<PageProps> = ({children}) => {
     </div>
   ) : !isAuthenticated ? (
     redirect(publicRoutes.homepage._.login.path)
-  ) : currentUser?.role !== "admin" ? (
+  ) : currentUser?.role !== "agency" ? (
     redirect(publicRoutes.homepage.path)
   ) : (
     children
   );
 };
 
-export default AdminOnlyGuard;
+export default AgencyOnlyGuard;

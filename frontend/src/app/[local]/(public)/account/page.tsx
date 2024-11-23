@@ -1,6 +1,5 @@
 import { publicRoutes } from "@/config";
-import ThemePage from "@/themes/miqat/pages/account";
-import Image from "next/image";
+import ThemePage from "@/themes/miqat/pages/user-dashboard/account";
 
 const ROUTE = publicRoutes.homepage._.myAccount;
 

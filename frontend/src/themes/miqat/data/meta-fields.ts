@@ -73,7 +73,7 @@ export const getMetaFieldValueLabel = (
       (
         field as Levelup.CMS.V1.Content.CustomFields.MetaField<"select">
       ).field_options?.choices?.find(
-        item => item.value.toString() === value.toString(),
+        item => item.value?.toString() === value?.toString(),
       )?.label || value
     );
   }

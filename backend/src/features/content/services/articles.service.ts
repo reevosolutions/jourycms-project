@@ -295,17 +295,16 @@ export default class ArticlesService extends BaseService {
     totalQ = filter.totalQ;
 
     // -- created_by
-    if (ArticleSchemaFields["created_by"]) {
-      filter = createDateRangeFilter<DocumentProperties>(
-        q,
-        totalQ,
-        filters["created_by"],
-        "created_by" as any
-      );
-      q = filter.q;
-      totalQ = filter.totalQ;
-    }
-    // -- slug
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.created_by,
+      "created_by"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
+
+    // slug
     filter = createStringFilter<DocumentProperties>(
       q,
       totalQ,
@@ -739,7 +738,7 @@ export default class ArticlesService extends BaseService {
       /**
        * @description Add query to execution scenario
        */
-      scenario.set('request_filter', fixFiltersObject(query));
+      scenario.set("request_filter", fixFiltersObject(query));
       scenario.set("listing_query", {
         model: q.model.modelName,
         query: q.getQuery(),

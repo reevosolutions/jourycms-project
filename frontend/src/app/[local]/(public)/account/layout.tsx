@@ -1,5 +1,8 @@
+"use client";
 import { publicRoutes } from "@/config";
+import MemberOnlyGuard from "@/guards/members-only.guard";
 import { getRouteTree } from "@/lib/routes/utills.routes";
+import { ReactQueryDevtoolsProvider } from "@/lib/utils/dev-tools/react-query-dev-tools";
 
 import type { Metadata } from "next";
 
@@ -14,10 +17,10 @@ const PARENT_ROUTE =
     : undefined;
 const QUERY_ID = ROUTE.path;
 
-export const metadata: Metadata = {
-  title: ROUTE.title,
-};
-
 export default function Layout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <ReactQueryDevtoolsProvider>
+      <MemberOnlyGuard>{children}</MemberOnlyGuard>
+    </ReactQueryDevtoolsProvider>
+  );
 }

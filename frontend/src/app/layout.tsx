@@ -182,7 +182,7 @@ export default async function RootLayout({
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${inter.className} ${noto.className} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
+        className={`${inter.className} ${noto.variable} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
       >
         <TranslationsProvider
           namespaces={i18nNamespaces}

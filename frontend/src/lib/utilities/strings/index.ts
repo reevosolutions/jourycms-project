@@ -249,7 +249,7 @@ export const formatAmount = (
   separator: string = ",",
   decimals: number = 2,
 ): string => {
-  const string_ = x.toFixed(decimals).split(".");
+  const string_ = (x || 0).toFixed(decimals).split(".");
   const part1 = string_[0].replace(
     /\.(.*)|(\d)(?=(?:\d{3})+(?:\.|$))/g,
     `$2${separator}$1`,

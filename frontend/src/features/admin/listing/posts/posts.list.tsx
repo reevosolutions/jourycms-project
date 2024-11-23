@@ -9,8 +9,6 @@ import { useTranslation } from "react-i18next";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
-import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
-import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import Listing from "..";
 import Link from "next/link";
 import BreadcrumbComponent from "../../presentation/breadcrumb";
@@ -19,6 +17,8 @@ import { Button } from "@/components/ui/button";
 import { LuLoader2 } from "react-icons/lu";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
+import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 type PostListProps = {
   articleType_slug?: string;
   /**
@@ -57,7 +57,6 @@ const PostList: React.FC<PostListProps> = ({
   >([
     "title",
     "slug",
-    "body",
     "article_type",
     "meta_fields",
     "created_at",

@@ -106,7 +106,7 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({ data, edge, articleTy
               </h3>
               <div
                 className="text-sm text-gray-500"
-                dangerouslySetInnerHTML={{__html: data.body_unformatted}}
+                dangerouslySetInnerHTML={{__html: data.body_unformatted || ''}}
               />
             </div>
 
