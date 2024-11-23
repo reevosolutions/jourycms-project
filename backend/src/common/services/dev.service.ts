@@ -157,15 +157,15 @@ export default class DevService extends BaseService {
       await this.reset();
       await this.createFirstAdmin();
       await this.seedArticleTypes();
-      // await this.fillDoctors();
-      // await this.fillEscorts();
-      // await this.fillAgencies();
-      // await this.fillAiroports();
-      // await this.fillAirlines();
-      // await this.fillShrines();
-      // await this.fillHotels();
-      // await this.fillTrips();
-      // await this.setAgenciesLogo();
+      await this.fillDoctors();
+      await this.fillEscorts();
+      await this.fillAgencies();
+      await this.fillAiroports();
+      await this.fillAirlines();
+      await this.fillShrines();
+      await this.fillHotels();
+      await this.fillTrips();
+      await this.setAgenciesLogo();
 
       /**
        *
@@ -233,6 +233,7 @@ export default class DevService extends BaseService {
         });
         if (!existing) {
           await this.articleTypeModel.create(type);
+          this.logger.info(`Article type ${type.slug} created`);
         } else {
           this.logger.info(`Article type ${type.slug} already exists`);
           await this.articleTypeModel
