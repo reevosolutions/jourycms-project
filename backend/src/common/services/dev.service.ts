@@ -222,6 +222,7 @@ export default class DevService extends BaseService {
   public async seedArticleTypes() {
     const scenario = this.initScenario(this.logger, this.seed);
     try {
+      this.logger.error('Deleted all article types')
       await this.articleTypeModel.deleteMany({});
       for (const type of articleTypesSeedData.types) {
         const existing = await this.articleTypeModel.findOne({
