@@ -22,6 +22,7 @@ import UsersService from "../../features/auth/services/users.service";
 import AuthService from "../../features/auth/services/auth.service";
 import { addLeadingZeros, buildUserFullName } from "../../utilities/strings";
 import moment from "moment";
+import articleTypesSeedData from '../../features/content/utils/seed/ar.types.seed';
 
 type User = Levelup.CMS.V1.Users.Entity.ExposedUser;
 type RegisterPayload = DeepRequired<
@@ -98,7 +99,7 @@ export default class DevService extends BaseService {
    * @since 16-10-2024 23:40:44
    */
   public async seed() {
-    this.logger.event('seeding data');
+    this.logger.event("seeding data");
 
     this.loremHtml = `
     <p>و سأعرض مثال حي لهذا، من منا لم يتحمل جهد بدني شاق إلا من أجل الحصول على ميزة أو فائدة؟ ولكن من لديه الحق أن ينتقد شخص ما أراد أن يشعر بالسعادة التي لا تشوبها عواقب أليمة أو آخر أراد أن يتجنب الألم الذي ربما تنجم عنه بعض المتعة ؟ 
@@ -138,7 +139,10 @@ export default class DevService extends BaseService {
         {}
       );
 
-      this.logger.value("types", articleTypes.map(t=>t.name));
+      this.logger.value(
+        "types",
+        articleTypes.map((t) => t.name)
+      );
 
       this.types = articleTypes.reduce(
         (prev, curr) => ({
@@ -152,6 +156,7 @@ export default class DevService extends BaseService {
 
       await this.reset();
       await this.createFirstAdmin();
+      await this.seedArticleTypes();
       await this.fillDoctors();
       await this.fillEscorts();
       await this.fillAgencies();
@@ -212,6 +217,34 @@ export default class DevService extends BaseService {
         );
       }
     } catch (error) {}
+  }
+
+  public async seedArticleTypes() {
+    const scenario = this.initScenario(this.logger, this.seed);
+    try {
+      for (const type of articleTypesSeedData.types) {
+        const existing = await this.articleTypeModel.findOne({
+          slug: type.slug,
+        });
+        if (!existing) {
+          await this.articleTypeModel.create(type);
+        } else {
+          this.logger.info(`Article type ${type.slug} already exists`);
+          await this.articleTypeModel
+            .updateOne(
+              {
+                _id: existing._id,
+              },
+              {
+                $set: type,
+              }
+            )
+            .exec();
+        }
+      }
+    } catch (error) {
+      scenario.error(error);
+    }
   }
 
   async fillDoctors() {
