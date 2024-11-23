@@ -9,7 +9,7 @@ import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
 import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign, LuMoonStar} from "react-icons/lu";
 import {format} from "date-fns";
 import {formatAmount} from "@/lib/utilities/strings";
-import {PiAirplaneTilt, PiTrolleySuitcase} from "react-icons/pi";
+import {PiAirplaneTilt, PiGenderIntersexBold, PiTrolleySuitcase} from "react-icons/pi";
 import {TbPlaneArrival, TbPlaneDeparture} from "react-icons/tb";
 import {GiDuration} from "react-icons/gi";
 import {HiOutlineTicket} from "react-icons/hi2";
@@ -19,6 +19,7 @@ import {cn} from "@/lib/utils";
 import {MdOutlineLocalHotel} from "react-icons/md";
 import initLogger, {LoggerContext} from "@/lib/logging";
 import { HiLocationMarker, HiOutlineLocationMarker } from "react-icons/hi";
+import { FaUserDoctor } from "react-icons/fa6";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -136,7 +137,7 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
             {/* field */}
             {hasMetaField(article, "medical_speciality") && (
               <div className="items-top flex flex-row gap-4">
-                <BsGlobeAsiaAustralia className="h-8 w-8 text-beige-50" />
+                <FaUserDoctor className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">{"التخصص"}</span>
                   <span className="d">
@@ -152,7 +153,7 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
             {/* field */}
             {hasMetaField(article, "sex") && (
               <div className="items-top flex flex-row gap-4">
-                <BsGlobeAsiaAustralia className="h-8 w-8 text-beige-50" />
+                <PiGenderIntersexBold className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">{"الجنس"}</span>
                   <span className="d">

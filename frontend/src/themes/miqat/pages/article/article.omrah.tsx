@@ -71,10 +71,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
 
-  return (
-    <DefaultLayout route={route}>
-      <div className="container mx-auto px-4 md:px-8">
-        {article ? (
+  return article ? (
           <div className="article-page mb-16">
             <div className="mb-4"></div>
             <div className="mb-4">
@@ -429,10 +426,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           </div>
         ) : initialData?.error ? (
           <PageNotFound />
-        ) : null}
-      </div>
-    </DefaultLayout>
-  );
+        ) : null;
 };
 
 export default OmrahArticlePage;
