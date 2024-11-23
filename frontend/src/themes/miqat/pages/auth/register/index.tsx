@@ -28,11 +28,11 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
               <RegisterForm />
             </div>
             <div className="d">
-              <p className="text-center text-xl">
+              <p className="text-center text-2xl">
                 لديك حساب؟{" "}
                 <Link
                   href={"/login"}
-                  className="text-beige-500 hocus:text-beige-900"
+                  className="text-red2-500 hocus:text-beige-900"
                 >
                   تسجيل الدخول
                 </Link>

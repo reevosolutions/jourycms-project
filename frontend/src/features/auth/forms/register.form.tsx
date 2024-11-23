@@ -148,7 +148,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               <Label className="text-2xl text-darkblue-500">
                 {"نوع الحساب"}
               </Label>
-              <div className="mt-3 grid min-w-80 grid-cols-3 sm:gap-8 gap-2">
+              <div className="mt-3 grid min-w-80 grid-cols-3 gap-2 sm:gap-8">
                 <button
                   className={cn(
                     "flex aspect-square flex-col items-center justify-center rounded-4xl border-2 bg-slate-100 p-4 transition-all",
@@ -252,7 +252,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                   <Input
                     type="text"
                     placeholder="الاسم"
-                    className="focus-visible:ring-orange-400"
+                    className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                     value={field.state.value}
                     onChange={event => field.handleChange(event.target.value)}
                   />
@@ -272,7 +272,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                   <Input
                     type="text"
                     placeholder="اللقب"
-                    className="focus-visible:ring-orange-400"
+                    className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                     value={field.state.value}
                     onChange={event => field.handleChange(event.target.value)}
                   />
@@ -306,7 +306,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={wilayaOpen}
-                      className="w-full justify-between rounded-md border-2"
+                      className="h-auto w-full justify-between rounded-md border-2 py-2 text-xl"
                       aria-label="state"
                     >
                       <div className="value text-xl">
@@ -327,7 +327,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[320px] sm:w-[436px] p-0 font-hammah text-2xl"
+                    className="w-[320px] p-0 font-hammah text-2xl sm:w-[436px]"
                     align="start"
                   >
                     <Command
@@ -397,10 +397,10 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                       variant="outline"
                       role="combobox"
                       aria-expanded={cityOpen}
-                      className="w-full justify-between rounded-md border-2"
+                      className="h-auto w-full justify-between rounded-md border-2 py-2 text-xl"
                       aria-label="city"
                     >
-                      <div className="value text-xl">
+                      <div className="value h-auto text-xl">
                         {!field.state.value?.city_code ? (
                           <span className="text-darkblue-500">
                             {"اختر بلدية..."}
@@ -418,7 +418,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[320px] sm:w-[436px] p-0 font-hammah text-2xl"
+                    className="w-[320px] p-0 font-hammah text-2xl sm:w-[436px]"
                     align="start"
                   >
                     <Command
@@ -482,7 +482,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               <div className="field mb-4">
                 <Label className="text-2xl text-darkblue-500">{"الشارع"}</Label>
                 <Textarea
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value.street_address}
                   onChange={event =>
                     field.handleChange(old => ({
@@ -512,7 +512,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                 <Input
                   type="url"
                   placeholder="https://"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
                   onChange={event => field.handleChange(event.target.value)}
                 />
@@ -545,7 +545,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                 <Input
                   type="email"
                   placeholder="البريد الالكتروني"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
                   onChange={event => field.handleChange(event.target.value)}
                 />
@@ -569,7 +569,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                 <Input
                   type="password"
                   placeholder="كلمة السر"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
                   onChange={event => field.handleChange(event.target.value)}
                 />
@@ -601,7 +601,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                 <Input
                   type="password"
                   placeholder="تأكيد كلمة السر"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
                   onChange={event => field.handleChange(event.target.value)}
                 />

@@ -28,7 +28,7 @@ const ThemePage: React.FC<PageProps> = ({ route }) => {
             <LoginForm />
           </div>
           <div className="d">
-            <p className="text-xl text-center">ليس لديك حساب؟  <Link href={"/register"} className=" text-beige-500 hocus:text-beige-900">تسجيل</Link>
+            <p className="text-2xl text-center">ليس لديك حساب؟  {" "}<Link href={"/register"} className=" text-red2-500 hocus:text-beige-900">تسجيل</Link>
             </p>
           </div>
         </div>

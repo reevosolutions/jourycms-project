@@ -84,29 +84,32 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
   /* -------------------------------------------------------------------------- */
   return (
     <div className="">
-
-      <div className="px-4 py-6 max-w-full ">
-        <h2 className="text-3xl  text-center mb-6 font-bold text-darkblue-950">تسجيل الدخول</h2>
+      <div className="max-w-full px-4 py-6">
+        <h2 className="mb-6 text-center text-3xl font-bold text-darkblue-950">
+          تسجيل الدخول
+        </h2>
 
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">{"البريد الالكتروني"}</Label>
+          <Label className="text-2xl text-darkblue-500">
+            {"البريد الالكتروني"}
+          </Label>
           <form.Field
             name="email"
             validators={{
-              onChange: yup.string().email(
-                "البريد الالكتروني غير صحيح"
-              ).required("البريد الالكتروني مطلوب"),
+              onChange: yup
+                .string()
+                .email("البريد الالكتروني غير صحيح")
+                .required("البريد الالكتروني مطلوب"),
             }}
             children={field => (
               <>
-
                 <Input
                   type="email"
                   placeholder="البريد الالكتروني"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={event => field.handleChange(event.target.value)}
                 />
                 {field.state.meta.errors?.[0] && (
                   <FormMessage error={field.state.meta.errors?.[0]} />
@@ -125,13 +128,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
             }}
             children={field => (
               <>
-
                 <Input
                   type="password"
                   placeholder="كلمة السر"
-                  className="focus-visible:ring-orange-400"
+                  className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value}
-                  onChange={(event) => field.handleChange(event.target.value)}
+                  onChange={event => field.handleChange(event.target.value)}
                 />
                 {field.state.meta.errors?.[0] && (
                   <FormMessage error={field.state.meta.errors?.[0]} />
@@ -141,9 +143,9 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
           />
         </div>
 
-        <div className="flex justify-center mb-2 mt-8">
+        <div className="mb-2 mt-8 flex justify-center">
           <form.Subscribe
-            selector={(state) => [state.canSubmit, state.isSubmitting]}
+            selector={state => [state.canSubmit, state.isSubmitting]}
             children={([canSubmit, isSubmitting]) => (
               <Button
                 disabled={!canSubmit || isSubmitting}
@@ -151,17 +153,17 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
                 onClick={() => {
                   form.handleSubmit();
                 }}
-                className=" text-2xl bg-darkblue-700 hocus:bg-darkblue-950 transition-colors"
+                className="bg-darkblue-700 text-2xl transition-colors hocus:bg-darkblue-950"
               >
                 {isSubmitting && <Loader2 className="animate-spin" />}
-
-                تسجيل الدخول</Button>
+                تسجيل الدخول
+              </Button>
             )}
           />
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default LoginForm;
