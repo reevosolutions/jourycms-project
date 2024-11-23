@@ -401,7 +401,7 @@ export class ExcecutionScenario<
    */
   public async log(purpose: "error" | "success" | "warn" = "success") {
     try {
-      if (config.environement === "development") {
+      if (config.isDev || config.dev.debugProduction) {
         if (purpose === "error")
           this.logger.error(`${this._class}.${this.method}`, `Error scenario:`);
         else if (purpose === "warn")

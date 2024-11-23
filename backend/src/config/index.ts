@@ -87,6 +87,9 @@ export default {
     faker: {
       userPassword: process.env.DEV_FAKER_USER_PASSWORD || "123456",
     },
+    debugProduction: ["true", "1", true, 1].includes(
+      process.env.DEBUG_PRODUCTION
+    ),
   },
 
   /**
