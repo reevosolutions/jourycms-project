@@ -27,6 +27,7 @@ const attachAuthData = async (
 
     const token = getTokenFromHeader(req);
     req.current_token = token;
+    logger.value("Token", token?.slice(0, 30) || 'Not sent');
 
     req.attached_entities.token = token;
 
@@ -73,7 +74,7 @@ const attachAuthData = async (
       if (!user) throw new exceptions.UnauthorizedException("User not found");
     }
 
-    
+
     /* -------------------------------------------------------------------------- */
     /*                                     APP                                    */
     /* -------------------------------------------------------------------------- */
@@ -120,7 +121,7 @@ const attachAuthData = async (
 
     return next();
   } catch (error) {
-    logger.error("🔥 Error attaching user to req: %o", error);
+    logger.error("🔥 Error attaching user to req:", error);
     return next(error);
   }
 };
