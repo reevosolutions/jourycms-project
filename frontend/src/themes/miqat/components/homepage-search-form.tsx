@@ -122,8 +122,8 @@ export const OmrahSearchForm: React.FC = () => {
       m: month || undefined,
       d: duration || undefined,
       s: selectedServices,
-      pn: priceRange[0] || 0,
-      px: priceRange[1] || 60,
+      pn: (priceRange[0] || 0) * 10_000,
+      px: (priceRange[1] || 60) * 10_000,
     };
     const path = `/search?${qs.stringify(searchObject)}`;
     logger.value("path", path);

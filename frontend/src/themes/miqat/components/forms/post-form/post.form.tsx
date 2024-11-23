@@ -379,7 +379,15 @@ const PostForm: React.FC<Props> = ({
               <aside className="meta-fields flex flex-col gap-4 px-4 pb-6">
                 {metaFields.map(field =>
                   applyFieldConstraints(field) ? (
-                    <div key={field.field_key} className={cn("", (hiddenMetaFields || []).includes(field.field_key as any) && "opacity-50 hidden")}>
+                    <div
+                      key={field.field_key}
+                      className={cn(
+                        "",
+                        (hiddenMetaFields || []).includes(
+                          field.field_key as any,
+                        ) && "hidden opacity-50",
+                      )}
+                    >
                       <CustomMetaField
                         field={field}
                         onChange={(value: any) =>
