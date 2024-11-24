@@ -1,32 +1,29 @@
-'use client';
+"use client";
 
 import useAuth from "@/hooks/use-auth";
-import initLogger, { LoggerContext } from "@/lib/logging";
-import { cn } from "@/lib/utils";
+import initLogger, {LoggerContext} from "@/lib/logging";
+import {cn} from "@/lib/utils";
 import Link from "next/link";
 import * as React from "react";
-import { LuChevronDown } from "react-icons/lu";
+import {LuChevronDown} from "react-icons/lu";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/customized.popover";
-import { adminRoutes, publicRoutes } from "@/config";
-import { useAppDispatch } from "@/lib/redux/hooks";
-import { logout } from "@features/auth/redux/slice";
+import {adminRoutes, publicRoutes} from "@/config";
+import {useAppDispatch} from "@/lib/redux/hooks";
+import {logout} from "@features/auth/redux/slice";
 
-const logger = initLogger(LoggerContext.COMPONENT, 'header');
+const logger = initLogger(LoggerContext.COMPONENT, "header");
 
+export type HeaderUserControlsProps = JouryCMS.Theme.ComponentProps & {};
 
-
-export type HeaderUserControlsProps = JouryCMS.Theme.ComponentProps & {
-};
-
-const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => {
+const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({children}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const { isAuthenticated, currentUser } = useAuth();
+  const {isAuthenticated, currentUser} = useAuth();
   const dispatch = useAppDispatch();
 
   /* -------------------------------------------------------------------------- */
@@ -61,17 +58,32 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => 
                     </Link>
                   </li>
                 )}
-                <li>
-                  <Link
-                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
-                    href="/account/settings"
-                  >
-                    {"الإعدادات"}
-                  </Link>
-                </li>
+                {currentUser?.role !== "admin" &&
+                currentUser?.role !== "user" ? (
+                  <li>
+                    <Link
+                      className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                      href={
+                        publicRoutes.homepage._.myAccount._.editAccount.path
+                      }
+                    >
+                      {publicRoutes.homepage._.myAccount._.editAccount.title}
+                    </Link>
+                  </li>
+                ) : null}
+                {currentUser?.role === "agency" && (
+                  <li>
+                    <Link
+                      className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                      href={publicRoutes.homepage._.myAccount._.newOffer.path}
+                    >
+                      {publicRoutes.homepage._.myAccount._.newOffer.title}
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <button
-                    className="block py-1 text-darkblue-800 transition-all hover:text-beige-600 active:text-darkblue-800"
+                    className="block py-1 text-red2-600 transition-all hover:text-beige-600 active:text-darkblue-800"
                     onClick={() => {
                       dispatch(logout());
                     }}
@@ -89,7 +101,7 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({ children }) => 
             <span className="d">{"تسجيل الدخول"}</span>
             <LuChevronDown className="h-5 w-5" />
           </PopoverTrigger>
-          
+
           <PopoverContent className="-translate-y-4">
             <div className="px-4 font-hammah text-2xl">
               <ul>

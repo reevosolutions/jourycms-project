@@ -910,17 +910,22 @@ export default class DevService extends BaseService {
             article_type: this.types[ArticleTypeSlug.OMRAH]._id,
             related_tags: [],
             meta_fields: {
-              agency: agency._id,
+              agency: agency._id.toString(),
               trip_duration: faker.helpers.arrayElement(trip_durations),
               flight_number: faker.finance.iban(),
               price: faker.number.int({ min: 10, max: 60 }) * 10_000,
               ramdhan_trip: month === 2,
-              airelines_company:
-                faker.helpers.arrayElement(airlinesCompanies)?._id,
-              departure_airoport: faker.helpers.arrayElement(dzAiroports)?._id,
-              arrival_airoport: faker.helpers.arrayElement(ksaAiroports)?._id,
-              mekkah_hotel: faker.helpers.arrayElement(hotels)?._id,
-              medina_hotel: faker.helpers.arrayElement(hotels)?._id,
+              airelines_company: faker.helpers
+                .arrayElement(airlinesCompanies)
+                ?._id?.toString(),
+              departure_airoport: faker.helpers
+                .arrayElement(dzAiroports)
+                ?._id?.toString(),
+              arrival_airoport: faker.helpers
+                .arrayElement(ksaAiroports)
+                ?._id?.toString(),
+              mekkah_hotel: faker.helpers.arrayElement(hotels)?._id?.toString(),
+              medina_hotel: faker.helpers.arrayElement(hotels)?._id?.toString(),
               shrines_at_mekkah: faker.helpers
                 .arrayElements(
                   shrines.filter(

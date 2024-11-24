@@ -1,42 +1,42 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import { useForm, type Validator } from "@tanstack/react-form";
-import { useQuery } from "@tanstack/react-query";
-import { yupValidator } from "@tanstack/yup-form-adapter";
-import React, { useCallback, useEffect, useState } from "react";
+import {useForm, type Validator} from "@tanstack/react-form";
+import {useQuery} from "@tanstack/react-query";
+import {yupValidator} from "@tanstack/yup-form-adapter";
+import React, {useCallback, useEffect, useState} from "react";
 import * as yup from "yup";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import {
   FormControl,
   FormItem,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/customized.form";
 import {
   SidebarContent,
   SidebarGroup,
-  SidebarHeader
+  SidebarHeader,
 } from "@/components/ui/customized.sidebar";
-import { Input } from "@/components/ui/input";
-import { Tiptap } from "@/features/editors/tiptap";
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
+import {Input} from "@/components/ui/input";
+import {Tiptap} from "@/features/editors/tiptap";
+import {useSdk} from "@/hooks/use-sdk";
+import initLogger, {LoggerContext} from "@/lib/logging";
 
-import { adminRoutes } from "@/config";
-import { setPathParams } from "@/lib/routes";
-import { useRouter } from "next/navigation";
+import {adminRoutes} from "@/config";
+import {setPathParams} from "@/lib/routes";
+import {useRouter} from "next/navigation";
 import Image from "next/image";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 import CustomMetaField from "../../custom-fields";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import { LuLoader2 } from "react-icons/lu";
+import {LuLoader2} from "react-icons/lu";
 import ImageUploader from "@/features/storage/form-components/image.uploader";
-import { cn } from "@/lib/utils";
+import {cn} from "@/lib/utils";
 import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
 
 type Props = {
@@ -60,14 +60,14 @@ const PostForm: React.FC<Props> = ({
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const sdk = useSdk();
-  const { t: tLabel } = useTranslation("label");
+  const {t: tLabel} = useTranslation("label");
   const router = useRouter();
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
   const [article, setArticle] = useState<EntityAlias | null>(null);
   const [body, setBody] = useState("");
-  const [structuredBody, setStructuredBody] = useState<{ [Key: string]: any }>(
+  const [structuredBody, setStructuredBody] = useState<{[Key: string]: any}>(
     {},
   );
   const [articleType, setArticleType] =
@@ -102,11 +102,10 @@ const PostForm: React.FC<Props> = ({
 
     queryFn: async () => {
       if (article_id) {
-        const { data: article } =
-          await sdk.content.articles.getById(article_id);
+        const {data: article} = await sdk.content.articles.getById(article_id);
         setArticle(article || null);
         if (article?.article_type) {
-          const { data: type } = await sdk.content.articleTypes.getById(
+          const {data: type} = await sdk.content.articleTypes.getById(
             article.article_type,
           );
           setArticleType(type || null);
@@ -129,7 +128,7 @@ const PostForm: React.FC<Props> = ({
         ...article,
       },
 
-      onSubmit: async ({ value }) => {
+      onSubmit: async ({value}) => {
         const payload: ApiAlias.Create.Request = {
           data: {
             ...value,
@@ -140,11 +139,13 @@ const PostForm: React.FC<Props> = ({
           },
         };
 
-        const { data } = await sdk.content.articles.create(payload);
+        const {data} = article_id
+          ? await sdk.content.articles.update(article_id, payload)
+          : await sdk.content.articles.create(payload);
 
         if (data._id) {
           router.push(
-            setPathParams(adminRoutes.articles._.edit.path, { id: data._id }),
+            setPathParams(adminRoutes.articles._.edit.path, {id: data._id}),
           );
         }
       },
@@ -156,7 +157,6 @@ const PostForm: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   const loadExtraData = useCallback(() => {
     if (article) {
-      setMetaFieldsData(article?.meta_fields || {});
       setBody(article?.body || "");
       setStructuredBody(article?.body_structured || {});
       setMetaFieldsData(article?.meta_fields || {});
@@ -177,47 +177,53 @@ const PostForm: React.FC<Props> = ({
     loadExtraData();
   }, [loadExtraData, article]);
 
-  const applyFieldConstraints = useCallback((field: Levelup.CMS.V1.Content.Entity.ICustomMetaField) => {
-    if (!field.field_options.constraints) return true;
-    if (!Array.isArray(field.field_options.constraints)) return true;
-    if (field.field_options.constraints.length === 0) return true;
+  const applyFieldConstraints = useCallback(
+    (field: Levelup.CMS.V1.Content.Entity.ICustomMetaField) => {
+      if (!field.field_options.constraints) return true;
+      if (!Array.isArray(field.field_options.constraints)) return true;
+      if (field.field_options.constraints.length === 0) return true;
 
-    for (const constraint of field.field_options.constraints) {
-      if (constraint.field) {
-        if (constraint.operator === 'eq') {
-          return metaFieldsData[constraint.field] === constraint.value;
-        }
-        if (constraint.operator === 'ne') {
-          return metaFieldsData[constraint.field] !== constraint.value;
-        }
-        if (constraint.operator === 'gt') {
-          return metaFieldsData[constraint.field] > constraint.value;
-        }
-        if (constraint.operator === 'lt') {
-          return metaFieldsData[constraint.field] < constraint.value;
-        }
-        if (constraint.operator === 'gte') {
-          return metaFieldsData[constraint.field] >= constraint.value;
-        }
-        if (constraint.operator === 'lte') {
-          return metaFieldsData[constraint.field] <= constraint.value;
-        }
-        if (constraint.operator === 'in') {
-          return constraint.value.includes(metaFieldsData[constraint.field]);
-        }
-        if (constraint.operator === 'nin') {
-          return !constraint.value.includes(metaFieldsData[constraint.field]);
-        }
-        if (constraint.operator === 'exists') {
-          return metaFieldsData[constraint.field] !== undefined;
-        }
-        if (constraint.operator === 'not_empty') {
-          return metaFieldsData[constraint.field] !== '' && metaFieldsData[constraint.field] !== undefined && metaFieldsData[constraint.field] !== null;
+      for (const constraint of field.field_options.constraints) {
+        if (constraint.field) {
+          if (constraint.operator === "eq") {
+            return metaFieldsData[constraint.field] === constraint.value;
+          }
+          if (constraint.operator === "ne") {
+            return metaFieldsData[constraint.field] !== constraint.value;
+          }
+          if (constraint.operator === "gt") {
+            return metaFieldsData[constraint.field] > constraint.value;
+          }
+          if (constraint.operator === "lt") {
+            return metaFieldsData[constraint.field] < constraint.value;
+          }
+          if (constraint.operator === "gte") {
+            return metaFieldsData[constraint.field] >= constraint.value;
+          }
+          if (constraint.operator === "lte") {
+            return metaFieldsData[constraint.field] <= constraint.value;
+          }
+          if (constraint.operator === "in") {
+            return constraint.value.includes(metaFieldsData[constraint.field]);
+          }
+          if (constraint.operator === "nin") {
+            return !constraint.value.includes(metaFieldsData[constraint.field]);
+          }
+          if (constraint.operator === "exists") {
+            return metaFieldsData[constraint.field] !== undefined;
+          }
+          if (constraint.operator === "not_empty") {
+            return (
+              metaFieldsData[constraint.field] !== "" &&
+              metaFieldsData[constraint.field] !== undefined &&
+              metaFieldsData[constraint.field] !== null
+            );
+          }
         }
       }
-    }
-
-  }, [metaFieldsData]);
+    },
+    [metaFieldsData],
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -227,20 +233,22 @@ const PostForm: React.FC<Props> = ({
     <div className="form-group upcms-form">
       <div className="flex flex-row gap-4">
         <section className="flex-grow pt-6">
-          <div className=" mb-4">
-            <BreadcrumbComponent items={[
-              {
-                title: tLabel("الرئيسية"),
-                path: `/admin/`
-              },
-              {
-                title: articleType?.labels.list || tLabel("Posts"),
-                path: `/admin/articles/types/${articleType?.slug}`
-              },
-              {
-                title: articleType?.labels.create || tLabel("Create Post"),
-              },
-            ]} />
+          <div className="mb-4">
+            <BreadcrumbComponent
+              items={[
+                {
+                  title: tLabel("الرئيسية"),
+                  path: `/admin/`,
+                },
+                {
+                  title: articleType?.labels.list || tLabel("Posts"),
+                  path: `/admin/articles/types/${articleType?.slug}`,
+                },
+                {
+                  title: articleType?.labels.create || tLabel("Create Post"),
+                },
+              ]}
+            />
           </div>
 
           <h1 className="up-page-title mb-4 text-xl font-bold">
@@ -248,7 +256,6 @@ const PostForm: React.FC<Props> = ({
               ? articleType?.labels.edit || tLabel("Edit post")
               : articleType?.labels.create || tLabel("New post")}
           </h1>
-
 
           <form.Field
             name="title"
@@ -276,7 +283,6 @@ const PostForm: React.FC<Props> = ({
             validators={{}}
             children={field => (
               <div className="mb-6">
-
                 <ImageUploader
                   value={field.state.value}
                   onUpload={file => {
@@ -292,10 +298,13 @@ const PostForm: React.FC<Props> = ({
                     field.handleChange(null);
                   }}
                   imageRatio={21 / 9}
-                  containerClassname={cn("w-full flex-grow rounded-lg overflow-hidden", field.state.value ? "aspect-21/9" : "h-72")}
+                  containerClassname={cn(
+                    "w-full flex-grow rounded-lg overflow-hidden",
+                    field.state.value ? "aspect-21/9" : "h-72",
+                  )}
                   dimensions={{
                     width: 1500,
-                    height: 1500 * 9 / 21,
+                    height: (1500 * 9) / 21,
                   }}
                   placeholder={
                     <div className="flex w-full flex-col items-center justify-center text-center">
@@ -305,7 +314,7 @@ const PostForm: React.FC<Props> = ({
                         height={100}
                         alt="featured image"
                       />
-                      <p className="text-muted-foreground text-sm mt-2">
+                      <p className="mt-2 text-sm text-muted-foreground">
                         {tLabel("تحميل صورة مميزة")}
                       </p>
                     </div>
@@ -318,15 +327,13 @@ const PostForm: React.FC<Props> = ({
             <Tiptap
               content={body}
               defaultContent={body}
-              onChange={({ content, json }) => {
-                logger.debug("Tiptap content change", { content, json });
+              onChange={({content, json}) => {
+                logger.debug("Tiptap content change", {content, json});
                 setBody(content);
                 setStructuredBody(json);
               }}
             />
           </FormItem>
-
-
         </section>
         <div className="min-h-screen w-96 flex-shrink-0 rounded-lg bg-body-900/50">
           <SidebarHeader className="sticky top-0 z-10 mb-4 rounded-t-lg bg-body-950 px-4">
@@ -348,19 +355,20 @@ const PostForm: React.FC<Props> = ({
           </SidebarHeader>
           <SidebarContent>
             <SidebarGroup>
-              <aside className="meta-fields flex flex-col gap-4 pb-6 px-4">
-                {metaFields.map(field => applyFieldConstraints(field) ? (
-
-                  <CustomMetaField
-                    key={field.field_key}
-                    field={field}
-                    onChange={(value: any) =>
-                      handleMetaFieldChange(field.field_key, value)
-                    }
-                    value={metaFieldsData[field.field_key]}
-                    metaData={metaFieldsData}
-                  />
-                ) : null)}
+              <aside className="meta-fields flex flex-col gap-4 px-4 pb-6">
+                {metaFields.map(field =>
+                  applyFieldConstraints(field) ? (
+                    <CustomMetaField
+                      key={field.field_key}
+                      field={field}
+                      onChange={(value: any) =>
+                        handleMetaFieldChange(field.field_key, value)
+                      }
+                      value={metaFieldsData[field.field_key]}
+                      metaData={metaFieldsData}
+                    />
+                  ) : null,
+                )}
               </aside>
             </SidebarGroup>
           </SidebarContent>

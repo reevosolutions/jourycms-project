@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/customized.form";
 import {
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/customized.sidebar";
@@ -91,20 +92,6 @@ const PostForm: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
-  const articleTypeQuery = useQuery({
-    queryKey: ["articleType", articleType_slug],
-    enabled: !!articleType_slug,
-    queryFn: async () => {
-      if (articleType_slug) {
-        const data = await sdk.content.articleTypes.getBySlug(articleType_slug);
-        setArticleType(data?.data || null);
-        setMetaFields(data?.data?.custom_meta_fields || []);
-        return data;
-      }
-      return null;
-    },
-  });
-
   const articleQuery = useQuery({
     queryKey: ["articleType", article_id],
     enabled: !!article_id,
@@ -149,7 +136,9 @@ const PostForm: React.FC<Props> = ({
             },
           };
 
-          const {data} = await sdk.content.articles.create(payload);
+          const {data} = article_id
+            ? await sdk.content.articles.update(article_id, payload)
+            : await sdk.content.articles.create(payload);
 
           if (data._id) {
             onSubmit && onSubmit(data);
@@ -166,18 +155,15 @@ const PostForm: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   const loadExtraData = useCallback(() => {
     if (article) {
-      setMetaFieldsData(article?.meta_fields || {});
       setBody(article?.body || "");
       setStructuredBody(article?.body_structured || {});
-      setMetaFieldsData(article?.meta_fields || {});
     }
 
     if (fill) {
-      setMetaFieldsData(fill?.meta_fields || {});
-      setBody(fill?.body || "");
-      setStructuredBody(fill?.body_structured || {});
-      setMetaFieldsData(fill?.meta_fields || {});
+      if (fill?.body) setBody(fill?.body);
+      if (fill?.body_structured) setStructuredBody(fill?.body_structured);
     }
+    setMetaFieldsData({...article?.meta_fields, ...fill?.meta_fields});
   }, [article, fill]);
 
   const handleMetaFieldChange = useCallback((key: string, value: any) => {
@@ -186,13 +172,6 @@ const PostForm: React.FC<Props> = ({
       [key]: value,
     }));
   }, []);
-
-  /* -------------------------------------------------------------------------- */
-  /*                                    HOOKS                                   */
-  /* -------------------------------------------------------------------------- */
-  useEffect(() => {
-    loadExtraData();
-  }, [loadExtraData, article]);
 
   const applyFieldConstraints = useCallback(
     (field: Levelup.CMS.V1.Content.Entity.ICustomMetaField) => {
@@ -243,12 +222,19 @@ const PostForm: React.FC<Props> = ({
   );
 
   /* -------------------------------------------------------------------------- */
+  /*                                    HOOKS                                   */
+  /* -------------------------------------------------------------------------- */
+  useEffect(() => {
+    loadExtraData();
+  }, [loadExtraData, article]);
+
+  /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
 
   return (
     <div className="form-group upcms-form">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row">
         <section className="flex-grow pt-6">
           {showBreadcrumb && (
             <div className="mb-4">
@@ -356,7 +342,7 @@ const PostForm: React.FC<Props> = ({
             />
           </FormItem>
         </section>
-        <div className="min-h-screen w-96 flex-shrink-0 rounded-lg bg-body-900/50">
+        <div className="w-full flex-shrink-0 rounded-lg bg-body-900/50 lg:min-h-screen lg:w-96">
           <SidebarHeader className="sticky top-0 z-10 mb-4 rounded-t-lg bg-body-950 px-4">
             <FormItem className="flex flex-row justify-end border-b border-body-800 py-4">
               <form.Subscribe
@@ -402,6 +388,23 @@ const PostForm: React.FC<Props> = ({
               </aside>
             </SidebarGroup>
           </SidebarContent>
+          <SidebarFooter className="mt-4 rounded-b-lg bg-body-950 px-4">
+            <FormItem className="flex flex-row justify-end border-t border-body-800 py-4">
+              <form.Subscribe
+                selector={state => [state.canSubmit, state.isSubmitting]}
+                children={([canSubmit, isSubmitting]) => (
+                  <Button
+                    type="submit"
+                    disabled={!canSubmit || isSubmitting}
+                    onClick={form.handleSubmit}
+                  >
+                    {isSubmitting && <LuLoader2 className="animate-spin" />}
+                    {isSubmitting ? "جار الحفظ" : "حفظ"}
+                  </Button>
+                )}
+              />
+            </FormItem>
+          </SidebarFooter>
         </div>
       </div>
     </div>

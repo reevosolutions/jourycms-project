@@ -1,7 +1,8 @@
 import React from "react";
+import { TMiqatRole } from "../config";
 
 const RoleIcon: React.FC<{
-  role: string;
+  role: TMiqatRole;
 }> = ({role}) => {
   return role === "agency" ? (
     <svg

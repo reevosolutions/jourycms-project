@@ -6,10 +6,11 @@ import {
   selectAuthUser,
 } from "@features/auth/redux/slice";
 import initLogger from "@lib/logging";
-import { useAppDispatch, useAppSelector } from "@redux/hooks";
-import { useCallback, useMemo } from "react";
+import {useAppDispatch, useAppSelector} from "@redux/hooks";
+import {useCallback, useMemo} from "react";
 
 import AuthenticationManager from "@/features/auth/lib/authentication-manager";
+import {ArticleTypeSlug, TMiqatRole} from "@/themes/miqat/config";
 
 const logger = initLogger("HOOK", "useAuth");
 
@@ -20,7 +21,11 @@ const useAuth = () => {
 
   const authStatus = useAppSelector(selectAuthStatus);
   const currentApp = useAppSelector(selectAuthApp);
-  const currentUser = useAppSelector(selectAuthUser);
+  const currentUser:
+    | (Omit<Levelup.CMS.V1.Users.Entity.ExposedUser, "role"> & {
+        role: TMiqatRole;
+      })
+    | null = useAppSelector(selectAuthUser) as any;
   const permissions = useAppSelector(state => state.authentication.permissions);
 
   const isAuthenticated = useAppSelector(selectAuthIsAuthenticated);
@@ -35,7 +40,7 @@ const useAuth = () => {
         // logger.debug('hasPermission', permissionName, currentUser?.email);
 
         let perms: string[] = [];
-        let permsObject: { [Name: string]: string } = {};
+        let permsObject: {[Name: string]: string} = {};
         if (typeof permissionName === "string") perms.push(permissionName);
         else
           for (const p of permissionName) {
@@ -57,7 +62,9 @@ const useAuth = () => {
         if (!currentUser || currentUser === null) {
           /* empty */
         } else if (typeof permissionName === "string") {
-          granted = currentUser.permissions.includes(permsObject[permissionName]);
+          granted = currentUser.permissions.includes(
+            permsObject[permissionName],
+          );
         } else {
           // TODO manage multiple permissions
 

@@ -11,11 +11,21 @@ import useCMSContent from "@/hooks/use-cms-content";
 import useAuth from "@/hooks/use-auth";
 import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import CustomPagination from "@/features/admin/presentation/pagination";
-import {LuLoader2} from "react-icons/lu";
+import {LuExternalLink, LuLoader2, LuPencil, LuTrash2} from "react-icons/lu";
 import {Button} from "@/components/ui/button";
 import {publicRoutes} from "@/config";
+import Link from "next/link";
+import {setPathParams} from "@/lib/routes";
 
-const AgencyContentSection: React.FC<{}> = ({}) => {
+const AgencyOffersList: React.FC<{
+  showHeader?: boolean;
+  showPagination?: boolean;
+  count?: number;
+}> = ({
+  showHeader,
+  showPagination=true,
+  count = 12
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -34,7 +44,6 @@ const AgencyContentSection: React.FC<{}> = ({}) => {
   const [filteredItems, setFilteredItems] = useState<EntityAlias[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [items, setItems] = useState<EntityAlias[]>([]);
-  const [count, setCount] = useState(24);
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState("");
   const [fields, setFields] = useState<
@@ -122,21 +131,23 @@ const AgencyContentSection: React.FC<{}> = ({}) => {
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="my-6 border-t border-slate-200 py-4">
-      <h2 className="flex items-center justify-between">
-        <span className="text-3xl">{"عروض الوكالة"}</span>
-        <div className="d">
-          <Button
-            variant={"default"}
-            onClick={() => {
-              router.push(publicRoutes.homepage._.myAccount._.newOffer.path);
-            }}
-            className="bg-darkblue-700 text-2xl transition-colors hocus:bg-darkblue-950"
-          >
-            {"عرض جديد"}
-          </Button>
-        </div>
-      </h2>
+    <div>
+      {showHeader && (
+        <h2 className="flex items-center justify-between">
+          <span className="text-3xl">{"أخر عروض الوكالة"}</span>
+          <div className="d">
+            <Button
+              variant={"default"}
+              onClick={() => {
+                router.push(publicRoutes.homepage._.myAccount._.newOffer.path);
+              }}
+              className="bg-darkblue-700 text-2xl transition-colors hocus:bg-darkblue-950"
+            >
+              {"عرض جديد"}
+            </Button>
+          </div>
+        </h2>
+      )}
       <div className="py-4">
         {error ? (
           <Alert variant={"destructive"}>
@@ -146,14 +157,46 @@ const AgencyContentSection: React.FC<{}> = ({}) => {
         ) : isFetched && isDataLoaded && !isFetching ? (
           filteredItems.length > 0 ? (
             <div className="">
-              <div className="flex flex-col">
+              <div className="mt-6 flex flex-col overflow-hidden rounded-xl border border-slate-100 text-xl shadow-lg shadow-slate-50 lg:text-2xl">
                 {data?.data.map(item => (
-                  <div className="flex" key={item._id}>
-                    <div className="d">{item.title}</div>
+                  <div
+                    className="flex gap-4 border-b border-slate-200 px-4 last:border-b-0 hover:bg-slate-50"
+                    key={item._id}
+                  >
+                    <div className="flex-grow py-2 transition-all hocus:text-beige-600">
+                      <Link href={`/${item.slug}`}>{item.title}</Link>
+                    </div>
+                    <div className="flex justify-end gap-1 py-2">
+                      <Link
+                        href={setPathParams("/:slug", {
+                          slug: item.slug,
+                        })}
+                        className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
+                      >
+                        <LuExternalLink className="h5 w-5" />
+                      </Link>
+                      <Link
+                        href={setPathParams(
+                          publicRoutes.homepage._.myAccount._.editOffer.path,
+                          {
+                            id: item._id,
+                          },
+                        )}
+                        className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
+                      >
+                        <LuPencil className="h5 w-5" />
+                      </Link>
+                      <Link
+                        href={"#"}
+                        className="p-1 text-red-500 transition-all duration-200 hover:text-red-700"
+                      >
+                        <LuTrash2 className="h5 w-5" />
+                      </Link>
+                    </div>
                   </div>
                 ))}
               </div>
-              {(data?.pagination?.pages || 0) > 1 && (
+              {(showPagination && data?.pagination?.pages || 0) > 1 ? (
                 <div className="my-8 mt-12">
                   <CustomPagination
                     totalCount={data?.pagination?.total}
@@ -163,7 +206,7 @@ const AgencyContentSection: React.FC<{}> = ({}) => {
                     className="text-base"
                   />
                 </div>
-              )}
+              ) : null}
             </div>
           ) : (
             <div className="flex min-h-screen-60 flex-col items-center justify-center">
@@ -182,4 +225,4 @@ const AgencyContentSection: React.FC<{}> = ({}) => {
   );
 };
 
-export default AgencyContentSection;
+export default AgencyOffersList;

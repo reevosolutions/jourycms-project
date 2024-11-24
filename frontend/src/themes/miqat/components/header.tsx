@@ -65,7 +65,11 @@ const Header: React.FC<HeaderProps> = ({children, route}) => {
   return (
     <header className="jcms-header h-16 bg-gradient-to-r from-darkblue-900 to-darkblue-800 lg:h-28">
       <div className="inner container mx-auto flex items-center gap-6 px-4 text-2xl font-medium md:px-8">
-        <Link className="block w-24 lg:hidden text-beige-100 hover:text-red2-500 transition-all" href="/" title="ميقات">
+        <Link
+          className="block w-24 text-beige-100 transition-all hover:text-red2-500 lg:hidden"
+          href="/"
+          title="ميقات"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             data-name="miqat"

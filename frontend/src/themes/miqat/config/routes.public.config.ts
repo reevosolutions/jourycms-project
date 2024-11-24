@@ -148,9 +148,27 @@ const routes = {
         title: "حسابي",
         ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
         _: {
+          offers: {
+            path: "/account/offers" as const,
+            title: "عروض الوكالة",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
           newOffer: {
             path: "/account/new-offer" as const,
             title: "عرض جديد",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+          editOffer: {
+            path: "/account/edit-offer/:id" as const,
+            title: "تحرير عرض",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+          editAccount: {
+            path: "/account/edit" as const,
+            title: "تحرير الملف الشخصي",
             ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
             _: {},
           },

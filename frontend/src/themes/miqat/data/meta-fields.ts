@@ -41,6 +41,7 @@ export type TFieldKey =
   | "logo"
   | "gallery"
   | "sex"
+  | "avatar"
   | "medical_speciality";
 
 export const hasMetaField = (
@@ -49,8 +50,26 @@ export const hasMetaField = (
 ) => {
   return (
     !!article &&
-    Object.prototype.hasOwnProperty.call(article.meta_fields || {}, field_key)
+    Object.prototype.hasOwnProperty.call(
+      article.meta_fields || {},
+      field_key,
+    ) &&
+    !!article.meta_fields?.[field_key]
   );
+};
+export const getMetaField = <
+  T extends Levelup.CMS.V1.Content.CustomFields.CustomFieldType,
+  IsMulti extends boolean = false,
+>(
+  article: Partial<Levelup.CMS.V1.Content.Entity.Article> | null | undefined,
+  field_key: TFieldKey,
+  field_type: T,
+  is_multi?: IsMulti,
+): Levelup.CMS.V1.Content.CustomFields.MetaFieldOutput<T, IsMulti> | null => {
+  return !!article &&
+    Object.prototype.hasOwnProperty.call(article.meta_fields || {}, field_key)
+    ? article.meta_fields?.[field_key]
+    : null;
 };
 export const getMetaFieldValueLabel = (
   type: Levelup.CMS.V1.Content.Entity.ArticleType | null | undefined,

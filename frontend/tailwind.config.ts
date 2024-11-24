@@ -177,6 +177,9 @@ const config: Config = {
   			}
   		},
   		borderRadius: {
+  			'7xl': 'calc(var(--radius) + 2.5rem)',
+  			'6xl': 'calc(var(--radius) + 2rem)',
+  			'5xl': 'calc(var(--radius) + 1.5rem)',
   			'4xl': 'calc(var(--radius) + 1rem)',
   			'3xl': 'calc(var(--radius) + 0.5rem)',
   			lg: 'var(--radius)',

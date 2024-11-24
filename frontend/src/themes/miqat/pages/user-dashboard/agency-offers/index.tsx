@@ -16,7 +16,7 @@ import initLogger, {LoggerContext} from "@/lib/logging";
 import {useSdk} from "@/hooks/use-sdk";
 import {useQuery} from "@tanstack/react-query";
 import DefaultArticleComponent from "../../article/article.default";
-import { GiBugleCall } from "react-icons/gi";
+import {GiBugleCall} from "react-icons/gi";
 
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles.GetOne;
 
@@ -30,12 +30,7 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
   /* -------------------------------------------------------------------------- */
   const router = useRouter();
   const {currentUser, isAuthenticated} = useAuth();
-  const {
-    getArticleTypeBySlug,
-    getUserAgencyId,
-    getEscortProfileId,
-    getDoctorProfileId,
-  } = useCMSContent();
+  const {getUserAgencyId} = useCMSContent();
   const sdk = useSdk();
 
   /* -------------------------------------------------------------------------- */
@@ -69,24 +64,14 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
         profileId =
           currentUser?.role === "agency"
             ? await getUserAgencyId(currentUser?._id)
-            : currentUser?.role === "doctor"
-              ? await getDoctorProfileId(currentUser?._id)
-              : currentUser?.role === "escort"
-                ? await getEscortProfileId(currentUser?._id)
-                : undefined;
+            : undefined;
       } catch (error) {
         logger.error("Error on load profile", currentUser._id, error);
       }
 
       setProfileId(profileId);
     }
-  }, [
-    currentUser?._id,
-    currentUser?.role,
-    getDoctorProfileId,
-    getEscortProfileId,
-    getUserAgencyId,
-  ]);
+  }, [currentUser?._id, currentUser?.role, getUserAgencyId]);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
@@ -104,73 +89,29 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
       route={route}
       headerControls={[
         {
-          title: "تحرير البروفايل",
-          path: publicRoutes.homepage._.myAccount._.editAccount.path,
-          icon: LuPencilLine,
-          ac() {
-            return canEditHisProfile(currentUser);
-          },
-        },
-        {
-          title: publicRoutes.homepage._.myAccount._.offers.title,
-          path: publicRoutes.homepage._.myAccount._.offers.path,
+          title: publicRoutes.homepage._.myAccount._.newOffer.title,
+          path: publicRoutes.homepage._.myAccount._.newOffer.path,
           icon: GiBugleCall,
           ac() {
-            return currentUser?.role === 'agency';
-          },
-        },
-        {
-          title: "إدارة الموقع",
-          path: "/admin",
-          icon: LuCog,
-          ac() {
-            return currentUser?.role === "admin";
+            return currentUser?.role === "agency";
           },
         },
       ]}
     >
       <div className="container mx-auto px-4 md:px-8">
-        {currentUser ? (
-          <div className="d">
-            {!data?.data || isPending || isFetching ? (
-              <div className="flex items-center gap-4 text-3xl">
-                <span className="block w-12 text-sm font-medium text-beige-100">
-                  <RoleIcon role={currentUser.role} />
-                </span>
-                <span>{buildUserFullName(currentUser.profile)}</span>
+        <ReactQueryDevtoolsProvider>
+          <div className="my-12">
+            {currentUser.role === "agency" && (
+              <div className="my-6 border-t border-slate-200 py-4">
+                <AgencyOffersList
+                  showHeader={false}
+                  count={24}
+                  showPagination
+                />
               </div>
-            ) : null}
-            {data?.data && (
-              <div className="my-12">
-                <DefaultArticleComponent initialData={data} />
-              </div>
-            )}
-            {!currentUser.attributes.is_approved ? (
-              <Alert
-                variant="default"
-                className="my-6 border-orange-300 bg-yellow-50 text-yellow-600"
-              >
-                <LuAlertCircle className="right-4 h-6 w-6 text-yellow-500" />
-                <AlertTitle className="ps-10 text-2xl font-bold">
-                  تفعيل الحساب
-                </AlertTitle>
-                <AlertDescription className="ps-10 text-2xl">
-                  {"لم يتم تفعيل الحساب بعد"}
-                </AlertDescription>
-              </Alert>
-            ) : (
-              <ReactQueryDevtoolsProvider>
-                <div className="my-12">
-                  {currentUser.role === "agency" && (
-                    <div className="my-6 border-t border-slate-200 py-4">
-                      <AgencyOffersList showHeader />
-                    </div>
-                  )}
-                </div>
-              </ReactQueryDevtoolsProvider>
             )}
           </div>
-        ) : null}
+        </ReactQueryDevtoolsProvider>
       </div>
     </DefaultLayout>
   );

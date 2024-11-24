@@ -77,3 +77,15 @@ export enum ArticleTypeSlug {
   TRANSPORTATION_SERVICE = "transportation-service",
   HEALTH_SERVICE = 'health-service'
 }
+export type TArticleTypeSlug = `${ArticleTypeSlug}`;
+
+
+export enum MiqatRole {
+  ADMIN = "admin",
+  AGENCY = "agency",
+  DOCTOR = "doctor",
+  ESCORT = "escort",
+  USER = "user",
+}
+
+export type TMiqatRole = `${MiqatRole}`

@@ -1,40 +1,60 @@
-import * as React from "react";
-import DefaultLayout from "../../layouts/default.layout";
 import Image from "next/image";
-import Link from "next/link";
+import * as React from "react";
 
-import PageNotFound from "../../components/page-not-found";
-import {serverSdk} from "../../data";
-import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
-import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign, LuMoonStar} from "react-icons/lu";
-import {format} from "date-fns";
-import {formatAmount} from "@/lib/utilities/strings";
-import {PiAirplaneTilt, PiGenderIntersexBold, PiTrolleySuitcase} from "react-icons/pi";
-import {TbPlaneArrival, TbPlaneDeparture} from "react-icons/tb";
-import {GiDuration} from "react-icons/gi";
-import {HiOutlineTicket} from "react-icons/hi2";
-import {BsGlobeAsiaAustralia, BsMoonStars, BsSuitcase} from "react-icons/bs";
-import {IoFastFoodOutline, IoMoonOutline} from "react-icons/io5";
-import {cn} from "@/lib/utils";
-import {MdOutlineLocalHotel} from "react-icons/md";
-import initLogger, {LoggerContext} from "@/lib/logging";
-import { HiLocationMarker, HiOutlineLocationMarker } from "react-icons/hi";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { formatAmount } from "@/lib/utilities/strings";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { BsGlobeAsiaAustralia, BsMoonStars, BsSuitcase } from "react-icons/bs";
 import { FaUserDoctor } from "react-icons/fa6";
+import { GiDuration } from "react-icons/gi";
+import { HiLocationMarker, HiOutlineLocationMarker } from "react-icons/hi";
+import { HiOutlineTicket } from "react-icons/hi2";
+import { IoFastFoodOutline, IoMoonOutline } from "react-icons/io5";
+import {
+  LuAlarmClock,
+  LuCalendarDays,
+  LuCircleDollarSign,
+  LuMoonStar,
+} from "react-icons/lu";
+import { MdOutlineLocalHotel } from "react-icons/md";
+import {
+  PiAirplaneTilt,
+  PiGenderIntersexBold,
+  PiTrolleySuitcase,
+} from "react-icons/pi";
+import { TbPlaneArrival, TbPlaneDeparture } from "react-icons/tb";
+import PageNotFound from "../../components/page-not-found";
+import RoleIcon from "../../components/role-icon";
+import { TArticleTypeSlug } from "../../config";
+import { serverSdk } from "../../data";
+import {
+  getMetaField,
+  getMetaFieldValueLabel,
+  hasMetaField,
+} from "../../data/meta-fields";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
 type ApiAlias = Levelup.CMS.V1.Content.Api.Articles.GetOne.Response;
 type Article = Levelup.CMS.V1.Content.Entity.Article;
 
-export type PageProps = JouryCMS.Theme.PageProps & {
+export type ComponentProps = JouryCMS.Theme.ComponentProps & {
   initialData?: ApiAlias;
-  articleType?: Levelup.CMS.V1.Content.Entity.ArticleType | null;
 };
 
-const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
+const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
+  /* -------------------------------------------------------------------------- */
+  /*                                    DATA                                    */
+  /* -------------------------------------------------------------------------- */
   const article = initialData?.data;
-  const articleType = article?.article_type
-    ? initialData?.edge?.article_types?.[article.article_type]
+  const articleType:
+    | (Omit<Levelup.CMS.V1.Content.Entity.ArticleType, "slug"> & {
+        slug: TArticleTypeSlug;
+      })
+    | null
+    | undefined = article?.article_type
+    ? (initialData?.edge?.article_types?.[article.article_type] as any)
     : undefined;
   const agency =
     initialData?.edge?.linked_articles?.[article?.meta_fields?.agency];
@@ -75,10 +95,56 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   return article ? (
     <div className="article-page mb-16">
       <div className="mb-4"></div>
-      <div className="mb-4">
-        <h1 className="mb-6 mt-8 text-center text-4xl text-gray-800 md:text-5xl">
+      <div className="mb-6 mt-8 flex flex-col items-center justify-center">
+        {hasMetaField(article, "avatar") ? (
+          <div className="relative mb-4 aspect-square w-32">
+            <Image
+              priority
+              placeholder="blur"
+              blurDataURL={serverSdk.storage.utils.getImageBlurredUrl(
+                getMetaField(article, "avatar", "image", false)?.id as string,
+              )}
+              className="rounded-7xl h-full w-full object-cover"
+              src={serverSdk.storage.utils.getImageUrl(
+                getMetaField(article, "avatar", "image", false)?.id as string,
+                {width: 450, height: 450},
+              )}
+              alt={article.title}
+              width={450}
+              height={450}
+            />
+          </div>
+        ) : null}
+        {hasMetaField(article, "logo") ? (
+          <div className="relative mb-4 aspect-square w-32">
+            <Image
+              priority
+              placeholder="blur"
+              blurDataURL={serverSdk.storage.utils.getImageBlurredUrl(
+                getMetaField(article, "logo", "image", false)?.id as string,
+              )}
+              className="rounded-7xl h-full w-full object-cover"
+              src={serverSdk.storage.utils.getImageUrl(
+                getMetaField(article, "logo", "image", false)?.id as string,
+                {width: 450, height: 450},
+              )}
+              alt={article.title}
+              width={450}
+              height={450}
+            />
+          </div>
+        ) : null}
+        <h1 className="mb-4 text-center text-4xl text-gray-800 md:text-5xl">
           {article.title}
         </h1>
+        {articleType?.slug === "doctor" || articleType?.slug === "escort" ? (
+          <div className="mb-4 flex items-center justify-center gap-4 rounded-full bg-beige-50/50 px-6 py-1 pe-8 text-4xl text-red2-600">
+            <span className="w-8">
+              <RoleIcon role={articleType?.slug} />
+            </span>
+            <span className="">{articleType?.labels?.singular}</span>
+          </div>
+        ) : null}
       </div>
       {article.featured_image?.id && (
         <div className="relative mb-6 aspect-video w-full md:aspect-21/9">
@@ -132,7 +198,7 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
       </aside>
 
       <div className="flex flex-col gap-6 xl:flex-row">
-        <aside className="relative flex-shrink-0 flex-grow xl:min-w-80 xl:rounded-2xl xl:bg-slate-50/50 xl:px-4 xl:py-6">
+        <aside className="relative flex-shrink-0 flex-grow xl:w-80 xl:flex-grow-0 xl:rounded-2xl xl:bg-slate-50/50 xl:px-4 xl:py-6">
           <div className="sticky top-6 grid gap-6 text-2xl sm:grid-cols-2 xl:grid-cols-1">
             {/* field */}
             {hasMetaField(article, "medical_speciality") && (
@@ -518,7 +584,7 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           </div>
         </aside>
         <div
-          className="prose mx-auto mb-6 text-2xl text-darkblue-700 md:text-3xl"
+          className="prose mx-auto mb-6 flex-grow text-2xl text-darkblue-700 md:text-3xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
       </div>
@@ -528,4 +594,4 @@ const DefaultArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   ) : null;
 };
 
-export default DefaultArticlePage;
+export default DefaultArticleComponent;
