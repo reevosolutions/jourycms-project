@@ -19,6 +19,7 @@
 /design
 /data-backup
 /frontend/.next/
+/frontend/yarn.lock
 /**/.next/
 /out/
 
