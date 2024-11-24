@@ -43,7 +43,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
         </ParallaxBanner>
 
         <div className="bg-beige-50 py-12 pb-16 text-beige-900">
-          <div className="container mx-auto flex flex-col-reverse items-center justify-between gap-12 pt-4 lg:flex-row lg:pt-0">
+          <div className="container mx-auto flex flex-col-reverse items-center justify-between gap-12 pt-4 lg:flex-row lg:pt-0 px-4 md:px-8">
             <div className="text-center lg:text-start">
               <h2 className="mb-2 text-5xl font-bold text-beige-800">
                 عن {getWebsiteConfig().name}

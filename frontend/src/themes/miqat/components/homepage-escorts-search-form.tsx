@@ -208,7 +208,7 @@ export const EscortsSearchForm: React.FC = () => {
       <div className="flex justify-center py-6">
         <button className="flex w-full items-center gap-4 rounded-lg bg-darkblue-900 px-8 py-3 text-2xl text-white transition-all duration-200 hocus:bg-darkblue-700 hocus:shadow-md hocus:shadow-darkblue-950">
           <LuSearch className="h-6 w-6" />
-          <span className="block flex-grow px-2 pe-12 text-center">
+          <span className="block flex-grow px-2 sm:pe-12 text-center">
             العثور على مرافقين
           </span>
         </button>

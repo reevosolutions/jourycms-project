@@ -282,7 +282,7 @@ export const OmrahSearchForm: React.FC = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-4">
         {/* field */}
         <div className="field mb-4">
           <Label className="text-lg text-darkblue-500">{"شهر الانطلاق"}</Label>
@@ -517,7 +517,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
       <Tabs defaultValue="omrah" className="w-full" onValueChange={setTab}>
         <TabsList className="h-auto w-full items-center justify-around bg-transparent">
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:text-3xl data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
             value="bids"
           >
             <span>مناقصات</span>
@@ -530,7 +530,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:text-3xl data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
             value="tombolas"
           >
             <span>طمبولات</span>
@@ -543,7 +543,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:text-3xl data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
             value="omrah"
           >
             <span>عروض العمرة</span>

@@ -25,7 +25,7 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
   /* -------------------------------------------------------------------------- */
   return (
     <section className="bg-gray-50/50">
-      <aside className="container mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2">
+      <aside className="container mx-auto grid grid-cols-1 gap-8 px-4 md:px-8 lg:grid-cols-2">
         <div className="pt-16">
           <h2 className="mt-0 pb-6 text-4xl font-bold text-darkblue-800 sm:text-5xl md:text-7xl">
             تحتاج إلى مساعدين أكفاء؟
@@ -62,7 +62,7 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
           height={600}
           alt=""
         />
-        <div className="container relative z-10 mx-auto py-28 pb-36">
+        <div className="container relative z-10 mx-auto px-4 py-28 pb-36 md:px-8">
           <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <div className="d">
               <aside className="relative mb-8 lg:h-40">
