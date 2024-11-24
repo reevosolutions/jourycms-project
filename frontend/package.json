@@ -137,6 +137,7 @@
     "react-redux": "^9.1.2",
     "react-resizable-panels": "^2.1.6",
     "react-scroll-parallax": "^3.4.5",
+    "sharp": "^0.33.5",
     "sonner": "^1.7.0",
     "treeify": "^1.1.0",
     "vaul": "^1.1.1",
