@@ -383,6 +383,29 @@ declare module Levelup {
                 };
               };
             }
+
+
+            /**
+             * --------------------------------------------------------------------------
+             *                            aggregateByRoles
+             * --------------------------------------------------------------------------
+             * @link
+             * @fires ArticlesService.aggregateByRoles
+             * @param {Levelup.CMS.V1.Api.Articles.AggregateByRoles.Request} query
+             * @returns {Levelup.CMS.V1.Api.Articles.AggregateByRoles.Response}
+             * @method GET
+             *
+             */
+            export namespace AggregateByRoles {
+              export type Request = Utils.Api.Request.Build<{}>;
+              export type Response =Utils.Api.Response.BuildListResponse<{
+                  role: string;
+                  count: number;
+                }>;
+            }
+
+
+            
           }
         }
       }

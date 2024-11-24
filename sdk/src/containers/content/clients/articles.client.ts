@@ -68,4 +68,19 @@ export default class ArticlesClient extends BaseClient {
     });
   }
 
+  // aggregateByTypes
+  async aggregateByTypes(
+    config?: SDK.TRequestConfig
+  ): Promise<SDK.TResponseDatum<ApiAlias.AggregateByTypes.Response>> {
+    return await this.container.sdk.httpClient.get(
+      this.generatePrefix(`/aggregate-by-types`),
+      {},
+      {
+        headers: this.container.sdk.generateHeadersFromRequestConfig(config),
+      }
+    );
+  }
+
+  
+
 }

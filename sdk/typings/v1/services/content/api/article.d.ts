@@ -101,6 +101,30 @@ declare module Levelup {
               export type Response<T extends Entity.Article = Entity.Article> =
                 Utils.Api.Response.BuildListResponse<T, 'users' | 'article_types' | 'linked_articles'>;
             }
+            
+            /**
+             * --------------------------------------------------------------------------
+             *                            aggregateByTypes
+             * --------------------------------------------------------------------------
+             * @link
+             * @fires ArticlesService.aggregateByTypes
+             * @param {Levelup.CMS.V1.Api.Articles.AggregateByTypes.Request} query
+             * @returns {Levelup.CMS.V1.Api.Articles.AggregateByTypes.Response}
+             * @method GET
+             *
+             */
+            export namespace AggregateByTypes {
+              export type Request = Utils.Api.Request.Build<{}>;
+              export type Response =Utils.Api.Response.BuildListResponse<{
+                  article_type: string;
+                  count: number;
+                }, 
+                'article_types'
+                >;
+            }
+
+
+            
           }
         }
       }

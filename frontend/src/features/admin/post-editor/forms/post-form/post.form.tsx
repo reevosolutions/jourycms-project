@@ -34,10 +34,11 @@ const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import {LuLoader2} from "react-icons/lu";
+import {LuExternalLink, LuLoader2} from "react-icons/lu";
 import ImageUploader from "@/features/storage/form-components/image.uploader";
 import {cn} from "@/lib/utils";
 import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
+import Link from "next/link";
 
 type Props = {
   articleType_slug?: string;
@@ -232,7 +233,7 @@ const PostForm: React.FC<Props> = ({
 
   return (
     <div className="form-group upcms-form">
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-col gap-4 lg:flex-row">
         <section className="flex-grow pt-6">
           <div className="mb-4">
             <BreadcrumbComponent
@@ -336,9 +337,14 @@ const PostForm: React.FC<Props> = ({
             />
           </FormItem>
         </section>
-        <div className="min-h-screen w-96 flex-shrink-0 rounded-lg bg-body-900/50">
+        <div className="w-full flex-shrink-0 rounded-lg bg-body-900/50 lg:min-h-screen lg:w-96 ">
           <SidebarHeader className="sticky top-0 z-10 mb-4 rounded-t-lg bg-body-950 px-4">
-            <FormItem className="flex flex-row justify-end border-b border-body-800 py-4">
+            <FormItem className="flex flex-row justify-end border-b border-body-800 py-4 items-center gap-3">
+              {article?.slug && (
+                <Link href={`/${article.slug}`} className=" bg-slate-200 text-slate-950 hocus:bg-slate-400 transition-all p-3 rounded-md mt-1 py-[11px]">
+                  <LuExternalLink className="h-5 w-5" />
+                </Link>
+              )}
               <form.Subscribe
                 selector={state => [state.canSubmit, state.isSubmitting]}
                 children={([canSubmit, isSubmitting]) => (

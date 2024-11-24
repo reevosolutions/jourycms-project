@@ -1450,4 +1450,76 @@ export default class ArticlesService extends BaseService {
       throw error;
     }
   }
+
+  public async aggregateByTypes() {
+    const scenario = this.initScenario(this.logger, this.aggregateByTypes);
+    try {
+      const aggregateQuery = [
+        {
+          $match:
+            /**
+             * query: The query in MQL.
+             */
+            {
+              is_deleted: false,
+            },
+        },
+        {
+          $group:
+            /**
+             * _id: The id of the group.
+             * fieldN: The first field name.
+             */
+            {
+              _id: "$article_type",
+              count: {
+                $sum: 1,
+              },
+            },
+        },
+        {
+          $project: {
+            article_type: "$_id",
+            count: 1,
+            _id: 0,
+          },
+        },
+      ];
+
+      const data: {
+        article_type: string;
+        count: number;
+      }[] = await this.articleModel.aggregate(aggregateQuery);
+
+      const result: {
+        data: typeof data;
+        edge: ApiAlias.List.Response["edge"];
+      } = {
+        data,
+        edge: {
+          users: {},
+          article_types: {},
+          linked_articles: {},
+        },
+      };
+
+      const typesArray = await this.articleTypeModel
+        .find({
+          is_deleted: false,
+        })
+        .lean()
+        .exec();
+      result.edge.article_types = typesArray.reduce(
+        (prev, curr) => ({ ...prev, [curr._id.toString()]: curr }),
+        {}
+      );
+
+      scenario.set({data}).end();
+
+      return result;
+    } catch (error) {
+      scenario.error(error);
+      throw error;
+    }
+  }
 }

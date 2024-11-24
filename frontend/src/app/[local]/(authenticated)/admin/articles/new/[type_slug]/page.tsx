@@ -1,9 +1,8 @@
 import { adminRoutes } from "@/config";
 import AdminLayout from "@/features/admin/layout";
 import PostForm from "@/features/admin/post-editor/forms/post-form/post.form";
-import { useSdk } from "@/hooks/use-sdk";
 import { getRouteTree, setPathParams } from "@/lib/routes";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 
 const ROUTE = adminRoutes.articles._.create;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
@@ -49,10 +48,9 @@ export default async function Page({ params }: PageProps) {
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout>
-      <PostForm articleType_slug={type_slug}
-        onSubmit={(article)=>{
-           redirect(setPathParams(adminRoutes.articles._.edit.path, {id: article._id}));
-        }}
+      <PostForm
+        articleType_slug={type_slug}
+        
       />
     </AdminLayout.PageLayout>
   );

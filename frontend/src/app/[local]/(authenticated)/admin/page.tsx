@@ -1,6 +1,7 @@
 "use client";
 
 import { adminRoutes } from "@/config";
+import AdminDashboardPage from "@/features/admin/dashboard";
 import AdminLayout from "@/features/admin/layout";
 import UnderConstrunction from "@/features/admin/presentation/under-construction";
 import { getRouteTree } from "@/lib/routes";
@@ -20,7 +21,7 @@ export default function Page() {
   /* -------------------------------------------------------------------------- */
   return (
     <AdminLayout.PageLayout title="إدارة الموقع">
-      <UnderConstrunction  />
+      <AdminDashboardPage />
     </AdminLayout.PageLayout>
   );
 }

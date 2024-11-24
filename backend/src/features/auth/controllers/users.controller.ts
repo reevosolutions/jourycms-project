@@ -29,105 +29,128 @@ export default (app: Router): void => {
   const logger = initLogger("CONTROLLER", "UsersController");
   const route = Router();
 
+  app.use(ROOT_PATH, middlewares.AUTH.requireUser, route);
 
-  app.use(
-    ROOT_PATH,
-    middlewares.AUTH.requireUser,
-    route
+  /**
+   * AggregateByRoles
+   */
+  route.get(
+    "/aggregate-by-roles",
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+        /**
+         * Always get the auth data at the beginning of the function
+         */
+        const AUTH_DATA = await getAuthData(req);
+
+        /**
+         * Load the required services and managers
+         */
+        const usersService = Container.get(UsersService);
+
+        /**
+         * Call the service method if the validation conditions are fulfilled
+         */
+
+        const result = await usersService.aggregateByRoles();
+
+        /**
+         * Respond to the client
+         */
+        return respond<ApiAlias.AggregateByRoles.Response>(res, result);
+      } catch (error) {
+        /**
+         * Pass the error to the next middleware
+         * the error logging logic is handled on the service layer
+         */
+
+        return next(error);
+      }
+    }
   );
 
   /**
    * List
    */
-  route.get('/',
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
+  route.get("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      /**
+       * Always get the auth data at the beginning of the function
+       */
+      const AUTH_DATA = await getAuthData(req);
 
-        /**
-         * Always get the auth data at the beginning of the function
-         */
-        const AUTH_DATA = await getAuthData(req);
+      /**
+       * Load the required services and managers
+       */
+      const usersService = Container.get(UsersService);
 
-        /**
-         * Load the required services and managers
-         */
-        const usersService = Container.get(UsersService);
+      /**
+       * Call the service method if the validation conditions are fulfilled
+       */
 
+      const result = await usersService.list(
+        req.query as unknown as ApiAlias.List.Request,
+        AUTH_DATA
+      );
 
-        /**
-         * Call the service method if the validation conditions are fulfilled
-         */
+      /**
+       * Respond to the client
+       */
+      return respond<ApiAlias.List.Response>(res, result);
+    } catch (error) {
+      /**
+       * Pass the error to the next middleware
+       * the error logging logic is handled on the service layer
+       */
 
-        const result = await usersService.list(req.query as unknown as ApiAlias.List.Request, AUTH_DATA);
-
-        /**
-         * Respond to the client
-         */
-        return respond<ApiAlias.List.Response>(res, result);
-
-      } catch (error) {
-
-        /**
-         * Pass the error to the next middleware
-         * the error logging logic is handled on the service layer
-         */
-
-        return next(error);
-
-      }
-    });
+      return next(error);
+    }
+  });
 
   /**
    * GetOne
    */
-  route.get('/:id',
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
+  route.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      /**
+       * Always get the auth data at the beginning of the function
+       */
+      const AUTH_DATA = await getAuthData(req);
 
-        /**
-         * Always get the auth data at the beginning of the function
-         */
-        const AUTH_DATA = await getAuthData(req);
+      /**
+       * Load the required services and managers
+       */
+      const usersService = Container.get(UsersService);
 
-        /**
-         * Load the required services and managers
-         */
-        const usersService = Container.get(UsersService);
+      /**
+       * Call the service method if the validation conditions are fulfilled
+       */
 
-        /**
-         * Call the service method if the validation conditions are fulfilled
-         */
+      const { id } = req.params;
 
-        const { id } = req.params;
+      const result = await usersService.getById(id, AUTH_DATA);
 
+      /**
+       * Respond to the client
+       */
+      return respond<ApiAlias.GetOne.Response>(res, result);
+    } catch (error) {
+      /**
+       * Pass the error to the next middleware
+       * the error logging logic is handled on the service layer
+       */
 
-        const result = await usersService.getById(id, AUTH_DATA);
-
-        /**
-         * Respond to the client
-         */
-        return respond<ApiAlias.GetOne.Response>(res, result);
-
-      } catch (error) {
-
-        /**
-         * Pass the error to the next middleware
-         * the error logging logic is handled on the service layer
-         */
-
-        return next(error);
-
-      }
-    });
-
+      return next(error);
+    }
+  });
 
   /**
    * GetByTrackingId
    */
-  route.get('/by-tracking-id/:tracking_id',
+  route.get(
+    "/by-tracking-id/:tracking_id",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -144,120 +167,111 @@ export default (app: Router): void => {
 
         const { tracking_id } = req.params;
 
-        const result = await usersService.getByTrackingId(tracking_id, AUTH_DATA);
+        const result = await usersService.getByTrackingId(
+          tracking_id,
+          AUTH_DATA
+        );
 
         /**
          * Respond to the client
          */
         return respond<ApiAlias.GetOne.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
-
-
-
+    }
+  );
 
   /**
    * Create
    */
-  route.post('/',
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
+  route.post("/", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      /**
+       * Always get the auth data at the beginning of the function
+       */
+      const AUTH_DATA = await getAuthData(req);
 
-        /**
-         * Always get the auth data at the beginning of the function
-         */
-        const AUTH_DATA = await getAuthData(req);
+      /**
+       * Load the required services and managers
+       */
+      const usersService = Container.get(UsersService);
 
-        /**
-         * Load the required services and managers
-         */
-        const usersService = Container.get(UsersService);
+      /**
+       * Call the service method if the validation conditions are fulfilled
+       */
 
-        /**
-         * Call the service method if the validation conditions are fulfilled
-         */
+      const result = await usersService.create(
+        req.body as ApiAlias.Create.Request,
+        AUTH_DATA
+      );
 
-        const result = await usersService.create(req.body as ApiAlias.Create.Request, AUTH_DATA);
+      /**
+       * Respond to the client
+       */
+      return respond<ApiAlias.Create.Response>(res, result, 201);
+    } catch (error) {
+      /**
+       * Pass the error to the next middleware
+       * the error logging logic is handled on the service layer
+       */
 
-        /**
-         * Respond to the client
-         */
-        return respond<ApiAlias.Create.Response>(res, result, 201);
-
-      } catch (error) {
-
-        /**
-         * Pass the error to the next middleware
-         * the error logging logic is handled on the service layer
-         */
-
-        return next(error);
-
-      }
-    });
-
-
+      return next(error);
+    }
+  });
 
   /**
    * Update
    */
-  route.put('/:id',
-    async (req: Request, res: Response, next: NextFunction) => {
-      try {
+  route.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      /**
+       * Always get the auth data at the beginning of the function
+       */
+      const AUTH_DATA = await getAuthData(req);
 
-        /**
-         * Always get the auth data at the beginning of the function
-         */
-        const AUTH_DATA = await getAuthData(req);
+      /**
+       * Load the required services and managers
+       */
+      const usersService = Container.get(UsersService);
 
-        /**
-         * Load the required services and managers
-         */
-        const usersService = Container.get(UsersService);
+      /**
+       * Call the service method if the validation conditions are fulfilled
+       */
+      const { id } = req.params;
 
-        /**
-         * Call the service method if the validation conditions are fulfilled
-         */
-        const { id } = req.params;
+      const result = await usersService.update(
+        id,
+        req.body as ApiAlias.Update.Request,
+        AUTH_DATA
+      );
 
+      /**
+       * Respond to the client
+       */
+      return respond<ApiAlias.Update.Response>(res, result);
+    } catch (error) {
+      /**
+       * Pass the error to the next middleware
+       * the error logging logic is handled on the service layer
+       */
 
-
-        const result = await usersService.update(id, req.body as ApiAlias.Update.Request, AUTH_DATA);
-
-        /**
-         * Respond to the client
-         */
-        return respond<ApiAlias.Update.Response>(res, result);
-
-      } catch (error) {
-
-        /**
-         * Pass the error to the next middleware
-         * the error logging logic is handled on the service layer
-         */
-
-        return next(error);
-
-      }
-    });
+      return next(error);
+    }
+  });
 
   /**
    * Delete
    */
-  route.delete('/:id',
+  route.delete(
+    "/:id",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -279,26 +293,24 @@ export default (app: Router): void => {
          * Respond to the client
          */
         return respond<ApiAlias.Delete.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
+    }
+  );
 
   /**
    * Restore
    */
-  route.delete('/:id/restore',
+  route.delete(
+    "/:id/restore",
     async (req: Request, res: Response, next: NextFunction) => {
       try {
-
         /**
          * Always get the auth data at the beginning of the function
          */
@@ -320,20 +332,15 @@ export default (app: Router): void => {
          * Respond to the client
          */
         return respond<ApiAlias.Delete.Response>(res, result);
-
       } catch (error) {
-
         /**
          * Pass the error to the next middleware
          * the error logging logic is handled on the service layer
          */
 
         return next(error);
-
       }
-    });
-
-
-
+    }
+  );
 }
 

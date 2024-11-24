@@ -183,6 +183,18 @@ export default class UsersClient extends BaseClient {
       }
     );
   }
+  // aggregateByRoles
+  async aggregateByRoles(
+    config?: SDK.TRequestConfig
+  ): Promise<SDK.TResponseDatum<ApiAlias.AggregateByRoles.Response>> {
+    return await this.container.sdk.httpClient.get(
+      this.generatePrefix(`/aggregate-by-roles`),
+      {},
+      {
+        headers: this.container.sdk.generateHeadersFromRequestConfig(config),
+      }
+    );
+  }
 
   async relateToCompany(
     id: string,

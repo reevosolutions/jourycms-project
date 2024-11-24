@@ -41,10 +41,10 @@ type DocumentProperties = Levelup.CMS.V1.Utils.DocumentProperties<EntityAlias>;
  */
 @Service()
 export default class UsersService extends BaseService {
-  protected ENTITY = 'user' as const;
+  protected ENTITY = "user" as const;
 
   constructor(
-    @Inject('userModel') private userModel: Levelup.CMS.V1.Users.Model.User,
+    @Inject("userModel") private userModel: Levelup.CMS.V1.Users.Model.User,
     @EventDispatcher() private eventDispatcher: EventDispatcher
   ) {
     super();
@@ -57,20 +57,26 @@ export default class UsersService extends BaseService {
     new_data: Partial<EntityAlias>,
     old_data: Partial<EntityAlias> | null,
     authData: Levelup.CMS.V1.Security.AuthData
-  ): Promise<EntityAlias['snapshots']> {
-    const scenario = this.initScenario(this.logger, this._generateSnapshotsObject, []);
+  ): Promise<EntityAlias["snapshots"]> {
+    const scenario = this.initScenario(
+      this.logger,
+      this._generateSnapshotsObject,
+      []
+    );
 
     try {
       const cache = Container.get(CustomCacheManager);
-      const result: Levelup.CMS.V1.Utils.Complete<EntityAlias['snapshots']> = {
+      const result: Levelup.CMS.V1.Utils.Complete<EntityAlias["snapshots"]> = {
         pharmacy: undefined,
         hospital: undefined,
         provider: undefined,
-        laboratory: undefined
+        laboratory: undefined,
       };
 
-      const new_attributes: EntityAlias['attributes'] = new_data.attributes || {};
-      const old_attributes: EntityAlias['attributes'] = old_data?.attributes || {};
+      const new_attributes: EntityAlias["attributes"] =
+        new_data.attributes || {};
+      const old_attributes: EntityAlias["attributes"] =
+        old_data?.attributes || {};
 
       scenario.set({ new_attributes, old_attributes });
       scenario.set({ result });
@@ -91,15 +97,18 @@ export default class UsersService extends BaseService {
    * @param {Partial<EntityAlias>} old used on update
    * @returns {string}
    */
-  _createSearchMeta(data: Partial<EntityAlias>, old?: Partial<EntityAlias>): string {
+  _createSearchMeta(
+    data: Partial<EntityAlias>,
+    old?: Partial<EntityAlias>
+  ): string {
     /**
      * Define the search meta object
      */
     const search_meta: { [Key in DocumentProperties]?: string } = {
       tracking_id: data.tracking_id,
       email: data.email,
-      'profile.family_name': data.profile?.family_name,
-      'profile.first_name': data.profile?.first_name,
+      "profile.family_name": data.profile?.family_name,
+      "profile.first_name": data.profile?.first_name,
       /**
        * TODO: Add more fields to the search meta
        */
@@ -110,27 +119,30 @@ export default class UsersService extends BaseService {
      * Add old values if not provided in the new data
      */
     if (old) {
-      if (typeof data.tracking_id === 'undefined') search_meta.tracking_id = old.tracking_id || '';
-      if (typeof data.email === 'undefined') search_meta.email = old.email || '';
-      if (typeof data.profile?.first_name === 'undefined')
-        search_meta['profile.first_name'] = old.profile?.first_name || '';
-      if (typeof data.profile?.family_name === 'undefined')
-        search_meta['profile.family_name'] = old.profile?.family_name || '';
+      if (typeof data.tracking_id === "undefined")
+        search_meta.tracking_id = old.tracking_id || "";
+      if (typeof data.email === "undefined")
+        search_meta.email = old.email || "";
+      if (typeof data.profile?.first_name === "undefined")
+        search_meta["profile.first_name"] = old.profile?.first_name || "";
+      if (typeof data.profile?.family_name === "undefined")
+        search_meta["profile.family_name"] = old.profile?.family_name || "";
       /**
        * TODO: Add more fields to the search meta
        */
-      
     }
 
-    this.logExecutionResult(this._createSearchMeta, { data, old }, null, { search_meta });
+    this.logExecutionResult(this._createSearchMeta, { data, old }, null, {
+      search_meta,
+    });
 
     /**
      * Return the search meta
      */
     return Object.values(search_meta)
-      .filter(s => !!s)
-      .join(' ')
-      .replaceAll('  ', ' ')
+      .filter((s) => !!s)
+      .join(" ")
+      .replaceAll("  ", " ")
       .trim();
   }
 
@@ -142,7 +154,7 @@ export default class UsersService extends BaseService {
     q,
     totalQ,
     opt,
-    authData
+    authData,
   }: {
     q: mongoose.QueryWithFuzzySearch<EntityAlias>;
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
@@ -153,7 +165,6 @@ export default class UsersService extends BaseService {
     q: mongoose.QueryWithFuzzySearch<EntityAlias>;
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
   } {
-    
     return { q, totalQ };
   }
 
@@ -165,7 +176,7 @@ export default class UsersService extends BaseService {
     q,
     totalQ,
     opt,
-    authData
+    authData,
   }: {
     q: mongoose.QueryWithFuzzySearch<EntityAlias>;
     totalQ: mongoose.QueryWithFuzzySearch<EntityAlias>;
@@ -199,18 +210,29 @@ export default class UsersService extends BaseService {
     /**
      * @description Inject attributes in the filters
      */
-    if (!load_deleted && !opt.load_deleted && !('is_deleted' in filters)) filters.is_deleted = false;
+    if (!load_deleted && !opt.load_deleted && !("is_deleted" in filters))
+      filters.is_deleted = false;
     if (authData?.current?.app) filters.app = authData?.current.app._id;
 
     // -- attributed:app
-    if (UserSchemaFields['app']) {
-      filter = createStringFilter<DocumentProperties>(q, totalQ, filters['app'], 'app' as any);
+    if (UserSchemaFields["app"]) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        filters["app"],
+        "app" as any
+      );
       q = filter.q;
       totalQ = filter.totalQ;
     }
 
     // -- attributed:company
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.company, 'company' as any);
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.company,
+      "company" as any
+    );
     q = filter.q;
     totalQ = filter.totalQ;
     // if (filters.company) {
@@ -223,53 +245,99 @@ export default class UsersService extends BaseService {
     // }
 
     // -- attributed:hospital
-    
+
     // -- is_deleted
-    filter = createBooleanFilter<DocumentProperties>(q, totalQ, filters.is_deleted, 'is_deleted');
+    filter = createBooleanFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.is_deleted,
+      "is_deleted"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- created_at
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.created_at, 'created_at');
+    filter = createDateRangeFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.created_at,
+      "created_at"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- updated_at
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.updated_at, 'updated_at');
+    filter = createDateRangeFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.updated_at,
+      "updated_at"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- _id
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters._id, '_id');
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters._id,
+      "_id"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- created_by
-    filter = createDateRangeFilter<DocumentProperties>(q, totalQ, filters.created_by, 'created_by');
+    filter = createDateRangeFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.created_by,
+      "created_by"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- tracking_id
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.tracking_id, 'tracking_id');
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.tracking_id,
+      "tracking_id"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- email
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.email, 'email');
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.email,
+      "email"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- role
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.role, 'role');
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.role,
+      "role"
+    );
     q = filter.q;
     totalQ = filter.totalQ;
-    filter = createStringFilter<DocumentProperties>(q, totalQ, filters.not?.role, 'role', true);
+    filter = createStringFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.not?.role,
+      "role",
+      true
+    );
     q = filter.q;
     totalQ = filter.totalQ;
 
     // -- role_group
-    
-    this.logger.value('filters', filters);
+
+    this.logger.value("filters", filters);
     return this._applyAuthDataBasedFilters({ query, q, totalQ, opt, authData });
   }
 
@@ -285,7 +353,7 @@ export default class UsersService extends BaseService {
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
       load_deleted: false,
-      dont_lean: false
+      dont_lean: false,
     }
   ): Promise<ApiAlias.List.Response> {
     try {
@@ -294,7 +362,7 @@ export default class UsersService extends BaseService {
        */
       opt = defaults(opt, {
         load_deleted: false,
-        dont_lean: false
+        dont_lean: false,
       });
       /**
        * Define the execution scenario object
@@ -305,11 +373,14 @@ export default class UsersService extends BaseService {
 
       const { sort, sort_by } = query;
       let { count, page } = query;
-      count = isNaN(count as unknown as number) ? undefined : parseInt(count.toString());
+      count = isNaN(count as unknown as number)
+        ? undefined
+        : parseInt(count.toString());
       page = isNaN(page as unknown as number) ? 1 : parseInt(page.toString());
 
       let q: mongoose.QueryWithFuzzySearch<EntityAlias> = this.userModel.find();
-      let totalQ: mongoose.QueryWithFuzzySearch<EntityAlias> = this.userModel.where();
+      let totalQ: mongoose.QueryWithFuzzySearch<EntityAlias> =
+        this.userModel.where();
 
       /**
        * Apply filters
@@ -320,7 +391,8 @@ export default class UsersService extends BaseService {
 
       const limit =
         count === undefined || count === null
-          ? authData?.current?.app?.settings?.listing?.default_count || config.settings.listing.defaultCount
+          ? authData?.current?.app?.settings?.listing?.default_count ||
+            config.settings.listing.defaultCount
           : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
       const sortOptions = this.getSortOptions(sort, sort_by);
@@ -338,7 +410,7 @@ export default class UsersService extends BaseService {
       scenario.listing_query = {
         model: q.model.modelName,
         query: q.getQuery(),
-        options: q.getOptions()
+        options: q.getOptions(),
       };
       // this.logger.value('listing query', JSON.stringify(q.getQuery(), null, 2));
 
@@ -359,12 +431,12 @@ export default class UsersService extends BaseService {
 
       const edge = await this._buildResponseEdge(items);
       const result: ApiAlias.List.Response = {
-        data: items.map(doc => mapDocumentToExposed(doc)),
+        data: items.map((doc) => mapDocumentToExposed(doc)),
         pagination: {
           total,
-          pages
+          pages,
         },
-        edge
+        edge,
       };
 
       /**
@@ -380,15 +452,15 @@ export default class UsersService extends BaseService {
   }
   private async _buildResponseEdge(items: EntityAlias[]) {
     try {
-      const edge: ApiAlias.List.Response['edge'] = {
+      const edge: ApiAlias.List.Response["edge"] = {
         stores: {},
-        companies: {}
+        companies: {},
       };
 
       const cache = Container.get(CacheManager);
-      this.logger.debug('Loading edge');
+      this.logger.debug("Loading edge");
 
-      const companies = uniq(items.map(i => i.company).filter(i => !!i));
+      const companies = uniq(items.map((i) => i.company).filter((i) => !!i));
 
       return edge;
     } catch (error) {
@@ -409,7 +481,12 @@ export default class UsersService extends BaseService {
       dont_lean?: boolean;
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
-    } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+    } = {
+      load_deleted: false,
+      dont_lean: false,
+      ignore_not_found_error: false,
+      bypass_authorization: false,
+    }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -418,7 +495,7 @@ export default class UsersService extends BaseService {
       opt = defaults(opt, {
         load_deleted: false,
         dont_lean: false,
-        ignore_not_found_error: false
+        ignore_not_found_error: false,
       });
 
       /**
@@ -436,19 +513,23 @@ export default class UsersService extends BaseService {
 
       const doc = await q.exec();
 
-      if (!doc) throw new exceptions.ItemNotFoundException('No object found with this ID: ' + id);
+      if (!doc)
+        throw new exceptions.ItemNotFoundException(
+          "No object found with this ID: " + id
+        );
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+      if (doc.is_deleted && !opt.load_deleted)
+        throw new exceptions.ItemNotFoundException("Object deleted");
 
       /**
        * Check if the user can view the object
        */
 
       const result = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
 
       /**
@@ -475,7 +556,12 @@ export default class UsersService extends BaseService {
       dont_lean?: boolean;
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
-    } = { load_deleted: false, dont_lean: false, ignore_not_found_error: false, bypass_authorization: false }
+    } = {
+      load_deleted: false,
+      dont_lean: false,
+      ignore_not_found_error: false,
+      bypass_authorization: false,
+    }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -484,7 +570,7 @@ export default class UsersService extends BaseService {
       opt = defaults(opt, {
         load_deleted: false,
         dont_lean: false,
-        ignore_not_found_error: false
+        ignore_not_found_error: false,
       });
 
       /**
@@ -502,19 +588,20 @@ export default class UsersService extends BaseService {
 
       const doc = await q.exec();
 
-      if (!doc) throw new exceptions.ItemNotFoundException('User not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("User not found");
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted) throw new exceptions.ItemNotFoundException('Object deleted');
+      if (doc.is_deleted && !opt.load_deleted)
+        throw new exceptions.ItemNotFoundException("Object deleted");
 
       /**
        * Check if the user can view the object
        */
 
       const result = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
 
       /**
@@ -524,7 +611,11 @@ export default class UsersService extends BaseService {
 
       return result;
     } catch (error) {
-      if (opt.ignore_not_found_error && error instanceof exceptions.ItemNotFoundException) return { data: undefined };
+      if (
+        opt.ignore_not_found_error &&
+        error instanceof exceptions.ItemNotFoundException
+      )
+        return { data: undefined };
       this.logError(this.getByTrackingId, error);
       throw error;
     }
@@ -567,12 +658,16 @@ export default class UsersService extends BaseService {
        */
       data.app = authData?.current?.app?._id
         ? authData?.current?.app?._id
-        : opt?.bypass_authorization || (authData.current?.service?.name && !authData.current?.service?.is_external)
+        : opt?.bypass_authorization ||
+            (authData.current?.service?.name &&
+              !authData.current?.service?.is_external)
           ? data.app
           : undefined;
-      
+
       if (data.password) {
-        const { salt, password } = await authManager.hashPassword(data.password);
+        const { salt, password } = await authManager.hashPassword(
+          data.password
+        );
         data.password = password;
         data.salt = salt;
       }
@@ -580,41 +675,57 @@ export default class UsersService extends BaseService {
       /**
        * Check if the user can create the object
        */
-      if (authData?.current?.app?._id && authData?.current?.app?._id !== data.app)
-        throw new exceptions.UnauthorizedException('You are not allowed to create this object on this app');
-      
+      if (
+        authData?.current?.app?._id &&
+        authData?.current?.app?._id !== data.app
+      )
+        throw new exceptions.UnauthorizedException(
+          "You are not allowed to create this object on this app"
+        );
+
       /**
        * Create data object
        */
       const docObject: Partial<EntityAlias> = {
-        ...data
+        ...data,
       };
 
       /**
        * Create tracking ID
        */
-      const entity = 'user' as const;
-      docObject['tracking_id'] = await createTrackingId(this.ENTITY, this.userModel as any);
+      const entity = "user" as const;
+      docObject["tracking_id"] = await createTrackingId(
+        this.ENTITY,
+        this.userModel as any
+      );
 
       /**
        * Create search meta
        */
-      docObject['search_meta'] = this._createSearchMeta(docObject, null);
+      docObject["search_meta"] = this._createSearchMeta(docObject, null);
 
-      docObject.snapshots = await this._generateSnapshotsObject(docObject, null, authData);
+      docObject.snapshots = await this._generateSnapshotsObject(
+        docObject,
+        null,
+        authData
+      );
 
       /**
        * Create the object on DB
        */
       const doc = await this.userModel.create(docObject);
 
-      if (!doc) throw new exceptions.InternalServerError('Failed to create the object');
+      if (!doc)
+        throw new exceptions.InternalServerError("Failed to create the object");
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.created>(events.users.user.created, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.created>(
+        events.users.user.created,
+        { data: doc }
+      );
 
       const result = {
         data: mapDocumentToExposed(doc),
-        edges: {}
+        edges: {},
       };
 
       /**
@@ -662,37 +773,42 @@ export default class UsersService extends BaseService {
        * load old object and check if it exists
        */
       const old = await this.userModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('User not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Object is deleted');
+      if (!old) throw new exceptions.ItemNotFoundException("User not found");
+      if (old.is_deleted)
+        throw new exceptions.UnauthorizedException("Object is deleted");
 
       /**
        * detect changes
        */
       const updates = new ObjectUpdatedProperties(old.toObject(), data, true);
-      scenario.set('updates', updates.asArray);
+      scenario.set("updates", updates.asArray);
 
-      scenario.set('attributes', data?.attributes);
+      scenario.set("attributes", data?.attributes);
 
       const updateObject: Levelup.CMS.V1.Utils.Entity.General.IItemUpdate = {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'updated',
-        updates: updates.asArray
+        action: "updated",
+        updates: updates.asArray,
       };
 
       /**
        * Create data object
        */
       const docObject: Partial<EntityAlias> = {
-        ...data
+        ...data,
       };
 
       /**
        * Ensure merging object properties to old object, not altering them
        */
 
-      docObject.snapshots = await this._generateSnapshotsObject(docObject, old, authData);
+      docObject.snapshots = await this._generateSnapshotsObject(
+        docObject,
+        old,
+        authData
+      );
 
       /**
        * Create search meta
@@ -702,8 +818,8 @@ export default class UsersService extends BaseService {
       docObject.search_meta = this._createSearchMeta(docObject, old);
 
       const flattenUpdates = this.flattenUpdateObject(docObject);
-      
-      scenario.set('updateObject', flattenUpdates);
+
+      scenario.set("updateObject", flattenUpdates);
       /**
        * Update the object on DB
        */
@@ -712,13 +828,13 @@ export default class UsersService extends BaseService {
         {
           $set: flattenUpdates,
           $addToSet: {
-            updates: updateObject
-          }
+            updates: updateObject,
+          },
         },
         { new: true }
       );
 
-      if (!doc) throw new exceptions.ItemNotFoundException('User not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("User not found");
 
       /**
        * Handle the updated effects on the same service
@@ -728,10 +844,13 @@ export default class UsersService extends BaseService {
       /**
        * Dispatch the updated event
        */
-      this.eventDispatcher.dispatch<EventPayloadsAlias.updated>(events.users.user.updated, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.updated>(
+        events.users.user.updated,
+        { data: doc }
+      );
 
       const result = {
-        data: mapDocumentToExposed(doc)
+        data: mapDocumentToExposed(doc),
       };
 
       /**
@@ -752,7 +871,10 @@ export default class UsersService extends BaseService {
   /**
    * @description Delete
    */
-  public async delete(id: string, authData: Levelup.CMS.V1.Security.AuthData): Promise<ApiAlias.Delete.Response> {
+  public async delete(
+    id: string,
+    authData: Levelup.CMS.V1.Security.AuthData
+  ): Promise<ApiAlias.Delete.Response> {
     try {
       /**
        * Define the execution scenario object
@@ -765,13 +887,14 @@ export default class UsersService extends BaseService {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'deleted',
-        updates: []
+        action: "deleted",
+        updates: [],
       };
 
       const old = await this.userModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('User not found');
-      if (old.is_deleted) throw new exceptions.UnauthorizedException('Object already deleted');
+      if (!old) throw new exceptions.ItemNotFoundException("User not found");
+      if (old.is_deleted)
+        throw new exceptions.UnauthorizedException("Object already deleted");
 
       let doc: EntityAlias;
       try {
@@ -780,8 +903,8 @@ export default class UsersService extends BaseService {
           {
             is_deleted: true,
             $addToSet: {
-              updates: updateObject
-            }
+              updates: updateObject,
+            },
           },
           { new: true }
         );
@@ -790,18 +913,21 @@ export default class UsersService extends BaseService {
           if (error.keyValue)
             await this.userModel.deleteOne({
               ...(error.keyValue || {}),
-              is_deleted: true
+              is_deleted: true,
             });
           return this.delete(id, authData);
         } else throw error;
       }
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(events.users.user.deleted, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(
+        events.users.user.deleted,
+        { data: doc }
+      );
 
       const result = {
         data: {
-          deleted: true
-        }
+          deleted: true,
+        },
       };
 
       /**
@@ -819,7 +945,10 @@ export default class UsersService extends BaseService {
   /**
    * @description Restore
    */
-  public async restore(id: string, authData: Levelup.CMS.V1.Security.AuthData): Promise<ApiAlias.Delete.Response> {
+  public async restore(
+    id: string,
+    authData: Levelup.CMS.V1.Security.AuthData
+  ): Promise<ApiAlias.Delete.Response> {
     try {
       /**
        * Define the execution scenario object
@@ -832,13 +961,14 @@ export default class UsersService extends BaseService {
         updated_by_system: !authData?.current?.user,
         updated_by: getUserSnapshot(authData?.current?.user),
         date: new Date(),
-        action: 'restored',
-        updates: []
+        action: "restored",
+        updates: [],
       };
 
       const old = await this.userModel.findById(id);
-      if (!old) throw new exceptions.ItemNotFoundException('User not found');
-      if (!old.is_deleted) throw new exceptions.UnauthorizedException('Object already exists');
+      if (!old) throw new exceptions.ItemNotFoundException("User not found");
+      if (!old.is_deleted)
+        throw new exceptions.UnauthorizedException("Object already exists");
 
       const doc = await this.userModel.findByIdAndUpdate(
         id,
@@ -846,20 +976,23 @@ export default class UsersService extends BaseService {
           is_deleted: false,
           deleted_at: null,
           $addToSet: {
-            updates: updateObject
-          }
+            updates: updateObject,
+          },
         },
         { new: true }
       );
 
-      if (!doc) throw new exceptions.ItemNotFoundException('User not found');
+      if (!doc) throw new exceptions.ItemNotFoundException("User not found");
 
-      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(events.users.user.restored, { data: doc });
+      this.eventDispatcher.dispatch<EventPayloadsAlias.deleted>(
+        events.users.user.restored,
+        { data: doc }
+      );
 
       const result = {
         data: {
-          restored: true
-        }
+          restored: true,
+        },
       };
 
       /**
@@ -874,5 +1007,58 @@ export default class UsersService extends BaseService {
     }
   }
 
-  
+  public async aggregateByRoles() {
+    const scenario = this.initScenario(this.logger, this.aggregateByRoles);
+    try {
+      const aggregateQuery = [
+        {
+          $match:
+            /**
+             * query: The query in MQL.
+             */
+            {
+              is_deleted: false,
+            },
+        },
+        {
+          $group:
+            /**
+             * _id: The id of the group.
+             * fieldN: The first field name.
+             */
+            {
+              _id: "$role",
+              count: {
+                $sum: 1,
+              },
+            },
+        },
+        {
+          $project: {
+            role: "$_id",
+            count: 1,
+            _id: 0,
+          },
+        },
+      ];
+
+      const data: {
+        role: string;
+        count: number;
+      }[] = await this.userModel.aggregate(aggregateQuery);
+
+      const result: {
+        data: typeof data;
+      } = {
+        data,
+      };
+
+      scenario.set({ data }).end();
+
+      return result;
+    } catch (error) {
+      scenario.error(error);
+      throw error;
+    }
+  }
 }
