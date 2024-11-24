@@ -158,16 +158,16 @@ export default class DevService extends BaseService {
       scenario.set({ articleTypes: articleTypes.map((i) => i.slug) });
 
 
-      // await this.reset();
-      // await this.createFirstAdmin();
-      // await this.fillDoctors();
-      // await this.fillEscorts();
-      // await this.fillAgencies();
-      // await this.fillAiroports();
-      // await this.fillAirlines();
-      // await this.fillShrines();
-      // await this.fillHotels();
-      // await this.fillTrips();
+      await this.reset();
+      await this.createFirstAdmin();
+      await this.fillDoctors();
+      await this.fillEscorts();
+      await this.fillAgencies();
+      await this.fillAiroports();
+      await this.fillAirlines();
+      await this.fillShrines();
+      await this.fillHotels();
+      await this.fillTrips();
       await this.setAgenciesLogo();
 
       /**
