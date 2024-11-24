@@ -1,23 +1,17 @@
 "use client";
-import React, {useCallback, useEffect, useState} from "react";
-import DefaultLayout from "../../../layouts/default.layout";
-import {redirect, useRouter} from "next/navigation";
+import { publicRoutes } from "@/config";
 import useAuth from "@/hooks/use-auth";
-import {publicRoutes} from "@/config";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {buildUserFullName} from "@/lib/utilities/strings";
-import {LuAlertCircle} from "react-icons/lu";
-import RoleIcon from "../../../components/role-icon";
-import {ReactQueryDevtoolsProvider} from "@/lib/utils/dev-tools/react-query-dev-tools";
-import {PostForm} from "@/themes/miqat/components/forms";
 import useCMSContent from "@/hooks/use-cms-content";
-import {toast} from "sonner";
+import { buildUserFullName } from "@/lib/utilities/strings";
+import { PostForm } from "@/themes/miqat/components/forms";
+import { redirect, useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
+import RoleIcon from "../../../components/role-icon";
+import DefaultLayout from "../../../layouts/default.layout";
 
-export type PageProps = JouryCMS.Theme.PageProps & {
-  id: string;
-};
+export type PageProps = JouryCMS.Theme.PageProps & {};
 
-const ThemePage: React.FC<PageProps> = ({route, id}) => {
+const ThemePage: React.FC<PageProps> = ({route}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -69,7 +63,6 @@ const ThemePage: React.FC<PageProps> = ({route, id}) => {
             </aside>
             <main className="my-6 font-noto text-xl">
               <PostForm.PostForm
-                article_id={id}
                 hiddenMetaFields={["agency"]}
                 fill={{
                   meta_fields: {
@@ -80,11 +73,7 @@ const ThemePage: React.FC<PageProps> = ({route, id}) => {
                 showBreadcrumb={false}
                 showTitle={false}
                 onSubmit={article => {
-                  toast.success("تم تحديث العرض بنجاح", {
-                    position: "bottom-left",
-                    descriptionClassName: " text-xl",
-                    className: " text-xl lg:text-2xl font-bold  font-hammah",
-                  });
+                  router.push(`/${article.slug}`);
                 }}
               />
             </main>
@@ -96,3 +85,4 @@ const ThemePage: React.FC<PageProps> = ({route, id}) => {
 };
 
 export default ThemePage;
+

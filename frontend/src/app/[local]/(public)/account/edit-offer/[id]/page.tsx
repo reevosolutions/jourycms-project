@@ -1,5 +1,5 @@
 import { publicRoutes } from "@/config";
-import ThemePage from "@/themes/miqat/pages/user-dashboard/new-offer";
+import ThemePage from "@/themes/miqat/pages/user-dashboard/edit-offer";
 
 const ROUTE = publicRoutes.homepage._.myAccount._.newOffer;
 
