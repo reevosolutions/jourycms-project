@@ -6,7 +6,8 @@
     "push": "git add . && git commit -m 'update' && git push",
     "add:sdk:local": "cd frontend && npm i file:../sdk",
     "sdk:f": "cd frontend && npm i jourycms-sdk@latest --legacy-peer-deps",
-    "sdk:b": "cd backend && npm i jourycms-sdk@latest --legacy-peer-deps"
+    "sdk:b": "cd backend && npm i jourycms-sdk@latest --legacy-peer-deps",
+    "build:all": "cd backend && yarn build && cd ../frontend && yarn build"
   },
   "repository": {
     "type": "git",
