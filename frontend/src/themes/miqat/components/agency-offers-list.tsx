@@ -16,6 +16,7 @@ import {Button} from "@/components/ui/button";
 import {publicRoutes} from "@/config";
 import Link from "next/link";
 import {setPathParams} from "@/lib/routes";
+import moment from "moment";
 
 const AgencyOffersList: React.FC<{
   showHeader?: boolean;
@@ -151,7 +152,7 @@ const AgencyOffersList: React.FC<{
       <div className="py-4">
         {error ? (
           <Alert variant={"destructive"}>
-            <AlertTitle>Error</AlertTitle>
+            <AlertTitle>خطأ</AlertTitle>
             <AlertDescription>{error.message}</AlertDescription>
           </Alert>
         ) : isFetched && isDataLoaded && !isFetching ? (
@@ -165,6 +166,9 @@ const AgencyOffersList: React.FC<{
                   >
                     <div className="flex-grow py-2 transition-all hocus:text-beige-600">
                       <Link href={`/${item.slug}`}>{item.title}</Link>
+                    </div>
+                    <div className="py-2 flex-shrink-0 text-xl text-slate-500">
+                      <span>{moment(item.created_at).format('DD/MM/YYYY')}</span>
                     </div>
                     <div className="flex justify-end gap-1 py-2">
                       <Link
