@@ -126,7 +126,7 @@ export default class UploadService extends BaseService {
       } = await uploadedFilesService.list({ filters: { remote_url: url } }, authData);
       if (record) {
         scenario.set({ found: true, record });
-        const file = path.join(__dirname, '../../', record.file_path);
+        const file = path.join(__dirname, '../../../../', record.file_path);
         if (fs.existsSync(file)) {
           scenario.log();
           return { data: record };
@@ -136,7 +136,7 @@ export default class UploadService extends BaseService {
       scenario.set({ found: false });
 
       const folder = `uploads/${authData?.current?.user?._id ?? 'unknown'}/`;
-      const folderPath = path.join(__dirname, `../../`, folder);
+      const folderPath = path.join(__dirname, `../../../../`, folder);
       fs.mkdirSync(folderPath, { recursive: true });
 
       const ext = getFileExtensionFromUrl(url);

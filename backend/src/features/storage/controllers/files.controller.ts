@@ -33,8 +33,8 @@ export default (app: Router): void => {
         const { data: file } = await filesServiceInstance.getById(req.params.id);
         if (!file) throw new exceptions.ItemNotFoundException('File not found');
         else {
-          logger.value('Sending file content', file._id, path.join(__dirname, '../../', file.file_path));
-          res.status(200).sendFile(path.join(__dirname, '../../', file.file_path));
+          logger.value('Sending file content', file._id, path.join(__dirname, '../../../../', file.file_path));
+          res.status(200).sendFile(path.join(__dirname, '../../../../', file.file_path));
         }
       } catch (e) {
         return next(e);
