@@ -84,7 +84,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
                 </div>
               </div>
             </div>
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <div className="end-1/2 -mt-[560px] lg:absolute lg:bottom-full lg:end-0 lg:-mt-0">
                 <HomepageSearchForm />
               </div>
