@@ -83,21 +83,22 @@ const PostForm: React.FC<Props> = ({
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
   const articleTypeQuery = useQuery({
-    queryKey: ["articleType", articleType_slug],
-    enabled: !!articleType_slug,
-    queryFn: async () => {
-      if (articleType_slug) {
-        const data = await sdk.content.articleTypes.getBySlug(articleType_slug);
-        setArticleType(data?.data || null);
-        setMetaFields(data?.data?.custom_meta_fields || []);
-        return data;
-      }
-      return null;
-    },
-  });
+     queryKey: ["articleType", articleType_slug, article_id],
+     enabled: !!articleType_slug && !article_id,
+     queryFn: async () => {
+       if (articleType_slug && !article_id) {
+         const data =
+           await sdk.content.articleTypes.getBySlug(articleType_slug);
+         setArticleType(data?.data || null);
+         setMetaFields(data?.data?.custom_meta_fields || []);
+         return data;
+       }
+       return null;
+     },
+   });
 
   const articleQuery = useQuery({
-    queryKey: ["articleType", article_id],
+    queryKey: ["article", article_id],
     enabled: !!article_id,
 
     queryFn: async () => {

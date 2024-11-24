@@ -55,13 +55,8 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
       <div className="container mx-auto px-4 md:px-8">
         {currentUser ? (
           <div>
-            <aside className="flex items-center gap-4 text-3xl">
-              <span className="block w-12 text-sm font-medium text-beige-100">
-                <RoleIcon role={currentUser.role} />
-              </span>
-              <span>{buildUserFullName(currentUser.profile)}</span>
-            </aside>
-            <main className="my-6 font-noto text-xl">
+            
+            <main className="my-12 font-noto text-xl">
               <PostForm.PostForm
                 hiddenMetaFields={["agency"]}
                 fill={{

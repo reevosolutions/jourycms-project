@@ -1,13 +1,13 @@
 /* eslint-disable react/no-children-prop */
 "use client";
 
-import {useForm, type Validator} from "@tanstack/react-form";
-import {useQuery} from "@tanstack/react-query";
-import {yupValidator} from "@tanstack/yup-form-adapter";
-import React, {useCallback, useEffect, useState} from "react";
+import { useForm, type Validator } from "@tanstack/react-form";
+import { useQuery } from "@tanstack/react-query";
+import { yupValidator } from "@tanstack/yup-form-adapter";
+import React, { useCallback, useEffect, useState } from "react";
 import * as yup from "yup";
 
-import {Button} from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   FormControl,
   FormItem,
@@ -19,27 +19,24 @@ import {
   SidebarGroup,
   SidebarHeader,
 } from "@/components/ui/customized.sidebar";
-import {Input} from "@/components/ui/input";
-import {Tiptap} from "@/features/editors/tiptap";
-import {useSdk} from "@/hooks/use-sdk";
-import initLogger, {LoggerContext} from "@/lib/logging";
-
-import {adminRoutes} from "@/config";
-import {setPathParams} from "@/lib/routes";
-import {useRouter} from "next/navigation";
+import { Input } from "@/components/ui/input";
+import { Tiptap } from "@/features/editors/tiptap";
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import CustomMetaField from "@/features/admin/post-editor/custom-fields";
+import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
+import ImageUploader from "@/features/storage/form-components/image.uploader";
+import { cn } from "@/lib/utils";
+import { ArticleTypeSlug } from "@/themes/miqat/config";
 import Image from "next/image";
-import {useTranslation} from "react-i18next";
+import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
+import { LuLoader2 } from "react-icons/lu";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import {LuLoader2} from "react-icons/lu";
-import ImageUploader from "@/features/storage/form-components/image.uploader";
-import {cn} from "@/lib/utils";
-import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
-import CustomMetaField from "@/features/admin/post-editor/custom-fields";
-import {ArticleTypeSlug} from "@/themes/miqat/config";
 
 type Props = {
   hiddenMetaFields?: `${ArticleTypeSlug}`[];
@@ -92,8 +89,23 @@ const PostForm: React.FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
+   const articleTypeQuery = useQuery({
+     queryKey: ["articleType", articleType_slug, article_id],
+     enabled: !!articleType_slug && !article_id,
+     queryFn: async () => {
+       if (articleType_slug && !article_id) {
+         const data =
+           await sdk.content.articleTypes.getBySlug(articleType_slug);
+         setArticleType(data?.data || null);
+         setMetaFields(data?.data?.custom_meta_fields || []);
+         return data;
+       }
+       return null;
+     },
+   });
+
   const articleQuery = useQuery({
-    queryKey: ["articleType", article_id],
+    queryKey: ["article", article_id],
     enabled: !!article_id,
 
     queryFn: async () => {
