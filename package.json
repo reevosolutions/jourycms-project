@@ -7,7 +7,7 @@
     "add:sdk:local": "cd frontend && npm i file:../sdk",
     "sdk:f": "cd frontend && npm i jourycms-sdk@latest --legacy-peer-deps",
     "sdk:b": "cd backend && npm i jourycms-sdk@latest --legacy-peer-deps",
-    "build:all": "cd backend && yarn build && cd ../frontend && yarn build"
+    "build:all": "cd backend && npm run build && cd ../frontend && npm run build"
   },
   "repository": {
     "type": "git",
@@ -24,3 +24,6 @@
   "homepage": "https://github.com/reevosolutions/jourycms-project#readme",
   "description": ""
 }
+
+
+
