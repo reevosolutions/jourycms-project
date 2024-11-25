@@ -8,7 +8,9 @@ import config from '../config';
 import { toKebabCase } from '../utilities/strings';
 import Container from 'typedi';
 import ContentBuilderService from '../features/content/services/builder.service';
+import StorageBuilderService from "../features/storage/services/builder.service";
 import DevService from '../common/services/dev.service';
+import { sleep } from '../utilities/system/timer.utilities';
 
 const logger = initLogger('SUBSCRIBER', 'service');
 
@@ -22,7 +24,11 @@ export default class ServiceSubscriber {
       await loadServicePermissions();
 
       const contentBuilderService = Container.get(ContentBuilderService);
+      const storageBuilderService = Container.get(StorageBuilderService);
       await contentBuilderService.run();
+
+      await sleep(500);
+      await storageBuilderService.run();
       const devService = Container.get(DevService);
 
       if (config.environement === 'development') {

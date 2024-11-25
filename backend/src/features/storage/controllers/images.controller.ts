@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import fs from 'fs';
 import path from 'path';
+import fs from 'fs';
 import sharp from 'sharp';
 import Container from 'typedi';
 import UploadedFilesService from '../services/uploaded-files.service';
