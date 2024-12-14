@@ -14,6 +14,7 @@ export type TFieldKey =
   | "departure_airoport"
   | "arrival_airoport"
   | "airelines_company"
+  | "program_type"
   | "trip_type"
   | "trip_duration"
   | "flight_number"

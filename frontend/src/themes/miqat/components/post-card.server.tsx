@@ -63,10 +63,29 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
       </div>
 
       <div className="px-6 py-4">
-        <div className="pb-0">
-          <h2 className="text-3xl font-semibold text-darkblue-900">
-            {data.title}
+        <div className="-mx-6 pb-0">
+          <h2 className="flex items-center justify-between text-3xl font-semibold text-darkblue-900">
+            <span className="px-6">{data.title}</span>
+            <span
+              className={cn(
+                "text-2xl text-white px-8 rounded-s-2xl py-1",
+                data.meta_fields.program_type === "economy"
+                  ? "bg-green-600"
+                  : data.meta_fields.program_type === "premium"
+                    ? "bg-blue-600"
+                    : data.meta_fields.program_type === "deluxe"
+                      ? "bg-purple-600"
+                      : "bg-red-500",
+              )}
+            >
+              {getMetaFieldValueLabel(
+                articleType,
+                "program_type",
+                data.meta_fields.program_type,
+              ) || "عادي"}
+            </span>
           </h2>
+
           <div
             className="text-sm text-gray-500"
             dangerouslySetInnerHTML={{__html: data.body_unformatted || ""}}
@@ -90,14 +109,16 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                 alt={agency.title || ""}
               />
             )}
-            <div className="flex-flex-col">
-              <span className="text-2xl text-darkblue-600">{agency.title}</span>
+            <div className="flex-flex-col leading-none">
+              <span className="text-2xl leading-none text-darkblue-600">
+                {agency.title}
+              </span>
             </div>
           </div>
         )}
 
         <div className="mb-2 flex items-end justify-between gap-4">
-          <p className="duration  text-teal-600">
+          <p className="duration text-teal-600">
             <span className="text-xl leading-tight">{"المدة"}</span>
             <div className="duration text-2xl font-bold text-teal-600">
               {getMetaFieldValueLabel(
@@ -147,8 +168,8 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                     },
                   )}
                   alt={airelinesCompany?.title || ""}
-                  width={150}
-                  height={150}
+                  width={70}
+                  height={50}
                 />
               )}
             </p>
