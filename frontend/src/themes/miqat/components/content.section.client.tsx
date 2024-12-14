@@ -1,21 +1,22 @@
 "use client";
 import useCMSContent from "@/hooks/use-cms-content";
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
+import {useSdk} from "@/hooks/use-sdk";
+import initLogger, {LoggerContext} from "@/lib/logging";
 import Loader from "@/themes/miqat/components/loader";
 import NoPostsMessage from "@/themes/miqat/components/no-posts-message";
 import CustomPagination from "@/themes/miqat/components/pagination.client";
-import PostCard from "@/themes/miqat/components/post-card.client";
-import { ArticleTypeSlug } from "@/themes/miqat/config";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import PostCard_Client from "@/themes/miqat/components/post-card.client";
+import {ArticleTypeSlug} from "@/themes/miqat/config";
+import {useQuery} from "@tanstack/react-query";
+import {useRouter} from "next/navigation";
+import React, {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 const logger = initLogger(LoggerContext.COMPONENT, "contentSection");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
+import PostCard_Server from "./post-card.server";
 
 export type ContentSectionProps = JouryCMS.Theme.ComponentProps & {
   articleTypeSlug: `${ArticleTypeSlug}`;
@@ -23,7 +24,7 @@ export type ContentSectionProps = JouryCMS.Theme.ComponentProps & {
   count: number;
 };
 
-const ContentSection: React.FC<ContentSectionProps> = ({
+const ContentSection_Client: React.FC<ContentSectionProps> = ({
   showPagination = true,
   articleTypeSlug,
   count: _count = 12,
@@ -137,16 +138,18 @@ const ContentSection: React.FC<ContentSectionProps> = ({
         <NoPostsMessage />
       ) : (
         <div className="">
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">
-            {filteredItems.map((item, index) => (
-              <PostCard
-                key={index}
-                data={item}
-                edge={data?.edge}
-                articleTypeSlug={articleTypeSlug}
-              />
-            ))}
-          </div>
+          {articleType && (
+            <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">
+              {filteredItems.map((item, index) => (
+                <PostCard_Server
+                  key={index}
+                  data={item}
+                  edge={data?.edge}
+                  articleType={articleType}
+                />
+              ))}
+            </div>
+          )}
           {showPagination && (data?.pagination?.pages || 0) > 1 && (
             <div className="my-8 mt-12">
               <CustomPagination
@@ -164,4 +167,4 @@ const ContentSection: React.FC<ContentSectionProps> = ({
   );
 };
 
-export default ContentSection;
+export default ContentSection_Client;

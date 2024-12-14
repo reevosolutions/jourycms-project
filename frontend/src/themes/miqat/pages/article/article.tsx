@@ -1,27 +1,10 @@
 import * as React from "react";
 import DefaultLayout from "../../layouts/default.layout";
-import Image from "next/image";
-import Link from "next/link";
 
-import PageNotFound from "../../components/page-not-found";
-import {serverSdk} from "../../data";
-import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
-import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign} from "react-icons/lu";
-import {format} from "date-fns";
-import {formatAmount} from "@/lib/utilities/strings";
-import {PiAirplaneTilt, PiTrolleySuitcase} from "react-icons/pi";
-import {TbPlaneArrival, TbPlaneDeparture} from "react-icons/tb";
-import {GiDuration} from "react-icons/gi";
-import {HiOutlineTicket} from "react-icons/hi2";
-import {BsMoonStars, BsSuitcase} from "react-icons/bs";
-import {IoFastFoodOutline, IoMoonOutline} from "react-icons/io5";
-import {cn} from "@/lib/utils";
-import {MdOutlineLocalHotel} from "react-icons/md";
-import initLogger, {LoggerContext} from "@/lib/logging";
-import {ArticleTypeSlug} from "../../config";
-import OmrahArticlePage from "./article.omrah";
-import AgencyArticlePage from "./article.agency";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { ArticleTypeSlug } from "../../config";
 import DefaultArticlePage from "./article.default";
+import OmrahArticlePage from "./article.omrah";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 

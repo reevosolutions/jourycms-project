@@ -1,23 +1,20 @@
 "use client";
-import {useRouter} from "next/navigation";
-import React, {useEffect, useState} from "react";
-import {useTranslation} from "react-i18next";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
-import {useSdk} from "@/hooks/use-sdk";
-import initLogger, {LoggerContext} from "@/lib/logging";
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 
-import Image from "next/image";
-import Link from "next/link";
 
 import useCMSContent from "@/hooks/use-cms-content";
-import {formatAmount} from "@/lib/utilities/strings";
-import {animated, useSpring} from "@react-spring/web";
-import {ArticleTypeSlug} from "../config";
+import { animated, useSpring } from "@react-spring/web";
+import { ArticleTypeSlug } from "../config";
 import PostCard_Server from "./post-card.server";
 
 export type PostCard_ClientProps = JouryCMS.Theme.ComponentProps & {
@@ -75,7 +72,7 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <animated.div style={styles}>
+    <animated.div style={styles} className="relative">
       {edge?.article_types?.[data.article_type] && (
 
       <PostCard_Server

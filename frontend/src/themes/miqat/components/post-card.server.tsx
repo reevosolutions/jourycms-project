@@ -17,12 +17,14 @@ export type PostCard_ServerProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;
   edge?: Partial<ApiAlias.List.Response["edge"]>;
   articleType: Levelup.CMS.V1.Content.Entity.ArticleType;
+  absolute?: boolean;
 };
 
 const PostCard_Server: React.FC<PostCard_ServerProps> = ({
   data,
   edge,
   articleType,
+  absolute
 }) => {
   const agency = edge?.linked_articles?.[data.meta_fields.agency] || null;
   const airelinesCompany =
@@ -34,7 +36,11 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
   return (
     <Link
       href={`/${data.slug}`}
-      className="relative block rounded-xl bg-white pb-20 shadow-lg shadow-slate-200 transition-all hocus:z-10 hocus:-translate-y-2 hocus:scale-105 hocus:shadow-xl hocus:shadow-slate-200"
+      className={cn(
+        "block rounded-xl bg-white pb-20 shadow-lg shadow-slate-200 transition-all hocus:z-10 hocus:-translate-y-2 hocus:scale-105 hocus:shadow-xl hocus:shadow-slate-200",
+        absolute && "absolute h-full",
+        !absolute && "relative",
+      )}
     >
       <div className="relative h-40 w-full">
         <Image
@@ -68,7 +74,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
             <span className="px-6">{data.title}</span>
             <span
               className={cn(
-                "text-2xl text-white px-8 rounded-s-2xl py-1",
+                "rounded-s-2xl px-8 py-1 text-2xl text-white",
                 data.meta_fields.program_type === "economy"
                   ? "bg-green-600"
                   : data.meta_fields.program_type === "premium"
@@ -118,7 +124,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
         )}
 
         <div className="mb-2 flex items-end justify-between gap-4">
-          <p className="duration text-teal-600">
+          <div className="duration text-teal-600">
             <span className="text-xl leading-tight">{"المدة"}</span>
             <div className="duration text-2xl font-bold text-teal-600">
               {getMetaFieldValueLabel(
@@ -127,8 +133,8 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                 data.meta_fields.trip_duration,
               )}
             </div>
-          </p>
-          <p className="text-blue-700">
+          </div>
+          <div className="text-blue-700">
             <span className="text-xl leading-tight">{"الدخول"}</span>
             <div className="text-2xl font-bold leading-tight">
               {getMetaFieldValueLabel(
@@ -137,7 +143,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                 data.meta_fields.entry_point,
               )}
             </div>
-          </p>
+          </div>
         </div>
         <div className="mb-2 flex items-center justify-between gap-4">
           <div
@@ -179,7 +185,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
       <div className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-between gap-4 rounded-b-xl bg-red2-50 px-6 py-4">
         <span className="text-2xl text-darkblue-600">{"ابتداء من"}</span>
         <span className="text-4xl font-bold text-beige-800">
-          {formatAmount(data.meta_fields?.price, ",", 0)}
+          {formatAmount(data.meta_fields?.price, ",", 2)}
         </span>
       </div>
     </Link>

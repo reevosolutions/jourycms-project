@@ -6,7 +6,7 @@ import Link from "next/link";
 import PageNotFound from "../../components/page-not-found";
 import {serverSdk} from "../../data";
 import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
-import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign} from "react-icons/lu";
+import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign, LuPencil} from "react-icons/lu";
 import {format} from "date-fns";
 import {formatAmount} from "@/lib/utilities/strings";
 import {PiAirplaneTilt, PiTrolleySuitcase} from "react-icons/pi";
@@ -19,6 +19,7 @@ import {cn} from "@/lib/utils";
 import {MdOutlineLocalHotel} from "react-icons/md";
 import initLogger, {LoggerContext} from "@/lib/logging";
 import { ArticleTypeSlug } from "../../config";
+import AdminOnlyGuard from "@/guards/admin-only.guard";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -75,8 +76,13 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
     <div className="article-page mb-16">
       <div className="mb-4"></div>
       <div className="mb-4">
-        <h1 className="mb-6 mt-8 text-center text-4xl text-gray-800 md:text-5xl">
+        <h1 className="mb-6 mt-8  justify-center gap-4 items-center flex text-4xl text-gray-800 md:text-5xl">
           {article.title}
+          <AdminOnlyGuard>
+            <Link href={`/admin/articles/edit/${article._id}`} className=" rounded-full inline-block ms-4 p-2 text-gray-400 hocus:bg-gray-100 hocus:text-gray-600" >
+            <LuPencil className="w-5 h-5" />
+            </Link>
+          </AdminOnlyGuard>
         </h1>
       </div>
       <div className="relative mb-6 aspect-video w-full md:aspect-21/9">

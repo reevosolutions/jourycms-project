@@ -1,3 +1,4 @@
+"use client";
 /* eslint-disable no-undef */
 import {
   useSpring,
@@ -41,7 +42,9 @@ import Pattern from "./pattern";
 import {ArticleTypeSlug} from "../config";
 import {useRouter} from "next/navigation";
 import qs from "querystringify";
-import { CustomFilterParams } from "../data";
+import {CustomFilterParams} from "../data";
+import {useQuery} from "@tanstack/react-query";
+import {useSdk} from "@/hooks/use-sdk";
 
 const logger = initLogger(LoggerContext.COMPONENT, "select.custom-field");
 
@@ -64,12 +67,79 @@ const services: Levelup.CMS.V1.Utils.Common.TLabelValue[] = [
   },
 ];
 
+const entry_points = [
+  {
+    value: "mekkah",
+    label: "مكة المكرمة",
+  },
+  {
+    value: "medina",
+    label: "المدينة المنورة",
+  },
+];
+
+const program_types = [
+  {
+    value: "economy",
+    label: "اقتصادي",
+  },
+  {
+    value: "normal",
+    label: "عادي",
+  },
+  {
+    value: "premium",
+    label: "مميز",
+  },
+  {
+    value: "deluxe",
+    label: "فاخر",
+  },
+];
+
+const trip_types = [
+  {
+    value: "direct",
+    label: "مباشرة",
+  },
+  {
+    value: "indirect",
+    label: "غير مباشرة",
+  },
+];
+const payment_modes = [
+  {
+    value: "cash",
+    label: "كاش",
+  },
+  {
+    value: "installment",
+    label: "بالتقسيط",
+  },
+];
+const distance_to_haram_options = [
+  {
+    value: "500-700",
+    label: "من 500 إلي 700",
+  },
+  {
+    value: "700-900",
+    label: "من 700 إلي 900",
+  },
+  {
+    value: "",
+    label: "لا يهم",
+  },
+];
+
 export const OmrahSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const {getWebsiteConfigValue, getArticleTypeBySlug} = useCMSContent();
   const router = useRouter();
+  const sdk = useSdk();
+
   /* -------------------------------------------------------------------------- */
   /*                                   STATE                                    */
   /* -------------------------------------------------------------------------- */
@@ -92,18 +162,63 @@ export const OmrahSearchForm: React.FC = () => {
   const [wilayaOpen, setWilayaOpen] = useState(false);
   const [cityOpen, setCityOpen] = useState(false);
   const [monthOpen, setMonthOpen] = useState(false);
+  const [entryPointOpen, setEntryPointOpen] = useState(false);
   const [durationOpen, setDurationOpen] = useState(false);
+  const [agencyOpen, setAgencyOpen] = useState(false);
+  const [agencySearch, setAgencySearch] = useState("");
+  const [agencies, setAgencies] = useState<{
+    [_id: string]: string;
+  }>({});
+  const [loadedAgencySearches, setLoadedAgencySearches] = useState<string[]>(
+    [],
+  );
+  const [programTypeOpen, setProgramTypeOpen] = useState(false);
+  const [distanceToHaramOpen, setDistanceToHaramOpen] = useState(false);
+  const [tripTypeOpen, setTripTypeOpen] = useState(false);
+  const [paymentModeOpen, setPaymentModeOpen] = useState(false);
+
   // form data
+  const [agency, setAgency] = useState<string | null>(null);
   const [state, setState] = useState<string | null>(null);
   const [city, setCity] = useState<string | null>(null);
   const [month, setMonth] = useState<string | null>(null);
   const [duration, setDuration] = useState<string | null>(null);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [priceRange, setPriceRange] = useState<number[]>([12, 32]);
-
+  const [entry_point, setEntry_point] = useState<string | null>(null);
+  const [program_type, setProgram_type] = useState<string | null>(null);
+  const [payment_mode, setPayment_mode] = useState<string | null>(null);
+  const [distance_to_haram, setDistance_to_haram] = useState<string | null>(
+    null,
+  );
+  const [trip_type, setTrip_type] = useState<string | null>(null);
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
+  const {data, error, refetch, isFetching, isFetched} = useQuery({
+    queryKey: ["agencies", loadedAgencySearches, agencySearch],
+    queryFn: async () => {
+      if (loadedAgencySearches.includes(agencySearch)) return {};
+
+      const data = await sdk.content.articles.list({
+        count: 200,
+        search: agencySearch,
+        filters: {
+          article_type: ArticleTypeSlug.AGENCY,
+        },
+        fields: ["_id", "title"],
+      });
+
+      const articles: {[_id: string]: string} = {};
+      for (const item of data?.data || []) {
+        articles[item._id] = item.title;
+      }
+      setAgencies(old => ({...old, ...articles}));
+      setLoadedAgencySearches(old => [...old, agencySearch]);
+      return {};
+    },
+  });
+
   const loadDurations = useCallback(async () => {
     const type = await getArticleTypeBySlug(ArticleTypeSlug.OMRAH);
     const durations = (
@@ -127,7 +242,7 @@ export const OmrahSearchForm: React.FC = () => {
     };
     const path = `/search?${qs.stringify(searchObject)}`;
     logger.value("path", path);
-    router.push(path)
+    router.push(path);
   }, [city, duration, month, priceRange, router, selectedServices, state]);
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
@@ -141,6 +256,68 @@ export const OmrahSearchForm: React.FC = () => {
   /* -------------------------------------------------------------------------- */
   return (
     <div className="d text-darkblue-950">
+      {/* field */}
+      <div className="field mb-4">
+        <Label className="text-lg text-darkblue-500">{"الوكالة"}</Label>
+        <div className="d">
+          <Popover open={agencyOpen} onOpenChange={setAgencyOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={agencyOpen}
+                className="w-full justify-between"
+              >
+                <div className="value">
+                  {!agency ? <span>{"ابحث..."}</span> : agencies[agency]}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-80 p-0" align="start">
+              <Command
+                filter={(value, search, keywords) => {
+                  setAgencySearch(search);
+                  const label = agencies[value];
+                  const similarity = checkSimilarity(
+                    search,
+                    `${value} ${label || ""}`,
+                  );
+                  return similarity;
+                }}
+              >
+                <CommandInput placeholder="ابحث عن وكالة..." />
+                <CommandList>
+                  <CommandEmpty>لا توجد خيارات.</CommandEmpty>
+                  <CommandGroup>
+                    {Object.entries(agencies).map(([_id, title]) => (
+                      <CommandItem
+                        key={_id}
+                        value={_id}
+                        onSelect={currentValue => {
+                          let value;
+                          value = [_id];
+                          setAgency(currentValue);
+                          setAgencyOpen(false);
+                        }}
+                      >
+                        {title}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            agency === _id ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+
       {/* field */}
       <div className="field mb-4">
         <Label className="text-lg text-darkblue-500">{"الولاية"}</Label>
@@ -166,7 +343,7 @@ export const OmrahSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
@@ -239,7 +416,7 @@ export const OmrahSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
@@ -282,9 +459,9 @@ export const OmrahSearchForm: React.FC = () => {
           </PopoverContent>
         </Popover>
       </div>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-0 sm:gap-4">
+      <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
         {/* field */}
-        <div className="field mb-4">
+        {/* <div className="field mb-4">
           <Label className="text-lg text-darkblue-500">{"شهر الانطلاق"}</Label>
           <Popover open={monthOpen} onOpenChange={setMonthOpen}>
             <PopoverTrigger asChild>
@@ -340,7 +517,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Command>
             </PopoverContent>
           </Popover>
-        </div>
+        </div> */}
         {/* field */}
         <div className="field mb-4">
           <Label className="text-lg text-darkblue-500">
@@ -406,13 +583,74 @@ export const OmrahSearchForm: React.FC = () => {
             </PopoverContent>
           </Popover>
         </div>
+        {/* field */}
+        <div className="field mb-4">
+          <Label className="text-lg text-darkblue-500">{"الدخول"}</Label>
+          <Popover open={entryPointOpen} onOpenChange={setEntryPointOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={entryPointOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="entry"
+              >
+                <div className="value text-xl">
+                  {!entry_point ? (
+                    <span className="text-darkblue-500">{"اختر..."}</span>
+                  ) : (
+                    <span>
+                      {entry_points.find(ep => ep.value === entry_point)
+                        ?.label || ""}
+                    </span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-hammah text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandInput className="text-xl" placeholder="ابحث هنا..." />
+                <CommandList>
+                  <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
+                    لا توجد خيارات.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {entry_points.map(({value, label}) => (
+                      <CommandItem
+                        key={value}
+                        value={value}
+                        onSelect={value => {
+                          setEntry_point(value);
+                          setEntryPointOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            value === entry_point ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
       <div className="field mb-4">
         <p className="d flex items-center gap-3 text-text-500">
           <LuHelpCircle className="h-4 w-4" />
           <span className="dd">ماذا تفضل أن يكون متوفرا في العرض؟</span>
         </p>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {services.map(item => (
             <FormLabel
               key={item.value}
@@ -513,11 +751,11 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
 
   logger.value("springs", springs);
   return (
-    <div className="jcms-hero-section min-h-[600px] sm:w-[500px] w-full rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all">
+    <div className="jcms-hero-section min-h-[600px] w-full rounded-4xl bg-beige-50 shadow-lg shadow-darkblue-900/10 transition-all sm:w-[500px]">
       <Tabs defaultValue="omrah" className="w-full" onValueChange={setTab}>
         <TabsList className="h-auto w-full items-center justify-around bg-transparent">
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
             value="bids"
           >
             <span>مناقصات</span>
@@ -530,7 +768,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
             value="tombolas"
           >
             <span>طمبولات</span>
@@ -543,7 +781,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 md:px-4 py-4 text-2xl sm:text-2xl md:text-3xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent"
+            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
             value="omrah"
           >
             <span>عروض العمرة</span>
