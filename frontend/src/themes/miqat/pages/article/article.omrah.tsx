@@ -6,7 +6,12 @@ import Link from "next/link";
 import PageNotFound from "../../components/page-not-found";
 import {serverSdk} from "../../data";
 import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
-import {LuAlarmClock, LuCalendarDays, LuCircleDollarSign, LuPencil} from "react-icons/lu";
+import {
+  LuAlarmClock,
+  LuCalendarDays,
+  LuCircleDollarSign,
+  LuPencil,
+} from "react-icons/lu";
 import {format} from "date-fns";
 import {formatAmount} from "@/lib/utilities/strings";
 import {PiAirplaneTilt, PiTrolleySuitcase} from "react-icons/pi";
@@ -18,8 +23,9 @@ import {IoFastFoodOutline, IoMoonOutline} from "react-icons/io5";
 import {cn} from "@/lib/utils";
 import {MdOutlineLocalHotel} from "react-icons/md";
 import initLogger, {LoggerContext} from "@/lib/logging";
-import { ArticleTypeSlug } from "../../config";
+import {ArticleTypeSlug} from "../../config";
 import AdminOnlyGuard from "@/guards/admin-only.guard";
+import AdminOnlyView from "@/guards/admin-only.view";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -76,13 +82,16 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
     <div className="article-page mb-16">
       <div className="mb-4"></div>
       <div className="mb-4">
-        <h1 className="mb-6 mt-8  justify-center gap-4 items-center flex text-4xl text-gray-800 md:text-5xl">
+        <h1 className="mb-6 mt-8 flex items-center justify-center gap-4 text-4xl text-gray-800 md:text-5xl">
           {article.title}
-          <AdminOnlyGuard>
-            <Link href={`/admin/articles/edit/${article._id}`} className=" rounded-full inline-block ms-4 p-2 text-gray-400 hocus:bg-gray-100 hocus:text-gray-600" >
-            <LuPencil className="w-5 h-5" />
+          <AdminOnlyView>
+            <Link
+              href={`/admin/articles/edit/${article._id}`}
+              className="ms-4 inline-block rounded-full p-2 text-gray-400 hocus:bg-gray-100 hocus:text-gray-600"
+            >
+              <LuPencil className="h-5 w-5" />
             </Link>
-          </AdminOnlyGuard>
+          </AdminOnlyView>
         </h1>
       </div>
       <div className="relative mb-6 aspect-video w-full md:aspect-21/9">
@@ -148,7 +157,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
       </aside>
 
       <div className="flex flex-col gap-6 xl:flex-row">
-        <aside className="relative flex-shrink-0 flex-grow xl:grow-0 xl:w-80 xl:rounded-2xl xl:bg-slate-50/50 xl:px-4 xl:py-6">
+        <aside className="relative flex-shrink-0 flex-grow xl:w-80 xl:grow-0 xl:rounded-2xl xl:bg-slate-50/50 xl:px-4 xl:py-6">
           <div className="sticky top-6 grid gap-6 text-2xl sm:grid-cols-2 xl:grid-cols-1">
             {/* field */}
             <div className="items-top flex flex-row gap-4">
@@ -410,7 +419,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           </div>
         </aside>
         <div
-          className="prose mx-auto mb-6 text-2xl text-darkblue-700 md:text-3xl flex-grow"
+          className="prose mx-auto mb-6 flex-grow text-2xl text-darkblue-700 md:text-3xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
       </div>
@@ -421,6 +430,5 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
 };
 
 export default OmrahArticlePage;
-
 
 //  router.push(setPathParams(adminRoutes.articles._.edit.path, {id: data._id}));
