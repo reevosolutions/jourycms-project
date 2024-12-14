@@ -4,6 +4,7 @@ import React from "react";
 import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs";
 import ContentSection from "@/themes/miqat/components/content.section.client";
 import {ArticleTypeSlug} from "@/themes/miqat/config";
+import Link from "next/link";
 
 export type HomepageContentSectionProps = JouryCMS.Theme.ComponentProps & {};
 
@@ -13,7 +14,7 @@ const CustomTabTrigger: React.FC<{
   tab: string;
 }> = ({label, image, tab}) => (
   <TabsTrigger
-    className="group flex flex-col items-center justify-center gap-2 rounded-none border-b-2 border-b-transparent bg-transparent sm:px-8 px-4 py-4 text-4xl text-darkblue-400 transition-all data-[state=active]:border-b-darkblue-900 data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-darkblue-950 data-[state=active]:shadow-none hover:text-darkblue-900 active:bg-transparent md:flex-row lg:gap-4"
+    className="group flex flex-col items-center justify-center gap-2 rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-4 text-4xl text-darkblue-400 transition-all data-[state=active]:border-b-darkblue-900 data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-darkblue-950 data-[state=active]:shadow-none hover:text-darkblue-900 active:bg-transparent sm:px-8 md:flex-row lg:gap-4"
     value={tab}
   >
     <Image
@@ -56,6 +57,14 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
                 count={12}
                 showPagination={false}
               />
+              <div className="py-10 flex justify-center">
+                <Link
+                  href={`/omrah/2`}
+                  className="rounded-xl bg-darkblue-700 px-10 py-2 pb-3 text-3xl font-bold text-white transition-all hocus:bg-darkblue-900"
+                >
+                  عرض المزيد
+                </Link>
+              </div>
             </div>
           </TabsContent>
           <TabsContent value="tombolas">

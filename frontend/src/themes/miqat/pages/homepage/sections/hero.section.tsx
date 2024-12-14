@@ -28,10 +28,10 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
           layers={[
             {image: "/assets/miqat/images/medina.webp", speed: -40},
             {
-              speed: -25,
+              speed: -10,
               children: (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="container mx-auto hidden lg:block">
+                  <div className="container mx-auto hidden lg:block mt-20">
                     <h2
                       className="inline-flex flex-col gap-1 rounded-3xl bg-white/30 py-2 px-8 text-7xl font-thin leading-tight text-red2-800"
                       dangerouslySetInnerHTML={{
