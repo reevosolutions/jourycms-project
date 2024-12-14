@@ -11,7 +11,11 @@ const logger = initLogger("UTILITY", `MongoDB-helpers`);
 export const isObjectIdValid = (id: string) => {
   try {
     if (!id) return false;
-    if (ObjectId.isValid(id.toString()) && String(new ObjectId(id.toString())) === id) return true;
+    if (
+      ObjectId.isValid(id.toString()) &&
+      String(new ObjectId(id.toString())) === id
+    )
+      return true;
     return false;
   } catch (error) {
     logger.save.error({
@@ -61,6 +65,7 @@ export async function upgradeIndexes(
     for (const index of indexes) {
       const { data } = index.value;
       const { fields, key } = data;
+      if(Object.keys(fields).some(k=>k.includes('$'))) continue; 
       const keys = Object.keys(fields);
       const indexes: {
         v: number;
@@ -77,7 +82,7 @@ export async function upgradeIndexes(
         textIndexVersion: number;
       }[] = await model.listIndexes();
       const indexKeys = indexes.map((i) => i.name);
-      if (!indexKeys.includes(key)) {
+      if (!indexKeys.includes(key) && !keys.includes("$")) {
         try {
           logger.info(
             "upgradeIndexes",
@@ -113,7 +118,13 @@ export function ensureIndexes(
         );
       })
       .catch((error) => {
-        logger.error("ensure-indexes", model.collection.name, error);
+        logger.error(
+          "ensure-indexes",
+          model.collection.name,
+          error.message?.includes("Index already exists")
+            ? error.message
+            : error
+        );
       });
   });
 }

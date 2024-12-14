@@ -5,14 +5,14 @@
  */
 
 export const combineArrays: (
-  arg: string[][],
+  argument: string[][],
   separator?: string,
 ) => string[] = ([head, ...[headTail, ...tailTail]], separator = " ") => {
   console.log("combineArrays", { head, headTail, tailTail });
   if (!headTail) return head;
 
-  const combined = headTail.reduce((acc, x) => {
-    return [...acc, ...head.map(h => `${h}${separator}${x}`)];
+  const combined = headTail.reduce((accumulator, x) => {
+    return [...accumulator, ...head.map(h => `${h}${separator}${x}`)];
   }, [] as string[]);
 
   return combineArrays([combined, ...tailTail], separator);

@@ -98,7 +98,7 @@ const AdminDashboardPage: React.FC<AdminDashboardPageProps> = ({}) => {
                   ).map(item => {
                     const count =
                       data?.articlesByTypes?.data?.find(
-                        i => i.article_type === item?._id,
+                        index => index.article_type === item?._id,
                       )?.count || 0;
                     return (
                       <div

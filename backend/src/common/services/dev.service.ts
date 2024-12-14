@@ -132,9 +132,6 @@ export default class DevService extends BaseService {
       this.articlesService = Container.get(ArticlesService);
       this.articleTypesService = Container.get(ArticleTypesService);
 
-      
-
-      
       await this.seedArticleTypes();
       const { data: articleTypes } = await this.articleTypesService.list(
         {
@@ -156,7 +153,6 @@ export default class DevService extends BaseService {
         {} as { [slug in `${ArticleTypeSlug}`]: (typeof articleTypes)[0] }
       );
       scenario.set({ articleTypes: articleTypes.map((i) => i.slug) });
-
 
       await this.reset();
       await this.createFirstAdmin();
@@ -489,47 +485,47 @@ export default class DevService extends BaseService {
       this.internalAuthData
     );
     if (user) {
+      const dzAiroports = [
+        "الجزائر",
+        "وهران",
+        "قسنطينة",
+        "الوادي",
+        "ورقلة",
+        "غرداية",
+      ];
+      const ksaAiroports = ["جدة", "المدينة", "الرياض", "الطائف", "ينبع"];
+
       const dzCount = await this.articleModel.countDocuments({
         "meta_fields.country": "dz",
         article_type: this.types[ArticleTypeSlug.AIROPORT]?._id,
       });
 
       if (!dzCount)
-        for (const state of faker.helpers.arrayElements(states, 40)) {
-          const stateCities = cities.filter(
-            (item) => item.state_code === state.code
-          );
-          for (const index of new Array(
-            faker.number.int({ min: 1, max: 1 })
-          ).fill(null)) {
-            try {
-              const city = faker.helpers.arrayElement(stateCities);
-              const article: Article = {
-                title: `مطار ${state.name}`,
-                body: this.loremHtml,
-                body_unformatted: "",
-                body_structured: {},
-                is_published: true,
-                published_at: new Date(),
-                is_featured: false,
-                featured_image: null,
-                article_type: this.types[ArticleTypeSlug.AIROPORT]?._id,
-                related_tags: [],
-                meta_fields: {
-                  country: "dz",
-                  state: state.code,
-                  city: city.code,
-                },
-                attributes: undefined,
-                snapshots: undefined,
-                insights: undefined,
-              };
-              await this.articlesService.create(
-                { data: article },
-                { current: { user } }
-              );
-            } catch (error) {}
-          }
+        for (const name of dzAiroports) {
+          try {
+            const article: Article = {
+              title: `مطار ${name}`,
+              body: this.loremHtml,
+              body_unformatted: "",
+              body_structured: {},
+              is_published: true,
+              published_at: new Date(),
+              is_featured: false,
+              featured_image: null,
+              article_type: this.types[ArticleTypeSlug.AIROPORT]?._id,
+              related_tags: [],
+              meta_fields: {
+                country: "dz",
+              },
+              attributes: undefined,
+              snapshots: undefined,
+              insights: undefined,
+            };
+            await this.articlesService.create(
+              { data: article },
+              { current: { user } }
+            );
+          } catch (error) {}
         }
 
       const ksaCount = await this.articleModel.countDocuments({
@@ -537,9 +533,9 @@ export default class DevService extends BaseService {
         article_type: this.types[ArticleTypeSlug.AIROPORT]?._id,
       });
       if (!ksaCount)
-        for (const city of faker.helpers.arrayElements(ksa_cities, 20)) {
+        for (const name of ksaAiroports) {
           const article: Article = {
-            title: `مطار ${city.name}`,
+            title: `مطار ${name}`,
             body: this.loremHtml,
             body_unformatted: "",
             body_structured: {},
@@ -551,7 +547,6 @@ export default class DevService extends BaseService {
             related_tags: [],
             meta_fields: {
               country: "ksa",
-              ksa_city: city.code,
             },
             attributes: undefined,
             snapshots: undefined,
@@ -577,42 +572,46 @@ export default class DevService extends BaseService {
       },
       this.internalAuthData
     );
+
+    const airline_names = [
+      "الجزائرية",
+      "السعودية",
+      "فلاي ناس",
+      "اير نوفال",
+      "التركية",
+      "المصرية",
+      "القطرية",
+      "الإماراتية",
+      "التونسية",
+      "الأردنية",
+    ];
+
     if (user) {
-      for (const state of faker.helpers.arrayElements(states, 40)) {
-        const stateCities = cities.filter(
-          (item) => item.state_code === state.code
-        );
-        for (const index of new Array(
-          faker.number.int({ min: 1, max: 1 })
-        ).fill(null)) {
-          try {
-            const city = faker.helpers.arrayElement(stateCities);
-            const article: Article = {
-              title: faker.company.buzzPhrase(),
-              body: this.loremHtml,
-              body_unformatted: "",
-              body_structured: {},
-              is_published: true,
-              published_at: new Date(),
-              is_featured: false,
-              featured_image: null,
-              article_type: this.types[ArticleTypeSlug.AIRELINES_COMPANY]?._id,
-              related_tags: [],
-              meta_fields: {
-                country: "dz",
-                state: state.code,
-                city: city.code,
-              },
-              attributes: undefined,
-              snapshots: undefined,
-              insights: undefined,
-            };
-            await this.articlesService.create(
-              { data: article },
-              { current: { user } }
-            );
-          } catch (error) {}
-        }
+      for (const name of airline_names) {
+        try {
+          const article: Article = {
+            title: name,
+            body: this.loremHtml,
+            body_unformatted: "",
+            body_structured: {},
+            is_published: true,
+            published_at: new Date(),
+            is_featured: false,
+            featured_image: null,
+            article_type: this.types[ArticleTypeSlug.AIRELINES_COMPANY]?._id,
+            related_tags: [],
+            meta_fields: {
+              country: "dz",
+            },
+            attributes: undefined,
+            snapshots: undefined,
+            insights: undefined,
+          };
+          await this.articlesService.create(
+            { data: article },
+            { current: { user } }
+          );
+        } catch (error) {}
       }
     }
   }

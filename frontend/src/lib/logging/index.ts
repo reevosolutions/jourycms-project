@@ -112,7 +112,7 @@ export class LoggerService {
   public log(
     type: Levelup.CMS.V1.Lib.Logger.LogType,
     message: string,
-    ...args: any[]
+    ...arguments_: any[]
   ) {
     if (
       LoggerService.muted[this.context][this.contextId] ||
@@ -140,7 +140,7 @@ export class LoggerService {
                       ? message.magenta
                       : message.gray
     }`;
-    console.log(label, ...args);
+    console.log(label, ...arguments_);
   }
 
   /**
@@ -148,8 +148,8 @@ export class LoggerService {
    * @param message The warning message.
    * @param args Additional arguments to be logged.
    */
-  public warn(message: string, ...args: any[]) {
-    this.log("WARN", message, ...args);
+  public warn(message: string, ...arguments_: any[]) {
+    this.log("WARN", message, ...arguments_);
   }
 
   /**
@@ -157,8 +157,8 @@ export class LoggerService {
    * @param message The error message.
    * @param args Additional arguments to be logged.
    */
-  public error(message: string, ...args: any[]) {
-    this.log("ERROR", message, ...args);
+  public error(message: string, ...arguments_: any[]) {
+    this.log("ERROR", message, ...arguments_);
   }
 
   /**
@@ -166,8 +166,8 @@ export class LoggerService {
    * @param message The info message.
    * @param args Additional arguments to be logged.
    */
-  public info(message: string, ...args: any[]) {
-    this.log("INFO", message, ...args);
+  public info(message: string, ...arguments_: any[]) {
+    this.log("INFO", message, ...arguments_);
   }
 
   /**
@@ -175,8 +175,8 @@ export class LoggerService {
    * @param message The debug message.
    * @param args Additional arguments to be logged.
    */
-  public debug(message: string, ...args: any[]) {
-    this.log("DEBUG", message, ...args);
+  public debug(message: string, ...arguments_: any[]) {
+    this.log("DEBUG", message, ...arguments_);
   }
 
   /**
@@ -184,8 +184,8 @@ export class LoggerService {
    * @param message The success message.
    * @param args Additional arguments to be logged.
    */
-  public success(message: string, ...args: any[]) {
-    this.log("SUCCESS", message, ...args);
+  public success(message: string, ...arguments_: any[]) {
+    this.log("SUCCESS", message, ...arguments_);
   }
 
   /**
@@ -193,8 +193,8 @@ export class LoggerService {
    * @param message The silly message.
    * @param args Additional arguments to be logged.
    */
-  public silly(message: string, ...args: any[]) {
-    this.log("SILLY", message, ...args);
+  public silly(message: string, ...arguments_: any[]) {
+    this.log("SILLY", message, ...arguments_);
   }
 
   /**
@@ -202,8 +202,8 @@ export class LoggerService {
    * @param message The HTTP message.
    * @param args Additional arguments to be logged.
    */
-  public http(message: string, ...args: any[]) {
-    this.log("HTTP", message, ...args);
+  public http(message: string, ...arguments_: any[]) {
+    this.log("HTTP", message, ...arguments_);
   }
 
   /**
@@ -211,8 +211,8 @@ export class LoggerService {
    * @param message The event message.
    * @param args Additional arguments to be logged.
    */
-  public event(message: string, ...args: any[]) {
-    this.log("EVENT", message, ...args);
+  public event(message: string, ...arguments_: any[]) {
+    this.log("EVENT", message, ...arguments_);
   }
 
   /**
@@ -220,8 +220,8 @@ export class LoggerService {
    * @param message The value message.
    * @param args Additional arguments to be logged.
    */
-  public value(message: string, ...args: any[]) {
-    this.log("VALUE", message, ...args);
+  public value(message: string, ...arguments_: any[]) {
+    this.log("VALUE", message, ...arguments_);
   }
 
   /**
@@ -229,10 +229,10 @@ export class LoggerService {
    * @param name The value name.
    * @param args Additional arguments to be logged.
    */
-  public tree(name: string, ...args: any[]) {
+  public tree(name: string, ...arguments_: any[]) {
     this.log("VALUE", name);
     console.log(
-      treeify.asTree({ ...args } as unknown as TreeObject, true, true),
+      treeify.asTree({ ...arguments_ } as unknown as TreeObject, true, true),
     );
   }
 }

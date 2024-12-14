@@ -29,7 +29,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
         <div className="d"></div>
 
         <ParallaxBanner
-          layers={[{image: "/assets/miqat/images/mosque2.webp", speed: -40}]}
+          layers={[{image: "/assets/miqat/images/medina.webp", speed: -40}]}
           className="aspect-[3/1] min-h-[600px]"
           style={{
             backgroundImage:

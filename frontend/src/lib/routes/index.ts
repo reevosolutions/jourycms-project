@@ -1,1 +1,1 @@
-export { filterRoutes, setPathParams, getRouteTree } from "./utills.routes";
+export { filterRoutes, getRouteTree,setPathParams } from "./utills.routes";

@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/explicit-length-check */
 "use client";
 
 import * as React from "react";

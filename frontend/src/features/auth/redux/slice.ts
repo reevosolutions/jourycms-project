@@ -28,7 +28,7 @@ export const authSlice = createAppSlice({
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: create => ({
     loadAuthData: create.asyncThunk(
-      async (arg1: void) => {
+      async (argument1: void) => {
         try {
           logger.event("loadAuthData", "triggered");
           const authManager = AuthenticationManager.getInstance();
@@ -113,7 +113,7 @@ export const authSlice = createAppSlice({
       },
     ),
     logout: create.asyncThunk(
-      async (arg: void) => {
+      async (argument: void) => {
         try {
           const authManager = AuthenticationManager.getInstance();
           await authManager.logout();

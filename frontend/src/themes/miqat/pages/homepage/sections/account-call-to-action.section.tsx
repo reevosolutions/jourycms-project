@@ -59,7 +59,7 @@ const HomepageCallToActionSection: React.FC<
               </animated.div>
             </div>
           </div>
-          <div className="container relative z-10">
+          <div className="container mx-auto relative z-10">
             <h2 className="mt-0 pb-8  md:pb-16 text-center text-6xl sm:text-6xl md:text-8xl font-bold text-red2-800">
               {getWebsiteConfigValue("name")}
             </h2>

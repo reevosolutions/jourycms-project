@@ -1,17 +1,17 @@
-import { formatAmount } from "@/lib/utilities/strings";
+import {formatAmount} from "@/lib/utilities/strings";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { serverSdk } from "../data";
-import { getMetaFieldValueLabel } from "../data/meta-fields";
+import {serverSdk} from "../data";
+import {getMetaFieldValueLabel} from "../data/meta-fields";
 
-import initLogger, { LoggerContext } from "@/lib/logging";
+import initLogger, {LoggerContext} from "@/lib/logging";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-
+import {cn} from "@/lib/utils";
 
 export type PostCard_ServerProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;
@@ -19,9 +19,14 @@ export type PostCard_ServerProps = JouryCMS.Theme.ComponentProps & {
   articleType: Levelup.CMS.V1.Content.Entity.ArticleType;
 };
 
-const PostCard_Server: React.FC<PostCard_ServerProps> = ({ data, edge, articleType }) => {
-
+const PostCard_Server: React.FC<PostCard_ServerProps> = ({
+  data,
+  edge,
+  articleType,
+}) => {
   const agency = edge?.linked_articles?.[data.meta_fields.agency] || null;
+  const airelinesCompany =
+    edge?.linked_articles?.[data.meta_fields.airelines_company] || null;
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
@@ -64,7 +69,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({ data, edge, articleTy
           </h2>
           <div
             className="text-sm text-gray-500"
-            dangerouslySetInnerHTML={{__html: data.body_unformatted || ''}}
+            dangerouslySetInnerHTML={{__html: data.body_unformatted || ""}}
           />
         </div>
 
@@ -86,23 +91,74 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({ data, edge, articleTy
               />
             )}
             <div className="flex-flex-col">
-              <span className="text-xl text-darkblue-600">{agency.title}</span>
+              <span className="text-2xl text-darkblue-600">{agency.title}</span>
             </div>
           </div>
         )}
 
-        <p className="duration mb-2 text-2xl font-bold text-teal-600">
-          {getMetaFieldValueLabel(
-            articleType,
-            "trip_duration",
-            data.meta_fields.trip_duration,
-          )}
-        </p>
+        <div className="mb-2 flex items-end justify-between gap-4">
+          <p className="duration  text-teal-600">
+            <span className="text-xl leading-tight">{"المدة"}</span>
+            <div className="duration text-2xl font-bold text-teal-600">
+              {getMetaFieldValueLabel(
+                articleType,
+                "trip_duration",
+                data.meta_fields.trip_duration,
+              )}
+            </div>
+          </p>
+          <p className="text-blue-700">
+            <span className="text-xl leading-tight">{"الدخول"}</span>
+            <div className="text-2xl font-bold leading-tight">
+              {getMetaFieldValueLabel(
+                articleType,
+                "entry_point",
+                data.meta_fields.entry_point,
+              )}
+            </div>
+          </p>
+        </div>
+        <div className="mb-2 flex items-center justify-between gap-4">
+          <div
+            className={cn(
+              "duration font-regular text-2xl",
+              data.meta_fields.trip_type === "direct"
+                ? "text-green-600"
+                : "text-red-600",
+            )}
+          >
+            <p className="d">
+              رحلة{" "}
+              {getMetaFieldValueLabel(
+                articleType,
+                "trip_type",
+                data.meta_fields.trip_type,
+              )}
+            </p>
+            <p className="d">
+              {airelinesCompany?.meta_fields?.logo && (
+                <Image
+                  priority
+                  className="object-cover"
+                  src={serverSdk.storage.utils.getImageUrl(
+                    airelinesCompany?.meta_fields?.logo.id,
+                    {
+                      width: 300,
+                    },
+                  )}
+                  alt={airelinesCompany?.title || ""}
+                  width={150}
+                  height={150}
+                />
+              )}
+            </p>
+          </div>
+        </div>
       </div>
       <div className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-between gap-4 rounded-b-xl bg-red2-50 px-6 py-4">
-        <span className="text-darkblue-600">{"ابتداء من"}</span>
+        <span className="text-2xl text-darkblue-600">{"ابتداء من"}</span>
         <span className="text-4xl font-bold text-beige-800">
-          {formatAmount(data.meta_fields?.price, ",", 0)} دج
+          {formatAmount(data.meta_fields?.price, ",", 0)}
         </span>
       </div>
     </Link>

@@ -206,9 +206,9 @@ const AvatarImageUploader: FC<Props> = ({
 
             {selectedFile && !isDragActive && (
               <button
-                onClick={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                onClick={event => {
+                  event.preventDefault();
+                  event.stopPropagation();
                   setUploadedFile(null);
                   setSelectedFile(null);
                   setPreview(null);

@@ -95,9 +95,6 @@ export default class BuilderService extends BaseService {
   public async upgrade() {
     const scenario = this.initScenario(this.logger, this.upgrade);
     try {
-
-
-
       const translationToolsService = Container.get(TranslationToolsService);
       await translationToolsService.translateUsingGoogleAPI();
       const type = await this.articleTypeModel.findOne({

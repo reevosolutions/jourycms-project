@@ -104,7 +104,7 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
               blurDataURL={serverSdk.storage.utils.getImageBlurredUrl(
                 getMetaField(article, "avatar", "image", false)?.id as string,
               )}
-              className="rounded-7xl h-full w-full object-cover"
+              className="h-full w-full rounded-7xl object-cover"
               src={serverSdk.storage.utils.getImageUrl(
                 getMetaField(article, "avatar", "image", false)?.id as string,
                 {width: 450, height: 450},
@@ -112,25 +112,27 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
               alt={article.title}
               width={450}
               height={450}
+              fill={true}
             />
           </div>
         ) : null}
         {hasMetaField(article, "logo") ? (
-          <div className="relative mb-4 aspect-square w-32">
+          <div className="relative mb-4 aspect-video   w-60">
             <Image
               priority
               placeholder="blur"
               blurDataURL={serverSdk.storage.utils.getImageBlurredUrl(
                 getMetaField(article, "logo", "image", false)?.id as string,
               )}
-              className="rounded-7xl h-full w-full object-cover"
+              className="h-full w-full object-contain"
               src={serverSdk.storage.utils.getImageUrl(
                 getMetaField(article, "logo", "image", false)?.id as string,
-                {width: 450, height: 450},
+                // {width: 450, height: 450},
               )}
               alt={article.title}
-              width={450}
-              height={450}
+              // width={450}
+              // height={450}
+              fill={true}
             />
           </div>
         ) : null}

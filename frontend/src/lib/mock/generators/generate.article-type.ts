@@ -32,7 +32,7 @@ export default function generateArticleTypes(count: number) {
       { min: count, max: count },
     )
     .map(type => {
-      const doc: Levelup.CMS.V1.Content.Entity.ArticleType = {
+      const document_: Levelup.CMS.V1.Content.Entity.ArticleType = {
         _id: faker.database.mongodbObjectId(),
         slug: type.toKebabCase(),
         name: type,
@@ -56,7 +56,7 @@ export default function generateArticleTypes(count: number) {
           article_count: faker.number.int({ min: 0, max: 10_000 }),
         },
       };
-      logger.value("doc", doc);
-      return doc;
+      logger.value("doc", document_);
+      return document_;
     });
 }

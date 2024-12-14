@@ -52,9 +52,9 @@ export default class CacheManager {
        * Apply encryption middleware
        */
       const tableSettings = this._db.tables.reduce(
-        (acc, table) => {
-          acc[table.name] = NON_INDEXED_FIELDS;
-          return acc;
+        (accumulator, table) => {
+          accumulator[table.name] = NON_INDEXED_FIELDS;
+          return accumulator;
         },
         {} as Record<string, string>,
       );

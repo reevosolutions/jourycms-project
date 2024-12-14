@@ -14,12 +14,6 @@
     },
     {
       "path": "."
-    },
-    {
-      "path": "../auvibado/auvibado-starter"
-    },
-    {
-      "path": "../auvibado/mussaab-ui"
     }
   ],
   "settings": {

@@ -93,7 +93,7 @@ export const slice = createAppSlice({
     selectStates: state => state.states,
     selectCities: state => state.cities,
     selectStateCities: (state, state_code: string) =>
-      state.cities.filter(i => (i.state_code = state_code)),
+      state.cities.filter(index => (index.state_code = state_code)),
   },
 });
 

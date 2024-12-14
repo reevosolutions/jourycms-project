@@ -1,3 +1,4 @@
+/* eslint-disable import/no-named-as-default */
 import Dexie from "dexie";
 
 export type JouryCMS_AuthEntityType = "user" | "app" | "config";

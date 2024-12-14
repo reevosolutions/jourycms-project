@@ -10,7 +10,7 @@ const custom_meta_fields = {
       choices: [
         {
           value: "mekkah",
-          label: "مكة المكرة",
+          label: "مكة المكرمة",
         },
         {
           value: "medina",
@@ -38,7 +38,6 @@ const custom_meta_fields = {
       multiple: false,
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"select">,
-
   price: {
     field_key: "price",
     field_label: "السعر",
@@ -98,9 +97,9 @@ const custom_meta_fields = {
       multiple: false,
     },
   },
-  trip_type: {
-    field_key: "trip_type",
-    field_label: "نوع الرحلة",
+  program_type: {
+    field_key: "program_type",
+    field_label: "نوع البرنامج",
     field_type: "select" as const,
     field_options: {
       choices: [
@@ -109,26 +108,118 @@ const custom_meta_fields = {
           label: "اقتصادي",
         },
         {
-          value: "premium_economy",
-          label: "اقتصادي مميز",
+          value: "normal",
+          label: "عادي",
         },
         {
-          value: "business",
-          label: "رجال الأعمال",
+          value: "premium",
+          label: "مميز",
         },
         {
-          value: "first_class",
-          label: "الدرجة الأولى",
+          value: "deluxe",
+          label: "فاخر",
         },
       ],
     },
   },
+  trip_type: {
+    field_key: "trip_type",
+    field_label: "نوع الرحلة",
+    field_type: "select" as const,
+    field_options: {
+      choices: [
+        {
+          value: "direct",
+          label: "مباشرة",
+        },
+        {
+          value: "indirect",
+          label: "غير مباشرة",
+        },
+      ],
+    },
+  },
+  payment_mode: {
+    field_key: "payment_mode",
+    field_label: "طريقة الدفع",
+    field_type: "select" as const,
+    field_options: {
+      choices: [
+        {
+          value: "cash",
+          label: "كاش",
+        },
+        {
+          value: "installment",
+          label: "بالتقسيط",
+        },
+      ],
+    },
+  },
+  installment_initial_payment: {
+    field_key: "installment_initial_payment",
+    field_label: "الدفع الاولي",
+    field_type: "number" as const,
+    field_options: {
+      min: 0,
+      constraints: [
+        {
+          field: "payment_mode",
+          operator: "eq",
+          value: "installment",
+        },
+      ],
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"number", false>,
+  installment_number_of_installments: {
+    field_key: "installment_number_of_installments",
+    field_label: "عدد الاقساط",
+    field_type: "number" as const,
+    field_options: {
+      min: 1,
+      constraints: [
+        {
+          field: "payment_mode",
+          operator: "eq",
+          value: "installment",
+        },
+      ],
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"number", false>,
+  trip_start_date: {
+    field_key: "trip_start_date",
+    field_label: "تاريخ بداية الرحلة",
+    field_type: "date" as const,
+    field_options: {
+      format: "YYYY-MM-DD",
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"date">,
+  trip_end_date: {
+    field_key: "trip_end_date",
+    field_label: "تاريخ نهاية الرحلة",
+    field_type: "date" as const,
+    field_options: {
+      format: "YYYY-MM-DD",
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"date">,
   trip_duration: {
     field_key: "trip_duration",
     field_label: "مدة الرحلة",
     field_type: "select" as const,
     field_options: {
       choices: [
+        {
+          value: "5",
+          label: "5 أيام",
+        },
+        {
+          value: "7",
+          label: "7 أيام",
+        },
+        {
+          value: "10",
+          label: "10 أيام",
+        },
         {
           value: "15",
           label: "15 يوم",
@@ -158,14 +249,7 @@ const custom_meta_fields = {
       max: 255,
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text">,
-  flight_date: {
-    field_key: "flight_date",
-    field_label: "تاريخ الرحلة",
-    field_type: "date" as const,
-    field_options: {
-      format: "YYYY-MM-DD",
-    },
-  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"date">,
+
   start_date: {
     field_key: "start_date",
     field_label: "تاريخ البداية",
@@ -521,11 +605,11 @@ const custom_meta_fields = {
       choices: [
         {
           value: "male",
-          label: "ذكر"
+          label: "ذكر",
         },
         {
           value: "female",
-          label: "أنثى"
+          label: "أنثى",
         },
       ],
       multiple: false,
@@ -568,14 +652,21 @@ const _articleTypesSeedData = {
       description_structured: {},
       custom_meta_fields: [
         custom_meta_fields.agency,
+        custom_meta_fields.program_type,
+        custom_meta_fields.trip_start_date,
+        custom_meta_fields.trip_end_date,
         custom_meta_fields.trip_duration,
-        custom_meta_fields.airelines_company,
         custom_meta_fields.departure_airoport,
         custom_meta_fields.arrival_airoport,
-        custom_meta_fields.flight_number,
-        custom_meta_fields.flight_date,
-        custom_meta_fields.flight_time,
         custom_meta_fields.trip_type,
+        custom_meta_fields.airelines_company,
+        custom_meta_fields.payment_mode,
+        custom_meta_fields.installment_initial_payment,
+        custom_meta_fields.installment_number_of_installments,
+
+        //
+        custom_meta_fields.flight_number,
+        custom_meta_fields.flight_time,
         custom_meta_fields.entry_point,
         custom_meta_fields.price,
         custom_meta_fields.ramdhan_trip,
@@ -618,6 +709,7 @@ const _articleTypesSeedData = {
       description_unformatted: "وصف شركة طيران",
       description_structured: {},
       custom_meta_fields: [
+        custom_meta_fields.logo,
         custom_meta_fields.country,
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,

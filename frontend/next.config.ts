@@ -1,5 +1,6 @@
 import type {NextConfig} from "next";
 import withSerwistInit from "@serwist/next";
+import path from "node:path";
 
 const withSerwist = withSerwistInit({
   // Note: This is only an example. If you use Pages Router,
@@ -7,7 +8,6 @@ const withSerwist = withSerwistInit({
   swSrc: "src/app/sw.ts",
   swDest: "public/sw.js",
   cacheOnNavigation: true,
-
 });
 
 const nextConfig: NextConfig = {
@@ -73,6 +73,7 @@ const nextConfig: NextConfig = {
         ]
       : [];
   },
+  
 };
 
 export default nextConfig;

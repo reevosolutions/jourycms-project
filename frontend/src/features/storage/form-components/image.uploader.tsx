@@ -216,14 +216,14 @@ const ImageUploader: FC<Props> = ({
             </div>
 
             {isDragActive && !isDragReject ? (
-              <div className="absolute h-full w-full rounded-full border-2 border-blue-500 bg-blue-300/50"></div>
+              <div className="absolute inset-1 rounded-lg bg-blue-300/50"></div>
             ) : null}
 
             {selectedFile && !isDragActive && (
               <button
-                onClick={e => {
-                  e.preventDefault();
-                  e.stopPropagation();
+                onClick={event => {
+                  event.preventDefault();
+                  event.stopPropagation();
                   setUploadedFile(null);
                   setSelectedFile(null);
                   setPreview(null);
