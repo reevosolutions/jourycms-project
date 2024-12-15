@@ -163,7 +163,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
               )}
             </p>
             <p className="d">
-              {airelinesCompany?.meta_fields?.logo && (
+              {airelinesCompany?.meta_fields?.logo ? (
                 <Image
                   priority
                   className="object-cover"
@@ -177,7 +177,9 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                   width={70}
                   height={50}
                 />
-              )}
+              ) : airelinesCompany?.title ? (
+                <span className="text-xl text-darkblue-500 font-bold">{airelinesCompany?.title}</span>
+              ) : null}
             </p>
           </div>
         </div>

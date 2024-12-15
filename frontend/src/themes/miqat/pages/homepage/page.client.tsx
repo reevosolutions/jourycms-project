@@ -9,6 +9,7 @@ import HomepageCallToActionSection from "./sections/account-call-to-action.secti
 import HomepagePartnersSection from "./sections/partners.section";
 import HomepageSeatsSection from "./sections/seats.section";
 import HomepageEscortsSection from "./sections/escorts.section";
+import HomepageBlogSection from "./sections/blog.section";
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
@@ -24,6 +25,7 @@ const ThemePage_Client: React.FC<PageProps> = ({ route }) => {
           <HomepageEscortsSection />
           <HomepageSeatsSection />
           <HomepageCallToActionSection />
+          <HomepageBlogSection />
           <HomepagePartnersSection />
       </DefaultLayout>
     </ReactQueryDevtoolsProvider>
