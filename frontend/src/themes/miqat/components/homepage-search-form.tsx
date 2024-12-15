@@ -319,7 +319,7 @@ export const OmrahSearchForm: React.FC = () => {
       </div>
 
       {/* field */}
-      <div className="field mb-4">
+      {/* <div className="field mb-4">
         <Label className="text-lg text-darkblue-500">{"الولاية"}</Label>
         <Popover open={wilayaOpen} onOpenChange={setWilayaOpen}>
           <PopoverTrigger asChild>
@@ -390,9 +390,9 @@ export const OmrahSearchForm: React.FC = () => {
             </Command>
           </PopoverContent>
         </Popover>
-      </div>
+      </div> */}
       {/* field */}
-      <div className="field mb-4">
+      {/* <div className="field mb-4">
         <Label className="text-lg text-darkblue-500">{"البلدية"}</Label>
         <Popover open={cityOpen} onOpenChange={setCityOpen}>
           <PopoverTrigger asChild>
@@ -458,7 +458,7 @@ export const OmrahSearchForm: React.FC = () => {
             </Command>
           </PopoverContent>
         </Popover>
-      </div>
+      </div> */}
       <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
         {/* field */}
         {/* <div className="field mb-4">
@@ -645,7 +645,267 @@ export const OmrahSearchForm: React.FC = () => {
           </Popover>
         </div>
       </div>
-      <div className="field mb-4">
+      <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
+        {/* field */}
+        <div className="field mb-4">
+          <Label className="text-lg text-darkblue-500">{"نوع البرنامج"}</Label>
+          <Popover open={programTypeOpen} onOpenChange={setProgramTypeOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={programTypeOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="duration"
+              >
+                <div className="value text-xl">
+                  {!program_type ? (
+                    <span className="text-darkblue-500">
+                      {"اختر نوع البرنامج..."}
+                    </span>
+                  ) : (
+                    <span>
+                      {program_types?.find(item => item.value === program_type)
+                        ?.label || ""}
+                    </span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-hammah text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandInput className="text-xl" placeholder="ابحث هنا..." />
+                <CommandList>
+                  <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
+                    لا توجد خيارات.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {program_types?.map(item => (
+                      <CommandItem
+                        key={item.value}
+                        value={item.value}
+                        onSelect={value => {
+                          setProgram_type(value);
+                          setProgramTypeOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {item.label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            item.value === program_type
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+        {/* field */}
+        <div className="field mb-4">
+          <Label className="text-lg text-darkblue-500">{"نوع الرحلة"}</Label>
+          <Popover open={tripTypeOpen} onOpenChange={setTripTypeOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={tripTypeOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="trip"
+              >
+                <div className="value text-xl">
+                  {!trip_type ? (
+                    <span className="text-darkblue-500">{"اختر..."}</span>
+                  ) : (
+                    <span>
+                      {trip_types.find(item => item.value === trip_type)
+                        ?.label || ""}
+                    </span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-hammah text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandInput className="text-xl" placeholder="ابحث هنا..." />
+                <CommandList>
+                  <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
+                    لا توجد خيارات.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {trip_types.map(({value, label}) => (
+                      <CommandItem
+                        key={value}
+                        value={value}
+                        onSelect={value => {
+                          setTrip_type(value);
+                          setTripTypeOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            value === trip_type ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
+        {/* field */}
+        <div className="field mb-4">
+          <Label className="text-lg text-darkblue-500">
+            {"القرب من الحرم المكي"}
+          </Label>
+          <Popover
+            open={distanceToHaramOpen}
+            onOpenChange={setDistanceToHaramOpen}
+          >
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={distanceToHaramOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="duration"
+              >
+                <div className="value text-xl">
+                  {!distance_to_haram ? (
+                    <span className="text-darkblue-500">{"اختر..."}</span>
+                  ) : (
+                    <span>
+                      {distance_to_haram_options?.find(
+                        item => item.value === distance_to_haram,
+                      )?.label || ""}
+                    </span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-hammah text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandInput className="text-xl" placeholder="ابحث هنا..." />
+                <CommandList>
+                  <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
+                    لا توجد خيارات.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {distance_to_haram_options?.map(item => (
+                      <CommandItem
+                        key={item.value}
+                        value={item.value}
+                        onSelect={value => {
+                          setDistance_to_haram(value);
+                          setDistanceToHaramOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {item.label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            item.value === distance_to_haram
+                              ? "opacity-100"
+                              : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+        {/* field */}
+        <div className="field mb-4">
+          <Label className="text-lg text-darkblue-500">{"طريقة الدفع"}</Label>
+          <Popover open={paymentModeOpen} onOpenChange={setPaymentModeOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={paymentModeOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="trip"
+              >
+                <div className="value text-xl">
+                  {!payment_mode ? (
+                    <span className="text-darkblue-500">{"اختر..."}</span>
+                  ) : (
+                    <span>
+                      {payment_modes.find(item => item.value === payment_mode)
+                        ?.label || ""}
+                    </span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-hammah text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandInput className="text-xl" placeholder="ابحث هنا..." />
+                <CommandList>
+                  <CommandEmpty className="py-6 text-center text-xl text-darkblue-500">
+                    لا توجد خيارات.
+                  </CommandEmpty>
+                  <CommandGroup>
+                    {payment_modes.map(({value, label}) => (
+                      <CommandItem
+                        key={value}
+                        value={value}
+                        onSelect={value => {
+                          setPayment_mode(value);
+                          setPaymentModeOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            value === payment_mode ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      {/* <div className="field mb-4">
         <p className="d flex items-center gap-3 text-text-500">
           <LuHelpCircle className="h-4 w-4" />
           <span className="dd">ماذا تفضل أن يكون متوفرا في العرض؟</span>
@@ -674,7 +934,7 @@ export const OmrahSearchForm: React.FC = () => {
             </FormLabel>
           ))}
         </div>
-      </div>
+      </div> */}
       <div className="field mb-0">
         <p className="d mb-2 flex items-center gap-3 text-text-500">
           <LuHelpCircle className="h-4 w-4" />
