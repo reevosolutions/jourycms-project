@@ -21,8 +21,10 @@ const HomepageBlogSection: React.FC<HomepageBlogSectionProps> = ({
             يمنع منها حال إحرامه
           </li>
           <li>
+            {`
             يلبي قائلاً: "لبيك اللهم لبيك، لبيك لا شريك لك لبيك، إن الحمد
             والنعمة لك والملك، لا شريك لك"
+            `}
           </li>
         </ul>
         <h2 className="t">الطواف</h2>
