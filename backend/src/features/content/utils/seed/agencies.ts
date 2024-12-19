@@ -1,48 +1,89 @@
+import path from "path";
+import * as fs from "fs";
+import initLogger, {
+  LoggerContext,
+  LoggerService,
+} from "../../../../utilities/logging/index";
+import ExcelParser from "../../../../utilities/excel/excel.parser";
+
+const logger = initLogger(LoggerContext.UTILITY, "seed");
+
 const state_mapping = {
-  الجزائر: 16,
-  باتنة: 5,
-  البويرة: 10,
-  غليزان: 40,
-  "عين تموشنت": 31,
-  "برج بوعريريج": 34,
-  النعامة: 45,
-  تيارت: 14,
-  عنابة: 23,
-  ورقلة: 30,
-  سطيف: 19,
-  قسنطينة: 25,
-  "عين الدفلى": 44,
-  المسيلة: 28,
-  وهران: 31,
-  تيبازة: 42,
-  البليدة: 9,
-  بومرداس: 35,
-  تلمسان: 13,
-  ميلة: 43,
-  األغواط: 3,
-  "أم البواقي": 1,
-  "سيدي بلعباس": 22,
-  الوادي: 39,
-  الجلفة: 17,
-  غرداية: 47,
-  سكيكدة: 21,
-  قاملة: 4,
-  املدية: 48,
-  سعيدة: 20,
-  معسكر: 29,
-  تبسة: 12,
-  املسيلة: 28,
-  بسكرة: 7,
-  البيض: 32,
-  الطارف: 36,
+  أدرار: 1,
   الشلف: 2,
-  أدرار: 11,
-  مستغانم: 27,
-  خنشلة: 40,
+  األغواط: 3,
+  "أم البواقي": 4,
+  قاملة: 4,
+  باتنة: 5,
   بجاية: 6,
+  بسكرة: 7,
+  البليدة: 9,
+  البويرة: 10,
   تمنراست: 11,
+  تبسة: 12,
+  تلمسان: 13,
+  تيارت: 14,
+  الجزائر: 16,
+  الجلفة: 17,
+  سطيف: 19,
+  سعيدة: 20,
+  سكيكدة: 21,
+  "سيدي بلعباس": 22,
+  عنابة: 23,
+  قسنطينة: 25,
+  املدية: 26,
+  مستغانم: 27,
+  املسيلة: 28,
+  المسيلة: 28,
+  معسكر: 29,
+  ورقلة: 30,
+  وهران: 31,
+  البيض: 32,
+  "برج بوعريريج": 34,
+  بومرداس: 35,
+  الطارف: 36,
   تيسمسيلت: 38,
+  الوادي: 39,
+  خنشلة: 40,
   "سوق أهراس": 41,
+  تيبازة: 42,
+  ميلة: 43,
+  "عين الدفلى": 44,
+  النعامة: 45,
+  "عين تموشنت": 46,
+  غرداية: 47,
+  غليزان: 48,
+};
+
+export const extractAgenciesFromExcel = async () => {
+  const filePath = path.join(
+    __dirname,
+    "../../../../../dev/data/agencies.xlsx"
+  );
+  if (fs.existsSync(filePath)) {
+    logger.success("File exists");
+    const parser = new ExcelParser(filePath);
+    const data = await parser.parse(filePath, (row, index) => {
+      if (index === 0) {
+        return null;
+      }
+      return {
+        phone_number: `0${row[1]}`,
+        abbreviation: row[5],
+        agency_name: row[6],
+        state_name: row[7],
+        state_code: state_mapping[row[7]] || null,
+      };
+    });
+    logger.value(
+      "data",
+      (await data).filter((i) => !!i)
+    );
+    return data.filter((i) => !!i);
+  } else {
+    logger.warn("File does not exist", filePath);
+    return [];
+  }
 };
 
 export const agencies = [

@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 import exceptions from "../exceptions";
 import config from "../config";
 import { errorToObject } from "../utilities/exceptions/index";
-import initLogger, { LoggerService } from "../utilities/logging/index";
+import initLogger, { LoggerContext, LoggerService } from "../utilities/logging/index";
 import { extractRequestSignificantData } from "./../utilities/requests/extract-request-significant-data";
 import { MongoServerError } from "mongodb";
 import treeify from "treeify";
@@ -31,7 +31,7 @@ export default class BaseService {
   protected _sdk: JouryCMSSdk;
 
   public constructor() {
-    this.logger = initLogger("SERVICE", this.constructor.name);
+    this.logger = initLogger(LoggerContext.SERVICE, this.constructor.name);
   }
 
   /**

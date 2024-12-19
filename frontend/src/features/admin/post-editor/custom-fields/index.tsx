@@ -35,123 +35,123 @@ const CustomMetaField: React.FC<Props> = ({ field, value, onChange, metaData }) 
             <ArticleObjectCustomField
               label={field.field_label}
               metaData={metaData}
-              required={field.field_options.required}
+              required={field.field_options?.required}
               value={value}
               onChange={onChange}
               options={field.field_options as any}
-              default_value={field.field_options.default_value as any}
+              default_value={field.field_options?.default_value as any}
             />
           ) :
             field.field_type === "boolean" ? (
               <BooleanCustomField
                 label={field.field_label}
                 metaData={metaData}
-                required={field.field_options.required}
+                required={field.field_options?.required}
                 value={value}
                 onChange={onChange}
                 options={field.field_options as any}
-                default_value={field.field_options.default_value as any}
+                default_value={field.field_options?.default_value as any}
               />
             ) :
               field.field_type === "checkbox" ? (
                 <CheckboxCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "select" ? (
                 <SelectCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ): field.field_type === "algerian_state" ? (
                 <AlgerianStateCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ): field.field_type === "algerian_city" ? (
                 <AlgerianCityCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ): field.field_type === "ksa_city" ? (
                 <KSACityCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "date" ? (
                 <DateCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "time" ? (
                 <TimeCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "text" ? (
                 <TextCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "number" ? (
                 <NumberCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                 />
               ) : field.field_type === "image" ? (
                 <ImageCustomField
                   label={field.field_label}
                   metaData={metaData}
-                  required={field.field_options.required}
+                  required={field.field_options?.required}
                   value={value}
                   onChange={onChange}
                   options={field.field_options as any}
-                  default_value={field.field_options.default_value as any}
+                  default_value={field.field_options?.default_value as any}
                   image_ratio={1 / 1}
                 />
               ) : null}

@@ -23,6 +23,7 @@ import AuthService from "../../features/auth/services/auth.service";
 import { addLeadingZeros, buildUserFullName } from "../../utilities/strings";
 import moment from "moment";
 import articleTypesSeedData from "../../features/content/utils/seed/ar.types.seed";
+import { extractAgenciesFromExcel } from "../../features/content/utils/seed/agencies";
 
 type User = Levelup.CMS.V1.Users.Entity.ExposedUser;
 type RegisterPayload = DeepRequired<
@@ -400,75 +401,77 @@ export default class DevService extends BaseService {
   }
 
   async fillAgencies() {
-    for (const state of faker.helpers.arrayElements(states, 58)) {
-      const stateCities = cities.filter(
-        (item) => item.state_code === state.code
+    const agencies = await extractAgenciesFromExcel();
+    for (const agency of agencies) {
+      const state = states.find(
+        (s) => s.code === (addLeadingZeros(agency.state_code, 2) || "16")
       );
-      for (const index of new Array(faker.number.int({ min: 1, max: 10 })).fill(
-        null
-      )) {
-        try {
-          const city = faker.helpers.arrayElement(stateCities);
-          const data: RegisterPayload = {
-            email: faker.internet.email(),
-            password: "123",
-            first_name: faker.person.firstName(),
-            family_name: faker.person.lastName(),
-            phones: [],
-            account_type: ArticleTypeSlug.AGENCY,
-            address: {
-              country_code: "dz",
-              country_name: "الجزائر",
-              state_code: state.code,
-              state_name: state.name,
-              city_code: city.code,
-              city_name: city.name,
-              street_address: faker.location.streetAddress(),
+      try {
+        const stateCities = cities.filter(
+          (item) => item.state_code === state.code
+        );
+        const city = faker.helpers.arrayElement(stateCities);
+        const data: RegisterPayload = {
+          email: faker.internet.email(),
+          password: "123",
+          first_name: faker.person.firstName(),
+          family_name: faker.person.lastName(),
+          phones: [],
+          account_type: ArticleTypeSlug.AGENCY,
+          address: {
+            country_code: "dz",
+            country_name: "الجزائر",
+            state_code: state.code,
+            state_name: state.name,
+            city_code: city.code,
+            city_name: city.name,
+            street_address: faker.location.streetAddress(),
+          },
+          website: faker.internet.url(),
+          sex: faker.helpers.arrayElement(["male", "female"]),
+        };
+
+        const {
+          data: { user },
+        } = await this.authService.register({
+          data,
+        });
+
+        if (user) {
+          const article: Article = {
+            title: agency.agency_name,
+            body: this.loremHtml,
+            body_unformatted: "",
+            body_structured: {},
+            is_published: true,
+            published_at: new Date(),
+            is_featured: false,
+            featured_image: null,
+            article_type: this.types[ArticleTypeSlug.AGENCY]?._id,
+            related_tags: [],
+            meta_fields: {
+              short_name: agency.abbreviation,
+              phone_number: agency.phone_number,
+              country: "dz",
+              state: state.code,
+              city: city.code,
             },
-            website: faker.internet.url(),
-            sex: faker.helpers.arrayElement(["male", "female"]),
+            attributes: undefined,
+            snapshots: undefined,
+            insights: undefined,
           };
-
-          const {
-            data: { user },
-          } = await this.authService.register({
-            data,
-          });
-
-          if (user) {
-            const article: Article = {
-              title: `وكالة ${user.profile.family_name} للسياحة والاسفار`,
-              body: this.loremHtml,
-              body_unformatted: "",
-              body_structured: {},
-              is_published: true,
-              published_at: new Date(),
-              is_featured: false,
-              featured_image: null,
-              article_type: this.types[ArticleTypeSlug.AGENCY]?._id,
-              related_tags: [],
-              meta_fields: {
-                country: "dz",
-                state: state.code,
-                city: city.code,
+          await this.articlesService.create(
+            {
+              data: article,
+            },
+            {
+              current: {
+                user,
               },
-              attributes: undefined,
-              snapshots: undefined,
-              insights: undefined,
-            };
-            await this.articlesService.create(
-              {
-                data: article,
-              },
-              {
-                current: {
-                  user,
-                },
-              }
-            );
-          }
-        } catch (error) {}
-      }
+            }
+          );
+        }
+      } catch (error) {}
     }
   }
 

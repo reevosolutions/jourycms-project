@@ -171,6 +171,18 @@ const custom_meta_fields = {
       ],
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"number", false>,
+  short_name: {
+    field_key: "short_name",
+    field_label: "الإسم المختصر",
+    field_type: "text" as const,
+    field_options: {},
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text", false>,
+  phone_number: {
+    field_key: "phone_number",
+    field_label: "رقم الهاتف",
+    field_type: "text" as const,
+    field_options: {},
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text", false>,
   installment_number_of_installments: {
     field_key: "installment_number_of_installments",
     field_label: "عدد الاقساط",
@@ -796,6 +808,8 @@ const _articleTypesSeedData = {
       description_structured: {},
       custom_meta_fields: [
         custom_meta_fields.logo,
+        custom_meta_fields.phone_number,
+        custom_meta_fields.short_name,
         custom_meta_fields.country,
         custom_meta_fields.algerian_state,
         custom_meta_fields.algerian_city,

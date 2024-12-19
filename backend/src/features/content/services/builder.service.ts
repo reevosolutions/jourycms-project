@@ -11,6 +11,7 @@ import CacheManager from '../../../managers/cache-manager';
 import TranslationToolsService from './translation.tools.service';
 import { faker } from '@faker-js/faker';
 import articleTypesSeedData from '../utils/seed/ar.types.seed';
+import { extractAgenciesFromExcel } from '../utils/seed/agencies';
 
 /**
  * @generator Levelup
@@ -70,6 +71,8 @@ export default class BuilderService extends BaseService {
         }
 
       }
+
+      await extractAgenciesFromExcel();
 
     } catch (error) {
       scenario.error(error);
