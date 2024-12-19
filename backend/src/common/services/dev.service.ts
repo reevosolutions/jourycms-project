@@ -900,7 +900,7 @@ export default class DevService extends BaseService {
         const month = faker.number.int({ min: 1, max: 12 });
         if (owner) {
           const article: Article = {
-            title: `عرض عمرة في شهر ${algerianArabicMonths[month]}`,
+            title: `عمرة ${algerianArabicMonths[month]}`,
             body: this.loremHtml,
             body_unformatted: "",
             body_structured: {},
