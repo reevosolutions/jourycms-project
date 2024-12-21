@@ -157,15 +157,15 @@ export default class DevService extends BaseService {
 
       await this.reset();
       await this.createFirstAdmin();
-      await this.fillDoctors();
-      await this.fillEscorts();
+      // await this.fillDoctors();
+      // await this.fillEscorts();
       await this.fillAgencies();
-      await this.fillAiroports();
-      await this.fillAirlines();
-      await this.fillShrines();
-      await this.fillHotels();
-      await this.fillTrips();
-      await this.setAgenciesLogo();
+      // await this.fillAiroports();
+      // await this.fillAirlines();
+      // await this.fillShrines();
+      // await this.fillHotels();
+      // await this.fillTrips();
+      // await this.setAgenciesLogo();
 
       /**
        *
