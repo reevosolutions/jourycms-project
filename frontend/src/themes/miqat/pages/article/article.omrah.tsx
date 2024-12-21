@@ -420,10 +420,10 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           </div>
         </aside>
         <div
-          className="prose mx-auto mb-6 flex-grow text-2xl text-darkblue-700 md:text-3xl"
+          className="prose mx-auto mb-6 flex-grow text-xl text-darkblue-700 md:text-2xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
-        <div className="mt-6 p-6 rounded-3xl bg-slate-100">
+        <div className="mt-6 p-6 rounded-3xl bg-slate-50 w-4xl w-full max-w-4xl mx-auto md:px-10 flex-grow">
           <h3 className=" mb-3 font-bold text-slate-600 text-center text-3xl">شارك العرض</h3>
           <ShareControl
             title={article.title}
