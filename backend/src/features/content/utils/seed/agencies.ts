@@ -58,7 +58,7 @@ const state_mapping = {
 export const extractAgenciesFromExcel = async () => {
   const filePath = path.join(
     __dirname,
-    "../../../../../dev/data/agencies.xlsx"
+    "../../../../../data/agencies.xlsx"
   );
   if (fs.existsSync(filePath)) {
     logger.success("File exists");
