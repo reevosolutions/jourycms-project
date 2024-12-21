@@ -22,6 +22,7 @@ const config: Config = {
     fontFamily: {
       sans: ["var(--font-inter)"],
       hammah: ["var(--font-hammah)"],
+      tajawal: ["var(--font-tajawal)"],
       noto: ["var(--font-noto)"],
     },
     extend: {

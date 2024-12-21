@@ -11,7 +11,7 @@ export type HomepageHeroSectionProps = JouryCMS.Theme.ComponentProps & {};
 const headlines = [
   "نحن أول منصة جزائرية",
   "تجمع كل عروض العمرة ",
-  "ابحث... قارن... اعتمر",
+  "ابحث... اختر... اعتمر",
 ];
 
 const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
@@ -26,14 +26,14 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
 
         <ParallaxBanner
           layers={[
-            {image: "/assets/miqat/images/medina.webp", speed: -40},
+            {image: "/assets/miqat/images/praying_man.webp", speed: -40},
             {
               speed: -10,
               children: (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="container mx-auto hidden lg:block mt-20">
+                  <div className="container mx-auto mt-20 hidden lg:block">
                     <h2
-                      className="inline-flex flex-col gap-1 rounded-3xl bg-white/30 py-2 px-8 text-7xl font-thin leading-tight text-red2-800"
+                      className="inline-flex flex-col gap-1 rounded-3xl px-8 py-2 text-6xl font-thin leading-tight text-white"
                       dangerouslySetInnerHTML={{
                         __html: headlines
                           .map(s => `<span>${s}</span>`)

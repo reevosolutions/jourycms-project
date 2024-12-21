@@ -113,6 +113,7 @@ export default class ArticlesService extends BaseService {
        * TODO: Add more fields to the search meta
        */
       // ...
+      title: data.title,
     };
 
     /**
@@ -123,6 +124,7 @@ export default class ArticlesService extends BaseService {
        * TODO: Add more fields to the search meta
        */
       // ...
+      if(typeof data.title === "undefined") search_meta.title = old.title
     }
 
     this.logExecutionResult(this._createSearchMeta, { data, old }, null, {
@@ -1148,9 +1150,7 @@ export default class ArticlesService extends BaseService {
       /**
        * Create search meta
        */
-      if (ArticleSchemaFields["search_meta"]) {
-        docObject["search_meta"] = this._createSearchMeta(docObject, null);
-      }
+        docObject.search_meta = this._createSearchMeta(docObject, null);
 
       docObject.snapshots = await this._generateSnapshotsObject(
         docObject,

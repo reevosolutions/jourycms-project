@@ -91,7 +91,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
 
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">
+          <Label className="text-xl text-darkblue-500">
             {"البريد الالكتروني"}
           </Label>
           <form.Field
@@ -120,7 +120,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
         </div>
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">{"كلمة المرور"}</Label>
+          <Label className="text-xl text-darkblue-500">{"كلمة المرور"}</Label>
           <form.Field
             name="password"
             validators={{
@@ -153,7 +153,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ }) => {
                 onClick={() => {
                   form.handleSubmit();
                 }}
-                className="bg-darkblue-700 text-2xl transition-colors hocus:bg-darkblue-950"
+                className="bg-darkblue-700 text-xl transition-colors hocus:bg-darkblue-950 pt-3"
               >
                 {isSubmitting && <Loader2 className="animate-spin" />}
                 تسجيل الدخول

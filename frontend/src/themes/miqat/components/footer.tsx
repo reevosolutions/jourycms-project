@@ -112,7 +112,7 @@ const Footer: React.FC<FooterProps> = ({ children }) => {
             <h2 className="text-3xl font-bold">روابط</h2>
 
             <div className="mt-16 flex items-center gap-8 text-2xl">
-              <ul>
+              <ul className=" flex flex-col gap-2">
                 <li className="">
                   <Link
                     href="/"

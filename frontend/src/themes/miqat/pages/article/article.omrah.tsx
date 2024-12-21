@@ -26,6 +26,7 @@ import initLogger, {LoggerContext} from "@/lib/logging";
 import {ArticleTypeSlug} from "../../config";
 import AdminOnlyGuard from "@/guards/admin-only.guard";
 import AdminOnlyView from "@/guards/admin-only.view";
+import ShareControl from "../../components/share-control";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -156,9 +157,9 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
         )}
       </aside>
 
-      <div className="flex flex-col gap-6 xl:flex-row">
-        <aside className="relative flex-shrink-0 flex-grow xl:w-80 xl:grow-0 xl:rounded-2xl xl:bg-slate-50/50 xl:px-4 xl:py-6">
-          <div className="sticky top-6 grid gap-6 text-2xl sm:grid-cols-2 xl:grid-cols-1">
+      <div className="flex flex-col gap-6">
+        <aside className="relative flex-shrink-0 flex-grow ">
+          <div className="sticky top-6 grid gap-6 text-2xl sm:grid-cols-2 xl:grid-cols-2 max-w-4xl mx-auto">
             {/* field */}
             <div className="items-top flex flex-row gap-4">
               <GiDuration className="h-8 w-8 text-beige-50" />
@@ -422,6 +423,13 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           className="prose mx-auto mb-6 flex-grow text-2xl text-darkblue-700 md:text-3xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
+        <div className="mt-6 p-6 rounded-3xl bg-slate-100">
+          <h3 className=" mb-3 font-bold text-slate-600 text-center text-3xl">شارك العرض</h3>
+          <ShareControl
+            title={article.title}
+            path={`/${article.slug}`}
+          />
+        </div>
       </div>
     </div>
   ) : initialData?.error ? (

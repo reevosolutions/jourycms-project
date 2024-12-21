@@ -25,7 +25,7 @@ const BreadcrumbComponent: React.FC<BreadcrumbComponentProps> = ({ route }) => {
           <LuChevronLeft className="w-4 h-4" />
         </BreadcrumbSeparator>
         <BreadcrumbItem >
-          <BreadcrumbLink className=" text-xl hover:text-beige-400" href={route.path}>{route.title}</BreadcrumbLink>
+          <BreadcrumbLink className=" text-lg hover:text-beige-400" href={route.path}>{route.title}</BreadcrumbLink>
         </BreadcrumbItem>
       </BreadcrumbList>
     </Breadcrumb>

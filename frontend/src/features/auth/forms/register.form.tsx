@@ -145,7 +145,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
           }}
           children={field => (
             <div className="field mb-6">
-              <Label className="text-2xl text-darkblue-500">
+              <Label className="text-xl text-darkblue-500">
                 {"نوع الحساب"}
               </Label>
               <div className="mt-3 grid min-w-80 grid-cols-3 gap-2 sm:gap-8">
@@ -240,7 +240,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
 
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">{"الاسم واللقب"}</Label>
+          <Label className="text-xl text-darkblue-500">{"الاسم واللقب"}</Label>
           <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
             <form.Field
               name="first_name"
@@ -297,7 +297,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
           children={field => (
             <>
               <div className="field mb-4">
-                <Label className="text-2xl text-darkblue-500">
+                <Label className="text-xl text-darkblue-500">
                   {"الولاية"}
                 </Label>
                 <Popover open={wilayaOpen} onOpenChange={setWilayaOpen}>
@@ -327,7 +327,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[320px] p-0 font-hammah text-2xl sm:w-[436px]"
+                    className="font-tajawal w-[320px] p-0 text-2xl sm:w-[436px]"
                     align="start"
                   >
                     <Command
@@ -388,7 +388,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               </div>
               {/* field */}
               <div className="field mb-4">
-                <Label className="text-2xl text-darkblue-500">
+                <Label className="text-xl text-darkblue-500">
                   {"البلدية"}
                 </Label>
                 <Popover open={cityOpen} onOpenChange={setCityOpen}>
@@ -418,7 +418,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
                     </Button>
                   </PopoverTrigger>
                   <PopoverContent
-                    className="w-[320px] p-0 font-hammah text-2xl sm:w-[436px]"
+                    className="font-tajawal w-[320px] p-0 text-2xl sm:w-[436px]"
                     align="start"
                   >
                     <Command
@@ -480,7 +480,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
 
               {/* field */}
               <div className="field mb-4">
-                <Label className="text-2xl text-darkblue-500">{"الشارع"}</Label>
+                <Label className="text-xl text-darkblue-500">{"الشارع"}</Label>
                 <Textarea
                   className="h-auto py-2 text-xl focus-visible:ring-orange-400"
                   value={field.state.value.street_address}
@@ -501,7 +501,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
 
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">
+          <Label className="text-xl text-darkblue-500">
             {"الموقع الالكتروني"}
           </Label>
           <form.Field
@@ -529,7 +529,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
         </div>
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">
+          <Label className="text-xl text-darkblue-500">
             {"البريد الالكتروني"}
           </Label>
           <form.Field
@@ -558,7 +558,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
         </div>
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">{"كلمة المرور"}</Label>
+          <Label className="text-xl text-darkblue-500">{"كلمة المرور"}</Label>
           <form.Field
             name="password"
             validators={{
@@ -582,7 +582,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
         </div>
         {/* field */}
         <div className="field mb-6">
-          <Label className="text-2xl text-darkblue-500">
+          <Label className="text-xl text-darkblue-500">
             {"تأكيد كلمة المرور"}
           </Label>
           <form.Field
@@ -624,7 +624,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
               onClick={() => {
                 form.handleSubmit();
               }}
-              className="bg-darkblue-700 text-2xl transition-colors hocus:bg-darkblue-950"
+              className="bg-darkblue-700 pt-3 text-xl transition-colors hocus:bg-darkblue-950"
             >
               {isSubmitting && <Loader2 className="animate-spin" />}
               التسجيل

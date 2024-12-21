@@ -17,7 +17,7 @@ const DefaultLayout: React.FC<LayoutProps> = ({
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="jcms-layout font-hammah text-lg">
+    <div className="jcms-layout font-tajawal text-lg">
       <Header
         {...{
           route,
@@ -31,8 +31,8 @@ const DefaultLayout: React.FC<LayoutProps> = ({
                 route,
               }}
             />
-            <div className="mb-4 flex items-center justify-between gap-4">
-              <h1 className="text-4xl text-gray-800 md:text-5xl">
+            <div className="mb-4 mt-2 flex items-center justify-between gap-4">
+              <h1 className="text-3xl text-gray-800 md:text-4xl">
                 {route.title}
               </h1>
               {headerControls?.length ? (
@@ -46,26 +46,30 @@ const DefaultLayout: React.FC<LayoutProps> = ({
                         onClick={() => {
                           control.onClick && control.onClick();
                         }}
-                        className="flex items-center gap-3 bg-darkblue-700 px-4 py-1 rounded-lg text-xl text-white transition-all hocus:bg-darkblue-900 xl:text-2xl"
+                        className="flex items-center gap-3 rounded-lg bg-darkblue-700 px-4 py-1 text-xl text-white transition-all hocus:bg-darkblue-900 xl:text-2xl"
                       >
                         {control.icon &&
                           control.icon({
                             className: "w-5 h-5",
                           })}
-                        <span className="d">{control.title}</span>
+                        <span className="inline-block pt-1">
+                          {control.title}
+                        </span>
                       </Link>
                     ) : (
                       <button
                         onClick={() => {
                           control.onClick && control.onClick();
                         }}
-                        className="flex items-center gap-3 bg-darkblue-700 px-4 py-1 rounded-lg text-xl text-white transition-all hocus:bg-darkblue-900 xl:text-2xl"
+                        className="flex items-center gap-3 rounded-lg bg-darkblue-700 px-4 py-1 text-xl text-white transition-all hocus:bg-darkblue-900 xl:text-2xl"
                       >
                         {control.icon &&
                           control.icon({
                             className: "w-5 h-5",
                           })}
-                        <span className="d">{control.title}</span>
+                        <span className="inline-block pt-1">
+                          {control.title}
+                        </span>
                       </button>
                     );
                   })}

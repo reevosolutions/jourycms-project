@@ -14,7 +14,7 @@ const CustomTabTrigger: React.FC<{
   tab: string;
 }> = ({label, image, tab}) => (
   <TabsTrigger
-    className="group flex flex-col items-center justify-center gap-2 rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-4 text-4xl text-darkblue-400 transition-all data-[state=active]:border-b-darkblue-900 data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-darkblue-950 data-[state=active]:shadow-none hover:text-darkblue-900 active:bg-transparent sm:px-8 md:flex-row lg:gap-4"
+    className="group flex flex-col items-center justify-center gap-2 rounded-none border-b-2 border-b-transparent bg-transparent px-4 py-4 text-xl text-darkblue-400 transition-all data-[state=active]:border-b-darkblue-900 data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-darkblue-950 data-[state=active]:shadow-none hover:text-darkblue-900 active:bg-transparent sm:px-8 md:flex-row lg:gap-4"
     value={tab}
   >
     <Image
@@ -24,7 +24,7 @@ const CustomTabTrigger: React.FC<{
       alt=""
       className="opacity-40 group-data-[state=active]:opacity-100"
     />
-    <span className="text-xl sm:text-3xl md:text-4xl">{label}</span>
+    <span className="text-xl sm:text-xl md:text-2xl">{label}</span>
   </TabsTrigger>
 );
 
@@ -60,7 +60,7 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
               <div className="py-10 flex justify-center">
                 <Link
                   href={`/omrah/2`}
-                  className="rounded-xl bg-darkblue-700 px-10 py-2 pb-3 text-3xl font-bold text-white transition-all hocus:bg-darkblue-900"
+                  className="rounded-xl bg-darkblue-700 px-10 py-2 pt-4 pb-3 text-3xl font-bold text-white transition-all hocus:bg-darkblue-900"
                 >
                   عرض المزيد
                 </Link>

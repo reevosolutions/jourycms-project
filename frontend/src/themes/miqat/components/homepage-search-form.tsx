@@ -184,7 +184,7 @@ export const OmrahSearchForm: React.FC = () => {
   const [month, setMonth] = useState<string | null>(null);
   const [duration, setDuration] = useState<string | null>(null);
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [priceRange, setPriceRange] = useState<number[]>([12, 32]);
+  const [priceRange, setPriceRange] = useState<number[]>([12, 50]);
   const [entry_point, setEntry_point] = useState<string | null>(null);
   const [program_type, setProgram_type] = useState<string | null>(null);
   const [payment_mode, setPayment_mode] = useState<string | null>(null);
@@ -258,7 +258,7 @@ export const OmrahSearchForm: React.FC = () => {
     <div className="d text-darkblue-950">
       {/* field */}
       <div className="field mb-4">
-        <Label className="text-lg text-darkblue-500">{"الوكالة"}</Label>
+        <Label className="text-base text-darkblue-500">{"الوكالة"}</Label>
         <div className="d">
           <Popover open={agencyOpen} onOpenChange={setAgencyOpen}>
             <PopoverTrigger asChild>
@@ -268,7 +268,7 @@ export const OmrahSearchForm: React.FC = () => {
                 aria-expanded={agencyOpen}
                 className="w-full justify-between"
               >
-                <div className="value">
+                <div className="value text-lg pt-1">
                   {!agency ? <span>{"ابحث..."}</span> : agencies[agency]}
                 </div>
                 <LuChevronsUpDown className="opacity-50" />
@@ -320,7 +320,7 @@ export const OmrahSearchForm: React.FC = () => {
 
       {/* field */}
       {/* <div className="field mb-4">
-        <Label className="text-lg text-darkblue-500">{"الولاية"}</Label>
+        <Label className="text-base text-darkblue-500">{"الولاية"}</Label>
         <Popover open={wilayaOpen} onOpenChange={setWilayaOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -330,7 +330,7 @@ export const OmrahSearchForm: React.FC = () => {
               className="w-full justify-between rounded-md border-2"
               aria-label="state"
             >
-              <div className="value text-xl">
+              <div className="value text-lg pt-1">
                 {!state ? (
                   <span className="text-darkblue-500">{"اختر ولاية..."}</span>
                 ) : (
@@ -343,7 +343,7 @@ export const OmrahSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
+            className="w-[220px] p-0 font-tajawal text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
@@ -393,7 +393,7 @@ export const OmrahSearchForm: React.FC = () => {
       </div> */}
       {/* field */}
       {/* <div className="field mb-4">
-        <Label className="text-lg text-darkblue-500">{"البلدية"}</Label>
+        <Label className="text-base text-darkblue-500">{"البلدية"}</Label>
         <Popover open={cityOpen} onOpenChange={setCityOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -403,7 +403,7 @@ export const OmrahSearchForm: React.FC = () => {
               className="w-full justify-between rounded-md border-2"
               aria-label="city"
             >
-              <div className="value text-xl">
+              <div className="value text-lg pt-1">
                 {!city ? (
                   <span className="text-darkblue-500">{"اختر بلدية..."}</span>
                 ) : (
@@ -416,7 +416,7 @@ export const OmrahSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
+            className="w-[220px] p-0 font-tajawal text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
@@ -462,7 +462,7 @@ export const OmrahSearchForm: React.FC = () => {
       <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
         {/* field */}
         {/* <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">{"شهر الانطلاق"}</Label>
+          <Label className="text-base text-darkblue-500">{"شهر الانطلاق"}</Label>
           <Popover open={monthOpen} onOpenChange={setMonthOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -472,7 +472,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="month"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!month ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
@@ -483,7 +483,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -520,8 +520,8 @@ export const OmrahSearchForm: React.FC = () => {
         </div> */}
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">
-            {"عدد أيام الرحلة"}
+          <Label className="text-base text-darkblue-500">
+            {"عدد أيام العمرة"}
           </Label>
           <Popover open={durationOpen} onOpenChange={setDurationOpen}>
             <PopoverTrigger asChild>
@@ -532,7 +532,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="duration"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!duration ? (
                     <span className="text-darkblue-500">{"اختر مدة..."}</span>
                   ) : (
@@ -546,7 +546,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -585,7 +585,7 @@ export const OmrahSearchForm: React.FC = () => {
         </div>
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">{"الدخول"}</Label>
+          <Label className="text-base text-darkblue-500">{"الدخول"}</Label>
           <Popover open={entryPointOpen} onOpenChange={setEntryPointOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -595,7 +595,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="entry"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!entry_point ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
@@ -609,7 +609,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -648,7 +648,7 @@ export const OmrahSearchForm: React.FC = () => {
       <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">{"نوع البرنامج"}</Label>
+          <Label className="text-base text-darkblue-500">{"نوع البرنامج"}</Label>
           <Popover open={programTypeOpen} onOpenChange={setProgramTypeOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -658,7 +658,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="duration"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!program_type ? (
                     <span className="text-darkblue-500">
                       {"اختر نوع البرنامج..."}
@@ -674,7 +674,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -713,7 +713,7 @@ export const OmrahSearchForm: React.FC = () => {
         </div>
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">{"نوع الرحلة"}</Label>
+          <Label className="text-base text-darkblue-500">{"نوع الرحلة"}</Label>
           <Popover open={tripTypeOpen} onOpenChange={setTripTypeOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -723,7 +723,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="trip"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!trip_type ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
@@ -737,7 +737,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -776,7 +776,7 @@ export const OmrahSearchForm: React.FC = () => {
       <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">
+          <Label className="text-base text-darkblue-500">
             {"القرب من الحرم المكي"}
           </Label>
           <Popover
@@ -791,7 +791,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="duration"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!distance_to_haram ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
@@ -806,7 +806,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -845,7 +845,7 @@ export const OmrahSearchForm: React.FC = () => {
         </div>
         {/* field */}
         <div className="field mb-4">
-          <Label className="text-lg text-darkblue-500">{"طريقة الدفع"}</Label>
+          <Label className="text-base text-darkblue-500">{"طريقة الدفع"}</Label>
           <Popover open={paymentModeOpen} onOpenChange={setPaymentModeOpen}>
             <PopoverTrigger asChild>
               <Button
@@ -855,7 +855,7 @@ export const OmrahSearchForm: React.FC = () => {
                 className="w-full justify-between rounded-md border-2"
                 aria-label="trip"
               >
-                <div className="value text-xl">
+                <div className="value text-lg pt-1">
                   {!payment_mode ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
@@ -869,7 +869,7 @@ export const OmrahSearchForm: React.FC = () => {
               </Button>
             </PopoverTrigger>
             <PopoverContent
-              className="w-[210px] p-0 font-hammah text-2xl"
+              className="w-[210px] p-0 font-tajawal text-2xl"
               align="start"
             >
               <Command>
@@ -947,7 +947,7 @@ export const OmrahSearchForm: React.FC = () => {
             minStepsBetweenThumbs={5}
             defaultValue={priceRange}
             min={10}
-            max={50}
+            max={200}
             step={1}
             value={priceRange}
             onValueChange={setPriceRange}
@@ -1015,7 +1015,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
       <Tabs defaultValue="omrah" className="w-full" onValueChange={setTab}>
         <TabsList className="h-auto w-full items-center justify-around bg-transparent">
           <TabsTrigger
-            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
+            className="group relative bg-transparent px-2 py-4 pt-6 text-xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-2xl"
             value="bids"
           >
             <span>مناقصات</span>
@@ -1028,7 +1028,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
+            className="group relative bg-transparent px-2 py-4 pt-6 text-xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-2xl"
             value="tombolas"
           >
             <span>طمبولات</span>
@@ -1041,7 +1041,7 @@ const HomepageSearchForm: React.FC<HomepageSearchFormProps> = ({}) => {
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-2 py-4 text-2xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-3xl"
+            className="group relative bg-transparent px-2 py-4 pt-6 text-xl text-beige-950 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-red-600 data-[state=active]:shadow-none hover:text-red-600 active:bg-transparent sm:text-2xl md:px-4 md:text-2xl"
             value="omrah"
           >
             <span>عروض العمرة</span>

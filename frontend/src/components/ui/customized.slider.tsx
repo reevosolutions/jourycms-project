@@ -23,15 +23,15 @@ const Slider = React.forwardRef<
       <SliderPrimitive.Range className="absolute h-full bg-orange-300/40" />
     </SliderPrimitive.Track>
     <SliderPrimitive.Thumb className="relative block h-5 w-5 cursor-col-resize rounded-full border border-orange-300 bg-orange-300 shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-orange-300 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-      <div className="absolute left-1/2 top-full flex w-16 -translate-x-1/2 items-center justify-center pt-2">
-        <span className="h-7 rounded-sm border border-orange-300 px-2 py-0 text-xl font-bold text-orange-300">
+      <div className="absolute left-1/2 top-full flex w-20 -translate-x-1/2 items-center justify-center pt-2">
+        <span className="h-7 rounded-sm border border-orange-300 px-2 pt-0 bg-white text-lg font-bold text-orange-300">
           {tooltip && tooltip(props.value?.[0] as number)}
         </span>
       </div>
     </SliderPrimitive.Thumb>
     <SliderPrimitive.Thumb className="relative block h-5 w-5 cursor-col-resize rounded-full border border-orange-300 bg-orange-300 shadow transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-orange-300 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50">
-      <div className="absolute left-1/2 top-full flex w-16 -translate-x-1/2 items-center justify-center pt-2">
-        <span className="h-7 rounded-sm border border-orange-300 px-2 py-0 text-xl font-bold text-orange-300">
+      <div className="absolute left-1/2 top-full flex w-20 -translate-x-1/2 items-center justify-center pt-2">
+        <span className="h-7 rounded-sm border border-orange-300 px-2 pt-0 bg-white text-lg font-bold text-orange-300">
           {tooltip && tooltip(props.value?.[1] as number)}
         </span>
       </div>

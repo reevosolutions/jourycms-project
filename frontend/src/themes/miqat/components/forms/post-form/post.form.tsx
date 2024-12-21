@@ -187,7 +187,7 @@ const PostForm: React.FC<Props> = ({
 
   const applyFieldConstraints = useCallback(
     (field: Levelup.CMS.V1.Content.Entity.ICustomMetaField) => {
-      if (!field.field_options.constraints) return true;
+      if (!field.field_options?.constraints) return true;
       if (!Array.isArray(field.field_options.constraints)) return true;
       if (field.field_options.constraints.length === 0) return true;
 

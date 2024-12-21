@@ -70,11 +70,11 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
 
       <div className="px-6 py-4">
         <div className="-mx-6 pb-0">
-          <h2 className="flex items-center justify-between text-3xl font-semibold text-darkblue-900">
+          <h2 className="flex items-center justify-between text-2xl font-semibold text-darkblue-900">
             <span className="px-6">{data.title}</span>
             <span
               className={cn(
-                "rounded-s-2xl px-8 py-1 text-2xl text-white",
+                "rounded-s-2xl px-8 py-1 text-xl text-white",
                 data.meta_fields.program_type === "economy"
                   ? "bg-green-600"
                   : data.meta_fields.program_type === "premium"
@@ -116,7 +116,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
               />
             )}
             <div className="flex-flex-col leading-none">
-              <span className="text-2xl leading-none text-darkblue-600">
+              <span className="text-lg leading-none text-darkblue-600">
                 {agency.title}
               </span>
             </div>
@@ -125,8 +125,8 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
 
         <div className="mb-2 flex items-end justify-between gap-4">
           <div className="duration text-teal-600">
-            <span className="text-xl leading-tight">{"المدة"}</span>
-            <div className="duration text-2xl font-bold text-teal-600">
+            <span className="text-lg leading-tight">{"المدة"}</span>
+            <div className="duration text-xl font-bold text-teal-600">
               {getMetaFieldValueLabel(
                 articleType,
                 "trip_duration",
@@ -135,8 +135,8 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
             </div>
           </div>
           <div className="text-blue-700">
-            <span className="text-xl leading-tight">{"الدخول"}</span>
-            <div className="text-2xl font-bold leading-tight">
+            <span className="text-lg leading-tight">{"الدخول"}</span>
+            <div className="text-xl font-bold leading-tight">
               {getMetaFieldValueLabel(
                 articleType,
                 "entry_point",
@@ -148,7 +148,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
         <div className="mb-2 flex items-center justify-between gap-4">
           <div
             className={cn(
-              "duration font-regular text-2xl",
+              "duration font-regular text-xl",
               data.meta_fields.trip_type === "direct"
                 ? "text-green-600"
                 : "text-red-600",
@@ -178,15 +178,15 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                   height={50}
                 />
               ) : airelinesCompany?.title ? (
-                <span className="text-xl text-darkblue-500 font-bold">{airelinesCompany?.title}</span>
+                <span className="text-lg text-darkblue-500 font-bold">{airelinesCompany?.title}</span>
               ) : null}
             </p>
           </div>
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-between gap-4 rounded-b-xl bg-red2-50 px-6 py-4">
-        <span className="text-2xl text-darkblue-600">{"ابتداء من"}</span>
-        <span className="text-4xl font-bold text-beige-800">
+      <div className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-between gap-4 rounded-b-xl bg-red2-50 px-6 py-3 pt-5">
+        <span className="text-xl text-darkblue-600">{"ابتداء من"}</span>
+        <span className="text-3xl font-bold text-beige-800">
           {formatAmount(data.meta_fields?.price, ",", 2)}
         </span>
       </div>

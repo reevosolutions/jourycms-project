@@ -1,14 +1,12 @@
 "use client";
-import {publicRoutes} from "@/config";
+import { publicRoutes } from "@/config";
 import useAuth from "@/hooks/use-auth";
-import initLogger, {LoggerContext} from "@/lib/logging";
-import {cn} from "@/lib/utils";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
-import {usePathname} from "next/navigation";
-import * as React from "react";
-import {LuBriefcase} from "react-icons/lu";
+import { usePathname } from "next/navigation";
+import React from "react";
 import HeaderUserControls from "./header.user-controls";
-import {SidebarProvider} from "@/components/ui/customized.sidebar";
 import ThemeSidebar from "./sidebar";
 
 const logger = initLogger(LoggerContext.COMPONENT, "header");
@@ -22,7 +20,7 @@ const HeaderLink: React.FC<{
     <Link
       href={href}
       className={cn(
-        "flex h-28 items-center justify-center border-b-[6px] px-4 duration-200 lg:px-6 xl:px-8",
+        "flex h-28 items-center justify-center border-b-[6px] pt-2 px-4 duration-200 lg:px-6 xl:px-6",
         isCurrent
           ? "border-beige-50 bg-darkblue-950/50 font-semibold text-beige-50"
           : "border-transparent text-white hocus:border-beige-50 hocus:text-beige-50",
@@ -64,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({children, route}) => {
   /* -------------------------------------------------------------------------- */
   return (
     <header className="jcms-header from-darkblue-900 to-darkblue-800 h-16 bg-gradient-to-r lg:h-28">
-      <div className="inner container mx-auto flex items-center gap-6 px-4 text-2xl font-medium md:px-8">
+      <div className="inner container mx-auto flex items-center gap-6 px-4 text-xl font-medium md:px-8">
         <Link
           className="text-beige-100 hover:text-red2-500 block w-24 transition-all"
           href="/"
@@ -107,7 +105,7 @@ const Header: React.FC<HeaderProps> = ({children, route}) => {
 
         <HeaderUserControls />
 
-        <nav className="hidden items-center lg:flex">
+        {/* <nav className="hidden items-center lg:flex">
           <Link
             className="bg-red2-800 hocus:bg-red2-950 flex items-center gap-4 rounded-lg px-4 py-1 text-white transition-all duration-200"
             href="/jobs"
@@ -115,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({children, route}) => {
             <LuBriefcase className="h-5 w-5" />
             <span className="block px-2">وظائف</span>
           </Link>
-        </nav>
+        </nav> */}
         <ThemeSidebar />
       </div>
     </header>

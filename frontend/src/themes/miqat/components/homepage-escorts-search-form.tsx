@@ -56,7 +56,7 @@ export const EscortsSearchForm: React.FC = () => {
     <div className="d pt-6 text-darkblue-950">
       {/* field */}
       <div className="field mb-8">
-        <Label className="text-2xl text-darkblue-500">{"جنس المرافق"}</Label>
+        <Label className="text-lg text-darkblue-500">{"جنس المرافق"}</Label>
         <div className="mt-3 grid grid-cols-3 gap-3 sm:gap-8">
           <button
             className={cn(
@@ -111,13 +111,13 @@ export const EscortsSearchForm: React.FC = () => {
             )}
             onClick={() => setSex(undefined)}
           >
-            <span className="text-2xl font-bold">أي شخص</span>
+            <span className="text-xl font-bold">أي شخص</span>
           </button>
         </div>
       </div>
       {/* field */}
       <div className="field mb-8">
-        <Label className="text-2xl text-darkblue-500">{"الولاية"}</Label>
+        <Label className="text-lg text-darkblue-500">{"الولاية"}</Label>
         <Popover open={wilayaOpen} onOpenChange={setWilayaOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -127,7 +127,7 @@ export const EscortsSearchForm: React.FC = () => {
               className="w-full justify-between rounded-md border-2"
               aria-label="state"
             >
-              <div className="value text-xl">
+              <div className="value text-lg pt-2">
                 {!state ? (
                   <span className="text-darkblue-500">{"اختر ولاية..."}</span>
                 ) : (
@@ -140,7 +140,7 @@ export const EscortsSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] sm:w-[436px] p-0 font-hammah text-2xl"
+            className="w-[220px] sm:w-[436px] p-0 font-tajawal text-2xl"
             align="start"
           >
             <Command
@@ -186,7 +186,7 @@ export const EscortsSearchForm: React.FC = () => {
       </div>
       {/* field */}
       <div className="field mb-12">
-        <Label className="text-2xl text-darkblue-500">{"سنوات الخبرة"}</Label>
+        <Label className="text-lg text-darkblue-500">{"سنوات الخبرة"}</Label>
         <div className="mb-10 mt-4">
           <Slider
             inverted
@@ -246,7 +246,7 @@ export const DoctorsSearchForm: React.FC = () => {
     <div className="d pt-6 text-darkblue-950" dir="rtl">
       {/* field */}
       <div className="field mb-8">
-        <Label className="text-2xl text-darkblue-500">{"جنس الطبيب"}</Label>
+        <Label className="text-lg text-darkblue-500">{"جنس الطبيب"}</Label>
         <div className="mt-3 grid grid-cols-3 gap-3 sm:gap-8">
           <button
             className={cn(
@@ -301,13 +301,13 @@ export const DoctorsSearchForm: React.FC = () => {
             )}
             onClick={() => setSex(undefined)}
           >
-            <span className="text-2xl font-bold">أي شخص</span>
+            <span className="text-xl font-bold">أي شخص</span>
           </button>
         </div>
       </div>
       {/* field */}
       <div className="field mb-8">
-        <Label className="text-2xl text-darkblue-500">{"التخصص"}</Label>
+        <Label className="text-lg text-darkblue-500">{"التخصص"}</Label>
         <Popover open={specialityOpen} onOpenChange={setSpecialityOpen}>
           <PopoverTrigger asChild>
             <Button
@@ -317,7 +317,7 @@ export const DoctorsSearchForm: React.FC = () => {
               className="w-full justify-between rounded-md border-2"
               aria-label="state"
             >
-              <div className="value text-xl">
+              <div className="value text-lg pt-2">
                 {!speciality ? (
                   <span className="text-darkblue-500">{"اختر التخصص..."}</span>
                 ) : (
@@ -331,7 +331,7 @@ export const DoctorsSearchForm: React.FC = () => {
             </Button>
           </PopoverTrigger>
           <PopoverContent
-            className="w-[220px] p-0 font-hammah text-2xl sm:w-[436px]"
+            className="w-[220px] p-0 font-tajawal text-2xl sm:w-[436px]"
             align="start"
           >
             <Command
@@ -380,7 +380,7 @@ export const DoctorsSearchForm: React.FC = () => {
 
       {/* field */}
       <div className="field mb-12">
-        <Label className="text-2xl text-darkblue-500">{"سنوات الخبرة"}</Label>
+        <Label className="text-lg text-darkblue-500">{"سنوات الخبرة"}</Label>
         <div className="mb-10 mt-4">
           <Slider
             inverted
@@ -424,7 +424,7 @@ const HomepageEscortsSearchForm: React.FC<
           dir="rtl"
         >
           <TabsTrigger
-            className="group relative bg-transparent px-4 py-4 text-4xl text-slate-100 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-white data-[state=active]:shadow-none hover:text-white active:bg-transparent"
+            className="group relative bg-transparent px-4 py-4 pt-6 text-2xl text-slate-100 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-white data-[state=active]:shadow-none hover:text-white active:bg-transparent"
             value="escorts"
           >
             <span>مرافقين</span>
@@ -437,7 +437,7 @@ const HomepageEscortsSearchForm: React.FC<
             />
           </TabsTrigger>
           <TabsTrigger
-            className="group relative bg-transparent px-4 py-4 text-4xl text-slate-100 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-white data-[state=active]:shadow-none hover:text-white active:bg-transparent"
+            className="group relative bg-transparent px-4 py-4 pt-6 text-2xl text-slate-100 transition-all data-[state=active]:bg-transparent data-[state=active]:font-medium data-[state=active]:text-white data-[state=active]:shadow-none hover:text-white active:bg-transparent"
             value="doctors"
           >
             <span>أطباء</span>

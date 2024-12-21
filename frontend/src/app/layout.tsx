@@ -12,7 +12,7 @@ import initLogger, { LoggerContext } from "@lib/logging";
 import { StoreProvider } from "@redux/providers/store-provider";
 import colors from "colors";
 import type { Metadata, Viewport } from "next";
-import { Inter, Noto_Sans_Arabic } from "next/font/google";
+import { Inter, Noto_Sans_Arabic, Tajawal } from "next/font/google";
 import localFont from "next/font/local";
 import "../styles/main.scss";
 
@@ -21,6 +21,10 @@ colors.enable();
 const logger = initLogger(LoggerContext.APPLICATION, "layout");
 
 const inter = Inter({ subsets: ["latin"] });
+const tajawal = Tajawal({
+  subsets: ["arabic", 'latin'],
+  weight: ["200", "300", "400", "500", "700", "800", "900"],
+});
 const noto = Noto_Sans_Arabic({
   variable: "--font-noto",
   weight: ['400', '500', '600', '700', '100', '200', '300', '800', '900'],
@@ -104,8 +108,16 @@ export default async function RootLayout({
   return (
     <html lang={locale} dir={locale !== "ar" ? "ltr" : "rtl"}>
       <head>
-        <link rel="preload" href="/assets/miqat/images/mosque2.webp" as="image" />
-        <link rel="preload" href="/assets/miqat/images/hajj-placeholder.webp" as="image" />
+        <link
+          rel="preload"
+          href="/assets/miqat/images/mosque2.webp"
+          as="image"
+        />
+        <link
+          rel="preload"
+          href="/assets/miqat/images/hajj-placeholder.webp"
+          as="image"
+        />
 
         <link
           rel="apple-touch-icon"
@@ -178,11 +190,14 @@ export default async function RootLayout({
         />
         <link rel="manifest" href="/manifest.json" />
         <meta name="msapplication-TileColor" content="#ffffff" />
-        <meta name="msapplication-TileImage" content="/icons/ms-icon-144x144.png" />
+        <meta
+          name="msapplication-TileImage"
+          content="/icons/ms-icon-144x144.png"
+        />
         <meta name="theme-color" content="#ffffff" />
       </head>
       <body
-        className={`${inter.className} ${noto.variable} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
+        className={`${inter.className} ${tajawal.className} ${noto.variable} ${geistSans.variable} ${hammah.variable} ${geistMono.variable} antialiased ${showThemeClasses()}`}
       >
         <TranslationsProvider
           namespaces={i18nNamespaces}

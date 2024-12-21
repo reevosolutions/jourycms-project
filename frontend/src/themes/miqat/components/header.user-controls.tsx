@@ -38,7 +38,7 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({children}) => {
             <LuChevronDown className="h-5 w-5" />
           </PopoverTrigger>
           <PopoverContent className="-translate-y-4">
-            <div className="px-4 font-hammah text-2xl">
+            <div className="px-4 font-tajawal text-xl">
               <ul>
                 <li>
                   <Link
@@ -103,7 +103,7 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({children}) => {
           </PopoverTrigger>
 
           <PopoverContent className="-translate-y-4">
-            <div className="px-4 font-hammah text-2xl">
+            <div className="px-4 font-tajawal text-xl">
               <ul>
                 <li>
                   <Link

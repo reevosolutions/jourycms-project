@@ -74,7 +74,7 @@ const ThemeSidebar: React.FC<Props> = () => {
             ) : null}
           </SheetHeader>
 
-          <div className="px-4 font-hammah text-2xl pt-8">
+          <div className="px-4 font-tajawal text-2xl pt-8">
             <ul>
               {menuItems.map(route => (
                 <li key={route.path}>

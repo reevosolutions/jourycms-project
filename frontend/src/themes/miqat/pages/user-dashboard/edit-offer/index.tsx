@@ -80,7 +80,7 @@ const ThemePage: React.FC<PageProps> = ({route, id}) => {
                   toast.success("تم تحديث العرض بنجاح", {
                     position: "bottom-left",
                     descriptionClassName: " text-xl",
-                    className: " text-xl lg:text-2xl font-bold  font-hammah",
+                    className: " text-xl lg:text-2xl font-bold  font-tajawal",
                   });
                 }}
               />

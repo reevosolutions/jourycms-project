@@ -75,7 +75,7 @@ const HomepageCallToActionSection: React.FC<
             <div className="flex justify-center py-16 pb-12">
               <Link
                 href="/register"
-                className="rounded-lg bg-red2-800 px-16 py-6 text-3xl font-bold text-white transition-all duration-200 hocus:bg-red2-900 md:text-5xl lg:text-6xl"
+                className="rounded-lg bg-red2-800 px-16 py-6 pt-8 text-3xl font-bold text-white transition-all duration-200 hocus:bg-red2-900 md:text-4xl lg:text-4xl"
               >
                 نعم، سجلني الآن
               </Link>
