@@ -28,42 +28,42 @@ export default class CustomHandlerServiceContainer extends BaseServiceContainer<
   }
   
   // create
-  async create(data: Levelup.CMS.V1.Utils.Api.Request.Build<{data: Record<string, any>}>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
-    return await this.sdk.httpClient.post(this.generatePrefix(), data, {
+  async create(path: SDK.PathPrefix = "/", data: Levelup.CMS.V1.Utils.Api.Request.Build<{data: Record<string, any>}>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
+    return await this.sdk.httpClient.post(this.generatePrefix(path), data, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // update
-  async update(id: string, data: Levelup.CMS.V1.Utils.Api.Request.Build<{data: Record<string, any>}>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
-    return await this.sdk.httpClient.put(this.generatePrefix("/:id", { id }), data, {
+  async update(path: SDK.PathPrefix = "/", id: string, data: Levelup.CMS.V1.Utils.Api.Request.Build<{data: Record<string, any>}>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
+    return await this.sdk.httpClient.put(this.generatePrefix(`${path}/:id`, { id }), data, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // delete
-  async delete(id: string, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.DefaultDeleteResponse>> {
-    return await this.sdk.httpClient.delete(this.generatePrefix("/:id", { id }), {}, {
+  async delete(path: SDK.PathPrefix = "/", id: string, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.DefaultDeleteResponse>> {
+    return await this.sdk.httpClient.delete(this.generatePrefix(`${path}/:id`, { id }), {}, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // restore
-  async restore(id: string, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.DefaultDeleteResponse>> {
-    return await this.sdk.httpClient.delete(this.generatePrefix(`/${id}/restore`), {}, {
+  async restore(path: SDK.PathPrefix = "/", id: string, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.DefaultDeleteResponse>> {
+    return await this.sdk.httpClient.delete(this.generatePrefix(`${path}/${id}/restore`), {}, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // list
-  async list(query: Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Record<string, any>>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildListResponse<any>>> {
-    return await this.sdk.httpClient.get<Levelup.CMS.V1.Utils.Api.Response.BuildListResponse<any>>(this.generatePrefix(), query, {
+  async list(path: SDK.PathPrefix = "/", query: Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Record<string, any>>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildListResponse<any>>> {
+    return await this.sdk.httpClient.get<Levelup.CMS.V1.Utils.Api.Response.BuildListResponse<any>>(this.generatePrefix(path), query, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
   // getOne
-  async getOne(query: Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Record<string, any>>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
-    return await this.sdk.httpClient.get(this.generatePrefix(), query, {
+  async getOne(path: SDK.PathPrefix = "/", query: Levelup.CMS.V1.Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<Record<string, any>>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<Levelup.CMS.V1.Utils.Api.Response.BuildSingleItemResponse<any>>> {
+    return await this.sdk.httpClient.get(this.generatePrefix(path), query, {
       headers: this.sdk.generateHeadersFromRequestConfig(config)
     });
   }
