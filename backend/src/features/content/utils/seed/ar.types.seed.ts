@@ -431,15 +431,15 @@ const custom_meta_fields = {
         },
         {
           value: "3",
-          label: "3 نجمة",
+          label: "3 نجوم",
         },
         {
           value: "4",
-          label: "4 نجمة",
+          label: "4 نجوم",
         },
         {
           value: "5",
-          label: "5 نجمة",
+          label: "5 نجوم",
         },
       ],
       multiple: false,

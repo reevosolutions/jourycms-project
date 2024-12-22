@@ -35,9 +35,7 @@ const ThemePage_Server: React.FC<PageProps> = ({ route, showPagination = true,
             data,
             articleType,
             error,
-            isOffer: true,
-          }}
-        />
+          }} />
       </div>
     </DefaultLayout>
   );

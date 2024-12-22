@@ -56,6 +56,7 @@ const HomepageContentSection: React.FC<HomepageContentSectionProps> = ({}) => {
                 articleTypeSlug={ArticleTypeSlug.OMRAH}
                 count={12}
                 showPagination={false}
+                isOffer
               />
               <div className="py-10 flex justify-center">
                 <Link

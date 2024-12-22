@@ -2,13 +2,14 @@ import initLogger, { LoggerContext } from "@/lib/logging";
 import NoPostsMessage from "@/themes/miqat/components/no-posts-message";
 import CustomPagination from "@/themes/miqat/components/pagination.client";
 import React from "react";
+import CustomPagination_Server from "./pagination.server";
 import PostCard_Server from "./post-card.server";
+import DefaultPostCard_Server from "./post-card.default.server";
 
 const logger = initLogger(LoggerContext.COMPONENT, "contentSection");
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
-import CustomPagination_Server from "./pagination.server";
 
 
 export type ContentSection_ServerProps = JouryCMS.Theme.ComponentProps & {
@@ -19,6 +20,7 @@ export type ContentSection_ServerProps = JouryCMS.Theme.ComponentProps & {
   articleType: Levelup.CMS.V1.Content.Entity.ArticleType;
   data?: ApiAlias.List.Response;
   error?: any;
+  isOffer?: boolean;
 };
 
 const ContentSection_Server: React.FC<ContentSection_ServerProps> = ({
@@ -29,6 +31,8 @@ const ContentSection_Server: React.FC<ContentSection_ServerProps> = ({
   data,
   articleType,
   error,
+  isOffer
+
 }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
@@ -64,14 +68,23 @@ const ContentSection_Server: React.FC<ContentSection_ServerProps> = ({
       ) : (
         <div className="">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">
-            {data?.data?.map((item, index) => (
-              <PostCard_Server
-                key={index}
-                data={item}
-                edge={data?.edge}
-                articleType={articleType}
-              />
-            ))}
+            {data?.data?.map((item, index) =>
+              isOffer ? (
+                <PostCard_Server
+                  key={index}
+                  data={item}
+                  edge={data?.edge}
+                  articleType={articleType}
+                />
+              ) : (
+                <DefaultPostCard_Server
+                  key={index}
+                  data={item}
+                  edge={data?.edge}
+                  articleType={articleType}
+                />
+              ),
+            )}
           </div>
           {pathPattern &&
             showPagination &&

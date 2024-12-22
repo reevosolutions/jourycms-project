@@ -37,12 +37,12 @@ import {checkSimilarity} from "@/lib/utilities/strings";
 import {useRouter} from "next/navigation";
 import {useTranslation} from "react-i18next";
 import {LuCheck, LuChevronsUpDown} from "react-icons/lu";
+import {Loader2} from "lucide-react";
+import {faker} from "@faker-js/faker";
 
 const logger = initLogger(LoggerContext.FORM, "RegisterForm");
 
 import ApiAlias = Levelup.CMS.V1.Auth.Api.Auth.Signup;
-import {Loader2} from "lucide-react";
-import {faker} from "@faker-js/faker";
 
 export type RegisterFormProps = {};
 

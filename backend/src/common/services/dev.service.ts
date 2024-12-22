@@ -24,6 +24,7 @@ import { addLeadingZeros, buildUserFullName } from "../../utilities/strings";
 import moment from "moment";
 import articleTypesSeedData from "../../features/content/utils/seed/ar.types.seed";
 import { extractAgenciesFromExcel } from "../../features/content/utils/seed/agencies";
+import { hotels } from "../../features/content/utils/seed/ksa.hotels";
 
 type User = Levelup.CMS.V1.Users.Entity.ExposedUser;
 type RegisterPayload = DeepRequired<
@@ -750,12 +751,12 @@ export default class DevService extends BaseService {
       const count = await this.articleModel.countDocuments({
         article_type: this.types[ArticleTypeSlug.HOTEL]?._id,
       });
-      if (!count)
-        for (let index = 0; index < 20; index++) {
+      if (!count) {
+        for (const hotel of hotels.mekkah) {
           const article: Article = {
-            title: faker.company.buzzPhrase(),
-            body: this.loremHtml,
-            body_unformatted: "",
+            title: hotel.name,
+            body: hotel.description,
+            body_unformatted: hotel.description,
             body_structured: {},
             is_published: true,
             published_at: new Date(),
@@ -765,9 +766,10 @@ export default class DevService extends BaseService {
             related_tags: [],
             meta_fields: {
               country: "ksa",
-              medina_mekkah: faker.helpers.arrayElement(["mekkah", "medina"]),
-              distance_to_haram: faker.number.int({ min: 0, max: 100 }),
-              hotel_rating: faker.number.int({ min: 1, max: 5 }),
+              medina_mekkah: "mekkah",
+              distance_to_haram: hotel.distance_to_haram,
+              hotel_rating: hotel.rating,
+              website: hotel.website,
             },
             attributes: undefined,
             snapshots: undefined,
@@ -778,6 +780,35 @@ export default class DevService extends BaseService {
             { current: { user } }
           );
         }
+        for (const hotel of hotels.medina) {
+          const article: Article = {
+            title: hotel.name,
+            body: hotel.description,
+            body_unformatted: hotel.description,
+            body_structured: {},
+            is_published: true,
+            published_at: new Date(),
+            is_featured: false,
+            featured_image: null,
+            article_type: this.types[ArticleTypeSlug.HOTEL]?._id,
+            related_tags: [],
+            meta_fields: {
+              country: "ksa",
+              medina_mekkah: "medina",
+              distance_to_haram: hotel.distance_to_haram,
+              hotel_rating: hotel.rating,
+              website: hotel.website,
+            },
+            attributes: undefined,
+            snapshots: undefined,
+            insights: undefined,
+          };
+          await this.articlesService.create(
+            { data: article },
+            { current: { user } }
+          );
+        }
+      }
     }
   }
 

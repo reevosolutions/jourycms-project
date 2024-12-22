@@ -15,7 +15,7 @@ const ThemePage_Client: React.FC<PageProps> = ({ route }) => {
     <ReactQueryDevtoolsProvider>
       <DefaultLayout route={route}>
         <div className="container mx-auto px-4 md:px-8">
-          <ContentSection articleTypeSlug={ArticleTypeSlug.OMRAH} count={12} showPagination isOffer />
+          <ContentSection articleTypeSlug={ArticleTypeSlug.HAJJ} count={12} showPagination isOffer />
         </div>
       </DefaultLayout>
     </ReactQueryDevtoolsProvider>

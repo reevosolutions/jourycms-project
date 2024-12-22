@@ -91,11 +91,6 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
               ) || "عادي"}
             </span>
           </h2>
-
-          <div
-            className="text-sm text-gray-500"
-            dangerouslySetInnerHTML={{__html: data.body_unformatted || ""}}
-          />
         </div>
 
         {agency && (
@@ -123,6 +118,13 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
           </div>
         )}
 
+        {data.body_unformatted && (
+          <div
+            className="mb-4 text-sm text-gray-500"
+            dangerouslySetInnerHTML={{__html: data.body_unformatted || ""}}
+          />
+        )}
+        
         <div className="mb-2 flex items-end justify-between gap-4">
           <div className="duration text-teal-600">
             <span className="text-lg leading-tight">{"المدة"}</span>
@@ -178,7 +180,9 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
                   height={50}
                 />
               ) : airelinesCompany?.title ? (
-                <span className="text-lg text-darkblue-500 font-bold">{airelinesCompany?.title}</span>
+                <span className="text-lg font-bold text-darkblue-500">
+                  {airelinesCompany?.title}
+                </span>
               ) : null}
             </p>
           </div>

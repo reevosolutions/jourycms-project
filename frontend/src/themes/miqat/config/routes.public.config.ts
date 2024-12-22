@@ -19,6 +19,45 @@ const routes = {
           },
         },
       },
+      hajj: {
+        path: "/hajj" as const,
+        title: "عروض الحج",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+        _: {
+          paged: {
+            path: "/hajj/:page" as const,
+            title: "عروض الحج",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+        },
+      },
+      visa: {
+        path: "/visa" as const,
+        title: "تأشيرة السعودية",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+        _: {
+          paged: {
+            path: "/visa/:page" as const,
+            title: "تأشيرة السعودية",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+        },
+      },
+      hotels: {
+        path: "/hotels" as const,
+        title: "فناق الحرمين",
+        ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+        _: {
+          paged: {
+            path: "/hotels/:page" as const,
+            title: "فناق الحرمين",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
+        },
+      },
       tombolas: {
         path: "/tombolas" as const,
         title: "طمبولات",

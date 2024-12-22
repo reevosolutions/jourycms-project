@@ -16,6 +16,7 @@ import {
   LuCalendarDays,
   LuCircleDollarSign,
   LuMoonStar,
+  LuPencil,
 } from "react-icons/lu";
 import { MdOutlineLocalHotel } from "react-icons/md";
 import {
@@ -33,6 +34,8 @@ import {
   getMetaFieldValueLabel,
   hasMetaField,
 } from "../../data/meta-fields";
+import AdminOnlyView from "@/guards/admin-only.view";
+import Link from "next/link";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -117,7 +120,7 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
           </div>
         ) : null}
         {hasMetaField(article, "logo") ? (
-          <div className="relative mb-4 aspect-video   w-60">
+          <div className="relative mb-4 aspect-video w-60">
             <Image
               priority
               placeholder="blur"
@@ -136,9 +139,19 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
             />
           </div>
         ) : null}
-        <h1 className="mb-4 text-center text-4xl text-gray-800 md:text-5xl">
-          {article.title}
-        </h1>
+        <div className="mb-4">
+          <h1 className="mb-6 mt-8 flex items-center justify-center gap-4 text-4xl text-gray-800 md:text-5xl">
+            {article.title}
+            <AdminOnlyView>
+              <Link
+                href={`/admin/articles/edit/${article._id}`}
+                className="ms-4 inline-block rounded-full p-2 text-gray-400 hocus:bg-gray-100 hocus:text-gray-600"
+              >
+                <LuPencil className="h-5 w-5" />
+              </Link>
+            </AdminOnlyView>
+          </h1>
+        </div>
         {articleType?.slug === "doctor" || articleType?.slug === "escort" ? (
           <div className="mb-4 flex items-center justify-center gap-4 rounded-full bg-beige-50/50 px-6 py-1 pe-8 text-4xl text-red2-600">
             <span className="w-8">

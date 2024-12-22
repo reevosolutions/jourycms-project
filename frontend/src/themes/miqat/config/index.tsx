@@ -62,6 +62,8 @@ export default websiteConfig;
 
 export enum ArticleTypeSlug {
   OMRAH = "omrah",
+  HAJJ = "hajj",
+  VISA = "visa",
   BLOG = "blog",
   SHRINE = "shrine",
   AIRELINES_COMPANY = "airelines-company",

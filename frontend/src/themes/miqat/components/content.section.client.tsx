@@ -17,17 +17,20 @@ const logger = initLogger(LoggerContext.COMPONENT, "contentSection");
 import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import PostCard_Server from "./post-card.server";
+import DefaultPostCard_Server from "./post-card.default.server";
 
 export type ContentSectionProps = JouryCMS.Theme.ComponentProps & {
   articleTypeSlug: `${ArticleTypeSlug}`;
   showPagination?: boolean;
   count: number;
+  isOffer?: boolean;
 };
 
 const ContentSection_Client: React.FC<ContentSectionProps> = ({
   showPagination = true,
   articleTypeSlug,
   count: _count = 12,
+  isOffer,
 }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
@@ -140,14 +143,23 @@ const ContentSection_Client: React.FC<ContentSectionProps> = ({
         <div className="">
           {articleType && (
             <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 lg:gap-10 xl:grid-cols-4">
-              {filteredItems.map((item, index) => (
-                <PostCard_Server
-                  key={index}
-                  data={item}
-                  edge={data?.edge}
-                  articleType={articleType}
-                />
-              ))}
+              {filteredItems.map((item, index) =>
+                isOffer ? (
+                  <PostCard_Server
+                    key={index}
+                    data={item}
+                    edge={data?.edge}
+                    articleType={articleType}
+                  />
+                ) : (
+                  <DefaultPostCard_Server
+                    key={index}
+                    data={item}
+                    edge={data?.edge}
+                    articleType={articleType}
+                  />
+                ),
+              )}
             </div>
           )}
           {showPagination && (data?.pagination?.pages || 0) > 1 && (
