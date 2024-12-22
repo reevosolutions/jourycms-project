@@ -7,6 +7,7 @@ import {
 import colors from "colors";
 import AuthServiceContainer from "./containers/auth/service-container";
 import ContentServiceContainer from "./containers/content/service-container";
+import CustomHandlerServiceContainer from "./containers/custom-handler/service-container";
 import StorageServiceContainer from "./containers/storage/service-container";
 import ApiResponseError from "./exceptions/api-response.exception";
 import HttpClient from "./http-client";
@@ -31,7 +32,7 @@ export default class JouryCMSSdk implements SDK.ISdk {
   private _requestCount = 0;
   protected serviceContainers: Partial<
     Record<
-      Levelup.CMS.V1.Utils.SystemStructure.TMicroService | "insights",
+      Levelup.CMS.V1.Utils.SystemStructure.TMicroService | "insights" | "custom",
       SDK.IServiceContainer
     >
   > = {};
@@ -70,6 +71,12 @@ export default class JouryCMSSdk implements SDK.ISdk {
     if (!this.serviceContainers.system)
       this.serviceContainers.system = new SystemServiceContainer(this);
     return this.serviceContainers.system as SystemServiceContainer;
+  }
+
+  get custom() {
+    if (!this.serviceContainers.custom)
+      this.serviceContainers.custom = new CustomHandlerServiceContainer(this);
+    return this.serviceContainers.custom as CustomHandlerServiceContainer;
   }
 
   get helpers() {
