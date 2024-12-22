@@ -24,7 +24,7 @@ import {yupValidator} from "@tanstack/yup-form-adapter";
 import useCMSContent from "@/hooks/use-cms-content";
 import {Loader2} from "lucide-react";
 import {useAppDispatch} from "@/lib/redux/hooks";
-import { Textarea } from "@/components/ui/textarea";
+import {Textarea} from "@/components/ui/textarea";
 
 const logger = initLogger(LoggerContext.FORM, "OmrahOnDemandForm");
 
@@ -75,14 +75,13 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
       };
 
       try {
-        const {data} = await sdk.auth.auth.login(payload);
+        const {data} = await sdk.custom.create("/omrah-on-demand", payload);
 
-        if (data?.user?._id) {
+        if (data) {
           // router.push(
           //   setPathParams(publicRoutes.homepage._.myAccount.path, { id: data?.user?._id }),
           // );
-          logger.success("authenticating", data.user.email);
-          dispatch(authenticate(data));
+          logger.success("posted", data);
         }
       } catch (error: any) {
         toast.error(error.message, {});
@@ -206,7 +205,7 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
       </div>
       {/* field */}
       <div className="field mb-6">
-        <Label className="text-xl text-darkblue-500">{"رقم الهاتف"}</Label>
+        <Label className="text-xl text-darkblue-500">{"البرنامج"}</Label>
         <form.Field
           name="program"
           validators={{

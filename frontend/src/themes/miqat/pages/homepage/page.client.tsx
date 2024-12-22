@@ -10,6 +10,7 @@ import HomepagePartnersSection from "./sections/partners.section";
 import HomepageSeatsSection from "./sections/seats.section";
 import HomepageEscortsSection from "./sections/escorts.section";
 import HomepageBlogSection from "./sections/blog.section";
+import OmrahOnDemandSection from "./sections/omrah-on-demand.section";
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
@@ -20,13 +21,14 @@ const ThemePage_Client: React.FC<PageProps> = ({ route }) => {
   return (
     <ReactQueryDevtoolsProvider>
       <DefaultLayout route={route}>
-          <HomepageHeroSection />
-          <HomepageContentSection />
-          <HomepageEscortsSection />
-          <HomepageSeatsSection />
-          <HomepageCallToActionSection />
-          <HomepageBlogSection />
-          <HomepagePartnersSection />
+        <HomepageHeroSection />
+        <HomepageContentSection />
+        <OmrahOnDemandSection />
+        <HomepageEscortsSection />
+        <HomepageSeatsSection />
+        <HomepageCallToActionSection />
+        <HomepageBlogSection />
+        <HomepagePartnersSection />
       </DefaultLayout>
     </ReactQueryDevtoolsProvider>
   );
