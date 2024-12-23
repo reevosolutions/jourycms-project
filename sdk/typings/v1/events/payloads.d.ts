@@ -167,121 +167,150 @@ declare module Levelup {
           export namespace Content {
             export namespace Comment {
               export type created = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Comment>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Comment>;
               };
               export type updated = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Comment>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Comment>;
               };
               export type deleted = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Comment>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Comment>;
               };
               export type restored = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Comment>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Comment>;
               };
             }
             export namespace Review {
               export type created = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Review>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Review>;
               };
               export type updated = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Review>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Review>;
               };
               export type deleted = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Review>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Review>;
               };
               export type restored = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Review>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Review>;
               };
             }
             export namespace Article {
               export type created = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Article>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Article>;
               };
               export type updated = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Article>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Article>;
               };
               export type deleted = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Article>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Article>;
               };
               export type restored = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Article>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Article>;
               };
             }
             export namespace ArticleType {
               export type created = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.ArticleType>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.ArticleType>;
               };
               export type updated = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.ArticleType>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.ArticleType>;
               };
               export type deleted = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.ArticleType>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.ArticleType>;
               };
               export type restored = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.ArticleType>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.ArticleType>;
               };
             }
             export namespace Term {
-              export type created = { data: Partial<Levelup.CMS.V1.Cm.Entity.Term> };
-              export type updated = { data: Partial<Levelup.CMS.V1.Cm.Entity.Term> };
-              export type deleted = { data: Partial<Levelup.CMS.V1.Cm.Entity.Term> };
-              export type restored = { data: Partial<Levelup.CMS.V1.Cm.Entity.Term> };
+              export type created = { data: Partial<Levelup.CMS.V1.Content.Entity.Term> };
+              export type updated = { data: Partial<Levelup.CMS.V1.Content.Entity.Term> };
+              export type deleted = { data: Partial<Levelup.CMS.V1.Content.Entity.Term> };
+              export type restored = { data: Partial<Levelup.CMS.V1.Content.Entity.Term> };
             }
             export namespace Taxonomy {
               export type created = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Taxonomy>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Taxonomy>;
               };
               export type updated = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Taxonomy>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Taxonomy>;
               };
               export type deleted = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Taxonomy>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Taxonomy>;
               };
               export type restored = {
-                data: Partial<Levelup.CMS.V1.Cm.Entity.Taxonomy>;
+                data: Partial<Levelup.CMS.V1.Content.Entity.Taxonomy>;
+              };
+            }
+
+            export namespace Form {
+              export type created = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.Form>;
+              };
+              export type updated = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.Form>;
+              };
+              export type deleted = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.Form>;
+              };
+              export type restored = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.Form>;
+              };
+            }
+            export namespace FormEntry {
+              export type created = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.FormEntry>;
+              };
+              export type updated = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.FormEntry>;
+              };
+              export type deleted = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.FormEntry>;
+              };
+              export type restored = {
+                data: Partial<Levelup.CMS.V1.Content.Entity.FormEntry>;
               };
             }
             export namespace Translation {
               export namespace Item {
                 export type created = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Item>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Item>;
                 };
                 export type updated = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Item>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Item>;
                 };
                 export type deleted = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Item>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Item>;
                 };
                 export type restored = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Item>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Item>;
                 };
               }
               export namespace Project {
                 export type created = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Project>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Project>;
                 };
                 export type updated = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Project>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Project>;
                 };
                 export type deleted = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Project>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Project>;
                 };
                 export type restored = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Project>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Project>;
                 };
               }
               export namespace Namespace {
                 export type created = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Namespace>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Namespace>;
                 };
                 export type updated = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Namespace>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Namespace>;
                 };
                 export type deleted = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Namespace>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Namespace>;
                 };
                 export type restored = {
-                  data: Partial<Levelup.CMS.V1.Cm.Translation.Entity.Namespace>;
+                  data: Partial<Levelup.CMS.V1.Content.Translation.Entity.Namespace>;
                 };
               }
             }

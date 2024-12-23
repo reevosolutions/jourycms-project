@@ -12,6 +12,7 @@ declare module JouryCMS {
         ac?: ()=>boolean;
       }[]
       children: React.ReactNode;
+      className?: string;
     }
   }
 }

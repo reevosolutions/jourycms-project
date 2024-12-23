@@ -45,12 +45,15 @@ declare module Levelup {
 						| 'file'
 						| 'image'
 						| 'number'
+						| 'number_range'
 						| 'radiobox'
 						| 'select'
 						| 'algerian_state'
 						| 'algerian_city'
 						| 'ksa_city'
 						| 'text'
+						| 'multiline_text'
+						| 'rich_text'
 						| 'time';
 
 
@@ -64,12 +67,15 @@ declare module Levelup {
 						T extends 'file' ? FileField.Input<IsMulti> :
 						T extends 'image' ? ImageField.Input<IsMulti> :
 						T extends 'number' ? NumberField.Input :
+						T extends 'number_range' ? NumberRangeField.Input :
 						T extends 'radiobox' ? RadioboxField.Input :
 						T extends 'select' ? SelectField.Input<IsMulti> :
 						T extends 'algerian_state' ? SelectField.Intput<IsMulti> :
 						T extends 'algerian_city' ? SelectField.Intput<IsMulti> :
 						T extends 'ksa_city' ? SelectField.Intput<IsMulti> :
 						T extends 'text' ? TextField.Input :
+						T extends 'multiline_text' ? MultiLineTextField.Input :
+						T extends 'rich_text' ? RichTextField.Input :
 						T extends 'time' ? TimeField.Input :
 						never;
 
@@ -82,12 +88,15 @@ declare module Levelup {
 						T extends 'file' ? FileField.Output<IsMulti> :
 						T extends 'image' ? ImageField.Output<IsMulti> :
 						T extends 'number' ? NumberField.Output :
+						T extends 'number_range' ? NumberRangeField.Output :
 						T extends 'radiobox' ? RadioboxField.Output :
 						T extends 'select' ? SelectField.Output<IsMulti> :
 						T extends 'algerian_state' ? SelectField.Output<IsMulti> :
 						T extends 'algerian_city' ? SelectField.Output<IsMulti> :
 						T extends 'ksa_city' ? SelectField.Output<IsMulti> :
 						T extends 'text' ? TextField.Output :
+						T extends 'multiline_text' ? MultiLineTextField.Output :
+						T extends 'rich_text' ? RichTextField.Output :
 						T extends 'time' ? TimeField.Output :
 						never;
 
@@ -103,12 +112,15 @@ declare module Levelup {
 						T extends 'file' ? FileField.Options<IsMulti> :
 						T extends 'image' ? ImageField.Options<IsMulti> :
 						T extends 'number' ? NumberField.Options :
+						T extends 'number_range' ? NumberRangeField.Options :
 						T extends 'radiobox' ? RadioboxField.Options :
 						T extends 'select' ? SelectField.Options<IsMulti> :
 						T extends 'algerian_state' ? SelectField.Options<IsMulti> :
 						T extends 'algerian_city' ? SelectField.Options<IsMulti> :
 						T extends 'ksa_city' ? SelectField.Options<IsMulti> :
 						T extends 'text' ? TextField.Options :
+						T extends 'multiline_text' ? MultiLineTextField.Options :
+						T extends 'rich_text' ? RichTextField.Options :
 						T extends 'time' ? TimeField.Options :
 						never;
 					}

@@ -25,6 +25,7 @@ import useCMSContent from "@/hooks/use-cms-content";
 import {Loader2} from "lucide-react";
 import {useAppDispatch} from "@/lib/redux/hooks";
 import {Textarea} from "@/components/ui/textarea";
+import { LuLoader2 } from "react-icons/lu";
 
 const logger = initLogger(LoggerContext.FORM, "OmrahOnDemandForm");
 
@@ -75,7 +76,10 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
       };
 
       try {
-        const {data} = await sdk.custom.create("/omrah-on-demand", payload);
+        const {data} = await sdk.custom.create(
+          "/forms/omrah-on-demand",
+          payload,
+        );
 
         if (data) {
           // router.push(
@@ -224,6 +228,23 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
                 <FormMessage error={field.state.meta.errors?.[0]} />
               )}
             </>
+          )}
+        />
+      </div>
+
+      <div className="flex justify-center py-10">
+        <form.Subscribe
+          selector={state => [state.canSubmit, state.isSubmitting]}
+          children={([canSubmit, isSubmitting]) => (
+            <button
+              className="rounded-xl inline-flex gap-4 bg-darkblue-700 px-10 py-2 pb-3 pt-4 text-xl font-bold text-white transition-all disabled:opacity-50 hocus:bg-darkblue-900"
+              type="submit"
+              disabled={!canSubmit || isSubmitting}
+              onClick={form.handleSubmit}
+            >
+              {isSubmitting && <LuLoader2 className="animate-spin" />}
+              {isSubmitting ? "جار الارسال" : "أرسل"}
+            </button>
           )}
         />
       </div>

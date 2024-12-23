@@ -14,7 +14,7 @@
     "test": "echo 'passed'",
     "comp": "npx shadcn@latest add",
     "sdk:local": "npm i ../sdk",
-    "sdk": "npm i jourycms-sdk@latest"
+    "sdk": "npm i jourycms-sdk@latest --legacy-peer-deps"
   },
   "config": {
     "commitizen": {
@@ -113,7 +113,7 @@
     "i18next-resources-to-backend": "^1.2.1",
     "iframe-resizer": "^4.4.5",
     "input-otp": "^1.4.0",
-    "jourycms-sdk": "^1.1.27",
+    "jourycms-sdk": "^1.1.37",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
     "lowlight": "^3.1.0",

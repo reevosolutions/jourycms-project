@@ -9,3 +9,6 @@ export * from "./review.d.ts";
 export * from "./comment.d.ts";
 export * from "./article.d.ts";
 export * from "./article-type.d.ts";
+export * from "./form.d.ts";
+export * from "./form-entry.d.ts";
+

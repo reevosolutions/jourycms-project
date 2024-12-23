@@ -141,6 +141,18 @@ const events = {
       deleted: "ON_REVIEW_DELETED",
       restored: "ON_REVIEW_RESTORED",
     },
+    form: {
+      created: "ON_FORM_CREATED",
+      updated: "ON_FORM_UPDATED",
+      deleted: "ON_FORM_DELETED",
+      restored: "ON_FORM_RESTORED",
+    },
+    formEntry: {
+      created: "ON_FORM_ENTRY_CREATED",
+      updated: "ON_FORM_ENTRY_UPDATED",
+      deleted: "ON_FORM_ENTRY_DELETED",
+      restored: "ON_FORM_ENTRY_RESTORED",
+    },
     translation: {
       project: {
         created: "ON_TRANSLATION_PROJECT_CREATED",

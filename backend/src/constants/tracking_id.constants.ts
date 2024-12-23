@@ -17,6 +17,8 @@ export const LEVELUP_ITEM_SHORTCUTS: {
 
   // content
   articleType: "ATP",
+  form: "FRM",
+  formEntry: "FRE",
   article: "ART",
   comment: "CMT",
   review: "REV",

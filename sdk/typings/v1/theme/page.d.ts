@@ -10,7 +10,8 @@ declare module JouryCMS {
         title: string;
         icon?: Levelup.CMS.V1.UI.IconType;
         ac?: ()=>boolean;
-      }[]
+      }[];
+      className?: string;
     }
   }
 }

@@ -4,6 +4,8 @@ export * from "./translation.project.d.ts";
 export * from "./translation.namespace.d.ts";
 export * from "./translation.item.d.ts";
 export * from "./taxonomy.d.ts";
+export * from "./form.d.ts";
+export * from "./form-entry.d.ts";
 export * from "./term.d.ts";
 export * from "./review.d.ts";
 export * from "./comment.d.ts";

@@ -20,6 +20,8 @@ declare module Levelup {
 							| "term"
 							| "review"
 							| "comment"
+							| "form"
+							| "formEntry"
 							| "article"
 							| "articleType";
 						export type SystemModels = "app";
@@ -67,6 +69,10 @@ declare module Levelup {
 							? Levelup.CMS.V1.Content.Translation.Entity.Project
 							: E extends "translationNamespace"
 							? Levelup.CMS.V1.Content.Translation.Entity.Namespace
+							: E extends "form"
+							? Levelup.CMS.V1.Content.Entity.Form
+							: E extends "formEntry"
+							? Levelup.CMS.V1.Content.Entity.FormEntry
 							: // Storage
 							E extends "uploadedFile"
 							? Levelup.CMS.V1.Storage.Entity.UploadedFile

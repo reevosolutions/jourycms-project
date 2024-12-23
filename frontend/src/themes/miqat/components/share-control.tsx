@@ -17,7 +17,7 @@ import {
   ViberShareButton,
   WhatsappIcon,
   WhatsappShareButton,
-  XIcon
+  XIcon,
 } from "react-share";
 
 const DEFAULT_IMAGE = "/assets/miqat/images/praying_man.webp";
@@ -27,10 +27,10 @@ const ShareControl: React.FC<{
   title: string;
   showCount?: boolean;
 }> = ({path, title, showCount = false}) => {
-  const url = `${String(window.location)}${path}`;
+  const url = `${String(window.location)}`;
 
   return (
-    <div className="Demo__container flex justify-center gap-4 items-center§§">
+    <div className="Demo__container items-center§§ flex justify-center gap-4">
       <div className="Demo__some-network">
         <FacebookShareButton
           url={url}

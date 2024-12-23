@@ -17,6 +17,8 @@ import { Taxonomy } from '../models/taxonomy.model';
 import { TranslationItem } from '../models/translation.item.model';
 import { TranslationNamespace } from '../models/translation.namespace.model';
 import { TranslationProject } from '../models/translation.project.model';
+import { Form } from '../models/form.model';
+import { FormEntry } from '../models/form-entry.model';
 
 /**
  * Load the service models.
@@ -25,20 +27,21 @@ import { TranslationProject } from '../models/translation.project.model';
  */
 const getServiceModels: () => { [name: string]: any } = () => {
 	return {
-		/**
-		 * The content feature models.
-		 */
-		articleTypeModel: ArticleType,
-		articleModel: Article,
-		commentModel: Comment,
-		reviewModel: Review,
-		termModel: Term,
-		taxonomyModel: Taxonomy,
-		translationItemModel: TranslationItem,
-		translationNamespaceModel: TranslationNamespace,
-		translationProjectModel: TranslationProject,
-
-	}
+    /**
+     * The content feature models.
+     */
+    articleTypeModel: ArticleType,
+    articleModel: Article,
+    commentModel: Comment,
+    reviewModel: Review,
+    termModel: Term,
+    taxonomyModel: Taxonomy,
+    translationItemModel: TranslationItem,
+    translationNamespaceModel: TranslationNamespace,
+    translationProjectModel: TranslationProject,
+    FormModel: Form,
+    FormEntryModel: FormEntry,
+  };
 }
 
 export default getServiceModels;

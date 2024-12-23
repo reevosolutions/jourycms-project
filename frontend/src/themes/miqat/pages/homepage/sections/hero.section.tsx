@@ -33,7 +33,7 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="container mx-auto mt-20 hidden lg:block">
                     <h2
-                      className="inline-flex flex-col gap-1 rounded-3xl px-8 py-2 text-6xl font-thin leading-tight text-white"
+                      className="inline-flex flex-col gap-1 rounded-3xl px-8 py-2 text-6xl font-medium leading-tight text-white"
                       dangerouslySetInnerHTML={{
                         __html: headlines
                           .map(s => `<span>${s}</span>`)

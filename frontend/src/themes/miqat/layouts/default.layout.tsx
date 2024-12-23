@@ -5,6 +5,7 @@ import Header from "../components/header";
 import {SidebarProvider} from "@/components/ui/customized.sidebar";
 import ThemeSidebar from "../components/sidebar";
 import Link from "next/link";
+import clsx from "clsx";
 
 export type LayoutProps = JouryCMS.Theme.LayoutProps & {};
 
@@ -12,12 +13,13 @@ const DefaultLayout: React.FC<LayoutProps> = ({
   children,
   route,
   headerControls,
+  className=""
 }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
   return (
-    <div className="jcms-layout font-tajawal text-lg">
+    <div className={clsx("jcms-layout font-tajawal text-lg", className)}>
       <Header
         {...{
           route,

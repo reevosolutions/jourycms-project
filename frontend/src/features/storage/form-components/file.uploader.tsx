@@ -1,18 +1,19 @@
+/* eslint-disable unicorn/prefer-object-from-entries */
 /**
  * @since 06-05-2024 16:52:10
  */
 
-import { useSdk } from "@hooks/use-sdk";
+import {useSdk} from "@hooks/use-sdk";
 import initLogger from "@lib/logging";
-import { createFileObjectFromRemote } from "@lib/utilities/files";
-import { type AxiosProgressEvent } from "axios";
+import {createFileObjectFromRemote} from "@lib/utilities/files";
+import {type AxiosProgressEvent} from "axios";
 import clsx from "clsx";
 import Tooltip from "rc-tooltip";
-import { useCallback, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
-import { useTranslation } from "react-i18next";
+import {useCallback, useEffect, useState} from "react";
+import {useDropzone} from "react-dropzone";
+import {useTranslation} from "react-i18next";
 
-import { Button } from "@/components/ui/button";
+import {Button} from "@/components/ui/button";
 import Icons from "@/features/admin/ui/icons";
 
 const logger = initLogger("COMPONENT", "UPLOADER");
@@ -70,32 +71,32 @@ export type UploadFileDatum = File & {
 };
 
 type Props<IsMulti extends boolean = true> = {
-  multiple?: IsMulti;
-  accept: { [key: string]: string[] };
-  canUpload?: boolean;
-  autoUpload?: boolean;
-  showUploadButton?: boolean;
-  defaultValue?: IsMulti extends true
-  ? Levelup.CMS.V1.Storage.Entity.UploadedFile[]
-  : Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
+  value?: IsMulti extends true
+    ? Levelup.CMS.V1.Storage.Entity.UploadedFile[]
+    : Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
   /**
    * Memoise this function using useCallback to avoid unnecessary re-renders
    */
   onChange?: IsMulti extends true
-  ? (value: {
-    files: UploadFileDatum[];
-    uploaded: {
-      index: number;
-      dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile;
-    }[];
-  }) => void
-  : (value: {
-    file: UploadFileDatum | null;
-    dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
-  }) => void;
-
+    ? (value: {
+        files: UploadFileDatum[];
+        uploaded: {
+          index: number;
+          dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile;
+        }[];
+      }) => void
+    : (value: {
+        file: UploadFileDatum | null;
+        dbRecord: Levelup.CMS.V1.Storage.Entity.UploadedFile | null;
+      }) => void;
   onMoveFile?: (previousIndex: number, currentIndex: number) => void;
-  content?: React.ReactNode;
+  canUpload?: boolean;
+  autoUpload?: boolean;
+  showUploadButton?: boolean;
+  multiple?: IsMulti;
+  accept: (keyof typeof PREDEFINED_ACCEPTED_FILES)[];
+  placeholder?: React.ReactNode;
+  containerClassname?: string;
 };
 
 // const circumference = 11 * 2 * Math.PI;
@@ -105,16 +106,18 @@ const FileUploader = <IsMulti extends boolean = true>({
   canUpload = true,
   autoUpload = false,
   showUploadButton = true,
-  defaultValue,
+  value: defaultValue,
   onChange,
   accept,
-  content,
+  placeholder,
+  containerClassname = "",
 }: Props<IsMulti>): JSX.Element => {
-  // TOOLS
-  const { t: tLabel } = useTranslation("label");
-  const { t: tMessage } = useTranslation("message");
-  const { t: tError } = useTranslation("error");
-
+  /* -------------------------------------------------------------------------- */
+  /*                                    TOOLS                                   */
+  /* -------------------------------------------------------------------------- */
+  const {t: tLabel} = useTranslation("label");
+  const {t: tMessage} = useTranslation("message");
+  const {t: tError} = useTranslation("error");
   const sdk = useSdk();
 
   /* -------------------------------------------------------------------------- */
@@ -124,9 +127,22 @@ const FileUploader = <IsMulti extends boolean = true>({
   const [deletedFiles, setDeletedFiles] = useState<string[]>([]);
   const [fileInfos, setFileInfos] = useState<any[]>([]);
 
-  const { getRootProps, getInputProps, isDragActive, isDragReject } =
-    useDropzone({
-      accept,
+  /* -------------------------------------------------------------------------- */
+  /*                                   DROPZONE                                 */
+  /* -------------------------------------------------------------------------- */
+  const _accept = accept.reduce(
+    (previous, current) => {
+      for (const k of Object.keys(PREDEFINED_ACCEPTED_FILES[current])) {
+        previous[k] = (PREDEFINED_ACCEPTED_FILES[current] as any)[k];
+      }
+      return previous;
+    },
+    {} as {[key: string]: any[]},
+  );
+  logger.value("accept", _accept);
+  const {getRootProps, getInputProps, isDragActive, isDragReject} = useDropzone(
+    {
+      accept: _accept,
       multiple,
       onDrop: acceptedFiles => {
         const files: UploadFileDatum[] = acceptedFiles.map(file =>
@@ -142,7 +158,8 @@ const FileUploader = <IsMulti extends boolean = true>({
         logger.debug("calling on change...");
         setSelectedFiles(old => (multiple ? [...old, ...files] : files));
       },
-    });
+    },
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
@@ -150,7 +167,7 @@ const FileUploader = <IsMulti extends boolean = true>({
   const upload = useCallback(
     async (index_: number, file: UploadFileDatum) => {
       try {
-        const { data } = await sdk.storage.upload(
+        const {data} = await sdk.storage.upload(
           file,
           (event: AxiosProgressEvent) => {
             const percentage = Math.round(
@@ -161,9 +178,9 @@ const FileUploader = <IsMulti extends boolean = true>({
               [...old].map((file, index) =>
                 index === index_
                   ? Object.assign(file, {
-                    percentage,
-                    status: percentage === 100 ? "uploaded" : "uploading",
-                  })
+                      percentage,
+                      status: percentage === 100 ? "uploaded" : "uploading",
+                    })
                   : file,
               ),
             );
@@ -174,9 +191,9 @@ const FileUploader = <IsMulti extends boolean = true>({
           [...old].map((file, index) =>
             index === index_
               ? Object.assign(file, {
-                dbRecord: data?.files[0] || null,
-                status: "uploaded",
-              })
+                  dbRecord: data?.files[0] || null,
+                  status: "uploaded",
+                })
               : file,
           ),
         );
@@ -186,9 +203,9 @@ const FileUploader = <IsMulti extends boolean = true>({
           old.map((file, index) =>
             index === index_
               ? Object.assign(file, {
-                status: "failed",
-                error: error as any,
-              })
+                  status: "failed",
+                  error: error as any,
+                })
               : file,
           ),
         );
@@ -265,12 +282,13 @@ const FileUploader = <IsMulti extends boolean = true>({
 
   useEffect(() => {
     logger.event("CHARGING DEFAULT VALUE FILES");
-    const values: Levelup.CMS.V1.Storage.Entity.UploadedFile[] =
-      Array.isArray(defaultValue)
-        ? defaultValue
-        : defaultValue
-          ? [defaultValue]
-          : [];
+    const values: Levelup.CMS.V1.Storage.Entity.UploadedFile[] = Array.isArray(
+      defaultValue,
+    )
+      ? defaultValue
+      : defaultValue
+        ? [defaultValue]
+        : [];
     const injectedFiles = new Set([
       ...selectedFiles
         .filter(f => f.status === "uploaded")
@@ -294,18 +312,18 @@ const FileUploader = <IsMulti extends boolean = true>({
         "rounded-lg border-2 border-dashed text-center",
         !isDragActive && "cursor-pointer border-gray-200 text-gray-500",
         isDragActive &&
-        !isDragReject &&
-        "cursor-grab border-sky-200 bg-sky-50 text-sky-500",
+          !isDragReject &&
+          "cursor-grab border-sky-200 bg-sky-50 text-sky-500",
         isDragReject &&
-        "cursor-not-allowed border-red-200 bg-red-50 text-red-500",
+          "cursor-not-allowed border-red-200 bg-red-50 text-red-500",
       )}
     >
       <div
-        {...getRootProps({ className: "dropzone" })}
+        {...getRootProps({className: "dropzone"})}
         className="cursor-pointer rounded-lg p-6"
       >
         <input {...getInputProps()} />
-        {content}
+        {placeholder}
         <p className={clsx("p-6")}>
           {!isDragActive && tMessage("Click here or drop a file to upload!")}
           {isDragActive && !isDragReject && tMessage("Drop it like it's hot!")}
