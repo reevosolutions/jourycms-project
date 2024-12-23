@@ -57,7 +57,7 @@ export default (app: Router): void => {
         /**
          * Respond to the client
          */
-        return respond<ApiAlias.AggregateByTypes.Response>(res, result);
+        return respond<ApiAlias.AggregateByForms.Response>(res, result);
       } catch (error) {
         /**
          * Pass the error to the next middleware

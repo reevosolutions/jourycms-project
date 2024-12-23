@@ -104,12 +104,12 @@ declare module Levelup {
              * --------------------------------------------------------------------------
              * @link
              * @fires FormEntriesService.aggregateByTypes
-             * @param {Levelup.CMS.V1.Api.FormEntries.AggregateByTypes.Request} query
-             * @returns {Levelup.CMS.V1.Api.FormEntries.AggregateByTypes.Response}
+             * @param {Levelup.CMS.V1.Api.FormEntries.AggregateByForms.Request} query
+             * @returns {Levelup.CMS.V1.Api.FormEntries.AggregateByForms.Response}
              * @method GET
              *
              */
-            export namespace AggregateByTypes {
+            export namespace AggregateByForms {
               export type Request = Utils.Api.Request.Build<{}>;
               export type Response =Utils.Api.Response.BuildListResponse<{
                   form: string;

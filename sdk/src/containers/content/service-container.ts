@@ -13,6 +13,8 @@ import TermsClient from './clients/terms.client';
 import TranslationItemsClient from './clients/translation.items.client';
 import TranslationNamespacesClient from './clients/translation.namespaces.client';
 import TranslationProjectsClient from './clients/translation.projects.client';
+import FormsClient from './clients/forms.client';
+import FormEntriesClient from './clients/form-entries.client';
 type TClientName =
   'articles' |
   'articleTypes' |
@@ -23,6 +25,8 @@ type TClientName =
   'translationItems' |
   'translationNamespaces' |
   'translationProjects' |
+  'forms' |
+  'formEntries' |
   '';
   
 
@@ -75,6 +79,16 @@ export default class CmServiceContainer extends BaseServiceContainer<TClientName
   get translationProjects() {
     if (!this.clients.translationProjects) this.clients.translationProjects = new TranslationProjectsClient(this);
     return this.clients.translationProjects as TranslationProjectsClient;
+  }
+
+  get forms() {
+    if (!this.clients.forms) this.clients.forms = new FormsClient(this);
+    return this.clients.forms as FormsClient;
+  }
+
+  get formEntries() {
+    if (!this.clients.formEntries) this.clients.formEntries = new FormEntriesClient(this);
+    return this.clients.formEntries as FormEntriesClient;
   }
   
 
