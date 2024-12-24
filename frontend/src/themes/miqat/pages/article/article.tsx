@@ -30,7 +30,8 @@ const ArticlePage: React.FC<PageProps> = ({route, initialData}) => {
   return (
     <DefaultLayout route={route}>
       <div className="container mx-auto px-4 md:px-8">
-        {articleType?.slug === ArticleTypeSlug.OMRAH ? (
+        {articleType?.slug === ArticleTypeSlug.OMRAH ||
+        articleType?.slug === ArticleTypeSlug.HAJJ ? (
           <OmrahArticlePage {...{route, initialData}} />
         ) : articleType?.slug === ArticleTypeSlug.AGENCY ? (
           // <AgencyArticlePage {...{route, initialData}} />

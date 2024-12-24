@@ -22,7 +22,10 @@ import UsersService from "../../features/auth/services/users.service";
 import AuthService from "../../features/auth/services/auth.service";
 import { addLeadingZeros, buildUserFullName } from "../../utilities/strings";
 import moment from "moment";
-import articleTypesSeedData from "../../features/content/utils/seed/ar.types.seed";
+import articleTypesSeedData, {
+  custom_meta_fields,
+  TCustomArticle,
+} from "../../features/content/utils/seed/ar.types.seed";
 import { extractAgenciesFromExcel } from "../../features/content/utils/seed/agencies";
 import { hotels } from "../../features/content/utils/seed/ksa.hotels";
 
@@ -41,6 +44,7 @@ type CustomField<
 
 export enum ArticleTypeSlug {
   OMRAH = "omrah",
+  HAJJ = "hajj",
   BLOG = "blog",
   TRIP = "trip",
   SHRINE = "shrine",
@@ -933,7 +937,11 @@ export default class DevService extends BaseService {
         );
         const month = faker.number.int({ min: 1, max: 12 });
         if (owner) {
-          const article: Article = {
+          const single_price = faker.number.int({ min: 10, max: 60 }) * 10_000;
+          const article: Omit<
+            TCustomArticle<"omrah">,
+            "_id" | "_type" | "slug"
+          > = {
             title: `عمرة ${algerianArabicMonths[month]}`,
             body: this.loremHtml,
             body_unformatted: "",
@@ -948,7 +956,14 @@ export default class DevService extends BaseService {
               agency: agency._id.toString(),
               trip_duration: faker.helpers.arrayElement(trip_durations),
               flight_number: faker.finance.iban(),
-              price: faker.number.int({ min: 10, max: 60 }) * 10_000,
+              price_of_single_person_room: single_price,
+              price_of_two_persons_room: single_price - 10000,
+              price_of_three_persons_room: single_price - 20000,
+              price_of_four_persons_room: single_price - 30000,
+              price_of_five_persons_room: single_price - 40000,
+              price_of_child_with_bed: single_price - 70000,
+              price_of_child_without_bed: single_price - 80000,
+              price_of_infant: single_price - 10000,
               ramdhan_trip: month === 2,
               airelines_company: faker.helpers
                 .arrayElement(airlinesCompanies)
@@ -978,7 +993,11 @@ export default class DevService extends BaseService {
                 )
                 ?.map((i) => i._id),
               flight_time: `${addLeadingZeros(faker.number.int({ min: 0, max: 23 }), 2)}:00`,
-              flight_date: moment(faker.date.future({ years: 1 })).set(
+              trip_start_date: moment(faker.date.future({ years: 1 })).set(
+                "month",
+                month - 1
+              ),
+              trip_end_date: moment(faker.date.future({ years: 1 })).set(
                 "month",
                 month - 1
               ),
@@ -992,6 +1011,40 @@ export default class DevService extends BaseService {
                 subsistence_at_mekkah,
                 { min: 0, max: subsistence_at_mekkah.length }
               ),
+              health_services: faker.helpers.arrayElements(
+                custom_meta_fields.health_services.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
+              group_activities: faker.helpers.arrayElements(
+                custom_meta_fields.group_activities.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
+              gifts: faker.helpers.arrayElements(
+                custom_meta_fields.gifts.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
+              ongoing_stop: undefined,
+              incoming_stop: undefined,
+              program_type: faker.helpers.arrayElement(
+                custom_meta_fields.program_type.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
+              payment_mode: faker.helpers.arrayElement(
+                custom_meta_fields.payment_mode.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
+              installment_initial_payment: 100_000,
+              installment_number_of_installments: 20_000,
+              program_services: faker.helpers.arrayElements(
+                custom_meta_fields.program_services.field_options.choices.map(
+                  (item) => item.value
+                )
+              ),
             },
             attributes: undefined,
             snapshots: undefined,
@@ -1000,6 +1053,17 @@ export default class DevService extends BaseService {
 
           await this.articlesService.create(
             { data: article },
+            { current: { user: owner } }
+          );
+          // hajj
+          await this.articlesService.create(
+            {
+              data: {
+                ...article,
+                title: "عرض حج",
+                article_type: this.types[ArticleTypeSlug.HAJJ]._id,
+              },
+            },
             { current: { user: owner } }
           );
         }

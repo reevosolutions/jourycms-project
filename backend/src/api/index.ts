@@ -5,23 +5,22 @@
  * @since 2024-04-03 00:17:36
  */
 
-import { Router } from 'express';
-import contentAppController from '../features/content/api/index';
-import storageAppController from '../features/storage/api/index';
-import authAppController from '../features/auth/api/index';
+import { Router } from "express";
+import contentAppController from "../features/content/api/index";
+import storageAppController from "../features/storage/api/index";
+import authAppController from "../features/auth/api/index";
 // import authAppController from '../features/storage/api/index';
 
 // guaranteed to get dependencies
 export default (): Router => {
-	const app = Router();
+  const app = Router();
 
-	/**
-	 * Always inject the export controller.
-	 */
-	authAppController(app);
-	contentAppController(app);
-	storageAppController(app);
-	// authAppController(app);
-	return app;
+  /**
+   * Always inject the export controller.
+   */
+  authAppController(app);
+  contentAppController(app);
+  storageAppController(app);
+  // authAppController(app);
+  return app;
 };
-

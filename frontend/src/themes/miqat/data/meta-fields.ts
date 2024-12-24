@@ -1,7 +1,13 @@
+/* eslint-disable unicorn/no-instanceof-array */
 import {cities} from "../config/dz.cities.config";
 import {states} from "../config/dz.states.config";
 import initLogger, {LoggerContext} from "@/lib/logging";
 import {ksa_cities} from "../config/ksa.cities.config";
+import {
+  TArticleType,
+  TArticleTypeCustomFieldName,
+  TArticleTypeName,
+} from "./ar.types.seed";
 
 const logger = initLogger(LoggerContext.UTILITY, "Meta");
 
@@ -18,7 +24,6 @@ export type TFieldKey =
   | "trip_type"
   | "trip_duration"
   | "flight_number"
-  | "flight_date"
   | "start_date"
   | "end_date"
   | "flight_time"
@@ -43,26 +48,38 @@ export type TFieldKey =
   | "gallery"
   | "sex"
   | "avatar"
+  | "website"
   | "medical_speciality";
 
-export const hasMetaField = (
-  article: Partial<Levelup.CMS.V1.Content.Entity.Article> | null | undefined,
-  field_key: TFieldKey,
+export const hasMetaField = <
+  A extends Partial<{
+    meta_fields: Record<string, any>;
+  }> = Partial<Levelup.CMS.V1.Content.Entity.Article>,
+>(
+  article: A | null | undefined,
+  field_key: A extends {meta_fields: any}
+    ? keyof A["meta_fields"] | (keyof A["meta_fields"])[]
+    : TFieldKey | TFieldKey[],
 ) => {
-  return (
-    !!article &&
-    Object.prototype.hasOwnProperty.call(
-      article.meta_fields || {},
-      field_key,
-    ) &&
-    !!article.meta_fields?.[field_key]
-  );
+  if (!article) return false;
+  if (!(article.meta_fields as any)?.[field_key]) return false;
+  return field_key instanceof Array
+    ? field_key.some(key =>
+        Object.prototype.hasOwnProperty.call(article.meta_fields || {}, key),
+      )
+    : Object.prototype.hasOwnProperty.call(
+        article.meta_fields || {},
+        field_key,
+      );
 };
 export const getMetaField = <
   T extends Levelup.CMS.V1.Content.CustomFields.CustomFieldType,
   IsMulti extends boolean = false,
+  A extends Partial<{
+    meta_fields: Record<string, any>;
+  }> = Partial<Levelup.CMS.V1.Content.Entity.Article>,
 >(
-  article: Partial<Levelup.CMS.V1.Content.Entity.Article> | null | undefined,
+  article: A | null | undefined,
   field_key: TFieldKey,
   field_type: T,
   is_multi?: IsMulti,
@@ -72,13 +89,37 @@ export const getMetaField = <
     ? article.meta_fields?.[field_key]
     : null;
 };
-export const getMetaFieldValueLabel = (
-  type: Levelup.CMS.V1.Content.Entity.ArticleType | null | undefined,
-  field_key: TFieldKey,
-  value: string,
+export const getMetaFieldLabel = <T extends TArticleTypeName>(
+  type:
+    | TArticleType<T>
+    | Levelup.CMS.V1.Content.Entity.ArticleType
+    | null
+    | undefined,
+  field_key: TArticleTypeCustomFieldName<T>,
+  default_label: string = "",
 ) => {
   const field = type?.custom_meta_fields?.find(
-    item => item.field_key === field_key,
+    item => item.field_key === (field_key as any),
+  );
+
+  logger.value("field", type, field);
+
+  return field?.field_label || default_label;
+
+};
+
+export const getMetaFieldValueLabel = <T extends TArticleTypeName>(
+  type:
+    | TArticleType<T>
+    | Levelup.CMS.V1.Content.Entity.ArticleType
+    | null
+    | undefined,
+  field_key: TArticleTypeCustomFieldName<T>,
+  value: string,
+  default_label: string = "",
+) => {
+  const field = type?.custom_meta_fields?.find(
+    item => item.field_key === (field_key as any),
   );
 
   logger.value("field", type, field);

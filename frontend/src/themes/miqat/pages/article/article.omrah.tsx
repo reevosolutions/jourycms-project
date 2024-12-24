@@ -5,7 +5,11 @@ import Link from "next/link";
 
 import PageNotFound from "../../components/page-not-found";
 import {serverSdk} from "../../data";
-import {getMetaFieldValueLabel, hasMetaField} from "../../data/meta-fields";
+import {
+  getMetaFieldLabel,
+  getMetaFieldValueLabel,
+  hasMetaField,
+} from "../../data/meta-fields";
 import {
   LuAlarmClock,
   LuCalendarDays,
@@ -14,7 +18,11 @@ import {
 } from "react-icons/lu";
 import {format} from "date-fns";
 import {formatAmount} from "@/lib/utilities/strings";
-import {PiAirplaneTilt, PiTrolleySuitcase} from "react-icons/pi";
+import {
+  PiAirplaneTilt,
+  PiStarHalfLight,
+  PiTrolleySuitcase,
+} from "react-icons/pi";
 import {TbPlaneArrival, TbPlaneDeparture} from "react-icons/tb";
 import {GiDuration} from "react-icons/gi";
 import {HiOutlineTicket} from "react-icons/hi2";
@@ -27,11 +35,23 @@ import {ArticleTypeSlug} from "../../config";
 import AdminOnlyGuard from "@/guards/admin-only.guard";
 import AdminOnlyView from "@/guards/admin-only.view";
 import ShareControl from "../../components/share-control";
+import {
+  TArticleType,
+  TArticleTypeCustomFieldName,
+  TCustomArticle,
+} from "../../data/ar.types.seed";
+import moment from "moment";
+import {FaHandHoldingMedical} from "react-icons/fa";
+import {GrGroup} from "react-icons/gr";
+import {RiServiceLine} from "react-icons/ri";
+import {ImGift} from "react-icons/im";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
 type ApiAlias = Levelup.CMS.V1.Content.Api.Articles.GetOne.Response;
-type Article = Levelup.CMS.V1.Content.Entity.Article;
+type Article = TCustomArticle<"omrah">;
+type ArticleType = TArticleType<"omrah">;
+type ArticleTypeCustomFieldName = TArticleTypeCustomFieldName<"omrah">;
 
 export type PageProps = JouryCMS.Theme.PageProps & {
   initialData?: ApiAlias;
@@ -39,9 +59,9 @@ export type PageProps = JouryCMS.Theme.PageProps & {
 };
 
 const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
-  const article = initialData?.data;
-  const articleType = article?.article_type
-    ? initialData?.edge?.article_types?.[article.article_type]
+  const article: Article | undefined = initialData?.data as Article;
+  const articleType: ArticleType | undefined = article?.article_type
+    ? (initialData?.edge?.article_types?.[article.article_type] as any)
     : undefined;
   const agency =
     initialData?.edge?.linked_articles?.[article?.meta_fields?.agency];
@@ -158,91 +178,34 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
       </aside>
 
       <div className="flex flex-col gap-6">
-        <aside className="relative flex-shrink-0 flex-grow ">
-          <div className="sticky top-6 grid gap-6 text-2xl sm:grid-cols-2 xl:grid-cols-2 max-w-4xl mx-auto">
-            {/* field */}
-            <div className="items-top flex flex-row gap-4">
-              <GiDuration className="h-8 w-8 text-beige-50" />
-              <div className="-mt-1 flex flex-col items-start justify-start gap-0">
-                <span className="text-xl text-slate-500">{"مدة الرحلة"}</span>
-                <span className="d">
-                  {getMetaFieldValueLabel(
-                    articleType,
-                    "trip_duration",
-                    article.meta_fields.trip_duration,
-                  )}
-                </span>
-              </div>
-            </div>
-
-            {/* field */}
-            <div className="items-top flex flex-row gap-4">
-              <IoMoonOutline className="h-8 w-8 text-beige-50" />
-              <div className="-mt-1 flex flex-col items-start justify-start gap-0">
-                <span className="text-xl text-slate-500">{"رحلة رمضان"}</span>
-                <span
-                  className={cn(
-                    "d",
-                    article.meta_fields.ramdhan_trip &&
-                      "font-bold text-green-600",
-                  )}
-                >
-                  {article.meta_fields.ramdhan_trip ? "نعم" : "لا"}
-                </span>
-              </div>
-            </div>
-            {/* field */}
-            {hasMetaField(article, "price") && (
-              <div className="items-top flex flex-row gap-4">
-                <LuCircleDollarSign className="h-8 w-8 text-beige-50" />
-                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
-                  <span className="text-xl text-slate-500">{"السعر"}</span>
-                  <span className="d">
-                    {formatAmount(article.meta_fields.price, ",", 0)} DA
-                  </span>
-                </div>
-              </div>
-            )}
-            {/* field */}
-            {hasMetaField(article, "flight_date") && (
-              <div className="items-top flex flex-row gap-4">
-                <LuCalendarDays className="h-8 w-8 text-beige-50" />
+        <aside className="relative flex-shrink-0 flex-grow">
+          <div className="sticky top-6 mx-auto mb-8 grid max-w-4xl gap-6 text-xl sm:grid-cols-2 xl:grid-cols-2">
+            {/* ------------------------- program_type ------------------------- */}
+            {hasMetaField(article, "program_type") && (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <PiStarHalfLight className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
-                    {"تاريخ الرحلة"}
+                    {getMetaFieldLabel(articleType, "program_type")}
                   </span>
                   <span className="d">
-                    {format(article.meta_fields.flight_date, "dd / MM / YYY")}
+                    {getMetaFieldValueLabel(
+                      articleType,
+                      "program_type",
+                      article.meta_fields.program_type,
+                    )}
                   </span>
                 </div>
               </div>
             )}
-            {/* time */}
-            <div className="items-top flex flex-row gap-4">
-              <LuAlarmClock className="h-8 w-8 text-beige-50" />
-              <div className="-mt-1 flex flex-col items-start justify-start gap-0">
-                <span className="text-xl text-slate-500">{"توقيت الرحلة"}</span>
-                <span className="d">{article.meta_fields.flight_time}</span>
-              </div>
-            </div>
-            {/* field */}
-            {airelines_company && (
-              <div className="items-top flex flex-row gap-4">
-                <PiAirplaneTilt className="h-8 w-8 text-beige-50" />
+            {/* ------------------------- trip_type ------------------------- */}
+            {hasMetaField(article, "trip_type") ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <PiStarHalfLight className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
-                    {"شركة الطيران"}
+                    {getMetaFieldLabel(articleType, "trip_type")}
                   </span>
-                  <span className="d">{airelines_company.title}</span>
-                </div>
-              </div>
-            )}
-            {/* field */}
-            {article.meta_fields.trip_type && (
-              <div className="items-top flex flex-row gap-4">
-                <BsSuitcase className="h-8 w-8 text-beige-50" />
-                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
-                  <span className="text-xl text-slate-500">{"نوع الرحلة"}</span>
                   <span className="d">
                     {getMetaFieldValueLabel(
                       articleType,
@@ -252,20 +215,158 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {article.meta_fields.flight_number && (
-              <div className="items-top flex flex-row gap-4">
+
+            {/* ------------------------- trip_start_date ------------------------- */}
+            {hasMetaField<Article>(article, "trip_start_date") && (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <LuCalendarDays className="h-8 w-8 text-beige-50" />
+                <div className="-mt-1 flex flex-grow flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {"تاريخ الرحلة"}
+                  </span>
+                  <ul className="w-full">
+                    <li className="flex items-center justify-between gap-5">
+                      <span className="font-medium">من</span>
+                      <span>
+                        {format(
+                          article.meta_fields.trip_start_date,
+                          "dd / MM / YYY",
+                        )}
+                      </span>
+                    </li>
+                    {hasMetaField<Article>(article, "trip_end_date") && (
+                      <li className="flex items-center justify-between gap-5">
+                        <span className="font-medium">إلي</span>
+                        <span>
+                          {format(
+                            article.meta_fields.trip_end_date,
+                            "dd / MM / YYY",
+                          )}
+                        </span>
+                      </li>
+                    )}
+                    <li className="flex items-center justify-between gap-5">
+                      <span className="font-medium">المدة</span>
+                      <span>
+                        {moment(article.meta_fields.trip_end_date).diff(
+                          article.meta_fields.trip_start_date,
+                          "days",
+                        )}{" "}
+                        أيام
+                      </span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            )}
+
+            {/* ------------------------- flight_time ------------------------- */}
+            <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+              <LuAlarmClock className="h-8 w-8 text-beige-50" />
+              <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                <span className="text-xl text-slate-500">{"توقيت الرحلة"}</span>
+                <span className="d">{article.meta_fields.flight_time}</span>
+              </div>
+            </div>
+
+            {/* ------------------------- ramdhan_trip ------------------------- */}
+            {(articleType as any)?.slug === ArticleTypeSlug.OMRAH ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <IoMoonOutline className="h-8 w-8 text-beige-50" />
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">{"رحلة رمضان"}</span>
+                  <span
+                    className={cn(
+                      "d",
+                      article.meta_fields.ramdhan_trip &&
+                        "font-bold text-green-600",
+                    )}
+                  >
+                    {article.meta_fields.ramdhan_trip ? "نعم" : "لا"}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+            {/* ------------------------- trip_start_date ------------------------- */}
+            <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+              <LuCircleDollarSign className="h-8 w-8 text-beige-50" />
+              <div className="-mt-1 flex flex-grow flex-col items-start justify-start gap-0">
+                <span className="text-xl text-slate-500">{"السعر"}</span>
+                <ul className="flex w-full list-inside list-disc flex-col border-slate-300">
+                  {[
+                    {key: "price_of_five_persons_room", label: "غرفة خماسية"},
+                    {key: "price_of_four_persons_room", label: "غرفة رباعية"},
+                    {
+                      key: "price_of_three_persons_room",
+                      label: "غرفة ثلاثية",
+                    },
+                    {key: "price_of_two_persons_room", label: "غرفة ثنائية"},
+                    {
+                      key: "price_of_single_person_room",
+                      label: "غرفة أحادية",
+                    },
+                    {key: "price_of_child_with_bed", label: " طفل مع سرير"},
+                    {
+                      key: "price_of_child_without_bed",
+                      label: " طفل بدون سرير",
+                    },
+                    {key: "price_of_infant", label: " رضيع"},
+                  ].map(({key, label}) =>
+                    (article.meta_fields as any)[key] ? (
+                      <li
+                        className="mb-1 flex items-center justify-between gap-5"
+                        key={key}
+                      >
+                        <span className="text-lg font-medium">{label}</span>
+                        <span className="text-lg">
+                          {formatAmount(
+                            (article.meta_fields as any)[key],
+                            ",",
+                            2,
+                          )}
+                        </span>
+                      </li>
+                    ) : null,
+                  )}
+                </ul>
+              </div>
+            </div>
+
+            {/* ------------------------- airelines_company ------------------------- */}
+            {airelines_company ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <PiAirplaneTilt className="h-8 w-8 text-beige-50" />
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {"شركة الطيران"}
+                  </span>
+                  <span className="d">{airelines_company.title}</span>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+
+            {/* ------------------------- flight_number ------------------------- */}
+            {article.meta_fields.flight_number ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <HiOutlineTicket className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">{"رقم الرحلة"}</span>
                   <span className="d">{article.meta_fields.flight_number}</span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {departure_airoport && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- departure_airoport ------------------------- */}
+            {departure_airoport ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <TbPlaneDeparture className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -274,10 +375,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   <span className="d">{departure_airoport.title}</span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {arrival_airoport && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- trip_start_date ------------------------- */}
+            {arrival_airoport ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <TbPlaneArrival className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -286,10 +389,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   <span className="d">{arrival_airoport.title}</span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {article.meta_fields.entry_point && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- entry_point ------------------------- */}
+            {article.meta_fields.entry_point ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <PiTrolleySuitcase className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -304,10 +409,14 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {shrines_at_mekkah.length > 0 && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- placeholder ------------------------- */}
+            <div className="placeholder"></div>
+            {/* ------------------------- shrines_at_mekkah ------------------------- */}
+            {shrines_at_mekkah.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <span className="inline-block px-1">
                   <BsMoonStars className="h-6 w-6 text-beige-50" />
                 </span>
@@ -324,10 +433,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </ul>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {shrines_at_medina.length > 0 && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- shrines_at_medina ------------------------- */}
+            {shrines_at_medina.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <span className="inline-block px-1">
                   <BsMoonStars className="h-6 w-6 text-beige-50" />
                 </span>
@@ -344,10 +455,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </ul>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {mekkah_hotel && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- mekkah_hotel ------------------------- */}
+            {mekkah_hotel ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <MdOutlineLocalHotel className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -356,10 +469,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   <span className="">{mekkah_hotel.title}</span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {article.meta_fields.subsistence_at_mekkah?.length > 0 && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- subsistence_at_mekkah ------------------------- */}
+            {article.meta_fields.subsistence_at_mekkah?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <IoFastFoodOutline className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -380,10 +495,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </ul>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {medina_hotel && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- medina_hotel ------------------------- */}
+            {medina_hotel ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <MdOutlineLocalHotel className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -392,10 +509,12 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   <span className="">{medina_hotel.title}</span>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
-            {/* field */}
-            {article.meta_fields.subsistence_at_medina?.length > 0 && (
-              <div className="items-top flex flex-row gap-4">
+            {/* ------------------------- subsistence_at_medina ------------------------- */}
+            {article.meta_fields.subsistence_at_medina?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <IoFastFoodOutline className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
                   <span className="text-xl text-slate-500">
@@ -416,6 +535,117 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   </ul>
                 </div>
               </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+
+            {/* ------------------------- shrines_at_mekkah ------------------------- */}
+            {article.meta_fields.health_services?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <span className="inline-block px-1">
+                  <FaHandHoldingMedical className="h-6 w-6 text-beige-50" />
+                </span>
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {getMetaFieldLabel(articleType, "health_services")}
+                  </span>
+                  <ul className="flex list-inside list-disc flex-col border-slate-300">
+                    {article.meta_fields.health_services.map(
+                      (field: string) => (
+                        <li className="d" key={field}>
+                          {getMetaFieldValueLabel(
+                            articleType,
+                            "health_services",
+                            field,
+                          )}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+
+            {/* ------------------------- group_activities ------------------------- */}
+            {article.meta_fields.group_activities?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <span className="inline-block px-1">
+                  <GrGroup className="h-6 w-6 text-beige-50" />
+                </span>
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {getMetaFieldLabel(articleType, "group_activities")}
+                  </span>
+                  <ul className="flex list-inside list-disc flex-col border-slate-300">
+                    {article.meta_fields.group_activities.map(
+                      (field: string) => (
+                        <li className="d" key={field}>
+                          {getMetaFieldValueLabel(
+                            articleType,
+                            "group_activities",
+                            field,
+                          )}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+
+            {/* ------------------------- program_services ------------------------- */}
+            {article.meta_fields.program_services?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <span className="inline-block px-1">
+                  <RiServiceLine className="h-6 w-6 text-beige-50" />
+                </span>
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {getMetaFieldLabel(articleType, "program_services")}
+                  </span>
+                  <ul className="flex list-inside list-disc flex-col border-slate-300">
+                    {article.meta_fields.program_services.map(
+                      (field: string) => (
+                        <li className="d" key={field}>
+                          {getMetaFieldValueLabel(
+                            articleType,
+                            "program_services",
+                            field,
+                          )}
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
+            )}
+            {/* ------------------------- gifts ------------------------- */}
+            {article.meta_fields.gifts?.length > 0 ? (
+              <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
+                <span className="inline-block px-1">
+                  <ImGift className="h-6 w-6 text-beige-50" />
+                </span>
+                <div className="-mt-1 flex flex-col items-start justify-start gap-0">
+                  <span className="text-xl text-slate-500">
+                    {getMetaFieldLabel(articleType, "gifts")}
+                  </span>
+                  <ul className="flex list-inside list-disc flex-col border-slate-300">
+                    {article.meta_fields.gifts.map((field: string) => (
+                      <li className="d" key={field}>
+                        {getMetaFieldValueLabel(articleType, "gifts", field)}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            ) : (
+              <div className="placeholder"></div>
             )}
           </div>
         </aside>
@@ -423,12 +653,11 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           className="prose mx-auto mb-6 flex-grow text-xl text-darkblue-700 md:text-2xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
-        <div className="mt-6 p-6 rounded-3xl bg-slate-50 w-4xl w-full max-w-4xl mx-auto md:px-10 flex-grow">
-          <h3 className=" mb-3 font-bold text-slate-600 text-center text-3xl">شارك العرض</h3>
-          <ShareControl
-            title={article.title}
-            path={`/${article.slug}`}
-          />
+        <div className="w-4xl mx-auto mt-6 w-full max-w-4xl flex-grow rounded-3xl bg-slate-50 p-6 md:px-10">
+          <h3 className="mb-3 text-center text-3xl font-bold text-slate-600">
+            شارك العرض
+          </h3>
+          <ShareControl title={article.title} path={`/${article.slug}`} />
         </div>
       </div>
     </div>

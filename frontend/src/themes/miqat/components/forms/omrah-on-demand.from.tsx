@@ -25,17 +25,20 @@ import useCMSContent from "@/hooks/use-cms-content";
 import {Loader2} from "lucide-react";
 import {useAppDispatch} from "@/lib/redux/hooks";
 import {Textarea} from "@/components/ui/textarea";
-import { LuLoader2 } from "react-icons/lu";
+import {LuLoader2} from "react-icons/lu";
 
 const logger = initLogger(LoggerContext.FORM, "OmrahOnDemandForm");
 
-type ApiData = {
+import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
+type FormDataFields = {
   first_name: string;
   family_name: string;
   phone: string;
   email: string;
   program: string;
 };
+
+
 export type LoginFormProps = {};
 
 type Props = {};
@@ -57,7 +60,7 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
   /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
   const form = useForm<
-    Levelup.CMS.V1.Utils.DeepComplete<ApiData>,
+    Levelup.CMS.V1.Utils.DeepComplete<FormDataFields>,
     Validator<unknown, yup.AnySchema>
   >({
     defaultValues: {
@@ -69,17 +72,17 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
     },
 
     onSubmit: async ({value}) => {
-      const payload: {data: ApiData} = {
+      const payload: ApiAlias.Create.Request = {
         data: {
-          ...value,
+          form: "omrah-on-demand",
+          data: {
+            ...value,
+          },
         },
       };
 
       try {
-        const {data} = await sdk.custom.create(
-          "/forms/omrah-on-demand",
-          payload,
-        );
+        const {data} = await sdk.content.formEntries.create(payload);
 
         if (data) {
           // router.push(
@@ -237,7 +240,7 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
           selector={state => [state.canSubmit, state.isSubmitting]}
           children={([canSubmit, isSubmitting]) => (
             <button
-              className="rounded-xl inline-flex gap-4 bg-darkblue-700 px-10 py-2 pb-3 pt-4 text-xl font-bold text-white transition-all disabled:opacity-50 hocus:bg-darkblue-900"
+              className="inline-flex gap-4 rounded-xl bg-darkblue-700 px-10 py-2 pb-3 pt-4 text-xl font-bold text-white transition-all disabled:opacity-50 hocus:bg-darkblue-900"
               type="submit"
               disabled={!canSubmit || isSubmitting}
               onClick={form.handleSubmit}

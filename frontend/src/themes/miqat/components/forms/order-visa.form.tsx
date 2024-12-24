@@ -31,7 +31,8 @@ import FileUploader from "@/features/storage/form-components/file.uploader";
 
 const logger = initLogger(LoggerContext.FORM, "OrderVisaForm");
 
-type ApiData = {
+import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
+type FormDataFields = {
   phone: string;
   email: string;
   passport: Levelup.CMS.V1.Utils.Common.FileAttribute;
@@ -64,7 +65,7 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
   /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
   const form = useForm<
-    Levelup.CMS.V1.Utils.DeepComplete<ApiData>,
+    Levelup.CMS.V1.Utils.DeepComplete<FormDataFields>,
     Validator<unknown, yup.AnySchema>
   >({
     defaultValues: {
@@ -77,14 +78,17 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
     },
 
     onSubmit: async ({value}) => {
-      const payload: {data: ApiData} = {
+      const payload: ApiAlias.Create.Request = {
         data: {
-          ...value,
+          form: "order-visa",
+          data: {
+            ...value,
+          },
         },
       };
 
       try {
-        const {data} = await sdk.custom.create("/forms/oredr-visa", payload);
+        const {data} = await sdk.content.formEntries.create(payload);
 
         if (data) {
           // router.push(
@@ -297,12 +301,12 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
           validators={{}}
           children={field => (
             <>
-              <div className="flex gap-4 mt-2">
+              <div className="mt-2 flex gap-4">
                 {PAYMENT_METHODS.map(method => (
                   <button
                     key={method}
                     className={cn(
-                      "relative aspect-square rounded-lg border-2 w-16 p-2 ",
+                      "relative aspect-square w-16 rounded-lg border-2 p-2",
                       field.state.value === method
                         ? "border-beige-200 bg-beige-50/30"
                         : "border-slate-200",

@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/no-named-as-default
-import medical_specialities from "./medical-specialities.config";
+import medical_specialities from "../config/medical-specialities.config";
 
 export const custom_meta_fields = {
   // trips
