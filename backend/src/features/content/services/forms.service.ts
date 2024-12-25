@@ -599,13 +599,18 @@ export default class FormsService extends BaseService {
       dont_lean?: boolean;
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
+      create_if_not_found?: boolean;
     } = {
       load_deleted: false,
       dont_lean: false,
       ignore_not_found_error: false,
       bypass_authorization: false,
+      create_if_not_found: false,
     }
   ): Promise<ApiAlias.GetOne.Response> {
+    const scenario = this.initScenario(this.logger, this.getBySlug, {
+      slug,
+    });
     try {
       /**
        * Fill options argument with the defaults
@@ -614,14 +619,9 @@ export default class FormsService extends BaseService {
         load_deleted: false,
         dont_lean: false,
         ignore_not_found_error: false,
+        create_if_not_found: false,
       });
 
-      /**
-       * Define the execution scenario form
-       */
-      const scenario: {
-        [Key: string]: any;
-      } = {};
 
       const q = this.formModel.findOne({ slug });
       /**
@@ -631,13 +631,33 @@ export default class FormsService extends BaseService {
 
       const doc = await q.exec();
 
-      if (!doc) throw new exceptions.ItemNotFoundException("Form not found");
+      if (!doc && !opt.create_if_not_found)
+        throw new exceptions.ItemNotFoundException("Form not found");
 
       /**
        * Check if the document is deleted and the user does not want to load deleted documents
        */
-      if (doc.is_deleted && !opt.load_deleted)
+      if (doc?.is_deleted && !opt.load_deleted && !opt.create_if_not_found)
         throw new exceptions.ItemNotFoundException("Form deleted");
+
+      if (
+        (!doc && opt.create_if_not_found) ||
+        (doc?.is_deleted && !opt.load_deleted && opt.create_if_not_found)
+      ) {
+        /**
+         * Create not found or deleted form object
+         */
+        const payload: ApiAlias.Create.Request = {
+          data: {
+            slug: slug,
+            name: slug.replaceAll("-", " ").capitalizeFirstLetter(),
+          },
+        };
+
+        const { data } = await this.create(payload, authData);
+        if (data?._id) return { data };
+        else throw new exceptions.InternalServerError("Could not create form");
+      }
 
       /**
        * Check if the user can view the form
@@ -658,7 +678,7 @@ export default class FormsService extends BaseService {
       /**
        * Log execution result before returning the result
        */
-      this.logExecutionResult(this.getById, result, authData, scenario);
+      scenario.end();
 
       return result;
     } catch (error) {
@@ -667,7 +687,7 @@ export default class FormsService extends BaseService {
         error instanceof exceptions.ItemNotFoundException
       )
         return { data: undefined };
-      this.logError(this.getById, error);
+      scenario.error(error);
       throw error;
     }
   }
@@ -677,19 +697,20 @@ export default class FormsService extends BaseService {
    */
   public async create(
     { data }: ApiAlias.Create.Request,
-    authData: Levelup.CMS.V1.Security.AuthData,
+    authData?: Levelup.CMS.V1.Security.AuthData | null,
     opt?: {
       bypass_authorization?: boolean;
     }
   ): Promise<ApiAlias.Create.Response> {
+    const scenario = this.initScenario(this.logger, this.getBySlug, {
+      data,
+    });
+    
     try {
       /**
        * Define the execution scenario form
        */
-      const scenario: {
-        [Key: string]: any;
-      } = {};
-
+      
       /**
        * await sanitize data here
        */
@@ -776,11 +797,11 @@ export default class FormsService extends BaseService {
       /**
        * Log execution result before returning the result
        */
-      this.logExecutionResult(this.create, result, authData, scenario);
-
+      scenario.end();
+      
       return result;
     } catch (error) {
-      this.logError(this.create, error);
+      scenario.error(error);
       throw error;
     }
   }
@@ -1040,5 +1061,4 @@ export default class FormsService extends BaseService {
       throw error;
     }
   }
-
 }

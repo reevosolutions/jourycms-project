@@ -39,8 +39,8 @@ const getServiceModels: () => { [name: string]: any } = () => {
     translationItemModel: TranslationItem,
     translationNamespaceModel: TranslationNamespace,
     translationProjectModel: TranslationProject,
-    FormModel: Form,
-    FormEntryModel: FormEntry,
+    formModel: Form,
+    formEntryModel: FormEntry,
   };
 }
 

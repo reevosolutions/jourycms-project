@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/prefer-logical-operator-over-ternary */
 import {formatAmount} from "@/lib/utilities/strings";
 import Image from "next/image";
 import Link from "next/link";
@@ -9,9 +10,10 @@ import initLogger, {LoggerContext} from "@/lib/logging";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
-import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
+type EntityAlias = TCustomArticle<"omrah">;
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import {cn} from "@/lib/utils";
+import { TCustomArticle } from "../data/ar.types.seed";
 
 export type PostCard_ServerProps = JouryCMS.Theme.ComponentProps & {
   data: EntityAlias;
@@ -29,10 +31,15 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
   const agency = edge?.linked_articles?.[data.meta_fields.agency] || null;
   const airelinesCompany =
     edge?.linked_articles?.[data.meta_fields.airelines_company] || null;
+  const price = data.meta_fields?.price_of_five_persons_room ? data.meta_fields?.price_of_five_persons_room
+    : data.meta_fields?.price_of_four_persons_room ? data.meta_fields?.price_of_four_persons_room
+    : data.meta_fields?.price_of_three_persons_room ? data.meta_fields?.price_of_three_persons_room
+    : data.meta_fields?.price_of_two_persons_room || data.meta_fields?.price_of_single_person_room;
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
+
   return (
     <Link
       href={`/${data.slug}`}
@@ -191,7 +198,7 @@ const PostCard_Server: React.FC<PostCard_ServerProps> = ({
       <div className="absolute bottom-0 left-0 right-0 flex w-full items-center justify-between gap-4 rounded-b-xl bg-red2-50 px-6 py-3 pt-5">
         <span className="text-xl text-darkblue-600">{"ابتداء من"}</span>
         <span className="text-3xl font-bold text-beige-800">
-          {formatAmount(data.meta_fields?.price, ",", 2)}
+          {formatAmount(price, ",", 2)}
         </span>
       </div>
     </Link>

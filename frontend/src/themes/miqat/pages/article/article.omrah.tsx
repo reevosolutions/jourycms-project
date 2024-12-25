@@ -45,6 +45,7 @@ import {FaHandHoldingMedical} from "react-icons/fa";
 import {GrGroup} from "react-icons/gr";
 import {RiServiceLine} from "react-icons/ri";
 import {ImGift} from "react-icons/im";
+import OrderOfferForm from "../../components/forms/order-offer.from";
 
 const logger = initLogger(LoggerContext.COMPONENT, "Article");
 
@@ -653,6 +654,16 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           className="prose mx-auto mb-6 flex-grow text-xl text-darkblue-700 md:text-2xl"
           dangerouslySetInnerHTML={{__html: article.body}}
         />
+        <div className="w-4xl mx-auto mt-6 w-full max-w-4xl flex-grow rounded-3xl bg-slate-50 p-6 md:px-10">
+          <h3 className="mb-3 text-center text-3xl font-bold text-slate-600">
+            اطلب العرض الآن
+          </h3>
+          <OrderOfferForm
+            article={article}
+            article_type={articleType?.slug}
+            agency_name={agency?.title}
+          />
+        </div>
         <div className="w-4xl mx-auto mt-6 w-full max-w-4xl flex-grow rounded-3xl bg-slate-50 p-6 md:px-10">
           <h3 className="mb-3 text-center text-3xl font-bold text-slate-600">
             شارك العرض

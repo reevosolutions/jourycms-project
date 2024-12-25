@@ -211,7 +211,14 @@ export default async function RootLayout({
             <NProgressProvider>{children}</NProgressProvider>
           </StoreProvider>
         </TranslationsProvider>
-        <Toaster position="bottom-center" richColors />
+        <Toaster
+          position="bottom-center"
+          richColors
+          className="font-tajawal text-xl font-medium"
+          toastOptions={{
+            className: " font-tajawal font-medium text-lg",
+          }}
+        />
       </body>
     </html>
   );

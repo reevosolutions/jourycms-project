@@ -13,14 +13,14 @@ export default class FormEntriesClient extends BaseClient {
   }
 
   // create
-  async create(data: ApiAlias.Create.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.Create.Response>> {
+  async create<D extends { [Key: string]: any } = { [Key: string]: any }>(data: ApiAlias.Create.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.Create.Response<D>>> {
     return await this.container.sdk.httpClient.post(this.generatePrefix(), data, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // update
-  async update(id: string, data: ApiAlias.Update.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.Update.Response>> {
+  async update<D extends { [Key: string]: any } = { [Key: string]: any }>(id: string, data: ApiAlias.Update.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.Update.Response<D>>> {
     return await this.container.sdk.httpClient.put(this.generatePrefix("/:id", { id }), data, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
@@ -41,14 +41,14 @@ export default class FormEntriesClient extends BaseClient {
   }
 
   // list
-  async list(query: ApiAlias.List.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.List.Response>> {
-    return await this.container.sdk.httpClient.get<ApiAlias.List.Response>(this.generatePrefix(), query, {
+  async list<D extends { [Key: string]: any } = { [Key: string]: any }>(query: ApiAlias.List.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.List.Response<D>>> {
+    return await this.container.sdk.httpClient.get<ApiAlias.List.Response<D>>(this.generatePrefix(), query, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }
 
   // getById
-  async getById(id: string, params?: ApiAlias.GetOne.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response>> {
+  async getById<D extends { [Key: string]: any } = { [Key: string]: any }>(id: string, params?: ApiAlias.GetOne.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response<D>>> {
     return await this.container.sdk.httpClient.get(this.generatePrefix("/:id", { id }), params, {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });

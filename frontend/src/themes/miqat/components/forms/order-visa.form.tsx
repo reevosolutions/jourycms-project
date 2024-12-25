@@ -77,8 +77,8 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
       description: "",
     },
 
-    onSubmit: async ({value}) => {
-      const payload: ApiAlias.Create.Request = {
+    onSubmit: async ({value, formApi}) => {
+      const payload: ApiAlias.Create.Request<FormDataFields> = {
         data: {
           form: "order-visa",
           data: {
@@ -95,6 +95,9 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
           //   setPathParams(publicRoutes.homepage._.myAccount.path, { id: data?.user?._id }),
           // );
           logger.success("posted", data);
+          toast.success("تم إرسال المعلومات بنجاح");
+          setPassportFile(null);
+          formApi.reset();
         }
       } catch (error: any) {
         toast.error(error.message, {});
@@ -169,56 +172,50 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
       {/* field */}
       <div className="field mb-6">
         <Label className="text-xl text-darkblue-500">{"جواز السفر"}</Label>
-        <div className="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <form.Field
-            name="passport"
-            validators={{
-              onChange: yup
-                .object()
-                .required("يحب عليك تحميل صورة لجواز السفر"),
-            }}
-            children={field => (
-              <div>
-                <FileUploader<false>
-                  accept={["pdf", "images"]}
-                  multiple={false}
-                  autoUpload
-                  value={passportFile}
-                  onChange={value => {
-                    logger.value("File uploaded", value);
-                    if (!value?.dbRecord && !passportFile) return;
-                    if (value?.dbRecord?._id === passportFile?._id) return;
-                    setPassportFile(value?.dbRecord || null);
-                    field.handleChange(
-                      value?.dbRecord
-                        ? {
-                            id: value.dbRecord._id,
-                            url: sdk.storage.utils.getFileUrl(
-                              value.dbRecord._id,
-                            ),
-                          }
-                        : null,
-                    );
-                  }}
-                  containerClassname="w-80 max-w-full aspect-square rounded-lg overflow-hidden"
-                  placeholder={
-                    <div className="flex w-full justify-center text-center">
-                      <Image
-                        src="/cms/assets/svg/upload-image.svg"
-                        width={100}
-                        height={100}
-                        alt="upload"
-                      />
-                    </div>
-                  }
-                />
-                {field.state.meta.errors?.[0] && (
-                  <FormMessage error={field.state.meta.errors?.[0]} />
-                )}
-              </div>
-            )}
-          />
-        </div>
+        <form.Field
+          name="passport"
+          validators={{
+            onChange: yup.object().required("يحب عليك تحميل صورة لجواز السفر"),
+          }}
+          children={field => (
+            <div>
+              <FileUploader<false>
+                accept={["pdf", "images"]}
+                multiple={false}
+                autoUpload
+                value={passportFile}
+                onChange={value => {
+                  logger.value("File uploaded", value);
+                  if (!value?.dbRecord && !passportFile) return;
+                  if (value?.dbRecord?._id === passportFile?._id) return;
+                  setPassportFile(value?.dbRecord || null);
+                  field.handleChange(
+                    value?.dbRecord
+                      ? {
+                          id: value.dbRecord._id,
+                          url: sdk.storage.utils.getFileUrl(value.dbRecord._id),
+                        }
+                      : null,
+                  );
+                }}
+                containerClassname="w-full max-w-full aspect-square rounded-lg overflow-hidden"
+                placeholder={
+                  <div className="flex w-full justify-center text-center">
+                    <Image
+                      src="/cms/assets/svg/upload-image.svg"
+                      width={100}
+                      height={100}
+                      alt="upload"
+                    />
+                  </div>
+                }
+              />
+              {field.state.meta.errors?.[0] && (
+                <FormMessage error={field.state.meta.errors?.[0]} />
+              )}
+            </div>
+          )}
+        />
       </div>
       {/* field */}
       <div className="field mb-6">

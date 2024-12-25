@@ -118,7 +118,7 @@ FormEntrySchema.plugin(fuzzySearching, {
     }
   ]
 });
-FormEntrySchema.index({ app: 1, slug: 1 }, { unique: true });
+
 /**
  * The Mongoose model for the FormEntry model.
  *

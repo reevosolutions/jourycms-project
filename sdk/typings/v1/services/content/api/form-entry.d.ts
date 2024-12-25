@@ -16,11 +16,11 @@ declare module Levelup {
              *
              */
             export namespace Create {
-              export type Request = Utils.Api.Request.Build<{
-                data: Partial<Entity.FormEntry>;
+              export type Request<D extends { [Key: string]: any } = { [Key: string]: any }> = Utils.Api.Request.Build<{
+                data: Partial<Entity.FormEntry<D>>;
               }>;
-              export type Response<T extends Entity.FormEntry = Entity.FormEntry> =
-                Utils.Api.Response.BuildSingleItemResponse<T>;
+              export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Response.BuildSingleItemResponse<Entity.FormEntry<D>>;
             }
             /**
              * --------------------------------------------------------------------------
@@ -34,11 +34,11 @@ declare module Levelup {
              *
              */
             export namespace Update {
-              export type Request = Utils.Api.Request.Build<{
-                data: Partial<Entity.FormEntry>;
+              export type Request<D extends { [Key: string]: any } = { [Key: string]: any }> = Utils.Api.Request.Build<{
+                data: Partial<Entity.FormEntry<D>>;
               }>;
-              export type Response<T extends Entity.FormEntry = Entity.FormEntry> =
-                Utils.Api.Response.BuildSingleItemResponse<T>;
+              export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Response.BuildSingleItemResponse<Entity.FormEntry<D>>;
             }
 
             /**
@@ -71,9 +71,9 @@ declare module Levelup {
              *
              */
             export namespace GetOne {
-              export type Request = Utils.Api.Request.Build<{}>;
-              export type Response<T extends Entity.FormEntry = Entity.FormEntry> =
-                Utils.Api.Response.BuildSingleItemResponse<T, 'users' | 'forms'>;
+              export type Request<D extends { [Key: string]: any } = { [Key: string]: any }> = Utils.Api.Request.Build<{}>;
+              export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Response.BuildSingleItemResponse<Entity.FormEntry<D>, 'users' | 'forms'>;
             }
 
             /**
@@ -90,12 +90,12 @@ declare module Levelup {
             export namespace List {
               type Scope = "listing" | "ids" | "trackings";
 
-              export type Request =
+              export type Request<D extends { [Key: string]: any } = { [Key: string]: any }> =
                 Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<
-                  Entity.FormEntry 
+                  Entity.FormEntry<D>
                 >;
-              export type Response<T extends Entity.FormEntry = Entity.FormEntry> =
-                Utils.Api.Response.BuildListResponse<T, 'users' | 'forms'>;
+              export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Response.BuildListResponse<Entity.FormEntry<D>, 'users' | 'forms'>;
             }
             
             /**

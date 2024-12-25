@@ -9,5 +9,5 @@ export const userCanDeleteObject = <E extends Levelup.CMS.V1.Utils.SystemStructu
   /**
    * Handle the case where the user is a company admin
    */
-  return true;
+  return !!authData?.current?.user;
 }

@@ -42,7 +42,7 @@ export const EscortsSearchForm: React.FC = () => {
   );
   const [wilayaOpen, setWilayaOpen] = useState(false);
   const [state, setState] = useState<string | undefined>();
-  const [experianceRange, setExperianceRange] = useState<number[]>([2, 5]);
+  const [experianceRange, setExperianceRange] = useState<number[]>([2, 10]);
   const [sex, setSex] = useState<"male" | "female" | undefined>();
 
   useEffect(() => {

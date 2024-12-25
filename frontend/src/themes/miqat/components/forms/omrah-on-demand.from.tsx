@@ -38,7 +38,6 @@ type FormDataFields = {
   program: string;
 };
 
-
 export type LoginFormProps = {};
 
 type Props = {};
@@ -71,8 +70,8 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
       program: "",
     },
 
-    onSubmit: async ({value}) => {
-      const payload: ApiAlias.Create.Request = {
+    onSubmit: async ({value, formApi}) => {
+      const payload: ApiAlias.Create.Request<FormDataFields> = {
         data: {
           form: "omrah-on-demand",
           data: {
@@ -85,10 +84,9 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
         const {data} = await sdk.content.formEntries.create(payload);
 
         if (data) {
-          // router.push(
-          //   setPathParams(publicRoutes.homepage._.myAccount.path, { id: data?.user?._id }),
-          // );
           logger.success("posted", data);
+          toast.success("تم إرسال المعلومات بنجاح");
+          formApi.reset();
         }
       } catch (error: any) {
         toast.error(error.message, {});
