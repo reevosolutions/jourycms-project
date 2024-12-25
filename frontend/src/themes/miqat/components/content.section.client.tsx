@@ -147,7 +147,7 @@ const ContentSection_Client: React.FC<ContentSectionProps> = ({
                 isOffer ? (
                   <PostCard_Server
                     key={index}
-                    data={item}
+                    data={item as any}
                     edge={data?.edge}
                     articleType={articleType}
                   />

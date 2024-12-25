@@ -76,7 +76,7 @@ const PostCard_Client: React.FC<PostCard_ClientProps> = ({
       {edge?.article_types?.[data.article_type] && (
 
       <PostCard_Server
-        data={data}
+        data={data as any}
         articleType={edge?.article_types[data.article_type] as any}
         edge={edge}
       />
