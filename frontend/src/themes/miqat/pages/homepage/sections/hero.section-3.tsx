@@ -6,7 +6,7 @@ import Link from "next/link";
 import React from "react";
 import useCMSContent from "@/hooks/use-cms-content";
 
-export type HomepageHeroSectionProps = JouryCMS.Theme.ComponentProps & {};
+export type HomepageHeroSection_3Props = JouryCMS.Theme.ComponentProps & {};
 
 const headlines = [
   "نحن أول منصة جزائرية",
@@ -14,7 +14,7 @@ const headlines = [
   "ابحث... اختر... اعتمر",
 ];
 
-const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
+const HomepageHeroSection_3: React.FC<HomepageHeroSection_3Props> = ({
   children,
 }) => {
   const {getWebsiteConfig, getWebsiteConfigValue} = useCMSContent();
@@ -25,27 +25,18 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
         <div className="d"></div>
 
         <ParallaxBanner
-          className="aspect-[3/1] min-h-[700px]"
           layers={[
             {image: "/assets/miqat/images/praying_man.webp", speed: -40},
             {
               speed: -10,
               children: (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="container mx-auto mt-20 hidden lg:block pe-[500px]">
-                    <h2
-                      className="inline-flex flex-col gap-1 rounded-3xl px-8 py-2 text-5xl xl:text-6xl font-medium leading-tight text-white"
-                      dangerouslySetInnerHTML={{
-                        __html: headlines
-                          .map(s => `<span>${s}</span>`)
-                          .join(""),
-                      }}
-                    />
-                  </div>
+                  <div className="container mx-auto mt-20 hidden lg:block"></div>
                 </div>
               ),
             },
           ]}
+          className="aspect-[3/1] min-h-[600px]"
           style={{
             backgroundImage:
               "url(data:image/webp;base64,UklGRtAAAABXRUJQVlA4IMQAAADQBACdASoUAAsAPm0skUWkIqGYBABABsSgCdMoR4HhJ/09WByq2W2RCveyjqwAAAD+/TP4+UP/9qT9/Hp/rfi//IHM31eYEcsIXlq/xIKzuIai+OZ8HEt3178oPnFFiA/xhhk+dUwvmaCvPQmqRP51FnEcfJKb6A9bmM6OUXC0hOEY1S4EYIeolA6ucbG9nZlJQRncnCHloMHbZ/piPja//CY3coRYVfYyCuj5dn7V/m838rkEQAtPciL8ki8A6F+0sAAA)",
@@ -63,9 +54,12 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
               <h2 className="mb-2 text-5xl font-bold text-beige-800">
                 عن {getWebsiteConfig().name}
               </h2>
-              <p className="text-2xl">
-                نحن أول منصة جزائرية، تجمع كل عروض العمرة
-              </p>
+              <h2
+                className="inline-flex flex-col gap-1 py-2 text-2xl lg:text-3xl font-normal leading-tight"
+                dangerouslySetInnerHTML={{
+                  __html: headlines.map(s => `<span>${s}</span>`).join(""),
+                }}
+              />
               <div className="flex flex-col items-center gap-4 pt-6 text-darkblue-950 md:flex-row md:gap-10">
                 <b className="text-3xl">تجدنا على</b>
                 <div className="flex items-center gap-4">
@@ -111,4 +105,4 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
   );
 };
 
-export default HomepageHeroSection;
+export default HomepageHeroSection_3;
