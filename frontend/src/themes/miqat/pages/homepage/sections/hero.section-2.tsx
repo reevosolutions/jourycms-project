@@ -43,7 +43,7 @@ const HomepageHeroSection_2: React.FC<HomepageHeroSection_2Props> = ({
                         }}
                       />
                     </div>
-                    <div className="flex justify-center md:justify-end">
+                    <div className="flex justify-center lg:justify-end">
                       <HomepageSearchForm />
                     </div>
                   </div>
@@ -59,7 +59,7 @@ const HomepageHeroSection_2: React.FC<HomepageHeroSection_2Props> = ({
             backgroundPosition: "center",
           }}
         >
-          <div className="absolute inset-0 flex items-center justify-center"></div>
+          
         </ParallaxBanner>
       </div>
     </ParallaxProvider>

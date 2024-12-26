@@ -25,16 +25,16 @@ const HomepageHeroSection: React.FC<HomepageHeroSectionProps> = ({
         <div className="d"></div>
 
         <ParallaxBanner
-          className="aspect-[3/1] min-h-[700px]"
+          className="aspect-[3/1] min-h-[600px] lg:min-h-[700px]"
           layers={[
             {image: "/assets/miqat/images/praying_man.webp", speed: -40},
             {
               speed: -10,
               children: (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="container mx-auto mt-20 hidden lg:block pe-[500px]">
+                  <div className="container mx-auto mt-20 hidden pe-[500px] lg:block">
                     <h2
-                      className="inline-flex flex-col gap-1 rounded-3xl px-8 py-2 text-5xl xl:text-6xl font-medium leading-tight text-white"
+                      className="inline-flex flex-col gap-5 rounded-3xl px-8 py-2 text-5xl font-medium leading-tight text-white xl:text-6xl"
                       dangerouslySetInnerHTML={{
                         __html: headlines
                           .map(s => `<span>${s}</span>`)

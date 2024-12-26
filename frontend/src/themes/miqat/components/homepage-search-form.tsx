@@ -133,6 +133,25 @@ const distance_to_haram_options = [
   },
 ];
 
+const sort_options = [
+  {
+    value: "price-asc",
+    label: "الأقل سعراً",
+  },
+  {
+    value: "price-desc",
+    label: "الأعلى سعراً",
+  },
+  {
+    value: "date-asc",
+    label: "الأقرب",
+  },
+  {
+    value: "date-desc",
+    label: "الأبعد",
+  },
+];
+
 export const OmrahSearchForm: React.FC<{
   type: TArticleTypeSlug;
 }> = ({type}) => {
@@ -168,6 +187,7 @@ export const OmrahSearchForm: React.FC<{
   const [entryPointOpen, setEntryPointOpen] = useState(false);
   const [durationOpen, setDurationOpen] = useState(false);
   const [agencyOpen, setAgencyOpen] = useState(false);
+  const [sortOpen, setSortOpen] = useState(false);
   const [agencySearch, setAgencySearch] = useState("");
   const [agencies, setAgencies] = useState<{
     [_id: string]: string;
@@ -196,6 +216,7 @@ export const OmrahSearchForm: React.FC<{
   );
   const [trip_type, setTrip_type] = useState<string | null>(null);
   const [ramadhan_omrah, setRamadhan_omrah] = useState(false);
+  const [sort, setSort] = useState<"price-asc" | "price-desc" | "date-asc" | "date-desc">('price-asc');
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
@@ -1005,9 +1026,64 @@ export const OmrahSearchForm: React.FC<{
           </Popover>
         </div>
         {/* field */}
+        <div className="field mb-4">
+          <Label className="text-base text-darkblue-500">{"الترتيب حسب"}</Label>
+          <Popover open={sortOpen} onOpenChange={setSortOpen}>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                role="combobox"
+                aria-expanded={sortOpen}
+                className="w-full justify-between rounded-md border-2"
+                aria-label="sort"
+              >
+                <div className="value pt-1 text-lg">
+                  {!sort ? (
+                    <span className="text-darkblue-500">{"اختر..."}</span>
+                  ) : (
+                    <span>{sort_options.find(item=>item.value === sort)?.label}</span>
+                  )}
+                </div>
+                <LuChevronsUpDown className="opacity-50" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent
+              className="w-[210px] p-0 font-tajawal text-2xl"
+              align="start"
+            >
+              <Command>
+                <CommandList>
+                  <CommandGroup>
+                    {sort_options.map(({value, label}) => (
+                      <CommandItem
+                        key={value}
+                        value={value}
+                        onSelect={value => {
+                          setSort(value as any);
+                          setSortOpen(false);
+                        }}
+                        className="text-xl"
+                      >
+                        {label}
+                        <LuCheck
+                          className={cn(
+                            "ms-auto",
+                            value === sort ? "opacity-100" : "opacity-0",
+                          )}
+                        />
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </CommandList>
+              </Command>
+            </PopoverContent>
+          </Popover>
+        </div>
+      </div>
+      <div className="grid grid-cols-1 gap-0 sm:grid-cols-2 sm:gap-4">
+        {/* field */}
         {type === "omrah" && (
           <div className="field mb-4">
-            <div className="block h-7 w-full text-base text-darkblue-500"></div>
             <Label className="flex h-10 items-center gap-3">
               <Switch
                 checked={ramadhan_omrah}

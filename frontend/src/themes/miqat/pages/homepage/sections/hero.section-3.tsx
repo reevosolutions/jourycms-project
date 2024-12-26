@@ -25,6 +25,7 @@ const HomepageHeroSection_3: React.FC<HomepageHeroSection_3Props> = ({
         <div className="d"></div>
 
         <ParallaxBanner
+          className="aspect-[3/1] min-h-[600px] lg:min-h-[700px]"
           layers={[
             {image: "/assets/miqat/images/praying_man.webp", speed: -40},
             {
@@ -36,7 +37,6 @@ const HomepageHeroSection_3: React.FC<HomepageHeroSection_3Props> = ({
               ),
             },
           ]}
-          className="aspect-[3/1] min-h-[600px]"
           style={{
             backgroundImage:
               "url(data:image/webp;base64,UklGRtAAAABXRUJQVlA4IMQAAADQBACdASoUAAsAPm0skUWkIqGYBABABsSgCdMoR4HhJ/09WByq2W2RCveyjqwAAAD+/TP4+UP/9qT9/Hp/rfi//IHM31eYEcsIXlq/xIKzuIai+OZ8HEt3178oPnFFiA/xhhk+dUwvmaCvPQmqRP51FnEcfJKb6A9bmM6OUXC0hOEY1S4EYIeolA6ucbG9nZlJQRncnCHloMHbZ/piPja//CY3coRYVfYyCuj5dn7V/m838rkEQAtPciL8ki8A6F+0sAAA)",
@@ -55,7 +55,7 @@ const HomepageHeroSection_3: React.FC<HomepageHeroSection_3Props> = ({
                 عن {getWebsiteConfig().name}
               </h2>
               <h2
-                className="inline-flex flex-col gap-1 py-2 text-2xl lg:text-3xl font-normal leading-tight"
+                className="inline-flex flex-col gap-1 py-2 text-2xl font-normal leading-tight lg:text-3xl"
                 dangerouslySetInnerHTML={{
                   __html: headlines.map(s => `<span>${s}</span>`).join(""),
                 }}
