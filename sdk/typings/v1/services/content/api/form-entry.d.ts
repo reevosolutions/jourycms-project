@@ -97,6 +97,34 @@ declare module Levelup {
               export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
                 Utils.Api.Response.BuildListResponse<Entity.FormEntry<D>, 'users' | 'forms'>;
             }
+
+            /**
+             * --------------------------------------------------------------------------
+             *                            Export
+             * --------------------------------------------------------------------------
+             * @link
+             * @fires FormEntriesService.Export
+             * @param {Levelup.CMS.V1.Api.FormEntries.Export.Request} query
+             * @returns {Levelup.CMS.V1.Api.FormEntries.Export.Response}
+             * @method GET
+             *
+             */
+            export namespace Export {
+              export type Request<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Request.BuildSearchablePagedSortableFilterableProjectable<
+                  Entity.FormEntry<D>
+                > & {
+                  filters?:{
+                    form: string;
+                  }
+                };
+              export type Response<D extends { [Key: string]: any } = { [Key: string]: any }> =
+                Utils.Api.Response.BuildSingleItemResponse<{
+                  id: string;
+                  url: string;
+                  count: number;
+                }, 'users' | 'forms'>;
+            }
             
             /**
              * --------------------------------------------------------------------------

@@ -1,52 +1,56 @@
-import {adminRoutes} from "@/config";
-import AdminLayout from "@/features/admin/layout";
-import Listing from "@/features/admin/listing";
-import {useSdk} from "@/hooks/use-sdk";
-import {getRouteTree} from "@/lib/routes";
+"use client";
 
-const ROUTE = adminRoutes.forms._.list;
-const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
-const PARENT_ROUTE =
-  ROUTE_PARENTS.length > 1 ? ROUTE_PARENTS.at(-2) : undefined;
-const QUERY_ID = ROUTE.path;
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { useRouter } from "next/navigation";
+import React, { useCallback, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 
-type PageProps = {
-  params: Promise<{
-    type_slug: string;
-  }>;
+const logger = initLogger(LoggerContext.FORM, "formEntry");
+
+import EntityAlias = Levelup.CMS.V1.Content.Entity.FormEntry;
+import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
+
+type FormEntryListProps = {
+  form_id?: string;
 };
 
-export default async function Page({params}: PageProps) {
+const FormEntryListColumns: React.FC<FormEntryListProps> = ({ form_id }) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
-  const {type_slug} = await params;
 
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-
+  const { t: tLabel } = useTranslation("label");
+  const router = useRouter();
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
+
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
 
   /* -------------------------------------------------------------------------- */
-  /*                                   NETHODS                                  */
+  /*                                    FORMS                                   */
   /* -------------------------------------------------------------------------- */
+
+  /* -------------------------------------------------------------------------- */
+  /*                                   METHODS                                  */
+  /* -------------------------------------------------------------------------- */
+  const loadExtraData = useCallback(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
+  useEffect(() => {}, []);
 
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return (
-    <AdminLayout.PageLayout>
-      <Listing.Forms.FormList  />
-    </AdminLayout.PageLayout>
-  );
-}
+
+  return <div className="form-group upcms-form"></div>;
+};
+
+export default FormEntryListColumns;

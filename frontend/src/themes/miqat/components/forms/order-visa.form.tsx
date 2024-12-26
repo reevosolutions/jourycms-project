@@ -2,32 +2,25 @@
 
 "use client";
 
-import React, {useState} from "react";
-import {authenticate} from "@features/auth/redux/slice";
-import {Button} from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
-import {Label} from "@/components/ui/label";
-import initLogger, {LoggerContext} from "@/lib/logging";
-import Link from "next/link";
-import * as yup from "yup";
-import {useSdk} from "@/hooks/use-sdk";
-import {publicRoutes} from "@/config";
-import {FormMessage} from "@/components/ui/customized.form";
-import {cn} from "@/lib/utils";
-import {useForm, type Validator} from "@tanstack/react-form";
-import Image from "next/image";
-import {useTranslation} from "react-i18next";
-import {useRouter} from "next/navigation";
-import {setPathParams} from "@/lib/routes";
-import {toast} from "sonner";
-import {yupValidator} from "@tanstack/yup-form-adapter";
-import useCMSContent from "@/hooks/use-cms-content";
-import {Loader2} from "lucide-react";
-import {useAppDispatch} from "@/lib/redux/hooks";
-import {Textarea} from "@/components/ui/textarea";
-import ImageUploader from "@/features/storage/form-components/image.uploader";
-import {LuLoader2} from "react-icons/lu";
+import { FormMessage } from "@/components/ui/customized.form";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import FileUploader from "@/features/storage/form-components/file.uploader";
+import ImageUploader from "@/features/storage/form-components/image.uploader";
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { useAppDispatch } from "@/lib/redux/hooks";
+import { cn } from "@/lib/utils";
+import { useForm, type Validator } from "@tanstack/react-form";
+import { yupValidator } from "@tanstack/yup-form-adapter";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
+import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { LuLoader2 } from "react-icons/lu";
+import { toast } from "sonner";
+import * as yup from "yup";
 
 const logger = initLogger(LoggerContext.FORM, "OrderVisaForm");
 
@@ -96,8 +89,8 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
           // );
           logger.success("posted", data);
           toast.success("تم إرسال المعلومات بنجاح");
-          setPassportFile(null);
-          formApi.reset();
+          // setPassportFile(null);
+          // formApi.reset();
         }
       } catch (error: any) {
         toast.error(error.message, {});

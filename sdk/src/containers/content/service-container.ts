@@ -92,7 +92,13 @@ export default class CmServiceContainer extends BaseServiceContainer<TClientName
   }
   
 
-
+  /**
+   * @description generate export file url
+   */
+  public getExportFileUrl(entity: Levelup.CMS.V1.Utils.SystemStructure.Models.AllModels, id: string): string {
+    const url = `${this.sdk.config.baseURL}/export/${entity}/${id}`;
+    return url;
+  }
 
 
 

@@ -2,6 +2,7 @@
 
 import {
   type ColumnDef,
+  createColumnHelper,
   getCoreRowModel,
   type RowSelectionState,
   useReactTable,
@@ -11,7 +12,14 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {LuExternalLink, LuEye, LuPencil, LuTrash2} from "react-icons/lu";
+import {
+  LuCheck,
+  LuCheckCircle,
+  LuExternalLink,
+  LuEye,
+  LuPencil,
+  LuTrash2,
+} from "react-icons/lu";
 
 import {Checkbox} from "@/components/ui/checkbox";
 import {adminRoutes} from "@/config";
@@ -20,19 +28,25 @@ import {setPathParams} from "@/lib/routes";
 
 import TanstackTable from "../common/tanstack-table";
 
-const logger = initLogger(LoggerContext.FORM, "article");
+const logger = initLogger(LoggerContext.FORM, "formEntry");
 
-import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
-import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
+import EntityAlias = Levelup.CMS.V1.Content.Entity.FormEntry;
+import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
 import {buildUserFullName} from "@/lib/utilities/strings";
+import {useSdk} from "@/hooks/use-sdk";
+import {cn} from "@/lib/utils";
 
-type PostListProps = {
-  data: Levelup.CMS.V1.Content.Entity.Article[];
-  articleType?: Levelup.CMS.V1.Content.Entity.ArticleType | null;
-  edge?: Levelup.CMS.V1.Content.Api.Articles.List.Response["edge"];
+type FormEntryListProps = {
+  data: Levelup.CMS.V1.Content.Entity.FormEntry[];
+  form?: Levelup.CMS.V1.Content.Entity.Form | null;
+  edge?: Levelup.CMS.V1.Content.Api.FormEntries.List.Response["edge"];
 };
 
-const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
+const FormEntryListTable: React.FC<FormEntryListProps> = ({
+  form,
+  data: _data,
+  edge,
+}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -42,12 +56,15 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
   /* -------------------------------------------------------------------------- */
   const {t: tLabel} = useTranslation("label");
   const router = useRouter();
+  const sdk = useSdk();
 
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({}); // manage your own row selection state
-
+  const [data, setData] = useState<Levelup.CMS.V1.Content.Entity.FormEntry[]>(
+    [],
+  );
   /* -------------------------------------------------------------------------- */
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
@@ -60,17 +77,62 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
   const loadExtraData = useCallback(() => {}, []);
+  const handleToggleHendled = useCallback(
+    async (item: EntityAlias) => {
+      try {
+        const {data} = await sdk.content.formEntries.update(item._id, {
+          data: {
+            is_handled: !item.is_handled,
+          },
+        });
+        setData(old =>
+          old.map(element => (element._id === item._id ? data : element)),
+        );
+        loadExtraData();
+      } catch (error) {
+        logger.error("handleToggleHendled", error);
+      }
+    },
+    [loadExtraData, sdk.content.formEntries],
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
-  useEffect(() => {}, []);
+  useEffect(() => {
+    setData(_data);
+  }, [_data]);
 
   /* -------------------------------------------------------------------------- */
   /*                                    TABLE                                   */
   /* -------------------------------------------------------------------------- */
-  const columns = useMemo<ColumnDef<EntityAlias, any>[]>(
-    () => [
+  const columnHelper = createColumnHelper<EntityAlias>();
+
+  const columns = useMemo<ColumnDef<EntityAlias, any>[]>(() => {
+    const customColumns: ColumnDef<EntityAlias, unknown>[] = [];
+    const form = Object.values(edge?.forms || {})[0];
+    if (
+      form?.settings &&
+      form.settings.shown_fields_on_dashboard &&
+      (form?.settings?.shown_fields_on_dashboard || []).length > 0
+    ) {
+      for (const field_key of form.settings.shown_fields_on_dashboard) {
+        const field = form.fields.find(f => f.field_key === field_key);
+        if (!field) continue;
+
+        customColumns.push({
+          id: field_key,
+          header: () => <span className="d">{field.field_label}</span>,
+          cell: info => {
+            const value = info.row.original.data[field_key];
+            return (
+              <span className="text-sm font-medium text-text-700">{value}</span>
+            );
+          },
+        });
+      }
+    }
+    return [
       {
         id: "select-col",
         size: 24,
@@ -92,19 +154,6 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
         ),
       },
       {
-        id: "title",
-        header: () => <span className="d">{tLabel("العنوان")}</span>,
-        cell: info => {
-          return (
-            <div className="flex flex-col gap-1 py-2">
-              <span className="text-sm font-medium text-text-700">
-                {info.row.original.title}
-              </span>
-            </div>
-          );
-        },
-      },
-      {
         id: "created_by",
         header: () => <span className="d">{tLabel("بواسطة")}</span>,
         cell: info => {
@@ -115,7 +164,11 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
             <span className="text-sm font-medium text-text-700">
               {buildUserFullName(user)}
             </span>
-          ) : null;
+          ) : (
+            <span className="text-sm font-medium text-text-500">
+              {tLabel("guest")}
+            </span>
+          );
         },
       },
       {
@@ -129,25 +182,40 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
           );
         },
       },
+      ...customColumns,
       {
         id: "controls",
         header: () => <span className="d"></span>,
         cell: info => {
           return (
             <div className="flex justify-end gap-1 py-2">
+              <button
+                className={cn(
+                  "p-1 text-text-500 transition-all duration-200",
+                  info.row.original.is_handled
+                    ? "text-green-500 hover:text-red-500"
+                    : "text-gray-500 hover:text-green-700",
+                )}
+                onClick={() => {
+                  handleToggleHendled(info.row.original);
+                }}
+              >
+                {info.row.original.is_handled ? (
+                  <LuCheckCircle className="h5 w-5" />
+                ) : (
+                  <LuCheck className="h5 w-5" />
+                )}
+              </button>
               <Link
-                href={setPathParams("/:slug", {slug: info.row.original.slug})}
+                href={setPathParams(
+                  adminRoutes.forms._.entries._.details.path,
+                  {
+                    id: info.row.original._id,
+                  },
+                )}
                 className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
               >
                 <LuExternalLink className="h5 w-5" />
-              </Link>
-              <Link
-                href={setPathParams(adminRoutes.articles._.edit.path, {
-                  id: info.row.original._id,
-                })}
-                className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
-              >
-                <LuPencil className="h5 w-5" />
               </Link>
               <Link
                 href={"#"}
@@ -159,9 +227,8 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
           );
         },
       },
-    ],
-    [edge?.users, tLabel],
-  );
+    ];
+  }, [edge?.forms, edge?.users, handleToggleHendled, tLabel]);
 
   const table = useReactTable({
     data: data || [],
@@ -179,10 +246,18 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="form-group upcms-table upcms-posts-table">
-      <TanstackTable id={"post-list"} table={table} />
+    <div className="form-group upcms-table upcms-formEntrys-table">
+      <TanstackTable
+        id={"formEntry-list"}
+        table={table}
+        getRowClassName={row => {
+          return row.original.is_handled
+            ? " bg-slate-50 text-slate-600"
+            : " font-medium text-text-700";
+        }}
+      />
     </div>
   );
 };
 
-export default PostListTable;
+export default FormEntryListTable;

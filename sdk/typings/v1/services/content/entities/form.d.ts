@@ -10,6 +10,14 @@ declare module Levelup {
           export interface IFromInsights {
             entry_count?: number;
           }
+          
+          export interface IFormSettings {
+            has_reset_button?: boolean;
+            reset_button_label?: string;
+            has_submit_button?: boolean;
+            submit_button_label?: string;
+            shown_fields_on_dashboard?: string[];
+          }
 
           export interface Form
             extends Utils.Entity.General.ICreatable,
@@ -23,9 +31,9 @@ declare module Levelup {
             is_published: boolean;
             published_at: Date | null;
             fields: ICustomMetaField[];
-            
             insights: IFromInsights;
             snapshots: IFromSnapshots;
+            settings: IFormSettings;
           }
         }
       }

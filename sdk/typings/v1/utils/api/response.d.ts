@@ -125,6 +125,9 @@ declare module Levelup {
               article_types: {
                 [ID: string]: Content.Entity.ArticleType | null;
               }
+              forms: {
+                [ID: string]: Content.Entity.Form | null;
+              }
               linked_articles: {
                 [ID: string]: Omit<Content.Entity.Article,
                   'body' |

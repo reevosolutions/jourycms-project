@@ -111,6 +111,47 @@ export default (app: Router): void => {
   );
 
   /**
+   * Export
+   */
+  route.get(
+    "/export",
+    async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+      try {
+        /**
+         * Always get the auth data at the beginning of the function
+         */
+        const AUTH_DATA = await getAuthData(req);
+
+        /**
+         * Load the required services and managers
+         */
+        const formEntriesService = Container.get(FormEntriesService);
+
+        /**
+         * Call the service method if the validation conditions are fulfilled
+         */
+
+        const result = await formEntriesService.export(
+          req.query as unknown as ApiAlias.Export.Request,
+          AUTH_DATA
+        );
+
+        /**
+         * Respond to the client
+         */
+        return respond<ApiAlias.Export.Response>(res, result);
+      } catch (error) {
+        /**
+         * Pass the error to the next middleware
+         * the error logging logic is handled on the service layer
+         */
+
+        return next(error);
+      }
+    }
+  );
+
+  /**
    * GetOne
    */
   route.get(

@@ -14,6 +14,7 @@ declare module Levelup {
             slug: string;
             form: Utils.Common.ID;
             data: D;
+            is_handled: boolean;
             snapshots: IFormEntrySnapshots;
           }
         }

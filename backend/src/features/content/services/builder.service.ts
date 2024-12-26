@@ -4,14 +4,15 @@
  * @since 26-10-2024 23:24:33
  */
 
-import Container, { Inject, Service } from 'typedi';
-import BaseService from '../../../common/base.service';
-import { EventDispatcher } from '../../../decorators/eventDispatcher.decorator';
-import CacheManager from '../../../managers/cache-manager';
-import TranslationToolsService from './translation.tools.service';
-import { faker } from '@faker-js/faker';
-import articleTypesSeedData from '../utils/seed/ar.types.seed';
-import { extractAgenciesFromExcel } from '../utils/seed/agencies';
+import Container, { Inject, Service } from "typedi";
+import BaseService from "../../../common/base.service";
+import { EventDispatcher } from "../../../decorators/eventDispatcher.decorator";
+import CacheManager from "../../../managers/cache-manager";
+import TranslationToolsService from "./translation.tools.service";
+import { faker } from "@faker-js/faker";
+import articleTypesSeedData from "../utils/seed/ar.types.seed";
+import { extractAgenciesFromExcel } from "../utils/seed/agencies";
+import { miqate_forms } from "../utils/seed/forms.seed";
 
 /**
  * @generator Levelup
@@ -22,16 +23,27 @@ import { extractAgenciesFromExcel } from '../utils/seed/agencies';
 @Service()
 export default class BuilderService extends BaseService {
   public constructor(
-    @Inject('articleTypeModel') private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
-    @Inject('articleModel') private articleModel: Levelup.CMS.V1.Content.Model.Article,
-    @Inject('commentModel') private commentModel: Levelup.CMS.V1.Content.Model.Comment,
-    @Inject('reviewModel') private reviewModel: Levelup.CMS.V1.Content.Model.Review,
-    @Inject('termModel') private termModel: Levelup.CMS.V1.Content.Model.Term,
-    @Inject('taxonomyModel') private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
-    @Inject('translationItemModel') private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
-    @Inject('translationNamespaceModel') private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
-    @Inject('translationProjectModel') private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
-    @EventDispatcher() private eventDispatcher: EventDispatcher) {
+    @Inject("articleTypeModel")
+    private articleTypeModel: Levelup.CMS.V1.Content.Model.ArticleType,
+    @Inject("articleModel")
+    private articleModel: Levelup.CMS.V1.Content.Model.Article,
+    @Inject("formModel")
+    private formModel: Levelup.CMS.V1.Content.Model.Form,
+    @Inject("commentModel")
+    private commentModel: Levelup.CMS.V1.Content.Model.Comment,
+    @Inject("reviewModel")
+    private reviewModel: Levelup.CMS.V1.Content.Model.Review,
+    @Inject("termModel") private termModel: Levelup.CMS.V1.Content.Model.Term,
+    @Inject("taxonomyModel")
+    private taxonomyModel: Levelup.CMS.V1.Content.Model.Taxonomy,
+    @Inject("translationItemModel")
+    private translationItemModel: Levelup.CMS.V1.Content.Translation.Model.Item,
+    @Inject("translationNamespaceModel")
+    private translationNamespaceModel: Levelup.CMS.V1.Content.Translation.Model.Namespace,
+    @Inject("translationProjectModel")
+    private translationProjectModel: Levelup.CMS.V1.Content.Translation.Model.Project,
+    @EventDispatcher() private eventDispatcher: EventDispatcher
+  ) {
     super();
   }
 
@@ -53,33 +65,59 @@ export default class BuilderService extends BaseService {
   public async seed() {
     const scenario = this.initScenario(this.logger, this.seed);
     try {
-
+      /**
+       * @description seed article types
+       */
       for (const type of articleTypesSeedData.types) {
         const existing = await this.articleTypeModel.findOne({
-          slug: type.slug
+          slug: type.slug,
         });
         if (!existing) {
           await this.articleTypeModel.create(type);
-        }
-        else {
+        } else {
           this.logger.info(`Article type ${type.slug} already exists`);
-          await this.articleTypeModel.updateOne({
-            _id: existing._id
-          }, {
-            $set: type
-          }).exec();
+          await this.articleTypeModel
+            .updateOne(
+              {
+                _id: existing._id,
+              },
+              {
+                $set: type,
+              }
+            )
+            .exec();
         }
+      }
 
+      /**
+       * @description seed forms
+       */
+      for (const form of miqate_forms) {
+        const existing = await this.formModel.findOne({
+          slug: form.slug,
+        });
+        if (!existing) {
+          await this.formModel.create(form);
+        } else {
+          this.logger.info(`Form ${form.slug} already exists`);
+          await this.formModel
+            .updateOne(
+              {
+                _id: existing._id,
+              },
+              {
+                $set: form,
+              }
+            )
+            .exec();
+        }
       }
 
       await extractAgenciesFromExcel();
-
     } catch (error) {
       scenario.error(error);
     }
   }
-
-
 
   /**
    * @description this is used to clean up data
@@ -101,10 +139,10 @@ export default class BuilderService extends BaseService {
       const translationToolsService = Container.get(TranslationToolsService);
       await translationToolsService.translateUsingGoogleAPI();
       const type = await this.articleTypeModel.findOne({
-        slug: 'trip'
+        slug: "trip",
       });
       const omrahType = await this.articleTypeModel.findOne({
-        slug: 'omrah'
+        slug: "omrah",
       });
 
       if (type) {
@@ -113,23 +151,34 @@ export default class BuilderService extends BaseService {
         });
         for (const article of articles) {
           article.article_type = omrahType?._id;
-          article.title = 'عمرة رمضان';
-          article.meta_fields.price = faker.number.int({ min: 11, max: 50 }) * 10000 + faker.number.int({ min: 1, max: 9 }) * 1000;
+          article.title = "عمرة رمضان";
+          article.meta_fields.price =
+            faker.number.int({ min: 11, max: 50 }) * 10000 +
+            faker.number.int({ min: 1, max: 9 }) * 1000;
           article.meta_fields.duarttion = undefined;
-          article.meta_fields.trip_duration = faker.helpers.arrayElement([15, 21, 30, 45]);
-          article.meta_fields.agency = '672eb5728cb4792976274773';
-          this.logger.info(`Updating article ${article._id}`, article.meta_fields.trip_duration);
-          await this.articleModel.updateOne({
-            _id: article._id
-          }, {
-            $set: {
-              meta_fields: article.meta_fields,
-              article_type: article.article_type
-            }
-          }).exec();
+          article.meta_fields.trip_duration = faker.helpers.arrayElement([
+            15, 21, 30, 45,
+          ]);
+          article.meta_fields.agency = "672eb5728cb4792976274773";
+          this.logger.info(
+            `Updating article ${article._id}`,
+            article.meta_fields.trip_duration
+          );
+          await this.articleModel
+            .updateOne(
+              {
+                _id: article._id,
+              },
+              {
+                $set: {
+                  meta_fields: article.meta_fields,
+                  article_type: article.article_type,
+                },
+              }
+            )
+            .exec();
         }
       }
-
     } catch (error) {
       scenario.error(error);
     }

@@ -60,6 +60,7 @@ const FormEntrySchemaFields: DeepStrictSchemaDefinition<
     default: null,
   },
   is_deleted: { type: Boolean, default: false },
+  is_handled: { type: Boolean, default: false },
   deleted_at: { type: Date, default: null },
   tags: _ItemTagsSchemaFields,
   updates: [_ItemUpdateSchemaFields],

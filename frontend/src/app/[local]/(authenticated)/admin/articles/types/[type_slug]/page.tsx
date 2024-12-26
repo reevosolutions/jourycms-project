@@ -4,7 +4,7 @@ import Listing from "@/features/admin/listing";
 import { useSdk } from "@/hooks/use-sdk";
 import { getRouteTree } from "@/lib/routes";
 
-const ROUTE = adminRoutes.articles._.create;
+const ROUTE = adminRoutes.articles._.list;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1

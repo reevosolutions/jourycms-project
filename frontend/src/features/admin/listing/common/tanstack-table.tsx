@@ -1,4 +1,9 @@
-import { flexRender, type RowData, type Table } from "@tanstack/react-table";
+import {
+  flexRender,
+  type RowData,
+  type Table,
+  type Row,
+} from "@tanstack/react-table";
 import { useTranslation } from "react-i18next";
 
 import Icons from "../../ui/icons";
@@ -9,6 +14,7 @@ type Props<TData> = {
   headerGrouped?: boolean;
   sortable?: boolean;
   className?: string;
+  getRowClassName?: (row: Row<TData>) => string;
 };
 
 const TanstackTable = <TData extends RowData>({
@@ -17,8 +23,9 @@ const TanstackTable = <TData extends RowData>({
   table,
   headerGrouped,
   sortable = true,
+  getRowClassName,
 }: Props<TData>) => {
-  const { t: tLabel } = useTranslation("label");
+  const {t: tLabel} = useTranslation("label");
   return (
     <div
       className={`up-table relative ${id} ${className} ${headerGrouped ? "header-grouped" : ""}`}
@@ -75,7 +82,7 @@ const TanstackTable = <TData extends RowData>({
           {table.getRowModel().rows.map(row => (
             <tr
               key={row.id}
-              className="border-background-800 hocus:bg-foreground-100/50 border-b bg-background"
+              className={`${getRowClassName ? getRowClassName(row) : ""} border-background-800 hocus:bg-foreground-100/50 border-b bg-background`}
             >
               {row.getVisibleCells().map(cell => (
                 <td key={cell.id} className={`${cell.column.id}`}>

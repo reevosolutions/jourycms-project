@@ -47,6 +47,13 @@ export default class FormEntriesClient extends BaseClient {
     });
   }
 
+  // export
+  async export<D extends { [Key: string]: any } = { [Key: string]: any }>(query: ApiAlias.Export.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.Export.Response<D>>> {
+    return await this.container.sdk.httpClient.get<ApiAlias.Export.Response<D>>(this.generatePrefix('/export'), query, {
+      headers: this.container.sdk.generateHeadersFromRequestConfig(config)
+    });
+  }
+
   // getById
   async getById<D extends { [Key: string]: any } = { [Key: string]: any }>(id: string, params?: ApiAlias.GetOne.Request<D>, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.GetOne.Response<D>>> {
     return await this.container.sdk.httpClient.get(this.generatePrefix("/:id", { id }), params, {

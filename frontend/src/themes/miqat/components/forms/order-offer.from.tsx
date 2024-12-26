@@ -134,7 +134,7 @@ const OrderOfferForm: React.FC<Props> = ({
                 onChange={event => field.handleChange(event.target.value)}
               />
               {field.state.meta.errors?.[0] && (
-                <FormMessage error={field.state.meta.errors?.[0]} />
+                <FormMessage error={field.state.meta.errors?.[0]} className="px-4" />
               )}
             </>
           )}

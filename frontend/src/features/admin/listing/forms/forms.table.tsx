@@ -2,6 +2,7 @@
 
 import {
   type ColumnDef,
+  createColumnHelper,
   getCoreRowModel,
   type RowSelectionState,
   useReactTable,
@@ -11,28 +12,28 @@ import Link from "next/link";
 import {useRouter} from "next/navigation";
 import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useTranslation} from "react-i18next";
-import {LuExternalLink, LuEye, LuPencil, LuTrash2} from "react-icons/lu";
-
+import {LuClipboard, LuExternalLink, LuEye, LuPencil, LuTrash2} from "react-icons/lu";
 import {Checkbox} from "@/components/ui/checkbox";
 import {adminRoutes} from "@/config";
 import initLogger, {LoggerContext} from "@/lib/logging";
 import {setPathParams} from "@/lib/routes";
-
+import {CopyToClipboard} from "react-copy-to-clipboard";
 import TanstackTable from "../common/tanstack-table";
-
-const logger = initLogger(LoggerContext.FORM, "article");
-
-import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
-import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import {buildUserFullName} from "@/lib/utilities/strings";
+import {FaClipboardList} from "react-icons/fa";
 
-type PostListProps = {
-  data: Levelup.CMS.V1.Content.Entity.Article[];
-  articleType?: Levelup.CMS.V1.Content.Entity.ArticleType | null;
-  edge?: Levelup.CMS.V1.Content.Api.Articles.List.Response["edge"];
+const logger = initLogger(LoggerContext.FORM, "form");
+
+import EntityAlias = Levelup.CMS.V1.Content.Entity.Form;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Forms;
+import { toast } from "sonner";
+
+type FormListProps = {
+  data: Levelup.CMS.V1.Content.Entity.Form[];
+  edge?: Levelup.CMS.V1.Content.Api.Forms.List.Response["edge"];
 };
 
-const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
+const FormListTable: React.FC<FormListProps> = ({data, edge}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -97,9 +98,28 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
         cell: info => {
           return (
             <div className="flex flex-col gap-1 py-2">
-              <span className="text-sm font-medium text-text-700">
-                {info.row.original.title}
-              </span>
+              <Link
+                href={setPathParams(adminRoutes.forms._.entries.path, {
+                  id: info.row.original._id,
+                })}
+                className="text-text-500 transition-all duration-200 hover:text-text-900 inline-block"
+              >
+                <span className="text-sm font-medium text-text-700 hocus:text-primary-700 transition-all">
+                  {info.row.original.name}
+                </span>
+              </Link>
+
+              <CopyToClipboard
+                text={info.row.original.slug}
+                onCopy={(text) => {
+                  toast.success("تم نسخ المعرف", {});
+                }}
+              >
+                <span className="text-xs text-text-500 hocus:text-primary-700 transition-all cursor-copy flex items-center gap-3">
+                  {info.row.original.slug}
+                  <LuClipboard className="w-4 h-4" />
+                </span>
+              </CopyToClipboard>
             </div>
           );
         },
@@ -136,13 +156,15 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
           return (
             <div className="flex justify-end gap-1 py-2">
               <Link
-                href={setPathParams("/:slug", {slug: info.row.original.slug})}
+                href={setPathParams(adminRoutes.forms._.entries.path, {
+                  id: info.row.original._id,
+                })}
                 className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
               >
-                <LuExternalLink className="h5 w-5" />
+                <FaClipboardList className="h5 w-5" />
               </Link>
               <Link
-                href={setPathParams(adminRoutes.articles._.edit.path, {
+                href={setPathParams(adminRoutes.forms._.edit.path, {
                   id: info.row.original._id,
                 })}
                 className="p-1 text-text-500 transition-all duration-200 hover:text-text-900"
@@ -179,10 +201,10 @@ const PostListTable: React.FC<PostListProps> = ({articleType, data, edge}) => {
   /* -------------------------------------------------------------------------- */
 
   return (
-    <div className="form-group upcms-table upcms-posts-table">
-      <TanstackTable id={"post-list"} table={table} />
+    <div className="form-group upcms-table upcms-forms-table">
+      <TanstackTable id={"form-list"} table={table} />
     </div>
   );
 };
 
-export default PostListTable;
+export default FormListTable;

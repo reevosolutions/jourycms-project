@@ -6,7 +6,7 @@ import type { Metadata } from "next";
 /**
  * Always define the ROUTE variable at the beginning of the page
  */
-const ROUTE = adminRoutes.forms;
+const ROUTE = adminRoutes.forms._.list;
 const ROUTE_PARENTS = getRouteTree(ROUTE, adminRoutes);
 const PARENT_ROUTE =
   ROUTE_PARENTS.length > 1

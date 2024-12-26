@@ -32,7 +32,7 @@ type DeepStrictSchemaDefinition<T = undefined> =
 /**
  * Represents the embedded objects of the FormSchema.
  */
-const EmbeddedObjects: DeepStrictSchemaDefinition<Pick<_Entity, "insights" | "snapshots">> = {
+const EmbeddedObjects: DeepStrictSchemaDefinition<Pick<_Entity, "insights" | "snapshots" | "settings">> = {
   snapshots: {
     type: {
       created_by: {
@@ -45,6 +45,16 @@ const EmbeddedObjects: DeepStrictSchemaDefinition<Pick<_Entity, "insights" | "sn
   insights: {
     type: {
       entry_count: { type: Number, default: 0 },
+    },
+    _id: false, // Disable _id for this subdocument
+  },
+  settings: {
+    type: {
+      has_reset_button: { type: Boolean, default: false },
+      reset_button_label: { type: String, default: "Reset" },
+      has_submit_button: { type: Boolean, default: true },
+      submit_button_label: { type: String, default: "إرسال" },
+      shown_fields_on_dashboard: { type: [String], default: [] },
     },
     _id: false, // Disable _id for this subdocument
   },

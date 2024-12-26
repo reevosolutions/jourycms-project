@@ -977,6 +977,7 @@ export const custom_meta_fields = {
   },
 } as const;
 
+
 const _articleTypesSeedData = {
   custom_meta_fields,
   types: [

@@ -1,11 +1,11 @@
 "use client";
 
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
-import { useQuery } from "@tanstack/react-query";
-import { useRouter } from "next/navigation";
-import React, { useCallback, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+import {useSdk} from "@/hooks/use-sdk";
+import initLogger, {LoggerContext} from "@/lib/logging";
+import {useQuery} from "@tanstack/react-query";
+import {useRouter} from "next/navigation";
+import React, {useCallback, useEffect, useState} from "react";
+import {useTranslation} from "react-i18next";
 
 const logger = initLogger(LoggerContext.FORM, "article");
 
@@ -16,7 +16,7 @@ type PostListProps = {
   articleType_slug?: string;
 };
 
-const PostListFilter: React.FC<PostListProps> = ({ articleType_slug }) => {
+const PostListFilter: React.FC<PostListProps> = ({articleType_slug}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   CONFIG                                   */
   /* -------------------------------------------------------------------------- */
@@ -24,7 +24,7 @@ const PostListFilter: React.FC<PostListProps> = ({ articleType_slug }) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
-  const { t: tLabel } = useTranslation("label");
+  const {t: tLabel} = useTranslation("label");
   const router = useRouter();
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */

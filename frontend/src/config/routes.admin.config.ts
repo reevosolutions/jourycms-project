@@ -57,7 +57,7 @@ const routes = {
       slot: "articleTypes" as const,
       result: async (types: Levelup.CMS.V1.Content.Entity.ArticleType[]) => {
         // eslint-disable-next-line unicorn/prevent-abbreviations
-        const res: { [id: string]: Levelup.CMS.V1.UI.Routes.RouteItem } =
+        const res: {[id: string]: Levelup.CMS.V1.UI.Routes.RouteItem} =
           Object.fromEntries(
             types.map(type => [
               type._id ?? (type.slug || type.name),
@@ -87,8 +87,9 @@ const routes = {
                     icon: LuPencilLine,
                   },
                 },
-              }],
-            ));
+              },
+            ]),
+          );
         return res;
       },
     };
@@ -203,8 +204,7 @@ const routes = {
     icon: LuLayoutTemplate,
     ac: [
       "forms.manage",
-      (config: { extensions: string[] }) =>
-        !!config.extensions.includes("forms"),
+      (config: {extensions: string[]}) => !!config.extensions.includes("forms"),
     ] as any[],
     _: {
       list: {
@@ -232,6 +232,15 @@ const routes = {
         ac: ["forms.entries.read"] as any[],
         hideOnMenu: true,
         icon: LuMessageSquare,
+        _: {
+          details: {
+            path: "/admin/forms/entries/details/:id" as const,
+            title: "Form entry details",
+            ac: ["forms.manage"] as any[],
+            hideOnMenu: true,
+            icon: LuPencil,
+          },
+        },
       },
     },
   },

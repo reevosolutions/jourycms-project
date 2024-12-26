@@ -34,6 +34,7 @@ import { slugify } from "../../../utilities/strings/slugify.utilities";
 import { uniq } from "lodash";
 import { isObjectIdValid } from "../../../utilities/helpers/mogodb.helpers";
 import UsersService from "../../auth/services/users.service";
+import ExportManager from '../../../managers/export-manager/index';
 
 import EntityAlias = Levelup.CMS.V1.Content.Entity.FormEntry;
 import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
@@ -260,6 +261,16 @@ export default class FormEntriesService extends BaseService {
       totalQ,
       filters.is_deleted,
       "is_deleted"
+    );
+    q = filter.q;
+    totalQ = filter.totalQ;
+
+    // -- is_handled
+    filter = createBooleanFilter<DocumentProperties>(
+      q,
+      totalQ,
+      filters.is_handled,
+      "is_handled"
     );
     q = filter.q;
     totalQ = filter.totalQ;
@@ -493,6 +504,155 @@ export default class FormEntriesService extends BaseService {
       scenario.end();
 
       return result;
+    } catch (error) {
+      scenario.error(error);
+      throw error;
+    }
+  }
+
+  /**
+   * @description Export
+   */
+  public async export(
+    query: ApiAlias.Export.Request & {
+      customFilter?: { [k: string]: any };
+    },
+    authData: Levelup.CMS.V1.Security.AuthData,
+    opt: {
+      load_deleted?: boolean;
+      dont_lean?: boolean;
+      predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
+    } = {
+      load_deleted: false,
+      dont_lean: false,
+    }
+  ): Promise<ApiAlias.Export.Response> {
+    const scenario = this.initScenario(this.logger, this.export);
+    try {
+      /**
+       * Fill options argument with the defaults
+       */
+      opt = defaults(opt, {
+        load_deleted: false,
+        dont_lean: false,
+      });
+
+      let { count, page, sort, sort_by } = query;
+      count = isNaN(count as unknown as number)
+        ? undefined
+        : parseInt(count.toString());
+      page = isNaN(page as unknown as number) ? 1 : parseInt(page.toString());
+
+      let q: mongoose.QueryWithFuzzySearch<EntityAlias> =
+        this.formEntryModel.find();
+      let totalQ: mongoose.QueryWithFuzzySearch<EntityAlias> =
+        this.formEntryModel.where();
+
+      /**
+       * Apply filters
+       */
+      const filter = await this._applyFilters({
+        q,
+        totalQ,
+        query,
+        authData,
+        opt,
+      });
+      q = filter.q;
+      totalQ = filter.totalQ;
+
+      const limit = count === undefined || count === null ? -1 : count;
+      const { skip, take } = this.getPaginationOptions(limit, page);
+      const sortOptions = this.getSortOptions(sort, sort_by);
+      if (take) q = q.limit(take);
+      if (skip) q = q.skip(skip);
+      q = q.sort(sortOptions);
+      q = this.getSelectFields(q, query.fields);
+      if (!opt.dont_lean) q = q.lean() as any;
+
+      /**
+       * @description Add query to execution scenario
+       */
+      scenario.set("request_filter", fixFiltersObject(query));
+      scenario.set("listing_query", {
+        model: q.model.modelName,
+        query: q.getQuery(),
+        options: q.getOptions(),
+      });
+
+      /**
+       * @description execute the query
+       */
+      let items = await q
+        .allowDiskUse(true) // Enable disk usage for large sorting operations
+        .exec();
+
+      const total = await totalQ.countDocuments();
+      const pages = limit === -1 ? 1 : Math.ceil(total / limit);
+
+      scenario.set({
+        skip,
+        take,
+        found: items?.length,
+        total,
+      });
+
+      items = items.map((doc) => mapDocumentToExposed(doc));
+      const result: ApiAlias.Export.Response = {
+        data: {
+          id: "",
+          url: "",
+          count: items.length,
+        },
+      };
+      result.edge = await this._buildResponseEdge(items);
+
+      result.data!.id = await this.generateExportFile(
+        items,
+        result.edge
+      );
+
+      /**
+       * Log execution result before returning the result
+       */
+      scenario.end();
+
+      return result;
+    } catch (error) {
+      scenario.error(error);
+      throw error;
+    }
+  }
+  async generateExportFile(
+    items: DocumentAlias[],
+    edge: {
+      users: { [ID: string]: Levelup.CMS.V1.Utils.Entity.Snapshots.Auth.User };
+      forms: { [ID: string]: Levelup.CMS.V1.Content.Entity.Form };
+    }
+  ) {
+    const scenario = this.initScenario(this.logger, this.generateExportFile);
+    try {
+
+      /**
+       * @description Generate the export file
+       */
+      const exportManager = Container.get(ExportManager);
+      const result = await exportManager.generateExcel(
+        "formEntry",
+        items,
+        edge,
+      );
+
+      scenario.set({result});
+
+
+      /**
+       * @description Log execution result before returning the result
+       */
+      scenario.end();
+
+      return result.id;
+      
     } catch (error) {
       scenario.error(error);
       throw error;
