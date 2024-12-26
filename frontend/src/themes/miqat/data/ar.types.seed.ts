@@ -591,15 +591,15 @@ export const custom_meta_fields = {
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text", false> & {
     field_key: "website"; // replace this empty string by the attributted field_key
   },
-  ramdhan_trip: {
-    field_key: "ramdhan_trip" as const,
+  ramadhan_trip: {
+    field_key: "ramadhan_trip" as const,
     field_label: "عمرة رمضان",
     field_type: "boolean" as const,
     field_options: {
       default: false,
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"boolean"> & {
-    field_key: "ramdhan_trip"; // replace this empty string by the attributted field_key
+    field_key: "ramadhan_trip"; // replace this empty string by the attributted field_key
   },
   program_services: {
     field_key: "program_services" as const,
@@ -1013,7 +1013,7 @@ const _articleTypesSeedData = {
       custom_meta_fields: [
         custom_meta_fields.agency,
         custom_meta_fields.program_type,
-        custom_meta_fields.ramdhan_trip,
+        custom_meta_fields.ramadhan_trip,
         custom_meta_fields.trip_start_date,
         custom_meta_fields.trip_end_date,
         custom_meta_fields.trip_duration,

@@ -964,7 +964,7 @@ export default class DevService extends BaseService {
               price_of_child_with_bed: single_price - 70_000,
               price_of_child_without_bed: single_price - 80_000,
               price_of_infant: Math.max(single_price - 100_000, 10_000),
-              ramdhan_trip: month === 2,
+              ramadhan_trip: month === 2,
               airelines_company: faker.helpers
                 .arrayElement(airlinesCompanies)
                 ?._id?.toString(),

@@ -31,7 +31,7 @@ export type TFieldKey =
   | "hotel"
   | "mekkah_hotel"
   | "medina_hotel"
-  | "ramdhan_trip"
+  | "ramadhan_trip"
   | "subsistence_at_mekkah"
   | "subsistence_at_medina"
   | "shrines_at_mekkah"

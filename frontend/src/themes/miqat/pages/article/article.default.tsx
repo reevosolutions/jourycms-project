@@ -346,7 +346,7 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
               </div>
             )}
             {/* field */}
-            {hasMetaField(article, "ramdhan_trip") && (
+            {hasMetaField(article, "ramadhan_trip") && (
               <div className="items-top flex flex-row gap-4">
                 <IoMoonOutline className="h-8 w-8 text-beige-50" />
                 <div className="-mt-1 flex flex-col items-start justify-start gap-0">
@@ -354,11 +354,11 @@ const DefaultArticleComponent: React.FC<ComponentProps> = ({initialData}) => {
                   <span
                     className={cn(
                       "d",
-                      article.meta_fields.ramdhan_trip &&
+                      article.meta_fields.ramadhan_trip &&
                         "font-bold text-green-600",
                     )}
                   >
-                    {article.meta_fields.ramdhan_trip ? "نعم" : "لا"}
+                    {article.meta_fields.ramadhan_trip ? "نعم" : "لا"}
                   </span>
                 </div>
               </div>

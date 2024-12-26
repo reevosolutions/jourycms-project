@@ -952,7 +952,7 @@ export default class ArticlesService extends BaseService {
        * Log execution result before returning the result
        */
       scenario.end();
-
+      this.logger.value("query:", q.getQuery());
       return result;
     } catch (error) {
       scenario.error(error);

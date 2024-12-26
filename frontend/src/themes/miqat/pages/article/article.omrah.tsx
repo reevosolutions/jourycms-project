@@ -273,7 +273,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
               </div>
             </div>
 
-            {/* ------------------------- ramdhan_trip ------------------------- */}
+            {/* ------------------------- ramadhan_trip ------------------------- */}
             {(articleType as any)?.slug === ArticleTypeSlug.OMRAH ? (
               <div className="items-top flex flex-row gap-4 rounded-xl border border-gray-200 p-4">
                 <IoMoonOutline className="h-8 w-8 text-beige-50" />
@@ -282,11 +282,11 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
                   <span
                     className={cn(
                       "d",
-                      article.meta_fields.ramdhan_trip &&
+                      article.meta_fields.ramadhan_trip &&
                         "font-bold text-green-600",
                     )}
                   >
-                    {article.meta_fields.ramdhan_trip ? "نعم" : "لا"}
+                    {article.meta_fields.ramadhan_trip ? "نعم" : "لا"}
                   </span>
                 </div>
               </div>
