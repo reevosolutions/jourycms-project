@@ -12,7 +12,6 @@ import ThemePage_Server from "@/themes/miqat/pages/search/page.server";
 import qs from "querystringify";
 
 const ROUTE = publicRoutes.homepage._.search;
-const ARTICLE_TYPE_SLUG: ArticleTypeSlug = ArticleTypeSlug.JOB_OFFER;
 
 const logger = initLogger(LoggerContext.PAGE, ROUTE.path);
 
@@ -63,13 +62,13 @@ export default async function Page({params, searchParams}: PageProps) {
       if (search[k as keyof CustomFilterParams] === "")
         delete search[k as keyof CustomFilterParams];
     }
-    const articleTypeData = await getArticleTypeBySlug(ARTICLE_TYPE_SLUG);
+    const articleTypeData = await getArticleTypeBySlug(type);
     articleType = articleTypeData?.data;
     data = await searchWithFilter({
       page: page,
       count: COUNT,
       filters: {
-        article_type: ARTICLE_TYPE_SLUG,
+        article_type: type,
       },
       customFilter: {
         ...search,

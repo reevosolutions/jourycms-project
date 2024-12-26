@@ -10,7 +10,10 @@ import mongoose from "mongoose";
 import exceptions from "../exceptions";
 import config from "../config";
 import { errorToObject } from "../utilities/exceptions/index";
-import initLogger, { LoggerContext, LoggerService } from "../utilities/logging/index";
+import initLogger, {
+  LoggerContext,
+  LoggerService,
+} from "../utilities/logging/index";
 import { extractRequestSignificantData } from "./../utilities/requests/extract-request-significant-data";
 import { MongoServerError } from "mongodb";
 import treeify from "treeify";
@@ -59,7 +62,11 @@ export default class BaseService {
       //   error instanceof exceptions.InternalServerError,
       // );
 
-      if (error && error instanceof MongoServerError && (error as any).code === 11000) {
+      if (
+        error &&
+        error instanceof MongoServerError &&
+        (error as any).code === 11000
+      ) {
         if (config.logging.log_duplicate_errors || method.name !== "create")
           this.logger.error(
             `DUPLICATE Error in ${this.constructor.name}.${method.name}`,
@@ -67,7 +74,8 @@ export default class BaseService {
           );
       } else {
         this.logger.error(
-          `Error in ${this.constructor.name}.${method.name}: ${(error as any).message
+          `Error in ${this.constructor.name}.${method.name}: ${
+            (error as any).message
           }`,
           error
         );
@@ -166,8 +174,12 @@ export default class BaseService {
     sort: "asc" | "desc",
     sort_by?: string,
     prefer_update_date?: boolean
-  ): any {
-    const sortOptions: any = {};
+  ): {
+    [key: string]: 1 | -1;
+  } {
+    const sortOptions: {
+      [key: string]: 1 | -1;
+    } = {};
     sortOptions[
       sort_by ? sort_by : prefer_update_date ? "updated_at" : "created_at"
     ] = sort === "asc" ? 1 : -1;
@@ -239,19 +251,22 @@ export default class BaseService {
     }
 
     const flattenObjectKeys = (obj: Record<string, any>, prefix: string = "") =>
-      Object.keys(obj).reduce((acc: Record<string, any>, k) => {
-        const pre = prefix.length ? prefix + "." : "";
-        if (
-          obj[k] instanceof Object &&
-          !Array.isArray(obj[k]) &&
-          obj[k] !== null
-        ) {
-          acc = { ...acc, ...flattenObjectKeys(obj[k], pre + k) };
-        } else {
-          acc[pre + k] = obj[k];
-        }
-        return acc;
-      }, {} as Record<string, any>);
+      Object.keys(obj).reduce(
+        (acc: Record<string, any>, k) => {
+          const pre = prefix.length ? prefix + "." : "";
+          if (
+            obj[k] instanceof Object &&
+            !Array.isArray(obj[k]) &&
+            obj[k] !== null
+          ) {
+            acc = { ...acc, ...flattenObjectKeys(obj[k], pre + k) };
+          } else {
+            acc[pre + k] = obj[k];
+          }
+          return acc;
+        },
+        {} as Record<string, any>
+      );
 
     // return flattenObjectKeys(updateObj);
     return groupNestedProperties(
@@ -326,7 +341,7 @@ export default class BaseService {
       [Key: string]: any;
     },
     F extends Function,
-    Args extends Record<string, any> = {}
+    Args extends Record<string, any> = {},
   >(
     logger: LoggerService,
     method: F,
@@ -346,8 +361,9 @@ export default class BaseService {
 export class ExcecutionScenario<
   T extends {
     [Key: string]: any;
-  } = {}
-> implements Levelup.CMS.V1.Lib.ExecutionScenario.Scenario<T> {
+  } = {},
+> implements Levelup.CMS.V1.Lib.ExecutionScenario.Scenario<T>
+{
   public _class: string;
   public method: string;
   public args: Record<string, any>;
@@ -373,10 +389,10 @@ export class ExcecutionScenario<
 
   public set<
     K extends
-    | string
-    | {
-      [Key: string]: any;
-    } = string
+      | string
+      | {
+          [Key: string]: any;
+        } = string,
   >(key: K, value?: K extends string ? any : never) {
     if (typeof key === "object") {
       Object.keys(key).forEach((k) => this.set(k, key[k]));
@@ -513,4 +529,3 @@ export class ExcecutionScenario<
     return;
   }
 }
-

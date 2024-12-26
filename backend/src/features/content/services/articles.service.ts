@@ -124,7 +124,7 @@ export default class ArticlesService extends BaseService {
        * TODO: Add more fields to the search meta
        */
       // ...
-      if(typeof data.title === "undefined") search_meta.title = old.title
+      if (typeof data.title === "undefined") search_meta.title = old.title;
     }
 
     this.logExecutionResult(this._createSearchMeta, { data, old }, null, {
@@ -417,6 +417,59 @@ export default class ArticlesService extends BaseService {
        */
       t: string;
       /**
+       * @param agency
+       */
+      a?: string;
+      /**
+       * @param duration
+       */
+      d?: string;
+      /**
+       * @param entry_point
+       */
+      e?: string;
+      /**
+       * @param program_type
+       */
+      pt?: string;
+      /**
+       * @param trip_type
+       */
+      tt?: string;
+      /**
+       * @param distance_to_haram
+       */
+      dh?: string;
+      /**
+       * @param payment_mode
+       */
+      pm?: string;
+      /**
+       * @param month
+       */
+      m?: string;
+      /**
+       * @param ramadhan
+       */
+      r?: boolean;
+
+      /**
+       * @param price min
+       */
+      pn?: number;
+      /**
+       * @param price max
+       */
+      px?: number;
+
+      /* --------------------------------- HOTELS --------------------------------- */
+      /**
+       * @param stars
+       */
+      st?: string;
+
+      /* --------------------------------- MEMBERS -------------------------------- */
+      /**
        * @param state
        */
       w?: string;
@@ -425,25 +478,10 @@ export default class ArticlesService extends BaseService {
        */
       c?: string;
       /**
-       * @param month
-       */
-      m?: string;
-      /**
-       * @param durations
-       */
-      d?: string;
-      /**
        * @param services
        */
       s?: string | string[];
-      /**
-       * @param budget min
-       */
-      pn?: number;
-      /**
-       * @param budget max
-       */
-      px?: number;
+
       /**
        * @param experience min
        */
@@ -460,10 +498,12 @@ export default class ArticlesService extends BaseService {
        * @param speciaality
        */
       sp?: string | string[];
+
+      /* --------------------------------- GLOBAL --------------------------------- */
       /**
-       * @param agency
+       * @param sort
        */
-      a?: string;
+      so?: string;
       /**
        * @param search text
        */
@@ -489,7 +529,8 @@ export default class ArticlesService extends BaseService {
      */
     customFilters = fixFiltersObject(customFilters);
 
-    // -- article_type
+    const exprAnd: any[] = [];
+    /* ------------------------------ article_type ------------------------------ */
     if (customFilters.t) {
       let article_type;
       if (!isObjectIdValid(customFilters.t?.toString())) {
@@ -520,6 +561,150 @@ export default class ArticlesService extends BaseService {
       totalQ = filter.totalQ;
     }
 
+    /* --------------------------------- agency --------------------------------- */
+    if (customFilters.a) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.a,
+        "meta_fields.agency"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* ------------------------------- duration ------------------------------- */
+    if (customFilters.d && Number.parseInt(customFilters.d)) {
+      exprAnd.push({
+        $lte: [
+          {
+            $divide: [
+              {
+                $subtract: [
+                  { $toDate: "$meta_fields.trip_end_date" },
+                  { $toDate: "$meta_fields.trip_start_date" },
+                ],
+              },
+              1000 * 60 * 60 * 24,
+            ],
+          }, // Convert milliseconds to days
+          Number.parseInt(customFilters.d) + 1,
+        ],
+      });
+    }
+
+    /* ------------------------------ entry_point ------------------------------ */
+    if (customFilters.e) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.e,
+        "meta_fields.entry_point"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* ------------------------------ program_type ------------------------------ */
+    if (customFilters.pt) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.pt,
+        "meta_fields.program_type"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* ------------------------------ trip_type ------------------------------ */
+    if (customFilters.tt) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.tt,
+        "meta_fields.trip_type"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* ------------------------------ distance_to_haram ------------------------------ */
+    if (customFilters.dh) {
+      // FIXME: This is related to hotels
+    }
+
+    /* ------------------------------ payment_mode ------------------------------ */
+    if (customFilters.pm) {
+      filter = createStringFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.pm,
+        "meta_fields.payment_mode"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* --------------------------------- month --------------------------------- */
+    if (customFilters.m) {
+      exprAnd.push(
+        {
+          $eq: [
+            { $month: { $toDate: "$meta_fields.trip_start_date" } },
+            Number.parseInt(customFilters.m),
+          ],
+        },
+        {
+          $gte: [
+            { $year: { $toDate: "$meta_fields.trip_start_date" } },
+            new Date().getFullYear(),
+          ],
+        }
+      );
+    }
+
+    /* ------------------------------ ramadhan_trip ----------------------------- */
+    if (customFilters.r) {
+      filter = createBooleanFilter<DocumentProperties>(
+        q,
+        totalQ,
+        customFilters.r,
+        "meta_fields.ramadhan_trip"
+      );
+      q = filter.q;
+      totalQ = filter.totalQ;
+    }
+
+    /* --------------------------------- price --------------------------------- */
+    if (customFilters.pn || customFilters.px) {
+      const [pn, px] = [
+        Number.parseFloat(`${customFilters.pn}` || "0"),
+        Number.parseFloat(`${customFilters.px}` || "10000000"),
+      ].sort((a, b) => a - b);
+      q = q.where({
+        $or: [
+          { "meta_fields.price_of_single_person_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_two_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_three_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_four_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_five_persons_room": { $gte: pn, $lte: px } },
+        ],
+      });
+      totalQ = totalQ.where({
+        $or: [
+          { "meta_fields.price_of_single_person_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_two_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_three_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_four_persons_room": { $gte: pn, $lte: px } },
+          { "meta_fields.price_of_five_persons_room": { $gte: pn, $lte: px } },
+        ],
+      });
+    }
+
+    /* -------------------------------------------------------------------------- */
+    /*                                 DEPRECATED                                 */
+    /* -------------------------------------------------------------------------- */
     // state
     if (customFilters.w) {
       filter = createStringFilter<DocumentProperties>(
@@ -545,29 +730,9 @@ export default class ArticlesService extends BaseService {
       totalQ = filter.totalQ;
     }
 
-    // agency
-    if (customFilters.a) {
-      filter = createStringFilter<DocumentProperties>(
-        q,
-        totalQ,
-        customFilters.a,
-        "meta_fields.agency"
-      );
-      q = filter.q;
-      totalQ = filter.totalQ;
-    }
-    // duration
-    if (customFilters.d) {
-      filter = createStringFilter<DocumentProperties>(
-        q,
-        totalQ,
-        customFilters.d,
-        "meta_fields.duration"
-      );
-      q = filter.q;
-      totalQ = filter.totalQ;
-    }
-
+    /* -------------------------------------------------------------------------- */
+    /*                                   MEMBERS                                  */
+    /* -------------------------------------------------------------------------- */
     // spaciatilty
     if (customFilters.sp) {
       filter = createStringFilter<DocumentProperties>(
@@ -594,58 +759,7 @@ export default class ArticlesService extends BaseService {
       q = filter.q;
       totalQ = filter.totalQ;
     }
-    // month
-    if (customFilters.m) {
-      q = q.where({
-        $expr: {
-          $and: [
-            {
-              $eq: [
-                { $month: "$meta_fields.flight_date" },
-                Number.parseInt(customFilters.m),
-              ],
-            },
-            {
-              $gte: [
-                { $year: "$meta_fields.flight_date" },
-                new Date().getFullYear(),
-              ],
-            },
-          ],
-        },
-      });
-      totalQ = totalQ.where({
-        $expr: {
-          $and: [
-            {
-              $eq: [
-                { $month: "$meta_fields.flight_date" },
-                Number.parseInt(customFilters.m),
-              ],
-            },
-            {
-              $gte: [
-                { $year: "$meta_fields.flight_date" },
-                new Date().getFullYear(),
-              ],
-            },
-          ],
-        },
-      });
-    }
-    // price
-    if (customFilters.pn || customFilters.px) {
-      const [pn, px] = [
-        Number.parseFloat(`${customFilters.pn}` || "0"),
-        Number.parseFloat(`${customFilters.px}` || "10000000"),
-      ].sort((a, b) => a - b);
-      q = q.where({
-        "meta_fields.price": { $gte: pn, $lte: px },
-      });
-      totalQ = totalQ.where({
-        "meta_fields.price": { $gte: pn, $lte: px },
-      });
-    }
+
     // experience
     if (customFilters.xn || customFilters.xx) {
       const [xn, xx] = [
@@ -660,7 +774,60 @@ export default class ArticlesService extends BaseService {
       });
     }
 
+    /* ---------------------------- APPLY EXPRESSIONS --------------------------- */
+    if (exprAnd.length) {
+      q = q.where({ $expr: { $and: exprAnd } });
+      totalQ = totalQ.where({ $expr: { $and: exprAnd } });
+    }
+
+    /**
+     * Return
+     */
     return { q, totalQ };
+  }
+
+  _applyCustomSort({
+    query,
+  }: {
+    query: ApiAlias.List.Request & {
+      customFilter?: { [k: string]: any };
+    };
+  }):
+    | {
+        sort_by: string;
+        sort: "asc" | "desc";
+      }
+    | undefined {
+    type CustomFilterParams = {
+      /* --------------------------------- GLOBAL --------------------------------- */
+      /**
+       * @param sort
+       */
+      so?: "price:asc" | "price:desc" | "date:asc" | "date:desc";
+      /**
+       * @param search text
+       */
+      q?: string;
+      /**
+       * @param page
+       */
+      p?: string;
+    };
+
+    let customFilters: CustomFilterParams = query.customFilter as any;
+
+    /**
+     * @description fixing filters article
+     */
+    customFilters = fixFiltersObject(customFilters);
+
+    if (!customFilters.so) return undefined;
+
+    const sort = customFilters.so.split(":");
+    const sort_by = sort[0] === "date" ? "meta_fields.trip_start_date" : sort[0] === "price" ? "meta_fields.price_of_single_person_room" : "created_at";
+    const sort_order = sort[1] == "desc" ? (sort[1] as "desc") : "asc";
+
+    return { sort_by, sort: sort_order };
   }
 
   /**
@@ -730,7 +897,14 @@ export default class ArticlesService extends BaseService {
             config.settings.listing.defaultCount
           : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
-      const sortOptions = this.getSortOptions(sort, sort_by);
+
+      const custom_sort = this._applyCustomSort({
+        query,
+      });
+      const sortOptions = this.getSortOptions(
+        custom_sort?.sort || sort,
+        custom_sort?.sort_by || sort_by
+      );
       if (take) q = q.limit(take);
       if (skip) q = q.skip(skip);
       q = q.sort(sortOptions);
@@ -1150,7 +1324,7 @@ export default class ArticlesService extends BaseService {
       /**
        * Create search meta
        */
-        docObject.search_meta = this._createSearchMeta(docObject, null);
+      docObject.search_meta = this._createSearchMeta(docObject, null);
 
       docObject.snapshots = await this._generateSnapshotsObject(
         docObject,
@@ -1514,7 +1688,7 @@ export default class ArticlesService extends BaseService {
         {}
       );
 
-      scenario.set({data}).end();
+      scenario.set({ data }).end();
 
       return result;
     } catch (error) {

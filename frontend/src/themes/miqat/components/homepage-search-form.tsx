@@ -135,19 +135,19 @@ const distance_to_haram_options = [
 
 const sort_options = [
   {
-    value: "price-asc",
+    value: "price:asc",
     label: "الأقل سعراً",
   },
   {
-    value: "price-desc",
+    value: "price:desc",
     label: "الأعلى سعراً",
   },
   {
-    value: "date-asc",
+    value: "date:asc",
     label: "الأقرب",
   },
   {
-    value: "date-desc",
+    value: "date:desc",
     label: "الأبعد",
   },
 ];
@@ -216,7 +216,9 @@ export const OmrahSearchForm: React.FC<{
   );
   const [trip_type, setTrip_type] = useState<string | null>(null);
   const [ramadhan_omrah, setRamadhan_omrah] = useState(false);
-  const [sort, setSort] = useState<"price-asc" | "price-desc" | "date-asc" | "date-desc">('price-asc');
+  const [sort, setSort] = useState<
+    "price:asc" | "price:desc" | "date:asc" | "date:desc"
+  >("price:asc");
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
   /* -------------------------------------------------------------------------- */
@@ -256,19 +258,45 @@ export const OmrahSearchForm: React.FC<{
 
   const handleSubmit = useCallback(async () => {
     const searchObject: CustomFilterParams = {
-      t: "omrah",
-      w: state || undefined,
-      c: city || undefined,
-      m: month || undefined,
+      t: type === "omrah" ? "omrah" : "hajj",
+      a: agency || undefined,
       d: duration || undefined,
-      s: selectedServices,
+      e: entry_point || undefined,
+      pt: program_type || undefined,
+      tt: trip_type || undefined,
+      dh: distance_to_haram || undefined,
+      pm: payment_mode || undefined,
+      m: month || undefined,
+      r: ramadhan_omrah || undefined,
       pn: (priceRange[0] || 0) * 10_000,
       px: (priceRange[1] || 60) * 10_000,
+      so: sort || undefined,
+      // old
+      s: selectedServices,
+      w: state || undefined,
+      c: city || undefined,
     };
     const path = `/search?${qs.stringify(searchObject)}`;
     logger.value("path", path);
     router.push(path);
-  }, [city, duration, month, priceRange, router, selectedServices, state]);
+  }, [
+    agency,
+    city,
+    distance_to_haram,
+    duration,
+    entry_point,
+    month,
+    payment_mode,
+    priceRange,
+    program_type,
+    ramadhan_omrah,
+    router,
+    selectedServices,
+    sort,
+    state,
+    trip_type,
+    type,
+  ]);
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */
@@ -325,6 +353,7 @@ export const OmrahSearchForm: React.FC<{
                           setAgency(currentValue);
                           setAgencyOpen(false);
                         }}
+                        className="text-lg"
                       >
                         {title}
                         <LuCheck
@@ -1041,7 +1070,9 @@ export const OmrahSearchForm: React.FC<{
                   {!sort ? (
                     <span className="text-darkblue-500">{"اختر..."}</span>
                   ) : (
-                    <span>{sort_options.find(item=>item.value === sort)?.label}</span>
+                    <span>
+                      {sort_options.find(item => item.value === sort)?.label}
+                    </span>
                   )}
                 </div>
                 <LuChevronsUpDown className="opacity-50" />

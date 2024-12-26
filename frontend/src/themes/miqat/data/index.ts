@@ -18,25 +18,42 @@ export type CustomFilterParams = {
    */
   t: `${ArticleTypeSlug}`;
   /**
-   * @param state
+   * @param agency
    */
-  w?: string;
-  /**
-   * @param city
-   */
-  c?: string;
-  /**
-   * @param month
-   */
-  m?: string;
+  a?: string;
   /**
    * @param duration
    */
   d?: string;
   /**
-   * @param services
+   * @param entry_point
    */
-  s?: string | string[];
+  e?: string;
+  /**
+   * @param program_type
+   */
+  pt?: string;
+  /**
+   * @param trip_type
+   */
+  tt?: string;
+  /**
+   * @param distance_to_haram
+   */
+  dh?: string;
+  /**
+   * @param payment_mode
+   */
+  pm?: string;
+  /**
+   * @param month
+   */
+  m?: string;
+  /**
+   * @param ramadhan
+   */
+  r?: boolean;
+
   /**
    * @param price min
    */
@@ -45,6 +62,27 @@ export type CustomFilterParams = {
    * @param price max
    */
   px?: number;
+
+  /* --------------------------------- HOTELS --------------------------------- */
+  /**
+   * @param stars
+   */
+  st?: string;
+
+  /* --------------------------------- MEMBERS -------------------------------- */
+  /**
+   * @param state
+   */
+  w?: string;
+  /**
+   * @param city
+   */
+  c?: string;
+  /**
+   * @param services
+   */
+  s?: string | string[];
+
   /**
    * @param experience min
    */
@@ -61,10 +99,12 @@ export type CustomFilterParams = {
    * @param speciaality
    */
   sp?: string | string[];
+
+  /* --------------------------------- GLOBAL --------------------------------- */
   /**
-   * @param agency
+   * @param sort
    */
-  a?: string;
+  so?: "price:asc" | "price:desc" | "date:asc" | "date:desc";
   /**
    * @param search text
    */

@@ -31,7 +31,7 @@ const ThemePage_Server: React.FC<PageProps> = ({
   /* -------------------------------------------------------------------------- */
   return (
     <DefaultLayout route={route}>
-      <div className="container mx-auto px-4 md:px-8">
+      <div className="container mx-auto px-4 md:px-8 pb-12">
         {/* <pre className=" bg-slate-50 p-4 my-6 rounded-xl text-xs" dir="ltr">
           {JSON.stringify(search, null, 2)}
         </pre> */}
@@ -45,6 +45,8 @@ const ThemePage_Server: React.FC<PageProps> = ({
             data,
             articleType,
             error,
+            isOffer:
+              articleType.slug === "omrah" || articleType.slug === "hajj",
           }}
         />
       </div>
