@@ -15,6 +15,7 @@ declare module Levelup {
 
               export type Options<IsMulti extends boolean = false> = BaseFieldOption<Input, IsMulti> & {
                 multiple: IsMulti;
+                accept: ("text" | "audio" | "excel" | "word" | "pdf" | "images" | "videos" | "compressed")[]
               }
             }
           }

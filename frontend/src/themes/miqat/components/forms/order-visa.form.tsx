@@ -2,24 +2,24 @@
 
 "use client";
 
-import { FormMessage } from "@/components/ui/customized.form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import FileUploader from "@/features/storage/form-components/file.uploader";
+import {FormMessage} from "@/components/ui/customized.form";
+import {Input} from "@/components/ui/input";
+import {Label} from "@/components/ui/label";
+import {Textarea} from "@/components/ui/textarea";
+import FileUploader from "@/features/storage/form-components/file.uploader.legacy";
 import ImageUploader from "@/features/storage/form-components/image.uploader";
-import { useSdk } from "@/hooks/use-sdk";
-import initLogger, { LoggerContext } from "@/lib/logging";
-import { useAppDispatch } from "@/lib/redux/hooks";
-import { cn } from "@/lib/utils";
-import { useForm, type Validator } from "@tanstack/react-form";
-import { yupValidator } from "@tanstack/yup-form-adapter";
+import {useSdk} from "@/hooks/use-sdk";
+import initLogger, {LoggerContext} from "@/lib/logging";
+import {useAppDispatch} from "@/lib/redux/hooks";
+import {cn} from "@/lib/utils";
+import {useForm, type Validator} from "@tanstack/react-form";
+import {yupValidator} from "@tanstack/yup-form-adapter";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { LuLoader2 } from "react-icons/lu";
-import { toast } from "sonner";
+import {useRouter} from "next/navigation";
+import React, {useState} from "react";
+import {useTranslation} from "react-i18next";
+import {LuLoader2} from "react-icons/lu";
+import {toast} from "sonner";
 import * as yup from "yup";
 
 const logger = initLogger(LoggerContext.FORM, "OrderVisaForm");
@@ -54,6 +54,9 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
   /* -------------------------------------------------------------------------- */
   const [passportFile, setPassportFile] =
     useState<Levelup.CMS.V1.Storage.Entity.UploadedFile | null>(null);
+  const [files, setFiles] = useState<
+    Levelup.CMS.V1.Storage.Entity.UploadedFile[]
+  >([]);
   /* -------------------------------------------------------------------------- */
   /*                                    FORM                                    */
   /* -------------------------------------------------------------------------- */
@@ -210,6 +213,8 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
           )}
         />
       </div>
+
+
       {/* field */}
       <div className="field mb-6">
         <Label className="text-xl text-darkblue-500">

@@ -1242,7 +1242,7 @@ const _articleTypesSeedData = {
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
         custom_meta_fields.website,
-        custom_meta_fields.gallery,
+        // custom_meta_fields.gallery,
       ],
     },
     {

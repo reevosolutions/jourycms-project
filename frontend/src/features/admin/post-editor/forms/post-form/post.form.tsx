@@ -39,6 +39,7 @@ import ImageUploader from "@/features/storage/form-components/image.uploader";
 import {cn} from "@/lib/utils";
 import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
 import Link from "next/link";
+import { toast } from "sonner";
 
 type Props = {
   articleType_slug?: string;
@@ -131,24 +132,32 @@ const PostForm: React.FC<Props> = ({
       },
 
       onSubmit: async ({value}) => {
-        const payload: ApiAlias.Create.Request = {
-          data: {
-            ...value,
-            body,
-            body_structured: structuredBody,
-            article_type: articleType?._id,
-            meta_fields: metaFieldsData,
-          },
-        };
-
-        const {data} = article_id
+        try {
+          
+          const payload: ApiAlias.Create.Request = {
+            data: {
+              ...value,
+              body,
+              body_structured: structuredBody,
+              article_type: articleType?._id,
+              meta_fields: metaFieldsData,
+            },
+          };
+          
+          const {data} = article_id
           ? await sdk.content.articles.update(article_id, payload)
           : await sdk.content.articles.create(payload);
-
-        if (data._id) {
-          router.push(
-            setPathParams(adminRoutes.articles._.edit.path, {id: data._id}),
-          );
+          
+          
+          toast.success("تم حفظ المقال بنجاح");
+          if (data._id) {
+            router.push(
+              setPathParams(adminRoutes.articles._.edit.path, {id: data._id}),
+            );
+          }
+        } catch (error: any) {
+          toast.error("حدث خطأ أثناء حفظ المقال");
+          logger.error(error.message);
         }
       },
       validatorAdapter: yupValidator(),

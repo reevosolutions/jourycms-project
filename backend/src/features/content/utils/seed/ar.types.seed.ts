@@ -933,6 +933,17 @@ export const custom_meta_fields = {
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"image", true> & {
     field_key: "gallery"; // replace this empty string by the attributted field_key
   },
+  files: {
+    field_key: "files" as const,
+    field_label: "files",
+    field_type: "file" as const,
+    field_options: {
+      multiple: true,
+      accept: ["pdf", "images", "word", "excel"],
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"file", true> & {
+    field_key: "files"; // replace this empty string by the attributted field_key
+  },
   // members
   avatar: {
     field_key: "avatar" as const,
@@ -1243,7 +1254,8 @@ const _articleTypesSeedData = {
         custom_meta_fields.algerian_city,
         custom_meta_fields.ksa_city,
         custom_meta_fields.website,
-        custom_meta_fields.gallery,
+        // custom_meta_fields.gallery,
+        // custom_meta_fields.files,
       ],
     },
     {

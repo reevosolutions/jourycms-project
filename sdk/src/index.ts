@@ -37,6 +37,9 @@ export default class JouryCMSSdk implements SDK.ISdk {
     >
   > = {};
   protected _helpersInstance: JouryCMSSdkHelpers;
+  private _events: {
+    [key in SDK.TSdkEvent]?: SDK.TSdkEventHandler<key>[];
+  } = {};
 
   static getInstance(config: SDK.ISdkConfig, id: string = "DEFAULT") {
     if (!this.instances[id]) this.instances[id] = new JouryCMSSdk(config);
@@ -87,6 +90,31 @@ export default class JouryCMSSdk implements SDK.ISdk {
   /*                                end PharmaDz                                */
   /* -------------------------------------------------------------------------- */
 
+  /* -------------------------------------------------------------------------- */
+  /*                                   EVENTS                                   */
+  /* -------------------------------------------------------------------------- */
+
+    on<Event extends SDK.TSdkEvent>(event: Event, cb: SDK.TSdkEventHandler<Event>): void{
+      if(!this._events[event]) this._events[event] = [];
+      this._events[event]?.push(cb);
+    }
+    off<Event extends SDK.TSdkEvent>(event: Event, cb: SDK.TSdkEventHandler<Event>): void{
+      if(this._events[event]) (this._events[event] as any) = this._events[event].filter(item=> item !== cb);
+    }
+
+    async emit<Event extends SDK.TSdkEvent>(event: Event, data?: SDK.TSdkEventPayload<Event>): Promise<void>{
+      if(this._events[event]) {
+        for (const cb of this._events[event] as SDK.TSdkEventHandler<Event>[]) {
+          await cb(data);
+        }
+      }
+    }
+      
+
+  /* -------------------------------------------------------------------------- */
+  /*                                 END EVENTS                                 */
+  /* -------------------------------------------------------------------------- */
+
   generateHeadersFromRequestConfig(config?: SDK.TRequestConfig): {
     [key: string]: AxiosHeaderValue;
   } {
@@ -107,11 +135,21 @@ export default class JouryCMSSdk implements SDK.ISdk {
     return headers;
   }
 
+
   async handleResponse<T extends SDK.IResponse>(
     response: AxiosResponse<T, any>
   ): Promise<SDK.TResponseDatum<T>> {
     this.logResponse(response);
+    this.emit("response", response.data);
     if (response.data?.error) {
+
+      this.emit("error", response.data.error);
+
+      if (
+        response.data.error.name === "JWTTokenExpired"
+      ) {
+        this.emit("jwt-token-expired");
+      }
       if (
         response.data.error.name === "JWTTokenExpired" &&
         this.config.refreshTokenHandler

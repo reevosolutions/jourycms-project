@@ -54,7 +54,22 @@ declare global {
             throw_not_found_error?: boolean;
           };
 
+          type TSdkEvent = 'request' | 'response' | 'error' | 'reinit' | 'refresh-token' | 'jwt-token-expired';
+          type TSdkEventPayload<Event extends TSdkEvent> = Event extends 'request' ? Levelup.CMS.V1.Utils.Api.Request.Request
+          : Event extends 'response' ? { data?: object | Array<object>; } & Levelup.CMS.V1.Utils.Api.Response.DefaultResponse & Levelup.CMS.V1.Utils.Api.Response.PagedResponse
+          : Event extends 'error' ? Levelup.CMS.V1.Utils.Api.Response.Error
+          : Event extends 'reinit' ? never
+          : Event extends 'refresh-token' ? never
+          : Event extends 'jwt-token-expired' ? never
+          : never;
 
+          type TSdkEventHandler<Event extends TSdkEvent> = Event extends 'request' ? (data: TSdkEventPayload<Event>) => void | PromiseLike<void>
+          : Event extends 'response' ? (data: TSdkEventPayload<Event>) => void | PromiseLike<void>
+          : Event extends 'error' ? (error:TSdkEventPayload<Event>) => void | PromiseLike<void>
+          : Event extends 'reinit' ? () => void | PromiseLike<void>
+          : Event extends 'refresh-token' ? () => void | PromiseLike<void>
+          : Event extends 'jwt-token-expired' ? () => void | PromiseLike<void>
+          : never;
 
           interface IAppContainer {
             readonly sdk: ISdk;
@@ -147,7 +162,7 @@ declare global {
         }
       }
     }
-  }
+}
 }
 
 type TResponseDatum<T extends { data?: object | Array<object>; }> = {

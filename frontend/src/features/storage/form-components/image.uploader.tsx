@@ -1,13 +1,13 @@
-import { useSdk } from "@hooks/use-sdk";
-import initLogger, { LoggerContext } from "@lib/logging";
+import {useSdk} from "@hooks/use-sdk";
+import initLogger, {LoggerContext} from "@lib/logging";
 import clsx from "clsx";
 import Image from "next/image";
-import React, { FC, useCallback, useEffect, useState } from "react";
-import { type DropEvent, useDropzone } from "react-dropzone";
+import React, {FC, useCallback, useEffect, useState} from "react";
+import {type DropEvent, useDropzone} from "react-dropzone";
 
 import Icons from "@/features/admin/ui/icons";
 
-const logger = initLogger(LoggerContext.COMPONENT, "ImageUploader");
+const logger = initLogger(LoggerContext.COMPONENT, "Image.uploader");
 
 type Props = {
   value?: Levelup.CMS.V1.Utils.Common.FileAttribute;
@@ -43,9 +43,9 @@ const ImageUploader: FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   const [selectedFile, setSelectedFile] = useState<
     | (File & {
-      preview: string;
-      new: boolean;
-    })
+        preview: string;
+        new: boolean;
+      })
     | null
   >(null);
   const [progressInfos, setProgressInfos] = useState<{
@@ -61,8 +61,8 @@ const ImageUploader: FC<Props> = ({
   /* -------------------------------------------------------------------------- */
   /*                                  DROPZONE                                  */
   /* -------------------------------------------------------------------------- */
-  const { getRootProps, getInputProps, isDragActive, isDragReject } =
-    useDropzone({
+  const {getRootProps, getInputProps, isDragActive, isDragReject} = useDropzone(
+    {
       accept: {
         "image/*": [],
         "image/jpeg": [],
@@ -79,7 +79,8 @@ const ImageUploader: FC<Props> = ({
         setSelectedFile(file);
         setPreview(URL.createObjectURL(acceptedFiles[0]));
       },
-    });
+    },
+  );
 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
@@ -93,7 +94,7 @@ const ImageUploader: FC<Props> = ({
     ) => {
       logger.debug("uploading file", file);
       if (!file || !file.new) return;
-      let _progressInfos = { percentage: 0, fileName: file.name };
+      let _progressInfos = {percentage: 0, fileName: file.name};
       logger.event("Uploading", file);
       setProgressInfos(_progressInfos);
       setProcessing(true);
@@ -159,8 +160,8 @@ const ImageUploader: FC<Props> = ({
   return (
     <section className="text-center">
       <div
-        {...getRootProps({ className: "dropzone" })}
-        className="inline-block cursor-pointer w-full"
+        {...getRootProps({className: "dropzone"})}
+        className="inline-block w-full cursor-pointer"
       >
         <input {...getInputProps()} />
         <aside className="mt-2 flex flex-wrap">
@@ -172,25 +173,26 @@ const ImageUploader: FC<Props> = ({
           >
             <div className="relative flex w-full min-w-0 overflow-hidden rounded-md">
               {placeholder &&
-                !uploadedFile &&
-                !selectedFile?.preview &&
-                !value?.id &&
-                !value?.url ? (
+              !uploadedFile &&
+              !selectedFile?.preview &&
+              !value?.id &&
+              !value?.url ? (
                 placeholder
               ) : (
                 <Image
                   src={
                     uploadedFile
                       ? sdk.storage.utils.getImageUrl(uploadedFile._id, {
-                        width: dimensions?.width || 384,
-                        height: dimensions?.height || 384,
-                      })
-                      : selectedFile?.preview ?? (value?.id
-                        ? sdk.storage.utils.getImageUrl(value.id, {
                           width: dimensions?.width || 384,
                           height: dimensions?.height || 384,
                         })
-                        : value?.url ?? "/img/placeholder.png")
+                      : (selectedFile?.preview ??
+                        (value?.id
+                          ? sdk.storage.utils.getImageUrl(value.id, {
+                              width: dimensions?.width || 384,
+                              height: dimensions?.height || 384,
+                            })
+                          : (value?.url ?? "/img/placeholder.png")))
                   }
                   className="block w-auto"
                   alt=""

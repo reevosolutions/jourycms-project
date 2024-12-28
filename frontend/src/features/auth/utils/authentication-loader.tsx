@@ -24,6 +24,7 @@ const AuthenticationLoader: React.FC<Props> = () => {
     if (current) {
       dispatch(loadAuthData());
       // toast.info('Auth data updated');
+      
     }
   }, [dispatch, current]);
 
