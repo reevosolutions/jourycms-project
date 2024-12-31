@@ -1,6 +1,13 @@
+/* eslint-disable unicorn/no-await-expression-member */
+/* eslint-disable unicorn/prefer-logical-operator-over-ternary */
 /* eslint-disable unicorn/no-useless-undefined */
 import {publicRoutes} from "@/config";
-import {getArticleBySlug, listArticles} from "@/themes/miqat/data";
+import {ArticleTypeSlug} from "@/themes/miqat/config";
+import {
+  getArticleBySlug,
+  getArticleTypeById,
+  listArticles,
+} from "@/themes/miqat/data";
 import ArticlePage from "@/themes/miqat/pages/article/article";
 
 const ROUTE = publicRoutes.homepage;
@@ -32,8 +39,32 @@ export default async function Page({params}: PageProps) {
   /* -------------------------------------------------------------------------- */
   let data: Levelup.CMS.V1.Content.Api.Articles.GetOne.Response | undefined =
     undefined;
+  let articleType:
+    | Levelup.CMS.V1.Content.Api.ArticleTypes.GetOne.Response["data"]
+    | null
+    | undefined = undefined;
+  let relatedArticesData:
+    | Levelup.CMS.V1.Content.Api.Articles.List.Response
+    | undefined = undefined;
   try {
     data = await getArticleBySlug(article_slug);
+    if (data?.data?.article_type) {
+      articleType = data?.edge?.article_types?.[data?.data?.article_type]
+        ? data?.edge?.article_types?.[data?.data?.article_type]
+        : (await getArticleTypeById(data?.data?.article_type))?.data;
+    }
+    if (
+      articleType?.slug === ArticleTypeSlug.OMRAH ||
+      articleType?.slug === ArticleTypeSlug.HAJJ
+    ) {
+      relatedArticesData = await listArticles({
+        count: 12,
+        filters: {
+          article_type: articleType._id,
+          "meta_fields.agency": data?.data?.meta_fields?.agency,
+        },
+      });
+    }
   } catch (error: any) {
     // do nothing
     data = {
@@ -48,7 +79,13 @@ export default async function Page({params}: PageProps) {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return <ArticlePage {...{route: ROUTE}} initialData={data} />;
+  return (
+    <ArticlePage
+      {...{route: ROUTE}}
+      initialData={data}
+      relatedArticles={relatedArticesData?.data}
+    />
+  );
   // return <div className="d">
   //   {data?.title}
   //   <div className="d">{article_slug}</div>

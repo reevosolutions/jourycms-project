@@ -66,9 +66,10 @@ const DateCustomField: React.FC<Props> = ({
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
+          
           mode="single"
           selected={value || undefined}
-          onSelect={value => {
+          onSelect={(value, selectedDay, activeModifiers, event) => {
             onChange(value || null);
           }}
           initialFocus

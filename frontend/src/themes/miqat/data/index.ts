@@ -122,6 +122,13 @@ export const getArticleTypeBySlug = async (
   return data || null;
 };
 
+export const getArticleTypeById = async (
+  id: string,
+): Promise<Levelup.CMS.V1.Content.Api.ArticleTypes.GetOne.Response> => {
+  const data = await serverSdk.content.articleTypes.getById(id);
+  return data || null;
+};
+
 export const getArticleBySlug = async (
   slug: string,
 ): Promise<Levelup.CMS.V1.Content.Api.Articles.GetOne.Response> => {

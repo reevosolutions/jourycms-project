@@ -23,7 +23,7 @@ const ThemePage_Client_3: React.FC<PageProps> = ({route}) => {
       <HomepageContentSection />
       <OmrahOnDemandSection />
       <OrderVisaSection />
-      <HomepageEscortsSection />
+      {/* <HomepageEscortsSection /> */}
       <HomepageSeatsSection />
       <HomepageCallToActionSection />
       <HomepageBlogSection />

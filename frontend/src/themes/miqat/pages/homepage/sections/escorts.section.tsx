@@ -16,7 +16,6 @@ const HomepageEscortsSection: React.FC<HomepageEscortsSectionProps> = ({
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const {getWebsiteConfig, getWebsiteConfigValue} = useCMSContent();
-
   /* -------------------------------------------------------------------------- */
   /*                                   EFFECTS                                  */
   /* -------------------------------------------------------------------------- */

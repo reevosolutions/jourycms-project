@@ -321,7 +321,7 @@ export const OmrahSearchForm: React.FC<{
                 aria-expanded={agencyOpen}
                 className="w-full justify-between"
               >
-                <div className="value pt-1 text-lg">
+                <div className="value pt-1 text-lg truncate">
                   {!agency ? <span>{"ابحث..."}</span> : agencies[agency]}
                 </div>
                 <LuChevronsUpDown className="opacity-50" />
