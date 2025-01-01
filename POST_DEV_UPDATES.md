@@ -8,3 +8,4 @@
 [x] homepage omrah blog section
 [x] article related articles section
 [ ] date field close on select, could not do it
+[x] article page layout
