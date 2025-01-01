@@ -102,8 +102,70 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
 
   return article ? (
     <div className="article-page mb-16">
-      <div className="mb-4"></div>
-      <div className="mb-4">
+      {agency && (
+        <div className="mt-28 mb-12">
+          <div className="relative z-0 mb-6 aspect-video w-full md:aspect-[21/4]">
+            <Image
+              priority
+              placeholder="blur"
+              blurDataURL={
+                agency.featured_image?.id
+                  ? serverSdk.storage.utils.getImageBlurredUrl(
+                      agency.featured_image?.id,
+                    )
+                  : "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAsAAAAHCAIAAABRDCAKAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA+UlEQVR4nAHuABH/ANXp8tfs99bu+s3q+8Lo+rbd7q3X6afc9J3Z847Q8HnF6gD1+//y+//p9v3m9//p///F09eqtLnP+P+44vOp2/OWz+4Aj5OYytDS8PX64+vxwszSgoKCfnp4scHJzPH+td3zp9HqADxAPFNWVZ2bloOEgIB4c4NyaHhsXYV+d6eho7K4vZudpAA6Kxg7LyFANy1URjtiUUdsVkpJOixrUUNqRTJuTDl6X0sAAAESBRMiGy1AKDhLQUZVPztIIBYcRz9DdmplkHpnf3RkADZLWDE9Q0ZSWkRQXlVgbG9zeIqFfaWejoqGeFlWTWNdVBZSgKQv2x7tAAAAAElFTkSuQmCC"
+              }
+              className="h-full w-full rounded-xl object-cover"
+              src={
+                agency.featured_image?.id
+                  ? serverSdk.storage.utils.getImageUrl(
+                      agency.featured_image?.id,
+                      {width: 1050, height: 450},
+                    )
+                  : "/assets/miqat/images/hajj-placeholder.webp"
+              }
+              alt={article.title}
+              width={1050}
+              height={450}
+            />
+            <aside className=" -top-16 start-4 absolute mx-auto w-full">
+              <Link
+                className="group my-1 flex items-start gap-3"
+                href={agency.slug}
+              >
+                {agency.meta_fields?.logo && (
+                  <Image
+                    className="h-24 w-24 rounded-full border border-slate-100 shadow-md shadow-slate-200"
+                    src={serverSdk.storage.utils.getImageUrl(
+                      agency.meta_fields.logo.id,
+                      {
+                        width: 100,
+                        height: 100,
+                      },
+                    )}
+                    width={100}
+                    height={100}
+                    alt={agency.title || ""}
+                  />
+                )}
+                <div className="flex flex-col leading-tight">
+                  <span className="text-3xl text-darkblue-900 transition-all duration-300 group-hocus:text-red2-500">
+                    {agency.title}
+                  </span>
+                  <span className="text-xl leading-tight text-yellow-700">
+                    {getMetaFieldValueLabel(
+                      agencyArticleType,
+                      "state",
+                      agency.meta_fields.state,
+                    )}
+                  </span>
+                </div>
+              </Link>
+            </aside>
+          </div>
+        </div>
+      )}
+      <div className="mb-12">
         <h1 className="mb-6 mt-8 flex items-center justify-center gap-4 text-4xl text-gray-800 md:text-5xl">
           {article.title}
           <AdminOnlyView>
@@ -116,7 +178,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           </AdminOnlyView>
         </h1>
       </div>
-      <div className="relative mb-6 aspect-video w-full md:aspect-21/9">
+      {/* <div className="relative mb-6 aspect-video w-full md:aspect-21/9">
         <Image
           priority
           placeholder="blur"
@@ -140,43 +202,7 @@ const OmrahArticlePage: React.FC<PageProps> = ({route, initialData}) => {
           width={1050}
           height={450}
         />
-      </div>
-      <aside className="mx-auto mb-12 w-full">
-        {agency && (
-          <Link
-            className="group my-2 flex items-center gap-3"
-            href={agency.slug}
-          >
-            {agency.meta_fields?.logo && (
-              <Image
-                className="h-12 w-12 rounded-full border border-slate-100 shadow-md shadow-slate-200"
-                src={serverSdk.storage.utils.getImageUrl(
-                  agency.meta_fields.logo.id,
-                  {
-                    width: 100,
-                    height: 100,
-                  },
-                )}
-                width={100}
-                height={100}
-                alt={agency.title || ""}
-              />
-            )}
-            <div className="flex flex-col leading-tight">
-              <span className="text-3xl text-darkblue-900 transition-all duration-300 group-hocus:text-red2-500">
-                {agency.title}
-              </span>
-              <span className="text-2xl leading-tight text-yellow-600">
-                {getMetaFieldValueLabel(
-                  agencyArticleType,
-                  "state",
-                  agency.meta_fields.state,
-                )}
-              </span>
-            </div>
-          </Link>
-        )}
-      </aside>
+      </div> */}
 
       <div className="flex flex-col gap-6">
         <aside className="relative flex-shrink-0 flex-grow">
