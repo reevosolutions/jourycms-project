@@ -706,7 +706,10 @@ export const custom_meta_fields = {
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox"> & {
     field_key: "subsistence_at_medina"; // replace this empty string by the attributted field_key
   },
-  shrines_at_mekkah: {
+  /**
+   * @deprecated replace by static checkbox field
+   */
+  _shrines_at_mekkah: {
     field_key: "shrines_at_mekkah" as const,
     field_label: "المزارات في مكة",
     field_type: "article_object" as const,
@@ -720,7 +723,69 @@ export const custom_meta_fields = {
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", true> & {
     field_key: "shrines_at_mekkah"; // replace this empty string by the attributted field_key
   },
-  shrines_at_medina: {
+  shrines_at_mekkah: {
+    field_key: "shrines_at_mekkah" as const,
+    field_label: "المزارات في مكة",
+    field_type: "checkbox" as const,
+    field_options: {
+      choices: [
+        {
+          value: "jabal_arafat",
+          label: "جبل عرفات",
+        },
+        {
+          value: "jabal_al_noor_and_ghar_hira",
+          label: "جبل النور وغار حراء",
+        },
+        {
+          value: "ghar_and_jabal_thawr",
+          label: "غار وجبل ثور",
+        },
+        {
+          value: "hara_cultural_district",
+          label: "حي حراء الثقافي",
+        },
+        {
+          value: "umm_al_momineen_aisha_mosque",
+          label: "جامع أم المؤمنين عائشة رضي الله عنها (التنعيم)",
+        },
+        {
+          value: "namira_mosque",
+          label: "مسجد نمرة",
+        },
+        {
+          value: "al_khaif_mosque",
+          label: "مسجد الخيف",
+        },
+        {
+          value: "aisha_al_rajhi_mosque",
+          label: "جامع عائشة الراجحي",
+        },
+        {
+          value: "clock_tower_museum",
+          label: "متحف برج الساعة",
+        },
+        {
+          value: "kiswa_exhibition",
+          label: "معرض كسوة الكعبة",
+        },
+        {
+          value: "mushaf_printing_press",
+          label: "مطبعة المصحف الشريف",
+        },
+        {
+          value: "zamzam_water_factory",
+          label: "مصنع تعبئة ماء زمزم",
+        },
+      ]
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox", true> & {
+    field_key: "shrines_at_mekkah"; // replace this empty string by the attributted field_key
+  },
+  /**
+   * @deprecated replace by static checkbox field
+   */
+  _shrines_at_medina: {
     field_key: "shrines_at_medina" as const,
     field_label: "المزارات في المدينة",
     field_type: "article_object" as const,
@@ -732,6 +797,57 @@ export const custom_meta_fields = {
       },
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"article_object", true> & {
+    field_key: "shrines_at_medina"; // replace this empty string by the attributted field_key
+  },
+  shrines_at_medina: {
+    field_key: "shrines_at_medina" as const,
+    field_label: "المزارات في المدينة",
+    field_type: "checkbox" as const,
+    field_options: {
+      choices: [
+      {
+        value: "quba_mosque",
+        label: "مسجد قباء",
+      },
+      {
+        value: "baqi_cemetery",
+        label: "مقبرة البقيع",
+      },
+      {
+        value: "uhud_mountain",
+        label: "جبل أحد",
+      },
+      {
+        value: "martyrs_cemetery",
+        label: "مقبرة الشهداء",
+      },
+      {
+        value: "archers_mountain",
+        label: "جبل الرماة",
+      },
+      {
+        value: "qiblatain_mosque",
+        label: "مسجد القبلتين",
+      },
+      {
+        value: "king_fahd_complex",
+        label: "مجمع الملك فهد لطباعة المصحف الشريف",
+      },
+      {
+        value: "international_exhibition_and_museum_of_the_prophets_biography_and_islamic_civilization",
+        label: "المعرض والمتحف الدولي للسيرة النبوية والحضارة الإسلامية",
+      },
+      {
+        value: "prophets_mosque_architecture_exhibition",
+        label: "معرض عمارة المسجد النبوي",
+      },
+      {
+        value: "medina_orchards",
+        label: "بساتين المدينة",
+      }
+      ]
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox", true> & {
     field_key: "shrines_at_medina"; // replace this empty string by the attributted field_key
   },
 
