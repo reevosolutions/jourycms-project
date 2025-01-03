@@ -11,8 +11,8 @@ import RoleIcon from "../../../components/role-icon";
 import {ReactQueryDevtoolsProvider} from "@/lib/utils/dev-tools/react-query-dev-tools";
 import {PostForm} from "@/themes/miqat/components/forms";
 import useCMSContent from "@/hooks/use-cms-content";
-import { TMiqatRole } from "@/themes/miqat/config";
-import { canEditHisProfile } from "@/themes/miqat/utils";
+import {TMiqatRole} from "@/themes/miqat/config";
+import {canEditHisProfile} from "@/themes/miqat/utils";
 import initLogger, {LoggerContext} from "@/lib/logging";
 
 const logger = initLogger(LoggerContext.PAGE, "edit-profile");
@@ -35,7 +35,8 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */
   /* -------------------------------------------------------------------------- */
-  const [profileId, setProfileId] =    useState<string | undefined>();
+  const [profileId, setProfileId] = useState<string | undefined>();
+  const [isProfieLoaded, setIsProfieLoaded] = useState(false);
 
   /* -------------------------------------------------------------------------- */
   /*                                   METHODS                                  */
@@ -44,22 +45,30 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
     if (currentUser?._id) {
       let profileId: string | undefined;
       try {
-        profileId = currentUser?.role === "agency"
-          ? await getUserAgencyId(currentUser?._id)
-          : currentUser?.role === "doctor"
-            ? await getDoctorProfileId(currentUser?._id)
-            : currentUser?.role === "escort"
-              ? await getEscortProfileId(currentUser?._id)
-              : undefined;
+        profileId =
+          currentUser?.role === "agency"
+            ? await getUserAgencyId(currentUser?._id)
+            : currentUser?.role === "doctor"
+              ? await getDoctorProfileId(currentUser?._id)
+              : currentUser?.role === "escort"
+                ? await getEscortProfileId(currentUser?._id)
+                : undefined;
+          
       } catch (error) {
         logger.error("Error on load profile", currentUser._id, error);
       }
 
       setProfileId(profileId);
+      setIsProfieLoaded(true);
     }
-  }, [currentUser?._id, currentUser?.role, getDoctorProfileId, getEscortProfileId, getUserAgencyId]);
+  }, [
+    currentUser?._id,
+    currentUser?.role,
+    getDoctorProfileId,
+    getEscortProfileId,
+    getUserAgencyId,
+  ]);
 
-  
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
@@ -70,16 +79,16 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return !currentUser?.attributes.is_approved || !canEditHisProfile(currentUser) ? (
+  return !currentUser?.attributes.is_approved ||
+    !canEditHisProfile(currentUser) ? (
     redirect(publicRoutes.homepage._.myAccount.path)
   ) : (
     <DefaultLayout route={route}>
       <div className="container mx-auto px-4 md:px-8">
         {currentUser ? (
           <div>
-            
-            <main className="my-6 lg:my-12 font-noto text-xl">
-              {profileId ? (
+            <main className="my-6 font-noto text-xl lg:my-12">
+              {isProfieLoaded ? (
                 <PostForm.PostForm
                   article_id={profileId}
                   articleType_slug={currentUser?.role as any}

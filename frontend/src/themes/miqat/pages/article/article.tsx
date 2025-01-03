@@ -41,9 +41,9 @@ const ArticlePage: React.FC<PageProps> = ({
             <OmrahArticlePage {...{route, initialData}} />
 
             {relatedArticles?.length ? (
-              <div className=" pb-12">
-                <h2 className="mb-4 mt-8 text-3xl font-bold text-center">
-                  {"عروض ذات صلة"}
+              <div className="pb-12">
+                <h2 className="mb-4 mt-8 text-center text-3xl font-bold">
+                  {"كل عروض الوكالة"}
                 </h2>
                 <div className="container mx-auto px-4 md:px-8">
                   <ContentSection_Server
@@ -53,7 +53,6 @@ const ArticlePage: React.FC<PageProps> = ({
                       page: 1,
                       data: {
                         data: relatedArticles,
-                        
                       },
                       articleType,
                       isOffer: true,

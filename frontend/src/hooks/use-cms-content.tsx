@@ -5,7 +5,10 @@ import initLogger, {LoggerContext} from "@lib/logging";
 import {useAppSelector} from "@redux/hooks";
 import {useCallback, useEffect, useMemo} from "react";
 
-import websiteConfig, {ArticleTypeSlug, TArticleTypeSlug} from "@/themes/miqat/config";
+import websiteConfig, {
+  ArticleTypeSlug,
+  TArticleTypeSlug,
+} from "@/themes/miqat/config";
 import {useSdk} from "./use-sdk";
 
 const logger = initLogger(LoggerContext.HOOK, "useCMSContent");
@@ -108,7 +111,7 @@ const useCMSContent = () => {
       const {data} = await sdk.content.articles.list({
         count: 1,
         filters: {
-          article_type: 'agency',
+          article_type: "agency",
           created_by: userID,
         },
       });
@@ -116,7 +119,7 @@ const useCMSContent = () => {
     },
     [sdk.content.articles],
   );
-  
+
   const getDoctorProfileId = useCallback(
     async (userID: string) => {
       const {data} = await sdk.content.articles.list({
@@ -131,7 +134,7 @@ const useCMSContent = () => {
     },
     [sdk.content.articles],
   );
-  
+
   const getEscortProfileId = useCallback(
     async (userID: string) => {
       const {data} = await sdk.content.articles.list({
@@ -150,9 +153,9 @@ const useCMSContent = () => {
     async (userID: string) => {
       const {data} = await sdk.content.articles.list({
         count: 1,
-        fields: ['_id'],
+        fields: ["_id"],
         filters: {
-          article_type: 'agency',
+          article_type: "agency",
           created_by: userID,
         },
       });
@@ -160,13 +163,13 @@ const useCMSContent = () => {
     },
     [sdk.content.articles],
   );
-  
+
   const getDoctorProfile = useCallback(
     async (userID: string) => {
       const {data} = await sdk.content.articles.list({
         count: 1,
         filters: {
-          article_type: 'doctor',
+          article_type: "doctor",
           created_by: userID,
         },
       });
@@ -174,13 +177,13 @@ const useCMSContent = () => {
     },
     [sdk.content.articles],
   );
-  
+
   const getEscortProfile = useCallback(
     async (userID: string) => {
       const {data} = await sdk.content.articles.list({
         count: 1,
         filters: {
-          article_type: 'escort',
+          article_type: "escort",
           created_by: userID,
         },
       });
@@ -212,7 +215,7 @@ const useCMSContent = () => {
     getEscortProfile,
     getUserAgencyId,
     getDoctorProfileId,
-    getEscortProfileId
+    getEscortProfileId,
   };
 };
 

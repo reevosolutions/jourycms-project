@@ -11,6 +11,9 @@
     },
     {
       "path": "."
+    },
+    {
+      "path": "../levelup-labs"
     }
   ],
   "settings": {
