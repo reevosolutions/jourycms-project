@@ -56,7 +56,7 @@ export const applyOnDocumentChunks = async <
         totalCount: 0,
       } as typeof options
     ),
-  };
+  } as typeof options;
 
   let page = 0;
   let items_found = true;

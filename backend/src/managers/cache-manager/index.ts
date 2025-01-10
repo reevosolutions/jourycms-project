@@ -556,7 +556,7 @@ export default class CacheManager {
         filter: () => true,
         company: null,
         customKey: null,
-      });
+      }) as any;
 
       const customKey = config.customKey ? (config.customKey as E) : entity;
 
