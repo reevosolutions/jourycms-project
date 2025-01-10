@@ -121,6 +121,51 @@ export default (app: Router): void => {
 
       }
     });
+  /**
+   * ChangePassword
+   */
+  route.post('/change-password',
+    async (req: Request, res: Response, next: NextFunction) => {
+      try {
+
+        const { data } = req.body as ApiAlias.ChangePassword.Request;
+
+        /**
+         * Validate the request body
+         */
+
+        /**
+         * Always get the auth data at the beginning of the function
+         */
+        const AUTH_DATA = await getAuthData(req);
+
+        /**
+         * Load the required services and managers
+         */
+        const authService = Container.get(AuthService);
+
+        /**
+         * Call the service method if the validation conditions are fulfilled
+         */
+        const result = await authService.changePassword({ data }, AUTH_DATA);
+
+        /**
+         * Respond to the client
+         */
+        return respond<ApiAlias.ChangePassword.Response>(res, result);
+
+      } catch (error) {
+
+        /**
+         * Pass the error to the next middleware
+         * the error logging logic is handled on the service layer
+         */
+
+
+        return next(error);
+
+      }
+    });
 
   /**
    * refresh-token

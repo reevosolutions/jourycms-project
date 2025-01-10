@@ -101,6 +101,7 @@ export default class ArticlesService extends BaseService {
    * @param {Partial<EntityAlias>} old used on update
    * @returns {string}
    */
+  
   _createSearchMeta(
     data: Partial<EntityAlias>,
     old?: Partial<EntityAlias>

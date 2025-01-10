@@ -4,6 +4,7 @@
  * @since 26-03-2024 01:17:09
  */
 import deepmerge from "deepmerge";
+import { Assign, Overwrite, DeepRequired, Diff } from 'utility-types';
 
 /**
  * Merges two objects, with properties from the second object taking precedence over the first object.
@@ -13,15 +14,20 @@ import deepmerge from "deepmerge";
  * @param options - The options for merging.
  * @returns The merged object.
  */
-export const defaults = <T extends object>(
-  x: Partial<T>,
-  y: Partial<T>,
+export const defaults = <T extends object, Y extends object = Partial<T>>(
+  x: T,
+  y: Y,
   options?: deepmerge.Options
-): T => {
-  return deepmerge(y, x || {}, {
+): Assign<Diff<T, Y>, DeepRequired<Y>> => {
+  const res: any = deepmerge(y, x || {}, {
+    ...(options || {}),
     arrayMerge: (target, source) => source,
-  });
+  }) as any;
+  return res;
 };
+
+
+
 
 /**
  * Gets the item IDs from the new and old data.

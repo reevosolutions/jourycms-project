@@ -193,6 +193,52 @@ export default class AuthService extends BaseService {
     }
   }
 
+  public async changePassword(
+    { data }: Levelup.CMS.V1.Auth.Api.Auth.ChangePassword.Request,
+    authData: Levelup.CMS.V1.Security.AuthData
+  ): Promise<Levelup.CMS.V1.Auth.Api.Auth.RefreshToken.Response> {
+    try {
+      if (!data?.old_password) throw new exceptions.UnprocessableEntityException('Old password is required');
+      if (!data?.new_password) throw new exceptions.UnprocessableEntityException('New password is required');
+
+      const doc = await this.userModel.findOne({ _id: authData.current.user._id, is_deleted: false });
+      if (!doc) throw new exceptions.UnauthorizedException('User not found');
+      if (doc.attributes.is_suspended) throw new exceptions.UnauthorizedException('User suspended');
+
+      const isValidPassword = await this.authManager.verifyPassword(data.old_password, doc.password);
+      if (!isValidPassword) throw new exceptions.UnauthorizedException('Invalid password');
+
+      const { salt, password } = await this.authManager.hashPassword(data.new_password);
+      doc.salt = salt;
+      doc.password = password;
+      await doc.save();
+
+      const payload: Levelup.CMS.V1.Security.JWTUserAuthPayload = {
+        _id: doc._id.toString(),
+        tracking_id: doc.tracking_id,
+        role: doc.role,
+        space: 'default'
+      };
+      const token = this.authManager.generateToken(payload, 'default', false);
+      const refresh_token = this.authManager.generateToken(payload, 'default', true);
+
+      // dispatch event
+      this.eventDispatcher.dispatch<Levelup.CMS.V1.Events.Payloads.Auth.login>(events.auth.auth.login, {
+        data: mapDocumentToExposed(doc)
+      });
+      return {
+        data: {
+          user: mapUserToExposed(doc.toObject()),
+          token,
+          refresh_token
+        }
+      };
+    } catch (error) {
+      this.logError(this.refreshToken, error);
+      throw error;
+    }
+  }
+
   public async refreshToken(
     { data }: Levelup.CMS.V1.Auth.Api.Auth.RefreshToken.Request,
     authData: Levelup.CMS.V1.Security.AuthData

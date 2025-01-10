@@ -211,6 +211,12 @@ const routes = {
             ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
             _: {},
           },
+          changePassword: {
+            path: "/account/change-password" as const,
+            title: "تغيير كلمة المرور",
+            ac: [] as Levelup.CMS.V1.UI.Routes.RouteItem["ac"],
+            _: {},
+          },
         },
       },
     },

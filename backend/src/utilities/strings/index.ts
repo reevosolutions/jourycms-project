@@ -195,6 +195,7 @@ export function kebabToCamel(kebabString: string): string {
 export function camelToKebab(camelCaseString: string): string {
   return camelCaseString.replace(/([a-z])([A-Z])/g, "$1-$2").toLowerCase();
 }
+
 export function camelToWords(camelCaseString: string): string {
   return camelCaseString.replace(/([a-z])([A-Z])/g, "$1 $2").toLowerCase();
 }

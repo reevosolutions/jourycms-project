@@ -6,7 +6,6 @@
 
 import colors from "colors";
 import moment from "moment";
-import config from "../../config";
 import treeify from "treeify";
 import { initTimer } from "../system/timer.utilities";
 

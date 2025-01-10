@@ -1,22 +1,16 @@
 "use client";
-import React, {useCallback, useEffect, useState} from "react";
-import DefaultLayout from "../../../layouts/default.layout";
-import {redirect, useRouter} from "next/navigation";
+import { publicRoutes } from "@/config";
 import useAuth from "@/hooks/use-auth";
-import {publicRoutes} from "@/config";
-import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
-import {buildUserFullName} from "@/lib/utilities/strings";
-import {LuAlertCircle, LuCog, LuPencilLine} from "react-icons/lu";
-import RoleIcon from "../../../components/role-icon";
-import AgencyOffersList from "../../../components/agency-offers-list";
-import {ReactQueryDevtoolsProvider} from "@/lib/utils/dev-tools/react-query-dev-tools";
-import {canEditHisProfile} from "../../../utils/index";
 import useCMSContent from "@/hooks/use-cms-content";
-import initLogger, {LoggerContext} from "@/lib/logging";
-import {useSdk} from "@/hooks/use-sdk";
-import {useQuery} from "@tanstack/react-query";
-import DefaultArticleComponent from "../../article/article.default";
-import {GiBugleCall} from "react-icons/gi";
+import { useSdk } from "@/hooks/use-sdk";
+import initLogger, { LoggerContext } from "@/lib/logging";
+import { ReactQueryDevtoolsProvider } from "@/lib/utils/dev-tools/react-query-dev-tools";
+import { useQuery } from "@tanstack/react-query";
+import { redirect, useRouter } from "next/navigation";
+import React, { useCallback, useEffect, useState } from "react";
+import { GiBugleCall } from "react-icons/gi";
+import AgencyOffersList from "../../../components/agency-offers-list";
+import DefaultLayout from "../../../layouts/default.layout";
 
 import ApiAlias = Levelup.CMS.V1.Content.Api.Articles.GetOne;
 
@@ -93,7 +87,7 @@ const ThemePage: React.FC<PageProps> = ({route}) => {
           path: publicRoutes.homepage._.myAccount._.newOffer.path,
           icon: GiBugleCall,
           ac() {
-            return currentUser?.role === "agency";
+            return currentUser?.role === "agency" && !!profileId;
           },
         },
       ]}

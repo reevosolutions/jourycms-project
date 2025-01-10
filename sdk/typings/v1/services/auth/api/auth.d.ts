@@ -62,6 +62,31 @@ declare module Levelup {
 
             /**
              * --------------------------------------------------------------------------
+             *                            ChangePassword
+             * --------------------------------------------------------------------------
+             * @link /change-password
+             * @fires AuthService.ChangePassword
+             * @param {Levelup.CMS.V1.Auth.Api.Auth.ChangePassword.Request} query
+             * @returns {Levelup.CMS.V1.Auth.Api.Auth.ChangePassword.Response}
+             * @method POST
+             *
+             */
+            export namespace ChangePassword {
+              export type Request =
+                Levelup.CMS.V1.Utils.Api.Request.BuildCreateRequest<{
+                  old_password: string;
+                  new_password: string;
+                }>;
+              export type Response =
+                Utils.Api.Response.BuildSingleItemResponse<{
+                  user: Users.Entity.User;
+                  token: string;
+                  refresh_token: string;
+                }>;
+            }
+
+            /**
+             * --------------------------------------------------------------------------
              *                            RefreshToken
              * --------------------------------------------------------------------------
              * @link

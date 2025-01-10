@@ -25,6 +25,11 @@ export default class AuthClient extends BaseClient {
       headers: this.container.sdk.generateHeadersFromRequestConfig(config)
     });
   }
+  async changePassword(params: ApiAlias.ChangePassword.Request, config?: SDK.TRequestConfig): Promise<SDK.TResponseDatum<ApiAlias.ChangePassword.Response>> {
+    return await this.container.sdk.httpClient.post(this.generatePrefix('/change-password'), params, {
+      headers: this.container.sdk.generateHeadersFromRequestConfig(config)
+    });
+  }
 
   async logout(): Promise<SDK.TResponseDatum<ApiAlias.Signin.Response>> {
     return await this.container.sdk.httpClient.post(this.generatePrefix('/logout'));

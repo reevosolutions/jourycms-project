@@ -35,7 +35,6 @@ async function startServer() {
     });
 }
 
-
 /**
  * 'beforeExit': Emitted when the Node.js process is about to exit due to no more work to do.
  */

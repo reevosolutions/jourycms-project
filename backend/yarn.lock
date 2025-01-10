@@ -3981,10 +3981,10 @@ jose@^4.14.6:
   resolved "https://registry.npmjs.org/jose/-/jose-4.15.9.tgz"
   integrity sha512-1vUQX+IdDMVPj4k8kOxgUqlcK518yluMuGZwqlr44FS1ppZB/5GWh4rZG89erpOBOJjU/OBsnCVFfapsRz6nEA==
 
-jourycms-sdk@^1.1.60:
-  version "1.1.60"
-  resolved "https://registry.npmjs.org/jourycms-sdk/-/jourycms-sdk-1.1.60.tgz"
-  integrity sha512-+v4Xef9/CWyP5S6m1GbghjmG/WdA2tLVxEp0C+18MNdmID13Khe0/XHhj6rDIF8+1i/48ZbTbDWKG1FHsaUkgw==
+jourycms-sdk@^1.1.62:
+  version "1.1.62"
+  resolved "https://registry.npmjs.org/jourycms-sdk/-/jourycms-sdk-1.1.62.tgz"
+  integrity sha512-BuQr4p0hM3bpvZx3B//lx9EhOi8ILAezOrTSxJHjC4HQkDNDTKJ7+6IKvUS/L5hzGeG1/T1mdZCdiuUrtnVBQA==
   dependencies:
     axios "^1.7.7"
     colors "^1.4.0"

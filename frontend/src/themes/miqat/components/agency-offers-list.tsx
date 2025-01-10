@@ -1,3 +1,4 @@
+/* eslint-disable unicorn/no-await-expression-member */
 "use client";
 import {useSdk} from "@/hooks/use-sdk";
 import {useRouter} from "next/navigation";
@@ -17,16 +18,13 @@ import {publicRoutes} from "@/config";
 import Link from "next/link";
 import {setPathParams} from "@/lib/routes";
 import moment from "moment";
+import {toast} from "sonner";
 
 const AgencyOffersList: React.FC<{
   showHeader?: boolean;
   showPagination?: boolean;
   count?: number;
-}> = ({
-  showHeader,
-  showPagination=true,
-  count = 12
-}) => {
+}> = ({showHeader, showPagination = true, count = 12}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
@@ -112,6 +110,37 @@ const AgencyOffersList: React.FC<{
       });
   }, [currentUser?._id, getArticleTypeBySlug, getUserAgency]);
 
+  const handleDeleteArticle = useCallback(
+    async (id: string) => {
+      const article = filteredItems.find(item => item._id === id);
+
+      const canDelete =
+        currentUser?.role === "admin" ||
+        (currentUser?._id &&
+          (await getUserAgency(currentUser?._id))?._id ===
+            article?.meta_fields?.agency);
+
+      if (!canDelete) {
+        toast.error("لا يمكنك حذف هذا المقال");
+        return;
+      }
+
+      const result = await sdk.content.articles.delete(id);
+
+      if (result?.data?.deleted) {
+        toast.success("تم حذف المقال بنجاح");
+        setItems(old => old.filter(item => item._id !== id));
+      }
+    },
+    [
+      currentUser?._id,
+      currentUser?.role,
+      filteredItems,
+      getUserAgency,
+      sdk.content.articles,
+    ],
+  );
+
   /* -------------------------------------------------------------------------- */
   /*                                    HOOKS                                   */
   /* -------------------------------------------------------------------------- */
@@ -131,7 +160,7 @@ const AgencyOffersList: React.FC<{
   /* -------------------------------------------------------------------------- */
   /*                                   RETURN                                   */
   /* -------------------------------------------------------------------------- */
-  return (
+  return agency?._id ? (
     <div>
       {showHeader && (
         <h2 className="flex items-center justify-between">
@@ -159,7 +188,7 @@ const AgencyOffersList: React.FC<{
           filteredItems.length > 0 ? (
             <div className="">
               <div className="mt-6 flex flex-col overflow-hidden rounded-xl border border-slate-100 text-xl shadow-lg shadow-slate-50 lg:text-2xl">
-                {data?.data.map(item => (
+                {filteredItems.map(item => (
                   <div
                     className="flex gap-4 border-b border-slate-200 px-4 last:border-b-0 hover:bg-slate-50"
                     key={item._id}
@@ -167,8 +196,10 @@ const AgencyOffersList: React.FC<{
                     <div className="flex-grow py-2 transition-all hocus:text-beige-600">
                       <Link href={`/${item.slug}`}>{item.title}</Link>
                     </div>
-                    <div className="py-2 flex-shrink-0 text-xl text-slate-500">
-                      <span>{moment(item.created_at).format('DD/MM/YYYY')}</span>
+                    <div className="flex-shrink-0 py-2 text-xl text-slate-500">
+                      <span>
+                        {moment(item.created_at).format("DD/MM/YYYY")}
+                      </span>
                     </div>
                     <div className="flex justify-end gap-1 py-2">
                       <Link
@@ -190,17 +221,19 @@ const AgencyOffersList: React.FC<{
                       >
                         <LuPencil className="h5 w-5" />
                       </Link>
-                      <Link
-                        href={"#"}
+                      <button
                         className="p-1 text-red-500 transition-all duration-200 hover:text-red-700"
+                        onClick={() => {
+                          handleDeleteArticle(item._id);
+                        }}
                       >
                         <LuTrash2 className="h5 w-5" />
-                      </Link>
+                      </button>
                     </div>
                   </div>
                 ))}
               </div>
-              {(showPagination && data?.pagination?.pages || 0) > 1 ? (
+              {((showPagination && data?.pagination?.pages) || 0) > 1 ? (
                 <div className="my-8 mt-12">
                   <CustomPagination
                     totalCount={data?.pagination?.total}
@@ -224,6 +257,18 @@ const AgencyOffersList: React.FC<{
             <LuLoader2 className="h-12 w-12 animate-spin text-slate-300" />
           </div>
         )}
+      </div>
+    </div>
+  ) : (
+    <div className="d">
+      <div className="flex min-h-screen-60 flex-col items-center justify-center">
+        <p className="mx-6 rounded-xl border border-dashed border-slate-200 px-12 py-6 text-center text-lg">
+          {"برحى إدخال بيانات الوكالة أولا"}
+          {" "}
+          <Link href={publicRoutes.homepage._.myAccount._.editAccount.path} className=" font-bold text-beige-300 hocus:text-red2-700">
+            {"من هنا"}
+          </Link>
+        </p>
       </div>
     </div>
   );

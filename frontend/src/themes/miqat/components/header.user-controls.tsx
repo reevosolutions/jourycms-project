@@ -71,6 +71,7 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({children}) => {
                     </Link>
                   </li>
                 ) : null}
+
                 {currentUser?.role === "agency" && (
                   <li>
                     <Link
@@ -81,6 +82,16 @@ const HeaderUserControls: React.FC<HeaderUserControlsProps> = ({children}) => {
                     </Link>
                   </li>
                 )}
+                <li>
+                  <Link
+                    className="block py-1 text-darkblue-800 transition-all hocus:text-beige-600"
+                    href={
+                      publicRoutes.homepage._.myAccount._.changePassword.path
+                    }
+                  >
+                    {publicRoutes.homepage._.myAccount._.changePassword.title}
+                  </Link>
+                </li>
                 <li>
                   <button
                     className="block py-1 text-red2-600 transition-all hover:text-beige-600 active:text-darkblue-800"
