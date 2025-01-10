@@ -552,16 +552,11 @@ export const custom_meta_fields = {
   mekkah_hotel: {
     field_key: "mekkah_hotel" as const,
     field_label: "فندق مكة",
-    field_type: "article_object" as const,
+    field_type: "text" as const,
     field_options: {
-      type: "hotel",
-      multiple: false,
-      filter: {
-        "meta_fields.medina_mekkah": "mekkah",
-      },
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<
-    "article_object",
+    "text",
     false
   > & {
     field_key: "mekkah_hotel"; // replace this empty string by the attributted field_key
@@ -569,20 +564,49 @@ export const custom_meta_fields = {
   medina_hotel: {
     field_key: "medina_hotel" as const,
     field_label: "فندق المدينة",
-    field_type: "article_object" as const,
+    field_type: "text" as const,
     field_options: {
-      type: "hotel",
-      multiple: false,
-      filter: {
-        "meta_fields.medina_mekkah": "medina",
-      },
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<
-    "article_object",
+    "text",
     false
   > & {
     field_key: "medina_hotel"; // replace this empty string by the attributted field_key
   },
+  // mekkah_hotel: {
+  //   field_key: "mekkah_hotel" as const,
+  //   field_label: "فندق مكة",
+  //   field_type: "article_object" as const,
+  //   field_options: {
+  //     type: "hotel",
+  //     multiple: false,
+  //     filter: {
+  //       "meta_fields.medina_mekkah": "mekkah",
+  //     },
+  //   },
+  // } as Levelup.CMS.V1.Content.CustomFields.MetaField<
+  //   "article_object",
+  //   false
+  // > & {
+  //   field_key: "mekkah_hotel"; // replace this empty string by the attributted field_key
+  // },
+  // medina_hotel: {
+  //   field_key: "medina_hotel" as const,
+  //   field_label: "فندق المدينة",
+  //   field_type: "article_object" as const,
+  //   field_options: {
+  //     type: "hotel",
+  //     multiple: false,
+  //     filter: {
+  //       "meta_fields.medina_mekkah": "medina",
+  //     },
+  //   },
+  // } as Levelup.CMS.V1.Content.CustomFields.MetaField<
+  //   "article_object",
+  //   false
+  // > & {
+  //   field_key: "medina_hotel"; // replace this empty string by the attributted field_key
+  // },
   website: {
     field_key: "website" as const,
     field_label: "الموقع الإلكتروني",

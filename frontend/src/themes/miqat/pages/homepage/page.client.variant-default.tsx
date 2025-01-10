@@ -9,6 +9,7 @@ import OmrahOnDemandSection from "./sections/omrah-on-demand.section";
 import OrderVisaSection from "./sections/order-visa.section";
 import HomepagePartnersSection from "./sections/partners.section";
 import HomepageSeatsSection from "./sections/seats.section";
+import JoinOurTeamSection from "./sections/join-our-team.section";
 
 export type PageProps = JouryCMS.Theme.PageProps & {};
 
@@ -23,6 +24,7 @@ const ThemePage_Client_Default: React.FC<PageProps> = ({route}) => {
       <OmrahOnDemandSection />
       <OrderVisaSection />
       {/* <HomepageEscortsSection /> */}
+      <JoinOurTeamSection />
       <HomepageSeatsSection />
       <HomepageCallToActionSection />
       <HomepageBlogSection />

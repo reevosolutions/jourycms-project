@@ -31,7 +31,7 @@ type FormDataFields = {
   passport: Levelup.CMS.V1.Utils.Common.FileAttribute;
   photo: Levelup.CMS.V1.Utils.Common.FileAttribute;
   payment_method: "visa" | "mastercard" | "paypal" | "cib" | "baridi" | null;
-  description: string;
+  // description: string;
 };
 export type LoginFormProps = {};
 
@@ -70,7 +70,7 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
       phone: "",
       email: "",
       payment_method: null,
-      description: "",
+      // description: "",
     },
 
     onSubmit: async ({value, formApi}) => {
@@ -266,7 +266,7 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
         />
       </div>
       {/* field */}
-      <div className="field mb-6">
+      {/* <div className="field mb-6">
         <Label className="text-xl text-darkblue-500">{"الوصف"}</Label>
         <form.Field
           name="description"
@@ -286,7 +286,7 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
             </>
           )}
         />
-      </div>
+      </div> */}
 
       {/* field */}
       <div className="field mb-6">

@@ -43,8 +43,8 @@ const LoginForm: React.FC<LoginFormProps> = ({}) => {
     Validator<unknown, yup.AnySchema>
   >({
     defaultValues: {
-      email: "admin@miqat.com",
-      password: "123",
+      email: "",
+      password: "",
     },
 
     onSubmit: async ({value}) => {
