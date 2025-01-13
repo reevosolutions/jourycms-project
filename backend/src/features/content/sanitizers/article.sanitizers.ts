@@ -79,10 +79,10 @@ const sanitizeUpdateBody = async (body: PropType<ApiAlias.Update.Request, 'data'
   body = sanitizeObjectStrings(body);
 
   /**
-   * @description Remove all unwanted properties already set at the time of creation
+   * @description Remove all unwanted properties already set at the time of update
    */
   [
-    // all unwanted properties already set at the time of creation
+    // all unwanted properties already set at the time of update
     '_id',
     'tracking_id',
     'created_by',

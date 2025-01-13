@@ -101,7 +101,7 @@ export default class ArticlesService extends BaseService {
    * @param {Partial<EntityAlias>} old used on update
    * @returns {string}
    */
-  
+
   _createSearchMeta(
     data: Partial<EntityAlias>,
     old?: Partial<EntityAlias>
@@ -531,6 +531,7 @@ export default class ArticlesService extends BaseService {
     customFilters = fixFiltersObject(customFilters);
 
     const exprAnd: any[] = [];
+    const and: any[] = [];
     /* ------------------------------ article_type ------------------------------ */
     if (customFilters.t) {
       let article_type;
@@ -632,7 +633,22 @@ export default class ArticlesService extends BaseService {
 
     /* ------------------------------ distance_to_haram ------------------------------ */
     if (customFilters.dh) {
-      // FIXME: This is related to hotels
+      let [dhn, dhx]: number[] | string[] = customFilters.dh.split("-");
+      if(!dhx) {
+        dhn = "0";
+        dhx = customFilters.dh;
+      }
+      dhn = Number.parseInt(dhn);
+      dhx = Number.parseInt(dhx);
+
+      and.push(
+        {
+          $or: [
+            { "meta_fields.distance_mekkah_hotel_to_haram": dhn ? {$gte: dhn, $lte: dhx} :  { $lte: dhx } },
+            { "meta_fields.distance_medina_hotel_to_haram": dhn ? { $gte: dhn, $lte: dhx } : { $lte: dhx } },
+          ],
+        },
+      );
     }
 
     /* ------------------------------ payment_mode ------------------------------ */
@@ -683,16 +699,7 @@ export default class ArticlesService extends BaseService {
         Number.parseFloat(`${customFilters.pn}` || "0"),
         Number.parseFloat(`${customFilters.px}` || "10000000"),
       ].sort((a, b) => a - b);
-      q = q.where({
-        $or: [
-          { "meta_fields.price_of_single_person_room": { $gte: pn, $lte: px } },
-          { "meta_fields.price_of_two_persons_room": { $gte: pn, $lte: px } },
-          { "meta_fields.price_of_three_persons_room": { $gte: pn, $lte: px } },
-          { "meta_fields.price_of_four_persons_room": { $gte: pn, $lte: px } },
-          { "meta_fields.price_of_five_persons_room": { $gte: pn, $lte: px } },
-        ],
-      });
-      totalQ = totalQ.where({
+      and.push({
         $or: [
           { "meta_fields.price_of_single_person_room": { $gte: pn, $lte: px } },
           { "meta_fields.price_of_two_persons_room": { $gte: pn, $lte: px } },
@@ -775,10 +782,18 @@ export default class ArticlesService extends BaseService {
       });
     }
 
+
+    this.logger.value("extra filters", { exprAnd, and });
     /* ---------------------------- APPLY EXPRESSIONS --------------------------- */
     if (exprAnd.length) {
       q = q.where({ $expr: { $and: exprAnd } });
       totalQ = totalQ.where({ $expr: { $and: exprAnd } });
+    }
+
+    /* --------------------------------- APPLY AND ------------------------------- */
+    if (and.length) {
+      q = q.where({ $and: and });
+      totalQ = totalQ.where({ $and: and });
     }
 
     /**
@@ -795,9 +810,9 @@ export default class ArticlesService extends BaseService {
     };
   }):
     | {
-        sort_by: string;
-        sort: "asc" | "desc";
-      }
+      sort_by: string;
+      sort: "asc" | "desc";
+    }
     | undefined {
     type CustomFilterParams = {
       /* --------------------------------- GLOBAL --------------------------------- */
@@ -844,9 +859,9 @@ export default class ArticlesService extends BaseService {
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+      }
   ): Promise<ApiAlias.List.Response> {
     const scenario = this.initScenario(this.logger, this.list);
     try {
@@ -895,7 +910,7 @@ export default class ArticlesService extends BaseService {
       const limit =
         count === undefined || count === null
           ? authData?.current?.app?.settings?.listing?.default_count ||
-            config.settings.listing.defaultCount
+          config.settings.listing.defaultCount
           : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
 
@@ -1087,11 +1102,11 @@ export default class ArticlesService extends BaseService {
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-      ignore_not_found_error: false,
-      bypass_authorization: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+      }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -1171,11 +1186,11 @@ export default class ArticlesService extends BaseService {
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-      ignore_not_found_error: false,
-      bypass_authorization: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+      }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -1272,7 +1287,7 @@ export default class ArticlesService extends BaseService {
       const { error } = ArticleValidators.validateCreateBody(data);
       if (error) throw error;
 
-      let {} = data;
+      let { } = data;
 
       /**
        * Auto-fill system data
@@ -1280,8 +1295,8 @@ export default class ArticlesService extends BaseService {
       data.app = authData?.current?.app?._id
         ? authData?.current?.app?._id
         : opt?.bypass_authorization ||
-            (authData.current?.service?.name &&
-              !authData.current?.service?.is_external)
+          (authData.current?.service?.name &&
+            !authData.current?.service?.is_external)
           ? data.app
           : undefined;
 
@@ -1394,7 +1409,7 @@ export default class ArticlesService extends BaseService {
       /**
        * Extract the required in block variables from the data article
        */
-      const {} = data;
+      const { } = data;
 
       /**
        * load old article and check if it exists
@@ -1632,25 +1647,25 @@ export default class ArticlesService extends BaseService {
       const aggregateQuery = [
         {
           $match:
-            /**
-             * query: The query in MQL.
-             */
-            {
-              is_deleted: false,
-            },
+          /**
+           * query: The query in MQL.
+           */
+          {
+            is_deleted: false,
+          },
         },
         {
           $group:
-            /**
-             * _id: The id of the group.
-             * fieldN: The first field name.
-             */
-            {
-              _id: "$article_type",
-              count: {
-                $sum: 1,
-              },
+          /**
+           * _id: The id of the group.
+           * fieldN: The first field name.
+           */
+          {
+            _id: "$article_type",
+            count: {
+              $sum: 1,
             },
+          },
         },
         {
           $project: {

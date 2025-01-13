@@ -561,6 +561,17 @@ export const custom_meta_fields = {
   > & {
     field_key: "mekkah_hotel"; // replace this empty string by the attributted field_key
   },
+  distance_mekkah_hotel_to_haram: {
+    field_key: "distance_mekkah_hotel_to_haram" as const,
+    field_label: "المسافة من فندق مكة إلى الحرم (متر)",
+    field_type: "number" as const,
+    field_options: {
+      min: 0,
+
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"number"> & {
+    field_key: "distance_mekkah_hotel_to_haram"; // replace this empty string by the attributted field_key
+  },
   medina_hotel: {
     field_key: "medina_hotel" as const,
     field_label: "فندق المدينة",
@@ -572,6 +583,17 @@ export const custom_meta_fields = {
     false
   > & {
     field_key: "medina_hotel"; // replace this empty string by the attributted field_key
+  },
+  distance_medina_hotel_to_haram: {
+    field_key: "distance_medina_hotel_to_haram" as const,
+    field_label: "المسافة من فندق المدينة إلى الحرم (متر)",
+    field_type: "number" as const,
+    field_options: {
+      min: 0,
+
+    },
+  } as Levelup.CMS.V1.Content.CustomFields.MetaField<"number"> & {
+    field_key: "distance_medina_hotel_to_haram"; // replace this empty string by the attributted field_key
   },
   // mekkah_hotel: {
   //   field_key: "mekkah_hotel" as const,
@@ -829,46 +851,46 @@ export const custom_meta_fields = {
     field_type: "checkbox" as const,
     field_options: {
       choices: [
-      {
-        value: "quba_mosque",
-        label: "مسجد قباء",
-      },
-      {
-        value: "baqi_cemetery",
-        label: "مقبرة البقيع",
-      },
-      {
-        value: "uhud_mountain",
-        label: "جبل أحد",
-      },
-      {
-        value: "martyrs_cemetery",
-        label: "مقبرة الشهداء",
-      },
-      {
-        value: "archers_mountain",
-        label: "جبل الرماة",
-      },
-      {
-        value: "qiblatain_mosque",
-        label: "مسجد القبلتين",
-      },
-      {
-        value: "king_fahd_complex",
-        label: "مجمع الملك فهد لطباعة المصحف الشريف",
-      },
-      {
-        value: "international_exhibition_and_museum_of_the_prophets_biography_and_islamic_civilization",
-        label: "المعرض والمتحف الدولي للسيرة النبوية والحضارة الإسلامية",
-      },
-      {
-        value: "prophets_mosque_architecture_exhibition",
-        label: "معرض عمارة المسجد النبوي",
-      },
-      {
-        value: "medina_orchards",
-        label: "بساتين المدينة",
-      }
+        {
+          value: "quba_mosque",
+          label: "مسجد قباء",
+        },
+        {
+          value: "baqi_cemetery",
+          label: "مقبرة البقيع",
+        },
+        {
+          value: "uhud_mountain",
+          label: "جبل أحد",
+        },
+        {
+          value: "martyrs_cemetery",
+          label: "مقبرة الشهداء",
+        },
+        {
+          value: "archers_mountain",
+          label: "جبل الرماة",
+        },
+        {
+          value: "qiblatain_mosque",
+          label: "مسجد القبلتين",
+        },
+        {
+          value: "king_fahd_complex",
+          label: "مجمع الملك فهد لطباعة المصحف الشريف",
+        },
+        {
+          value: "international_exhibition_and_museum_of_the_prophets_biography_and_islamic_civilization",
+          label: "المعرض والمتحف الدولي للسيرة النبوية والحضارة الإسلامية",
+        },
+        {
+          value: "prophets_mosque_architecture_exhibition",
+          label: "معرض عمارة المسجد النبوي",
+        },
+        {
+          value: "medina_orchards",
+          label: "بساتين المدينة",
+        }
       ]
     },
   } as Levelup.CMS.V1.Content.CustomFields.MetaField<"checkbox", true> & {
@@ -1181,7 +1203,9 @@ const _articleTypesSeedData = {
         custom_meta_fields.entry_point,
         //
         custom_meta_fields.mekkah_hotel,
+        custom_meta_fields.distance_mekkah_hotel_to_haram,
         custom_meta_fields.medina_hotel,
+        custom_meta_fields.distance_medina_hotel_to_haram,
         //
         custom_meta_fields.price_of_five_persons_room,
         custom_meta_fields.price_of_four_persons_room,
@@ -1240,7 +1264,9 @@ const _articleTypesSeedData = {
         custom_meta_fields.entry_point,
         //
         custom_meta_fields.mekkah_hotel,
+        custom_meta_fields.distance_mekkah_hotel_to_haram,
         custom_meta_fields.medina_hotel,
+        custom_meta_fields.distance_medina_hotel_to_haram,
         //
         custom_meta_fields.price_of_five_persons_room,
         custom_meta_fields.price_of_four_persons_room,
@@ -1577,9 +1603,9 @@ export type TArticleTypeName = (typeof articleTypes)[number]["slug"];
 export type TArticleType<T extends TArticleTypeName> = TArticleTypes & {
   slug: T;
 } & Pick<
-    Levelup.CMS.V1.Content.Entity.ArticleType,
-    "_id" | "related_taxonomies" | "insights" | "snapshots"
-  >;
+  Levelup.CMS.V1.Content.Entity.ArticleType,
+  "_id" | "related_taxonomies" | "insights" | "snapshots"
+>;
 
 export type TArticleTypeCustomField<T extends TArticleTypeName> =
   TArticleType<T>["custom_meta_fields"][number];

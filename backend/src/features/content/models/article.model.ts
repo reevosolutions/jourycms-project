@@ -103,7 +103,7 @@ const ArticleSchemaFields: DeepStrictSchemaDefinition<
   body_structured: { type: Schema.Types.Mixed },
 
   title: { type: String },
-  _type: { type: String, default: "base" },
+  _type: { type: String, default: "base", },
   is_featured: { type: Boolean, default: false },
   featured_image: {
     type: _FileAttributeSchemaFields,

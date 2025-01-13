@@ -139,6 +139,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   return (
     <div className="">
       <div className="max-w-full px-4 py-6">
+        
         {/* field */}
         <form.Field
           name="account_type"
@@ -301,6 +302,11 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
             </div>
           )}
         />
+
+        <div className="rounded-xl border bg-slate-50 border-slate-200 px-4 py-3 mb-6">
+          <h3 className=" text-xl mb-0 font-medium ">ملاحظة:</h3>
+          <p className=" text-gray-500">ستتمكن من إدخال معلومات الحساب بعد إكمال التسجيل في الصفحة المخصصة</p>
+        </div>
 
         {/* field */}
         <div className="field mb-6">

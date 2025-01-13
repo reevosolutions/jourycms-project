@@ -31,6 +31,10 @@
 
 /dist
 /sdk/dist
+/sdk
+/typings
+./sdk
+./typings
 
 # misc
 .DS_Store

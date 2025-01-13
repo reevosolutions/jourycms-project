@@ -24,11 +24,10 @@ import {Separator} from "@/components/ui/separator";
 const logger = initLogger(LoggerContext.COMPONENT, "ThemeSidebar");
 
 const menuItems = [
-  publicRoutes.homepage,
   publicRoutes.homepage._.omrah,
-  publicRoutes.homepage._.tombolas,
-  publicRoutes.homepage._.healthServices,
-  publicRoutes.homepage._.transportationServices,
+  publicRoutes.homepage._.hajj,
+  publicRoutes.homepage._.visa,
+  publicRoutes.homepage._.hotels,
 ];
 
 type Props = {};
