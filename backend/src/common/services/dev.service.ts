@@ -975,7 +975,9 @@ export default class DevService extends BaseService {
                 .arrayElement(ksaAiroports)
                 ?._id?.toString(),
               mekkah_hotel: faker.helpers.arrayElement(hotels)?._id?.toString(),
+              distance_medina_hotel_to_haram: faker.number.int({ min: 100, max: 2000 }),
               medina_hotel: faker.helpers.arrayElement(hotels)?._id?.toString(),
+              distance_mekkah_hotel_to_haram: faker.number.int({ min: 100, max: 2000 }),
               shrines_at_mekkah: faker.helpers
                 .arrayElements(
                   shrines.filter(
