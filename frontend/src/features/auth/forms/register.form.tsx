@@ -51,8 +51,8 @@ const RegisterForm: React.FC<RegisterFormProps> = ({}) => {
   /*                                    TOOLS                                   */
   /* -------------------------------------------------------------------------- */
   const {getWebsiteConfigValue, getArticleTypeBySlug} = useCMSContent();
-  const sdk = useSdk();
   const {t: tLabel} = useTranslation("label");
+  const sdk = useSdk();
   const router = useRouter();
   /* -------------------------------------------------------------------------- */
   /*                                    STATE                                   */

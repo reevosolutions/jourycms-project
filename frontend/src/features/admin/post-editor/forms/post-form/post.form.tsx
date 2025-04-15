@@ -29,17 +29,17 @@ import {useRouter} from "next/navigation";
 import Image from "next/image";
 import {useTranslation} from "react-i18next";
 import CustomMetaField from "../../custom-fields";
-
-const logger = initLogger(LoggerContext.FORM, "article");
-
-import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
-import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 import {LuExternalLink, LuLoader2} from "react-icons/lu";
 import ImageUploader from "@/features/storage/form-components/image.uploader";
 import {cn} from "@/lib/utils";
 import BreadcrumbComponent from "@/features/admin/presentation/breadcrumb";
 import Link from "next/link";
-import { toast } from "sonner";
+import {toast} from "sonner";
+
+const logger = initLogger(LoggerContext.FORM, "article");
+
+import EntityAlias = Levelup.CMS.V1.Content.Entity.Article;
+import ApiAlias = Levelup.CMS.V1.Content.Api.Articles;
 
 type Props = {
   articleType_slug?: string;
@@ -85,19 +85,18 @@ const PostForm: React.FC<Props> = ({
   /*                                    QUERY                                   */
   /* -------------------------------------------------------------------------- */
   const articleTypeQuery = useQuery({
-     queryKey: ["articleType", articleType_slug, article_id],
-     enabled: !!articleType_slug && !article_id,
-     queryFn: async () => {
-       if (articleType_slug && !article_id) {
-         const data =
-           await sdk.content.articleTypes.getBySlug(articleType_slug);
-         setArticleType(data?.data || null);
-         setMetaFields(data?.data?.custom_meta_fields || []);
-         return data;
-       }
-       return null;
-     },
-   });
+    queryKey: ["articleType", articleType_slug, article_id],
+    enabled: !!articleType_slug && !article_id,
+    queryFn: async () => {
+      if (articleType_slug && !article_id) {
+        const data = await sdk.content.articleTypes.getBySlug(articleType_slug);
+        setArticleType(data?.data || null);
+        setMetaFields(data?.data?.custom_meta_fields || []);
+        return data;
+      }
+      return null;
+    },
+  });
 
   const articleQuery = useQuery({
     queryKey: ["article", article_id],
@@ -133,7 +132,6 @@ const PostForm: React.FC<Props> = ({
 
       onSubmit: async ({value}) => {
         try {
-          
           const payload: ApiAlias.Create.Request = {
             data: {
               ...value,
@@ -143,12 +141,11 @@ const PostForm: React.FC<Props> = ({
               meta_fields: metaFieldsData,
             },
           };
-          
+
           const {data} = article_id
-          ? await sdk.content.articles.update(article_id, payload)
-          : await sdk.content.articles.create(payload);
-          
-          
+            ? await sdk.content.articles.update(article_id, payload)
+            : await sdk.content.articles.create(payload);
+
           toast.success("تم حفظ المقال بنجاح");
           if (data._id) {
             router.push(
@@ -346,11 +343,14 @@ const PostForm: React.FC<Props> = ({
             />
           </FormItem>
         </section>
-        <div className="w-full flex-shrink-0 rounded-lg bg-body-900/50 lg:min-h-screen lg:w-96 ">
+        <div className="w-full flex-shrink-0 rounded-lg bg-body-900/50 lg:min-h-screen lg:w-96">
           <SidebarHeader className="sticky top-0 z-10 mb-4 rounded-t-lg bg-body-950 px-4">
-            <FormItem className="flex flex-row justify-end border-b border-body-800 py-4 items-center gap-3">
+            <FormItem className="flex flex-row items-center justify-end gap-3 border-b border-body-800 py-4">
               {article?.slug && (
-                <Link href={`/${article.slug}`} className=" bg-slate-200 text-slate-950 hocus:bg-slate-400 transition-all p-3 rounded-md mt-1 py-[11px]">
+                <Link
+                  href={`/${article.slug}`}
+                  className="mt-1 rounded-md bg-slate-200 p-3 py-[11px] text-slate-950 transition-all hocus:bg-slate-400"
+                >
                   <LuExternalLink className="h-5 w-5" />
                 </Link>
               )}

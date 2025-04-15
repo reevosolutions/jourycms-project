@@ -8,8 +8,8 @@ import { Label } from "@/components/ui/label";
 import { useSdk } from "@/hooks/use-sdk";
 import initLogger, { LoggerContext } from "@/lib/logging";
 import { useForm, type Validator } from "@tanstack/react-form";
-import React from "react";
 import * as yup from "yup";
+import React from "react";
 
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { yupValidator } from "@tanstack/yup-form-adapter";
