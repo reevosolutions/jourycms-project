@@ -40,6 +40,7 @@ const sanitizeCreateBody = async (
       create_if_not_found: true,
     });
     body.form = form._id;
+    body.form_slug = form.slug;
   }
 
   /**

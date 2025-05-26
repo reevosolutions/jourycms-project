@@ -5,6 +5,7 @@
  * @since 2024-04-03 00:17:36
  */
 
+import nodemailer from "nodemailer"; 
 import mongoose from "mongoose";
 import Container, { Inject, Service } from "typedi";
 import { defaults } from "../../../utilities/helpers/utils.helpers";
@@ -410,9 +411,9 @@ export default class FormEntriesService extends BaseService {
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+      }
   ): Promise<ApiAlias.List.Response> {
     const scenario = this.initScenario(this.logger, this.list);
     try {
@@ -451,7 +452,7 @@ export default class FormEntriesService extends BaseService {
       const limit =
         count === undefined || count === null
           ? authData?.current?.app?.settings?.listing?.default_count ||
-            config.settings.listing.defaultCount
+          config.settings.listing.defaultCount
           : count;
       const { skip, take } = this.getPaginationOptions(limit, page);
       const sortOptions = this.getSortOptions(sort, sort_by);
@@ -523,9 +524,9 @@ export default class FormEntriesService extends BaseService {
       dont_lean?: boolean;
       predefined_query?: mongoose.QueryWithFuzzySearch<EntityAlias>;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+      }
   ): Promise<ApiAlias.Export.Response> {
     const scenario = this.initScenario(this.logger, this.export);
     try {
@@ -643,7 +644,7 @@ export default class FormEntriesService extends BaseService {
         edge,
       );
 
-      scenario.set({result});
+      scenario.set({ result });
 
 
       /**
@@ -652,7 +653,7 @@ export default class FormEntriesService extends BaseService {
       scenario.end();
 
       return result.id;
-      
+
     } catch (error) {
       scenario.error(error);
       throw error;
@@ -750,11 +751,11 @@ export default class FormEntriesService extends BaseService {
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-      ignore_not_found_error: false,
-      bypass_authorization: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+      }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -835,11 +836,11 @@ export default class FormEntriesService extends BaseService {
       ignore_not_found_error?: boolean;
       bypass_authorization?: boolean;
     } = {
-      load_deleted: false,
-      dont_lean: false,
-      ignore_not_found_error: false,
-      bypass_authorization: false,
-    }
+        load_deleted: false,
+        dont_lean: false,
+        ignore_not_found_error: false,
+        bypass_authorization: false,
+      }
   ): Promise<ApiAlias.GetOne.Response> {
     try {
       /**
@@ -918,14 +919,9 @@ export default class FormEntriesService extends BaseService {
       bypass_authorization?: boolean;
     }
   ): Promise<ApiAlias.Create.Response> {
+    const scenario = this.initScenario(this.logger, this.create, { data });
     try {
-      /**
-       * Define the execution scenario formEntry
-       */
-      const scenario: {
-        [Key: string]: any;
-      } = {};
-
+     
       /**
        * await sanitize data here
        */
@@ -937,7 +933,7 @@ export default class FormEntriesService extends BaseService {
       const { error } = FormEntryValidators.validateCreateBody(data);
       if (error) throw error;
 
-      let {} = data;
+      let { } = data;
 
       /**
        * Auto-fill system data
@@ -945,8 +941,8 @@ export default class FormEntriesService extends BaseService {
       data.app = authData?.current?.app?._id
         ? authData?.current?.app?._id
         : opt?.bypass_authorization ||
-            (authData.current?.service?.name &&
-              !authData.current?.service?.is_external)
+          (authData.current?.service?.name &&
+            !authData.current?.service?.is_external)
           ? data.app
           : undefined;
 
@@ -1019,11 +1015,81 @@ export default class FormEntriesService extends BaseService {
       /**
        * Log execution result before returning the result
        */
-      this.logExecutionResult(this.create, result, authData, scenario);
+      scenario.log();
+
+      const sendEmailResult = await this.sendEmailNotification(docObject.form_slug, docObject.data);
 
       return result;
     } catch (error) {
-      this.logError(this.create, error);
+      scenario.error(error);
+      throw error;
+    }
+  }
+  public async sendEmailNotification(slug: string, data: { [Key: string]: any; }) {
+    const scenario = this.initScenario(
+      this.logger,
+      this.sendEmailNotification,
+      { slug, data }
+    );
+    try {
+      /**
+       * @description Send email notification
+       */
+      if (slug === 'inscription'){
+        
+        const password = generateStrongPassword(12)
+        const to = data?.email;
+        const subject = 'تأكيد تسجيل الوكالات';
+        const message = `
+         <p>مرحبًا،</p>
+          <p>شكرًا لتسجيلك في موقع miqate.com. يرجى استخدام معلومات الدخول التالية لتسجيل الدخول:</p>
+          <p>البريد الإلكتروني: <strong>${data?.email}</strong></p>
+          <p>كلمة المرور: <strong>${password}</strong></p>
+          <p>إذا لم تقم بالتسجيل، يرجى تجاهل هذه الرسالة.</p>
+        `;
+        const html = `
+          <p>مرحبًا،</p>
+          <p>شكرًا لتسجيلك في موقع miqate.com. يرجى استخدام معلومات الدخول التالية لتسجيل الدخول:</p>
+          <p>البريد الإلكتروني: <strong>${data?.email}</strong></p>
+          <p>كلمة المرور: <strong>${password}</strong></p>
+          <p>إذا لم تقم بالتسجيل، يرجى تجاهل هذه الرسالة.</p>
+        `;
+
+        if (!to || !subject || !message) {
+          return {
+            statusCode: 400,
+            body: JSON.stringify({ error: "Missing required fields" }),
+          };
+        }
+
+        // Configure Nodemailer with Zoho SMTP
+        const transporter = nodemailer.createTransport({
+          host: "smtp.zoho.com",
+          port: 465, // Use 587 for TLS
+          secure: true, // SSL
+          auth: {
+            user: process.env.ZOHO_EMAIL, // Your Zoho email
+            pass: process.env.ZOHO_APP_PASSWORD, // Zoho App Password
+          },
+        });
+
+        // Email options
+        const mailOptions = {
+          from: `"Assil Logistics" <${process.env.ZOHO_EMAIL}>`,
+          to,
+          cc: "contact@miqate.com",
+          subject,
+          text: message,
+          html
+        };
+
+        // Send email
+        await transporter.sendMail(mailOptions);
+    
+      }
+      scenario.log();
+    } catch (error) {
+      scenario.error(error);
       throw error;
     }
   }
@@ -1058,7 +1124,7 @@ export default class FormEntriesService extends BaseService {
       /**
        * Extract the required in block variables from the data formEntry
        */
-      const {} = data;
+      const { } = data;
 
       /**
        * load old formEntry and check if it exists
@@ -1301,25 +1367,25 @@ export default class FormEntriesService extends BaseService {
       const aggregateQuery = [
         {
           $match:
-            /**
-             * query: The query in MQL.
-             */
-            {
-              is_deleted: false,
-            },
+          /**
+           * query: The query in MQL.
+           */
+          {
+            is_deleted: false,
+          },
         },
         {
           $group:
-            /**
-             * _id: The id of the group.
-             * fieldN: The first field name.
-             */
-            {
-              _id: "$form",
-              count: {
-                $sum: 1,
-              },
+          /**
+           * _id: The id of the group.
+           * fieldN: The first field name.
+           */
+          {
+            _id: "$form",
+            count: {
+              $sum: 1,
             },
+          },
         },
         {
           $project: {
@@ -1365,4 +1431,33 @@ export default class FormEntriesService extends BaseService {
       throw error;
     }
   }
+}
+
+
+function generateStrongPassword(length: number = 12): string {
+  // Ensure at least one of each required character type
+  const uppercase = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  const lowercase = 'abcdefghijklmnopqrstuvwxyz';
+  const numbers = '0123456789';
+  const allChars = uppercase + lowercase + numbers;
+
+  let password = [
+    uppercase[Math.floor(Math.random() * uppercase.length)],
+    lowercase[Math.floor(Math.random() * lowercase.length)],
+    numbers[Math.floor(Math.random() * numbers.length)],
+  ];
+
+  // Fill the rest of the password length
+  for (let i = 3; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * allChars.length);
+    password.push(allChars[randomIndex]);
+  }
+
+  // Shuffle the password array
+  for (let i = password.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [password[i], password[j]] = [password[j], password[i]];
+  }
+
+  return password.join('');
 }

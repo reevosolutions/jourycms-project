@@ -13,6 +13,7 @@ declare module Levelup {
             _id: Utils.Common.ID;
             slug: string;
             form: Utils.Common.ID;
+            form_slug: string;
             data: D;
             is_handled: boolean;
             snapshots: IFormEntrySnapshots;

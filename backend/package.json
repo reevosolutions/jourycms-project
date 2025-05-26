@@ -79,6 +79,7 @@
     "murmurhash-js": "^1.0.0",
     "nanoid": "^3.3.7",
     "node-schedule": "^2.1.1",
+    "nodemailer": "^7.0.3",
     "rate-limit-redis": "^4.2.0",
     "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
