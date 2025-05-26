@@ -40,6 +40,8 @@ type Props = {};
 const PAYMENT_METHODS: ("visa" | "mastercard" | "paypal" | "cib" | "baridi")[] =
   ["baridi", "cib", "visa", "mastercard", "paypal"];
 
+const FORM_KEY = 'order-visa';
+
 const OrderVisaForm: React.FC<Props> = ({}) => {
   /* -------------------------------------------------------------------------- */
   /*                                    TOOLS                                   */
@@ -75,13 +77,13 @@ const OrderVisaForm: React.FC<Props> = ({}) => {
 
     onSubmit: async ({value, formApi}) => {
       const payload: ApiAlias.Create.Request<FormDataFields> = {
-        data: {
-          form: "order-visa",
-          data: {
-            ...value,
-          },
-        },
-      };
+				data: {
+					form: FORM_KEY,
+					data: {
+						...value,
+					},
+				},
+			};
 
       try {
         const {data} = await sdk.content.formEntries.create(payload);

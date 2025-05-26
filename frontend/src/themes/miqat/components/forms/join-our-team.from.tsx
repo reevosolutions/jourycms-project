@@ -29,6 +29,9 @@ import {LuLoader2} from "react-icons/lu";
 
 const logger = initLogger(LoggerContext.FORM, "JoinOurTeamForm");
 
+const FORM_KEY = "join-our-team";
+
+
 import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
 import FileUploader from "@/features/storage/form-components/file.uploader.legacy";
 type FormDataFields = {
@@ -76,7 +79,7 @@ const JoinOurTeamForm: React.FC<Props> = ({}) => {
     onSubmit: async ({value, formApi}) => {
       const payload: ApiAlias.Create.Request<FormDataFields> = {
         data: {
-          form: "join-our-team",
+          form: FORM_KEY,
           data: {
             ...value,
           },

@@ -29,6 +29,9 @@ import {LuLoader2} from "react-icons/lu";
 
 const logger = initLogger(LoggerContext.FORM, "OmrahOnDemandForm");
 
+const FORM_KEY = "omrah-on-demand";
+
+
 import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
 type FormDataFields = {
   first_name: string;
@@ -73,7 +76,7 @@ const OmrahOnDemandForm: React.FC<Props> = ({}) => {
     onSubmit: async ({value, formApi}) => {
       const payload: ApiAlias.Create.Request<FormDataFields> = {
         data: {
-          form: "omrah-on-demand",
+          form: FORM_KEY,
           data: {
             ...value,
           },

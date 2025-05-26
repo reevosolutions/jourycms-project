@@ -1,3 +1,4 @@
+@use "sass:meta";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -94,4 +95,4 @@ body {
   word-wrap: break-word !important;
 }
 
-@import "./admin";
+@include meta.load-css("admin");

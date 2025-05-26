@@ -79,7 +79,7 @@ export const miqate_forms = [
       reset_button_label: "إعادة تعبئة النموذج",
       has_submit_button: true,
       submit_button_label: "إرسال الطلب",
-      shown_fields_on_dashboard: ["phone", "article_title", "agency_name", ],
+      shown_fields_on_dashboard: ["phone", "article_title", "agency_name",],
     }
   },
   {
@@ -225,6 +225,123 @@ export const miqate_forms = [
       has_submit_button: true,
       submit_button_label: "إرسال الطلب",
       shown_fields_on_dashboard: ["phone", "email"],
+    }
+  },
+
+  {
+    name: "استمارة التسجيل",
+    slug: "inscription",
+    fields: [
+      {
+        field_key: "agency_name_ar",
+        field_label: "اسم الوكالة بالعربية",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "agency_name_ar";
+      },
+      {
+        field_key: "agency_name_en",
+        field_label: "اسم الوكالة بالإنجليزية",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "agency_name_en";
+      },
+      {
+        field_key: 'accreditation_number',
+        field_label: "رقم الاعتماد",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "accreditation_number";
+
+      },
+      {
+        field_key: 'onpo_accreditation_number',
+        field_label: " رقم الاعتماد ديوان الحج والعمره",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "onpo_accreditation_number";
+      },
+      {
+        field_key: 'phone',
+        field_label: "الهاتف",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "phone";
+      },
+      {
+        field_key: 'whatsapp',
+        field_label: "رقم الواتساب",
+        field_type: "text",
+        field_options: {
+          required: false,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "whatsapp";
+      },  
+      {
+        field_key: 'email',
+        field_label: "البريد الإلكتروني",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "email";
+      },
+      {
+        field_key: 'principle_address',
+        field_label: "العنوان الرئيسي",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "principle_address";
+      },
+      
+      {
+        field_key: 'departement_addresses',
+        field_label: "عناوين الفروع",
+        field_type: "text",
+        field_options: {
+          required: true,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"text"> & {
+        field_key: "departement_addresses";
+      },
+      
+      {
+        field_key: "logo",
+        field_label: "اللوغو",
+        field_type: "file",
+        field_options: {
+          required: false,
+        },
+      } as Levelup.CMS.V1.Content.CustomFields.MetaField<"file"> & {
+        field_key: "logo";
+      },
+    ],
+    settings: {
+      has_reset_button: true,
+      reset_button_label: "إعادة تعبئة النموذج",
+      has_submit_button: true,
+      submit_button_label: "إرسال الطلب",
+      shown_fields_on_dashboard: ["agency_name_ar", "agency_name_en", "phone", "email", "logo"],
     }
   },
 ] as Levelup.CMS.V1.Content.Entity.Form[];

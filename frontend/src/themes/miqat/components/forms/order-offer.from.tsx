@@ -21,6 +21,9 @@ import { TCustomArticle } from "../../data/ar.types.seed";
 
 const logger = initLogger(LoggerContext.FORM, "OrderOfferForm");
 
+const FORM_KEY = "order-offer";
+
+
 import ApiAlias = Levelup.CMS.V1.Content.Api.FormEntries;
 type FormDataFields = {
   article_id: string;
@@ -76,19 +79,19 @@ const OrderOfferForm: React.FC<Props> = ({
 
     onSubmit: async ({value, formApi}) => {
       const payload: ApiAlias.Create.Request<FormDataFields> = {
-        data: {
-          form: "order-offer",
-          data: {
-            ...value,
-            article_id: article._id,
-            article_slug: article.slug,
-            article_title: article.title,
-            agency_id: article.meta_fields.agency,
-            agency_name,
-            article_type,
-          },
-        },
-      };
+				data: {
+					form: FORM_KEY,
+					data: {
+						...value,
+						article_id: article._id,
+						article_slug: article.slug,
+						article_title: article.title,
+						agency_id: article.meta_fields.agency,
+						agency_name,
+						article_type,
+					},
+				},
+			};
 
       try {
         const {data} = await sdk.content.formEntries.create(payload);
