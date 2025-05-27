@@ -77,10 +77,11 @@ const FormEntrySchemaFields: DeepStrictSchemaDefinition<
   /**
    * Specific to Entity
    */
-  slug: { type: String },
-
+  slug: { type: String, default: null, index: true },
+  
   //
-
+  
+  form_slug: { type: String, default: null, index: true },
   form: { type: Schema.Types.ObjectId as any, ref: "Form", required: true },
   data: {
     type: Schema.Types.Mixed as any,
