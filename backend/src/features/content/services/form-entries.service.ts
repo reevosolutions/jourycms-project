@@ -5,7 +5,7 @@
  * @since 2024-04-03 00:17:36
  */
 
-import nodemailer from "nodemailer"; 
+import nodemailer from "nodemailer";
 import mongoose from "mongoose";
 import Container, { Inject, Service } from "typedi";
 import { defaults } from "../../../utilities/helpers/utils.helpers";
@@ -921,7 +921,7 @@ export default class FormEntriesService extends BaseService {
   ): Promise<ApiAlias.Create.Response> {
     const scenario = this.initScenario(this.logger, this.create, { data });
     try {
-     
+
       /**
        * await sanitize data here
        */
@@ -1035,11 +1035,11 @@ export default class FormEntriesService extends BaseService {
       /**
        * @description Send email notification
        */
-      if (slug === 'inscription'){
-        
+      if (slug === 'inscription') {
+        const sender = "contact@miqate.com";
         const password = generateStrongPassword(12)
         const to = data?.email;
-        const subject = 'تأكيد تسجيل الوكالات';
+        const subject = 'تأكيد تسجيل الوكالة';
         const message = `
          <p>مرحبًا،</p>
           <p>شكرًا لتسجيلك في موقع miqate.com. يرجى استخدام معلومات الدخول التالية لتسجيل الدخول:</p>
@@ -1075,7 +1075,7 @@ export default class FormEntriesService extends BaseService {
 
         // Email options
         const mailOptions = {
-          from: `"Assil Logistics" <${process.env.ZOHO_EMAIL}>`,
+          from: `"Miqate.com" <${process.env.ZOHO_EMAIL}>`,
           to,
           cc: "contact@miqate.com",
           subject,
@@ -1084,8 +1084,13 @@ export default class FormEntriesService extends BaseService {
         };
 
         // Send email
-        await transporter.sendMail(mailOptions);
-    
+        const sendResult = await transporter.sendMail(mailOptions);
+        scenario.set({
+          to,
+          subject,
+          message,
+          sendResult,
+        });
       }
       scenario.log();
     } catch (error) {

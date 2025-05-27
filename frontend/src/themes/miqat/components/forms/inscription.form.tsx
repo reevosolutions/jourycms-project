@@ -168,9 +168,10 @@ const InscriptionForm: React.FC<Props> = ({}) => {
 					//   setPathParams(publicRoutes.homepage._.myAccount.path, { id: data?.user?._id }),
 					// );
 					logger.success("posted", data);
-					toast.success("تم إرسال المعلومات بنجاح");
+					toast.success("تم إرسال المعلومات بنجاح، شكرا لتسجيلك");
+					toast.info("سيتم إرسال رسالة تأكيد على بريدك الإلكتروني", );
 					// setPassportFile(null);
-					// formApi.reset();
+					formApi.reset();
 				}
 			} catch (error: any) {
 				toast.error(error.message, {});
