@@ -120,13 +120,13 @@ const InscriptionForm: React.FC<Props> = ({}) => {
 	/* -------------------------------------------------------------------------- */
 	const form = useForm<FormDataFields, Validator<unknown, yup.AnySchema>>({
 		defaultValues: {
-			agency_name_ar: "1222",
-			agency_name_en: "3333",
-			accreditation_number: "0123",
-			onpo_accreditation_number: "0321",
-			email: "salmi@gmail.com",
-			phone: "06666",
-			whatsapp: "07777",
+			agency_name_ar: "",
+			agency_name_en: "",
+			accreditation_number: "",
+			onpo_accreditation_number: "",
+			email: "",
+			phone: "",
+			whatsapp: "",
 			principle_address: {
 				country_code: "dz",
 				country_name: "الجزائر",
