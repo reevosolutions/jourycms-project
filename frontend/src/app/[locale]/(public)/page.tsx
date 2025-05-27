@@ -5,8 +5,7 @@ import {redirect} from 'next/navigation';
 
 const ROUTE = publicRoutes.homepage;
 
-const INSCRIPTIONS_PERIOD = true;
 
 export default function Home() {
-  return INSCRIPTIONS_PERIOD ? redirect('/dz') : <ThemePage_Client {...{route: ROUTE}} variant="3" />;
+  return <ThemePage_Client {...{route: ROUTE}} variant="3" />;
 }
